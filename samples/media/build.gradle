@@ -1,0 +1,9 @@
+apply from: "$rootDir/gradle/sample-build.gradle"
+
+android {
+    namespace 'com.example.platform.media'
+}
+
+dependencies {
+    // Add samples specific dependencies
+}
