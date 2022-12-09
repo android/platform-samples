@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.platform.camera
+package com.example.platform.camera.mlkit
 
 import androidx.compose.runtime.Composable
 import com.google.android.catalog.framework.annotations.Sample
@@ -24,7 +24,7 @@ import com.google.android.catalog.framework.annotations.Sample
     description = "TODO: Add description"
 )
 @Composable
-fun Camera() {
+fun CameraMlKit() {
     // TODO: implement your sample. 
     // You can also use Activity or Fragment, simply tag them with the @Sample annotation
 }
