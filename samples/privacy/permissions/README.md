@@ -1,4 +1,4 @@
-# Accessibility samples
+# Permission samples
 
 > Work-in progress
 

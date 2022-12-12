@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.platform.permissions
+package com.example.platform.privacy.permissions
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,11 +24,11 @@ import androidx.compose.ui.Modifier
 import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
-    name = "Single Permission",
-    "Shows the recommended flow to request single runtime permissions"
+    name = "Multiple Permission",
+    "Shows the recommended flow to request multiple runtime permissions"
 )
 @Composable
-fun SinglePermission() {
+fun MultiplePermission() {
     Box(Modifier.fillMaxSize()) {
         // TODO
         Text(text = "Hi, I am a compose sample target!")

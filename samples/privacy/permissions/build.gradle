@@ -17,7 +17,7 @@
 apply from: "$rootProject.projectDir/gradle/sample-build.gradle"
 
 android {
-    namespace 'com.example.platform.permissions'
+    namespace 'com.example.platform.privacy.permissions'
 }
 
 dependencies {
