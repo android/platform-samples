@@ -27,6 +27,12 @@ import java.util.Locale
 
 abstract class CreateSample : DefaultTask() {
 
+    var samplePath: String = ""
+        @Option(option = "path", description = "Defines the path for the sample")
+        set
+        @Input
+        get
+
     var sampleName: String = ""
         @Option(option = "name", description = "Defines the sample module name")
         set
@@ -38,18 +44,35 @@ abstract class CreateSample : DefaultTask() {
 
     @TaskAction
     fun create() {
+        require(samplePath.isNotEmpty()) {
+            "Missing path, provide the path of the sample"
+        }
         require(sampleName.isNotEmpty()) {
             "Missing sample module name"
         }
-        val samplePackage = "com.example.platform.${sampleName}"
-        val directory = File(projectDir.asFile.get(), "samples/$sampleName")
+
+        // remove samples prefix if added in the path
+        samplePath = samplePath.removePrefix("samples/")
+
+        val directory = File(projectDir.asFile.get(), "samples/$samplePath")
 
         println("Creating $sampleName in $directory")
 
-        File(directory, "build.gradle").apply {
-            parentFile.mkdirs()
-            createNewFile()
-            writeText(sampleBuildTemplate(samplePackage))
+        val packagePath = samplePath.replace("/", ".").replace("-", ".")
+        val samplePackage = "com.example.platform.${packagePath}"
+
+        if (!directory.exists()) {
+            File(directory, "build.gradle").apply {
+                parentFile.mkdirs()
+                createNewFile()
+                writeText(sampleBuildTemplate(samplePackage))
+            }
+
+            File(directory, "README.md").apply {
+                parentFile.mkdirs()
+                createNewFile()
+                writeText(readmeTemplate(sampleName))
+            }
         }
 
         val sampleName = sampleName.replaceFirstChar {
@@ -60,12 +83,6 @@ abstract class CreateSample : DefaultTask() {
             parentFile.mkdirs()
             createNewFile()
             writeText(sampleTemplate(samplePackage, sampleName))
-        }
-
-        File(directory, "README.md").apply {
-            parentFile.mkdirs()
-            createNewFile()
-            writeText(readmeTemplate(sampleName))
         }
 
         Runtime.getRuntime().exec("git add $directory")
