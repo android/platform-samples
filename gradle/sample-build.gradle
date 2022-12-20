@@ -64,14 +64,6 @@ android {
     }
 }
 
-// Makes generated code visible to IDE
-kotlin.sourceSets.main {
-    kotlin.srcDirs(
-            file("$buildDir/generated/ksp/debug/kotlin"),
-            file("$buildDir/generated/ksp/release/kotlin"),
-    )
-}
-
 dependencies {
     implementation "com.google.android.catalog.framework:casa-ui:0.1.0"
     ksp "com.google.android.catalog.framework:casa-processor:0.1.0"
