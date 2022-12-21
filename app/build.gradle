@@ -49,7 +49,7 @@ android {
 }
 
 dependencies {
-    implementation "com.google.android.catalog.framework:casa-ui:0.1.0"
+    implementation libs.casa.ui
 
     implementation libs.hilt.android
     kapt libs.hilt.compiler

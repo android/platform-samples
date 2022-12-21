@@ -29,6 +29,7 @@ coroutines = "1.6.0"
 hilt = "2.44.2"
 androidxtest = "1.4.0"
 navigation = "2.5.3"
+casa = "0.1.0"
 
 [libraries]
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
@@ -70,6 +71,11 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 hilt-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+
+casa-base = { module = "com.google.android.catalog.framework:casa-base", version.ref = "casa" }
+casa-ui = { module = "com.google.android.catalog.framework:casa-ui", version.ref = "hilt" }
+casa-annotation = { module = "com.google.android.catalog.framework:casa-annoatation", version.ref = "hilt" }
+casa-processor = { module = "com.google.android.catalog.framework:casa-processor", version.ref = "hilt" }
 
 dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.0"
 
