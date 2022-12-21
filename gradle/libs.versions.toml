@@ -30,6 +30,7 @@ hilt = "2.44.2"
 androidxtest = "1.4.0"
 navigation = "2.5.3"
 casa = "0.1.0"
+accompanist = "0.28.0"
 
 [libraries]
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
@@ -76,6 +77,8 @@ casa-base = { module = "com.google.android.catalog.framework:casa-base", version
 casa-ui = { module = "com.google.android.catalog.framework:casa-ui", version.ref = "casa" }
 casa-annotation = { module = "com.google.android.catalog.framework:casa-annoatation", version.ref = "casa" }
 casa-processor = { module = "com.google.android.catalog.framework:casa-processor", version.ref = "casa" }
+
+accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist"}
 
 dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.0"
 

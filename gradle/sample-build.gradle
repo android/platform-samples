@@ -64,6 +64,13 @@ android {
     }
 }
 
+kotlin {
+    sourceSets {
+        main.kotlin.srcDirs += 'build/generated/ksp/main/kotlin'
+        test.kotlin.srcDirs += 'build/generated/ksp/test/kotlin'
+    }
+}
+
 dependencies {
     implementation libs.casa.base
     ksp libs.casa.processor
@@ -75,4 +82,5 @@ dependencies {
     implementation libs.compose.foundation.foundation
     implementation libs.compose.ui.ui
     implementation libs.compose.material3
+    implementation libs.accompanist.permissions
 }
