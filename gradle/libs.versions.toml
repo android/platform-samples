@@ -29,7 +29,7 @@ coroutines = "1.6.0"
 hilt = "2.44.2"
 androidxtest = "1.4.0"
 navigation = "2.5.3"
-casa = "0.1.0"
+casa = "0.2.0"
 accompanist = "0.28.0"
 
 [libraries]

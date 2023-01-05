@@ -16,4 +16,7 @@
 
 <resources>
     <string name="app_name">Platform Samples</string>
+    <string name="source_base_url">https://github.com/android/platform-samples/tree/main/samples/%1$s</string>
+    <string name="documentation_base_url">https://developer.android.com/about</string>
+    <string name="bug_report_url">https://github.com/android/platform-samples/issues/new?template=bug_report.md&amp;title=%1$s</string>
 </resources>
