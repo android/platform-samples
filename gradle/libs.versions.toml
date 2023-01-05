@@ -20,7 +20,7 @@ composeCompiler = "1.3.2"
 snapshot = "-" # a single character = no snapshot
 
 # gradlePlugin and lint need to be updated together
-gradlePlugin = "8.0.0-alpha09"
+gradlePlugin = "8.0.0-alpha11"
 lintMinCompose = "30.0.0"
 
 ktlint = "0.42.1"
@@ -73,9 +73,9 @@ hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.re
 hilt-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 
 casa-base = { module = "com.google.android.catalog.framework:casa-base", version.ref = "casa" }
-casa-ui = { module = "com.google.android.catalog.framework:casa-ui", version.ref = "hilt" }
-casa-annotation = { module = "com.google.android.catalog.framework:casa-annoatation", version.ref = "hilt" }
-casa-processor = { module = "com.google.android.catalog.framework:casa-processor", version.ref = "hilt" }
+casa-ui = { module = "com.google.android.catalog.framework:casa-ui", version.ref = "casa" }
+casa-annotation = { module = "com.google.android.catalog.framework:casa-annoatation", version.ref = "casa" }
+casa-processor = { module = "com.google.android.catalog.framework:casa-processor", version.ref = "casa" }
 
 dokka = "org.jetbrains.dokka:dokka-gradle-plugin:1.5.0"
 

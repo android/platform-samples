@@ -18,6 +18,7 @@ captures
 .idea/deploymentTargetDropDown.xml
 .idea/misc.xml
 .idea/androidTestResultsUserPreferences.xml
+.idea/inspectionProfiles
 gradle.xml
 *.iml
 
