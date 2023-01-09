@@ -83,4 +83,7 @@ dependencies {
     implementation libs.compose.ui.ui
     implementation libs.compose.material3
     implementation libs.accompanist.permissions
+
+    implementation libs.compose.ui.tooling.preview
+    debugImplementation libs.compose.ui.tooling
 }

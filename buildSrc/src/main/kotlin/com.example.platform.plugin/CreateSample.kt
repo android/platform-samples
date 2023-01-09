@@ -54,7 +54,8 @@ abstract class CreateSample : DefaultTask() {
         // remove samples prefix if added in the path
         samplePath = samplePath.removePrefix("samples/")
 
-        val directory = File(projectDir.asFile.get(), "samples/$samplePath")
+        val projectDirFile = projectDir.asFile.get()
+        val directory = File(projectDirFile, "samples/$samplePath")
 
         println("Creating $sampleName in $directory")
 
@@ -85,6 +86,10 @@ abstract class CreateSample : DefaultTask() {
             writeText(sampleTemplate(samplePackage, sampleName))
         }
 
+        createRunConfig(projectDirFile, sampleName)
+
+        val ideaDir = File(projectDirFile, ".idea/runConfigurations")
+        Runtime.getRuntime().exec("git add $ideaDir")
         Runtime.getRuntime().exec("git add $directory")
 
         println("Done! Sync and build project")

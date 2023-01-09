@@ -15,6 +15,7 @@
  */
 
 import com.example.platform.plugin.CreateSample
+import com.example.platform.plugin.CreateRunConfig
 
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
@@ -44,5 +45,8 @@ allprojects {
 }
 
 tasks.register('createSample', CreateSample) {
+    it.projectDir.set(project.projectDir)
+}
+tasks.register('createRunConfig', CreateRunConfig) {
     it.projectDir.set(project.projectDir)
 }
