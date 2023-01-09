@@ -1,7 +1,7 @@
 apply from: "$rootDir/gradle/sample-build.gradle"
 
 android {
-    namespace 'com.example.platform.ui'
+    namespace 'com.example.platform.ui.insets'
 }
 
 dependencies {
