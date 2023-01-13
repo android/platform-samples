@@ -24,14 +24,21 @@ gradlePlugin = "7.3.1"
 hilt = "2.44.2"
 kotlin = "1.8.0"
 ktlint = "0.48.1"
+coroutines = "1.6.4"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.2.0"
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
+
+androidx-activity = "androidx.activity:activity:1.6.1"
 androidx-core = "androidx.core:core-ktx:1.9.0"
 androidx-fragment = "androidx.fragment:fragment-ktx:1.5.4"
+androidx-activity-compose = "androidx.activity:activity-compose:1.6.1"
+androidx-navigation-fragment = "androidx.navigation:navigation-fragment:2.5.3"
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
+androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0"
+
 casa-base = { module = "com.google.android.catalog.framework:casa-base", version.ref = "casa" }
 casa-processor = { module = "com.google.android.catalog.framework:casa-processor", version.ref = "casa" }
 casa-ui = { module = "com.google.android.catalog.framework:casa-ui", version.ref = "casa" }
@@ -40,16 +47,24 @@ compose-animation-animation = { module = "androidx.compose.animation:animation" 
 compose-foundation-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:layout" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
+compose-material-material = { module = "androidx.compose.material:material", version.ref = "compose-bom" }
+compose-material-iconsext = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose-bom" }
 compose-runtime-runtime = {  module = "androidx.compose.runtime:runtime" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose-bom" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose-bom" }
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-util = { module = "androidx.compose.ui:util" }
 google-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "com-google-devtools-ksp" }
 google-ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "com-google-devtools-ksp" }
+
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 hilt-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
 kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
 kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
+kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
+kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }

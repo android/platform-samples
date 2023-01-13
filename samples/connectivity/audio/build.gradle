@@ -1,10 +1,9 @@
 apply from: "$rootDir/gradle/sample-build.gradle"
 
 android {
-    namespace 'com.example.platform.media'
+    namespace 'com.example.platform.connectivity.audio'
 }
 
 dependencies {
     // Add samples specific dependencies
-
 }
