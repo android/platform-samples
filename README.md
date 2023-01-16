@@ -7,24 +7,23 @@ Browse the samples inside each topic samples folder:
 - [Accessibility](samples/accessibility)
 - [Camera](samples/camera)
 - [Media](samples/media)
-- [Permissions](samples/permissions)
+- [Privacy](samples/privacy)
 - [Power](samples/power)
 - [Security](samples/security)
 - [Storage](samples/storage)
 - [User-interface](samples/user-interface)
 
 > **Important:** each sample is isolated from the rest and only contains the specific sample code.
-> The
-> wiring into the main application is done under the hood.
+> The wiring into the main application is done under the hood.
 
 ## How to run
 
 1. Clone the repository
-2. Open the whole project as projects in Android Studio.
+2. Open the whole project in Android Studio.
 3. Sync & Run
 
-This will open the catalog screen that allows you to navigate throughout the different categories
-and available samples.
+This will open the samples list screen that allows you to navigate throughout the different
+categories and available samples.
 
 ## Reporting Issues
 
