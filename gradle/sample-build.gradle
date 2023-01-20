@@ -72,6 +72,9 @@ kotlin {
 }
 
 dependencies {
+    implementation platform(libs.compose.bom)
+    androidTestImplementation platform(libs.compose.bom)
+
     implementation libs.casa.base
     ksp libs.casa.processor
 

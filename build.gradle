@@ -34,7 +34,8 @@ buildscript {
 }
 
 plugins {
-    id "com.diffplug.spotless" version "5.9.0"
+    // v6.6.1 and above currently results in https://github.com/diffplug/spotless/issues/1213
+    id "com.diffplug.spotless" version "6.6.0"
     id "com.github.ben-manes.versions" version "0.44.0"
     id "nl.littlerobots.version-catalog-update" version "0.7.0"
 }
