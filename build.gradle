@@ -34,13 +34,30 @@ buildscript {
 }
 
 plugins {
-    // v6.6.1 and above currently results in https://github.com/diffplug/spotless/issues/1213
-    id "com.diffplug.spotless" version "6.6.0"
+    id "com.diffplug.spotless" version "6.13.0"
     id "com.github.ben-manes.versions" version "0.44.0"
     id "nl.littlerobots.version-catalog-update" version "0.7.0"
 }
 
 apply plugin: 'com.dropbox.affectedmoduledetector'
+
+spotless {
+    predeclareDeps()
+}
+
+spotlessPredeclare {
+    kotlin {
+        target "**/*.kt"
+        ktlint(libs.versions.ktlint.get())
+        licenseHeaderFile rootProject.file('spotless/copyright.txt')
+    }
+    groovyGradle {
+        target '**/*.gradle'
+        greclipse().configFile(rootProject.file('spotless/greclipse.properties'))
+        licenseHeaderFile rootProject.file('spotless/copyright.txt'),
+                '(buildscript|apply|import|plugins)'
+    }
+}
 
 versionCatalogUpdate {
     sortByKey = true
@@ -81,22 +98,6 @@ allprojects {
 }
 
 subprojects {
-    apply plugin: 'com.diffplug.spotless'
-    spotless {
-        kotlin {
-            target "**/*.kt"
-            ktlint(libs.versions.ktlint.get())
-            licenseHeaderFile rootProject.file('spotless/copyright.txt')
-        }
-
-        groovyGradle {
-            target '**/*.gradle'
-            greclipse().configFile(rootProject.file('spotless/greclipse.properties'))
-            licenseHeaderFile rootProject.file('spotless/copyright.txt'),
-                    '(buildscript|apply|import|plugins)'
-        }
-    }
-
     // Remove all test apps after running UI tests.
     // This is specially important in CI so that test emulators don't run out of space.
     tasks.whenTaskAdded { task ->
