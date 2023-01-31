@@ -19,6 +19,7 @@ captures
 .idea/misc.xml
 .idea/androidTestResultsUserPreferences.xml
 .idea/inspectionProfiles
+.idea/vcs.xml
 gradle.xml
 *.iml
 
