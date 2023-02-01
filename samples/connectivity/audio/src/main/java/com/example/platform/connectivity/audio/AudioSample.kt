@@ -8,6 +8,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -38,37 +39,46 @@ import com.google.android.catalog.framework.annotations.Sample
 )
 @Composable
 fun AudioSample() {
-  val context = LocalContext.current
+    val context = LocalContext.current
 
-  val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-  val viewModel = AudioDeviceViewModel(PlatformAudioSource(audioManager))
-  AudioSampleScreen(viewModel)
+    val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val viewModel = AudioDeviceViewModel(PlatformAudioSource(audioManager))
+    AudioSampleScreen(viewModel)
 }
 
 @Composable
 fun AudioSampleScreen(viewModel: AudioDeviceViewModel) {
-  val uiStateAvailableDevices by viewModel.availableDeviceUiState.collectAsState()
-  val uiStateActiveDevice by viewModel.activeDeviceUiState.collectAsState()
-  val uiStateErrorMessage by viewModel.errorUiState.collectAsState()
+    val uiStateAvailableDevices by viewModel.availableDeviceUiState.collectAsState()
+    val uiStateActiveDevice by viewModel.activeDeviceUiState.collectAsState()
+    val uiStateErrorMessage by viewModel.errorUiState.collectAsState()
 
-  uiStateErrorMessage?.let {
-      Toast.makeText(LocalContext.current, uiStateErrorMessage, Toast.LENGTH_LONG).show()
-      viewModel.onErrorMessageShown()
-  }
+    uiStateErrorMessage?.let {
+        Toast.makeText(LocalContext.current, uiStateErrorMessage, Toast.LENGTH_LONG).show()
+        viewModel.onErrorMessageShown()
+    }
 
-  Column {
-    ActiveAudioSource(uiStateActiveDevice)
-    Text(stringResource(id = R.string.selectdevice),
-         modifier = Modifier
-           .padding(8.dp, 12.dp),
-         style = MaterialTheme.typography.displayMedium)
-    AvailableDevicesList(uiStateAvailableDevices, viewModel::setAudioDevice)
-  }
+    Column(
+        Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
+        ActiveAudioSource(uiStateActiveDevice)
+        Text(
+            stringResource(id = R.string.selectdevice),
+            modifier = Modifier
+                .padding(8.dp, 12.dp),
+            style = MaterialTheme.typography.displayMedium
+        )
+        AvailableDevicesList(uiStateAvailableDevices, viewModel::setAudioDevice)
+    }
 }
 
 @Composable
-fun AvailableDevicesList(audioDeviceWidgetUiState: AudioDeviceViewModel.AudioDeviceListUiState, onDeviceSelected: (AudioDeviceInfo) -> Unit){
-    when(audioDeviceWidgetUiState){
+fun AvailableDevicesList(
+    audioDeviceWidgetUiState: AudioDeviceViewModel.AudioDeviceListUiState,
+    onDeviceSelected: (AudioDeviceInfo) -> Unit
+) {
+    when (audioDeviceWidgetUiState) {
         AudioDeviceViewModel.AudioDeviceListUiState.Loading -> {}
         is AudioDeviceViewModel.AudioDeviceListUiState.Success -> {
             ListOfAudioDevices(audioDeviceWidgetUiState.audioDevices, onDeviceSelected)
@@ -78,14 +88,17 @@ fun AvailableDevicesList(audioDeviceWidgetUiState: AudioDeviceViewModel.AudioDev
 
 @Composable
 fun ActiveAudioSource(activeAudioDeviceUiState: AudioDeviceViewModel.ActiveAudioDeviceUiState) =
-    when(activeAudioDeviceUiState){
+    when (activeAudioDeviceUiState) {
         AudioDeviceViewModel.ActiveAudioDeviceUiState.NotActive -> {
             ActiveAudioSource(stringResource(id = R.string.nodevice), "", R.drawable.phone_icon)
         }
+
         is AudioDeviceViewModel.ActiveAudioDeviceUiState.OnActiveDevice -> {
-            ActiveAudioSource(stringResource(id = R.string.connected),
-                              activeAudioDeviceUiState.audioDevice.getDeviceName(),
-                              activeAudioDeviceUiState.audioDevice.resIconId)
+            ActiveAudioSource(
+                stringResource(id = R.string.connected),
+                activeAudioDeviceUiState.audioDevice.getDeviceName(),
+                activeAudioDeviceUiState.audioDevice.resIconId
+            )
         }
     }
 
@@ -93,20 +106,27 @@ fun ActiveAudioSource(activeAudioDeviceUiState: AudioDeviceViewModel.ActiveAudio
  * Shows user the active audio source
  */
 @Composable
-fun ActiveAudioSource(title: String, subTitle: String, resId: Int){
-    Row(verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier
-            .padding(12.dp, 24.dp)){
-        Icon(painterResource(resId),
-             contentDescription = null,
-             tint = MaterialTheme.colorScheme.primary)
+fun ActiveAudioSource(title: String, subTitle: String, resId: Int) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.padding(vertical = 12.dp)
+    ) {
+        Icon(
+            painterResource(resId),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.primary
+        )
         Column {
-            Text(title, modifier = Modifier.padding(8.dp, 0.dp),
-                 color = MaterialTheme.colorScheme.primary,
-                 style = MaterialTheme.typography.headlineMedium)
-            Text(subTitle, modifier = Modifier.padding(8.dp, 0.dp),
-                 color = MaterialTheme.colorScheme.primary,
-                 style = MaterialTheme.typography.headlineSmall)
+            Text(
+                title, modifier = Modifier.padding(8.dp, 0.dp),
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.headlineMedium
+            )
+            Text(
+                subTitle, modifier = Modifier.padding(8.dp, 0.dp),
+                color = MaterialTheme.colorScheme.primary,
+                style = MaterialTheme.typography.headlineSmall
+            )
         }
     }
 }
@@ -116,7 +136,7 @@ fun ActiveAudioSource(title: String, subTitle: String, resId: Int){
  */
 @Composable
 fun ListOfAudioDevices(devices: List<AudioDeviceUI>, onDeviceSelected: (AudioDeviceInfo) -> Unit) {
-    LazyColumn() {
+    LazyColumn {
         items(devices) { item ->
             AudioItem(audioDevice = item, onDeviceSelected = onDeviceSelected)
         }
@@ -128,26 +148,33 @@ fun ListOfAudioDevices(devices: List<AudioDeviceUI>, onDeviceSelected: (AudioDev
  */
 @Composable
 fun AudioItem(
-    audioDevice : AudioDeviceUI,
+    audioDevice: AudioDeviceUI,
     onDeviceSelected: (AudioDeviceInfo) -> Unit
-){
+) {
     Box(modifier = Modifier
-      .fillMaxWidth()
-      .clickable { onDeviceSelected(audioDevice.audioDeviceInfo) }){
-        Row(modifier = Modifier.padding(12.dp, 8.dp),
-            verticalAlignment = Alignment.CenterVertically,) {
-            Icon(painterResource(audioDevice.resIconId),
-                 contentDescription = null,
-                 tint = Color.White)
+        .fillMaxWidth()
+        .clickable { onDeviceSelected(audioDevice.audioDeviceInfo) }) {
+        Row(
+            modifier = Modifier.padding(12.dp, 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                painterResource(audioDevice.resIconId),
+                contentDescription = null,
+                tint = Color.White
+            )
             Column {
-                Text(audioDevice.getDeviceName(),
-                     modifier = Modifier
-                    .padding(8.dp, 0.dp),
-                     audioDevice.getStatusColor())
-                Text("",
-                     modifier = Modifier.
-                     padding(8.dp, 0.dp),
-                     audioDevice.getStatusColor())
+                Text(
+                    audioDevice.getDeviceName(),
+                    modifier = Modifier
+                        .padding(8.dp, 0.dp),
+                    audioDevice.getStatusColor()
+                )
+                Text(
+                    "",
+                    modifier = Modifier.padding(8.dp, 0.dp),
+                    audioDevice.getStatusColor()
+                )
             }
         }
     }
