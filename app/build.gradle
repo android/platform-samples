@@ -54,6 +54,9 @@ dependencies {
     implementation libs.hilt.android
     kapt libs.hilt.compiler
 
+    implementation libs.coil.base
+    implementation libs.coil.video
+
     // include all available samples.
     gradle.ext.samples.each {
         implementation project("$it")
