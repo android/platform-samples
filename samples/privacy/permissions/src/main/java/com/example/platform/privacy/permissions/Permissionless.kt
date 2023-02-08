@@ -7,10 +7,12 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Card
 import androidx.compose.material3.Text
@@ -18,14 +20,15 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
+import androidx.core.database.getStringOrNull
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.google.android.catalog.framework.annotations.Sample
@@ -101,8 +104,11 @@ private fun CameraRequest(
     }
 
     // Hold the Coil requests to load the provided uri if any
-    var imageRequest by remember {
-        mutableStateOf<ImageRequest?>(null)
+    var imageRequest by rememberSaveable(stateSaver = Saver<ImageRequest?, Uri>(
+        save = { it?.data as? Uri },
+        restore = { ImageRequest.Builder(context).data(it).build() }
+    )) {
+        mutableStateOf(null)
     }
 
     // Create the launcher for the given contract and handle result
@@ -116,7 +122,11 @@ private fun CameraRequest(
         Toast.makeText(context, "Captured? $isSuccessful", Toast.LENGTH_SHORT).show()
     }
 
-    Card(Modifier.fillMaxWidth()) {
+    Card(
+        Modifier
+            .fillMaxWidth()
+            .animateContentSize()
+    ) {
         TextButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
@@ -170,7 +180,48 @@ private fun CaptureVideo() {
 
 @Composable
 private fun PickContact() {
-    // TODO
+    val context = LocalContext.current
+    var contactInfo by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    // Note: PickContact does not provide all contact information, if you need certain information,
+    // like phone number or email, you should create your own contract and launch the intent with
+    // ContactsContract.CommonDataKinds.Phone.CONTENT_TYPE
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.PickContact()) { uri ->
+        if (uri == null) {
+            Toast.makeText(context, "No contact selected", Toast.LENGTH_SHORT).show()
+            return@rememberLauncherForActivityResult
+        }
+        context.contentResolver.query(uri, null, null, null).use { cursor ->
+            // If the cursor returned is valid, get the phone number and (or) name
+            contactInfo = if (cursor != null && cursor.moveToFirst()) {
+                (0 until cursor.columnCount).joinToString("\n") {
+                    "${cursor.getColumnName(it)}: ${cursor.getStringOrNull(it)}"
+                }
+            } else {
+                "Error while retrieve contact information"
+            }
+        }
+    }
+    Card(
+        Modifier
+            .fillMaxWidth()
+            .animateContentSize()
+    ) {
+        TextButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                launcher.launch(null)
+            }
+        ) {
+            Text(text = "Pick contact")
+        }
+
+        if (contactInfo.isNotBlank()) {
+            Text(text = contactInfo, modifier = Modifier.padding(16.dp))
+        }
+    }
 }
 
 @Composable
