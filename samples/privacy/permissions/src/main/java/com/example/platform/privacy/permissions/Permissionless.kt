@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.animation.animateContentSize
@@ -14,7 +15,9 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -26,6 +29,13 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.text.ExperimentalTextApi
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.UrlAnnotation
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.core.database.getStringOrNull
@@ -38,6 +48,7 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 
+@OptIn(ExperimentalTextApi::class)
 @Sample(
     name = "Permissionless",
     description = "This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs",
@@ -49,6 +60,9 @@ fun Permissionless() {
         contentPadding = PaddingValues(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
+        item {
+            TitleCard()
+        }
         item {
             TakePhoto()
         }
@@ -64,6 +78,40 @@ fun Permissionless() {
         item {
             OpenDocuments()
         }
+    }
+}
+
+@Composable
+@OptIn(ExperimentalTextApi::class)
+private fun TitleCard() {
+    val uriHandler = LocalUriHandler.current
+    val title = buildAnnotatedString {
+        withStyle(
+            style = SpanStyle(
+                color = MaterialTheme.colorScheme.onSurface,
+            )
+        ) {
+            append("The following actions don't require any permission (")
+            withStyle(
+                style = SpanStyle(
+                    color = MaterialTheme.colorScheme.primary,
+                    textDecoration = TextDecoration.Underline
+                )
+            ) {
+                val startIndex = this.length
+                append("more actions")
+                addUrlAnnotation(
+                    UrlAnnotation("https://developer.android.com/training/permissions/evaluating"),
+                    start = startIndex,
+                    end = this.length
+                )
+            }
+            append(").")
+        }
+    }
+    ClickableText(text = title, style = MaterialTheme.typography.bodyLarge) {
+        val url = title.getUrlAnnotations(it, it).firstOrNull()?.item?.url ?: return@ClickableText
+        uriHandler.openUri(url)
     }
 }
 
@@ -200,7 +248,7 @@ private fun PickContact() {
                     "${cursor.getColumnName(it)}: ${cursor.getStringOrNull(it)}"
                 }
             } else {
-                "Error while retrieve contact information"
+                "Error while retrieving contact information"
             }
         }
     }
@@ -226,10 +274,83 @@ private fun PickContact() {
 
 @Composable
 private fun PickMedia() {
-    // TODO
+    var selectedUri by rememberSaveable {
+        mutableStateOf<Uri>(Uri.EMPTY)
+    }
+
+    // Create the launcher for the given contract and handle result
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            // Show the image if the user selected any.
+            selectedUri = uri ?: return@rememberLauncherForActivityResult
+        }
+
+    Card(
+        Modifier
+            .fillMaxWidth()
+            .animateContentSize()
+    ) {
+        TextButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                launcher.launch(
+                    PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
+                )
+            }
+        ) {
+            Text(text = "Pick Image")
+        }
+        if (selectedUri != Uri.EMPTY) {
+            // Using [Coil](https://github.com/coil-kt/coil) to load images from URIs
+            AsyncImage(
+                model = selectedUri,
+                contentDescription = null,
+            )
+        }
+    }
 }
 
 @Composable
 private fun OpenDocuments() {
-    // TODO
+    val context = LocalContext.current
+    var documentInfo by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    val launcher =
+        rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+            if (uri == null) {
+                Toast.makeText(context, "No document selected", Toast.LENGTH_SHORT).show()
+                return@rememberLauncherForActivityResult
+            }
+            context.contentResolver.query(uri, null, null, null, null).use { cursor ->
+                documentInfo = if (cursor != null && cursor.moveToFirst()) {
+                    (0 until cursor.columnCount).joinToString("\n") {
+                        "${cursor.getColumnName(it)}: ${cursor.getStringOrNull(it)}"
+                    }
+                } else {
+                    "Error while retrieving file information"
+                }
+            }
+        }
+    Card(
+        Modifier
+            .fillMaxWidth()
+            .animateContentSize()
+    ) {
+        TextButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                // Request the user to pick a file
+                // Note: You can provide multiple mime types to filter results.
+                launcher.launch(arrayOf("*/*"))
+            }
+        ) {
+            Text(text = "Open document")
+        }
+
+        if (documentInfo.isNotBlank()) {
+            Text(text = documentInfo, modifier = Modifier.padding(16.dp))
+        }
+    }
 }
