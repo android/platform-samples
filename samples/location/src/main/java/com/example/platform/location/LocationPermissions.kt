@@ -1,4 +1,4 @@
-package com.example.platform.privacy.location
+package com.example.platform.location
 
 import androidx.compose.runtime.Composable
 import com.google.android.catalog.framework.annotations.Sample

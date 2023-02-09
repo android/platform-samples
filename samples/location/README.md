@@ -1,4 +1,4 @@
-# CoarseOnly samples
+# Location samples
 
 // TODO
 
