@@ -23,8 +23,8 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.Saver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -40,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.core.database.getStringOrNull
 import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -48,7 +47,6 @@ import kotlinx.coroutines.withContext
 import java.io.File
 
 
-@OptIn(ExperimentalTextApi::class)
 @Sample(
     name = "Permissionless",
     description = "This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs",
@@ -64,19 +62,19 @@ fun Permissionless() {
             TitleCard()
         }
         item {
-            TakePhoto()
+            TakePhotoCard()
         }
         item {
-            CaptureVideo()
+            CaptureVideoCard()
         }
         item {
-            PickContact()
+            PickContactCard()
         }
         item {
-            PickMedia()
+            PickMediaCard()
         }
         item {
-            OpenDocuments()
+            OpenDocumentsCard()
         }
     }
 }
@@ -133,11 +131,26 @@ private suspend fun Context.createTemporaryFile(name: String, type: String): Uri
     }
 
 /**
+ * Utility class to hold the state of the camera request with the created URI.
+ */
+sealed class CameraRequest {
+
+    abstract val uri: Uri
+
+    object None : CameraRequest() {
+        override val uri: Uri = Uri.EMPTY
+    }
+
+    data class Pending(override val uri: Uri) : CameraRequest()
+    data class Completed(override val uri: Uri) : CameraRequest()
+}
+
+/**
  * Register the provided camera related contract and display the UI to request and show the returned
  * value from the camera.
  */
 @Composable
-private fun CameraRequest(
+private fun CameraRequestCard(
     actionTitle: String,
     fileName: String,
     fileType: String,
@@ -146,26 +159,19 @@ private fun CameraRequest(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
-    // Holds the URI generated for the Camera request
-    var uri by rememberSaveable {
-        mutableStateOf(Uri.EMPTY)
-    }
-
-    // Hold the Coil requests to load the provided uri if any
-    var imageRequest by rememberSaveable(stateSaver = Saver<ImageRequest?, Uri>(
-        save = { it?.data as? Uri },
-        restore = { ImageRequest.Builder(context).data(it).build() }
-    )) {
-        mutableStateOf(null)
+    // Hold the camera request use to display the selected media.
+    var request by remember {
+        mutableStateOf<CameraRequest>(CameraRequest.None)
     }
 
     // Create the launcher for the given contract and handle result
     val launcher = rememberLauncherForActivityResult(contract) { isSuccessful ->
-        // Create a new image request with the previously create URI to display the URI
-        imageRequest = if (isSuccessful) {
-            ImageRequest.Builder(context).data(uri).build()
+        // Create a new image request with the previously create URI to force Coil to display the
+        // new URI content, otherwise it would cache the "empty" URI.
+        request = if (isSuccessful) {
+            CameraRequest.Completed(request.uri)
         } else {
-            null
+            CameraRequest.None
         }
         Toast.makeText(context, "Captured? $isSuccessful", Toast.LENGTH_SHORT).show()
     }
@@ -179,24 +185,26 @@ private fun CameraRequest(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
                 scope.launch {
-                    // On click create a new file (outside of the main thread!) and launch the camera
-                    // request with the new file URI
-                    uri = context.createTemporaryFile(fileName, fileType)
-                    launcher.launch(uri)
+                    // On click create a new file (outside of the main thread!) and launch the
+                    // camera request with the new file URI
+                    request = CameraRequest.Pending(
+                        context.createTemporaryFile(fileName, fileType)
+                    )
+                    launcher.launch(request.uri)
                 }
             }
         ) {
             Text(text = actionTitle)
         }
-        if (imageRequest != null) {
+        if (request is CameraRequest.Completed) {
             // Using [Coil](https://github.com/coil-kt/coil) to load images from URIs
             AsyncImage(
-                model = imageRequest,
-                contentDescription = null,
+                model = request.uri,
+                contentDescription = "Image captured by you",
                 modifier = Modifier
                     .clickable {
                         // Request system to display URI
-                        val intent = Intent.parseUri(uri.toString(), Intent.URI_ANDROID_APP_SCHEME)
+                        val intent = Intent(Intent.ACTION_VIEW, request.uri)
                         // Important: flag needed to allow other apps read internal app's files.
                         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
                         context.startActivity(intent)
@@ -207,8 +215,8 @@ private fun CameraRequest(
 }
 
 @Composable
-private fun TakePhoto() {
-    CameraRequest(
+private fun TakePhotoCard() {
+    CameraRequestCard(
         actionTitle = "Take a photo",
         fileName = "sample-photo",
         fileType = ".jpeg",
@@ -217,8 +225,8 @@ private fun TakePhoto() {
 }
 
 @Composable
-private fun CaptureVideo() {
-    CameraRequest(
+private fun CaptureVideoCard() {
+    CameraRequestCard(
         actionTitle = "Capture video",
         fileName = "sample-video",
         fileType = ".mp4",
@@ -227,8 +235,10 @@ private fun CaptureVideo() {
 }
 
 @Composable
-private fun PickContact() {
+private fun PickContactCard() {
     val context = LocalContext.current
+
+    // Hold the contact information selected by the user
     var contactInfo by rememberSaveable {
         mutableStateOf("")
     }
@@ -273,7 +283,8 @@ private fun PickContact() {
 }
 
 @Composable
-private fun PickMedia() {
+private fun PickMediaCard() {
+    // Holds the selected URI from the media selected by the user
     var selectedUri by rememberSaveable {
         mutableStateOf<Uri>(Uri.EMPTY)
     }
@@ -293,6 +304,7 @@ private fun PickMedia() {
         TextButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
+                // Launch the Photo Picker request. Check PickVisualMedia types for other options
                 launcher.launch(
                     PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                 )
@@ -304,15 +316,17 @@ private fun PickMedia() {
             // Using [Coil](https://github.com/coil-kt/coil) to load images from URIs
             AsyncImage(
                 model = selectedUri,
-                contentDescription = null,
+                contentDescription = "Image selected by you",
             )
         }
     }
 }
 
 @Composable
-private fun OpenDocuments() {
+private fun OpenDocumentsCard() {
     val context = LocalContext.current
+
+    // Holds the information of the selected file by the user
     var documentInfo by rememberSaveable {
         mutableStateOf("")
     }
@@ -323,6 +337,8 @@ private fun OpenDocuments() {
                 Toast.makeText(context, "No document selected", Toast.LENGTH_SHORT).show()
                 return@rememberLauncherForActivityResult
             }
+
+            // Retrieve the metadata info from the file
             context.contentResolver.query(uri, null, null, null, null).use { cursor ->
                 documentInfo = if (cursor != null && cursor.moveToFirst()) {
                     (0 until cursor.columnCount).joinToString("\n") {
