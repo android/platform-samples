@@ -1,20 +1,26 @@
 # Platform Samples
 
-A collection of samples of different Android OS platform features.
+A collection of samples of different Android OS platform APIs.
+
+> **Note:** the goal of these samples are to showcase certain functionality in isolation and might
+> use simplified code. For best practices follow our documentation and check
+> [Now In Android](https://github.com/android/nowinandroid)
 
 Browse the samples inside each topic samples folder:
 
 - [Accessibility](samples/accessibility)
 - [Camera](samples/camera)
-- [Media](samples/media)
+- [Media & connectivity](samples/media)
 - [Privacy](samples/privacy)
+- [Location](samples/location)
 - [Power](samples/power)
 - [Security](samples/security)
 - [Storage](samples/storage)
 - [User-interface](samples/user-interface)
 
 > **Important:** each sample is isolated from the rest and only contains the specific sample code.
-> The wiring into the main application is done under the hood.
+> The wiring into the main application is done under the hood and an implementation detail not
+> needed to understand the sample functionality.
 
 ## How to run
 
@@ -24,6 +30,16 @@ Browse the samples inside each topic samples folder:
 
 This will open the samples list screen that allows you to navigate throughout the different
 categories and available samples.
+
+### Deeplink to sample
+
+To open a specific sample directly you can use one of the auto-generated configurations.
+
+1. Open Run Configuration dropdown
+2. Select sample name
+3. Run
+
+> **Tip:** use `⌥⌘R` or `Alt+Shift+F10` shortcut to open the full list and launch the selected one. 
 
 ## Reporting Issues
 
