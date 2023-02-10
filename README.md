@@ -39,7 +39,7 @@ To open a specific sample directly you can use one of the auto-generated configu
 2. Select sample name
 3. Run
 
-> **Tip:** use `⌥⌘R` or `Alt+Shift+F10` shortcut to open the full list and launch the selected one. 
+> **Tip:** use `⌃⌥R` or `Alt+Shift+F10` shortcut to open the full list and launch the selected one. 
 
 ## Reporting Issues
 
