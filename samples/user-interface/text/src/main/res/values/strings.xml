@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2023 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,6 +14,10 @@
   ~ limitations under the License.
 -->
 <resources>
+    <!-- Linkify -->
+    <string name="linkify_web_urls">Web URL: https://developer.android.com. Click to open the link in a browser.</string>
+    <string name="linkify_custom">Twitter: @AndroidDev. Click to open the account.</string>
+
     <!-- Hyphenation -->
     <string name="hyphenation_frequency">Hyphenation Frequency</string>
     <string name="english_paragraph">
