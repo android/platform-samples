@@ -8,6 +8,17 @@ This sample demonstrates several text-related features in Android.
 in the [core-ktx](https://developer.android.com/kotlin/ktx#core) library is useful for quickly
 building a rich text.
 
+### [Hyphenation](app/src/main/java/com/example/android/text/demo/hyphenation/HyphenationFragment.kt)
+
+Automatic hyphenation is available for a number of languages including English.
+
+Android 6.0 Marshmallow (API level 23) introduced the
+[android:hyphenationFrequency](https://developer.android.com/reference/android/widget/TextView#attr_android:hyphenationFrequency)
+attribute to apply automatic hyphenation to a `TextView`.
+
+Android 13 (API level 33) introduced 2 new options, `fullFast` and `normalFast`. These are the same
+as `full` and `normal`, but use faster algorithm for better performance.
+
 ## License
 
 ```
