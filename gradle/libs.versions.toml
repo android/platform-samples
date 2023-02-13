@@ -34,6 +34,7 @@ android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref 
 
 androidx-activity = "androidx.activity:activity:1.6.1"
 androidx-core = "androidx.core:core-ktx:1.9.0"
+androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-fragment = "androidx.fragment:fragment-ktx:1.5.5"
 androidx-activity-compose = "androidx.activity:activity-compose:1.6.1"
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "androidx-navigation" }

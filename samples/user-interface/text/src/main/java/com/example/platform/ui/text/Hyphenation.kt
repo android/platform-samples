@@ -20,18 +20,17 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.text.Layout
 import android.view.View
-import android.widget.Adapter
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import androidx.fragment.app.Fragment
 import com.example.platform.ui.text.databinding.HyphenationFragmentBinding
+import com.example.platform.ui.text.utils.doOnItemSelected
 import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
     name = "Hyphenation",
     description = "Demonstrates different options for the `android:hyphenationFrequency` attribute"
 )
-class Hyphenation: Fragment(R.layout.hyphenation_fragment) {
+class Hyphenation : Fragment(R.layout.hyphenation_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val binding = HyphenationFragmentBinding.bind(view)
@@ -53,28 +52,11 @@ class Hyphenation: Fragment(R.layout.hyphenation_fragment) {
 @SuppressLint("InlinedApi")
 private enum class HyphenationFrequencyOption(
     val value: Int,
-    val label: String
+    val label: String,
 ) {
     FullFast(Layout.HYPHENATION_FREQUENCY_FULL_FAST, "fullFast (API 33+)"),
     Full(Layout.HYPHENATION_FREQUENCY_FULL, "full"),
     None(Layout.HYPHENATION_FREQUENCY_NONE, "none"),
     NormalFast(Layout.HYPHENATION_FREQUENCY_NORMAL_FAST, "normalFast (API 33+)"),
     Normal(Layout.HYPHENATION_FREQUENCY_NORMAL, "normal"),
-}
-
-private fun <T : Adapter> AdapterView<T>.doOnItemSelected(
-    onNothingSelected: () -> Unit = {},
-    onItemSelected: (view: View, position: Int, id: Long) -> Unit
-) {
-    onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            if (view != null) {
-                onItemSelected(view, position, id)
-            }
-        }
-
-        override fun onNothingSelected(parent: AdapterView<*>?) {
-            onNothingSelected()
-        }
-    }
 }
