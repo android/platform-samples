@@ -1,4 +1,4 @@
-# TextSpan samples
+# Text samples
 
 This sample demonstrates several text-related features in Android.
 
@@ -34,6 +34,18 @@ Android 13 (API level 33) introduced the `android:lineBreakWordStyle` attribute 
 this attribute to `"phrase"`, and
 [phrases (bunsetsu)](https://ja.wikipedia.org/wiki/%E6%96%87%E7%AF%80)
 in the text will not be separated by line breaks.
+
+### [Conversation suggestions](src/main/java/com/example/platform/ui/text/ConversionSuggestions.kt)
+
+Android 13 (API level 33) introduced Conversion Suggestion API that allows apps to access pieces of
+text before they are committed during a text conversion session. Apps can then use these suggestions
+to build incremental search queries, etc.
+
+See
+[ConversionEditText.kt](src/main/java/com/example/platform/ui/text/ConversionEditText.kt)
+and
+[ConversionInputConnection.kt](src/main/java/com/example/platform/ui/text/ConversionInputConnection.kt)
+for the detail on how to use the API.
 
 ## License
 
