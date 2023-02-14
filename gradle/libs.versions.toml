@@ -18,12 +18,12 @@ accompanist = "0.28.0"
 androidx-navigation = "2.5.3"
 casa = "0.3.1"
 coil = "2.2.2"
-com-google-devtools-ksp = "1.8.0-1.0.8"
+com-google-devtools-ksp = "1.8.10-1.0.9"
 compose-bom = "2023.01.00"
-composeCompiler = "1.4.0"
+composeCompiler = "1.4.2"
 gradlePlugin = "7.3.1"
 hilt = "2.44.2"
-kotlin = "1.8.0"
+kotlin = "1.8.10"
 ktlint = "0.48.1"
 coroutines = "1.6.4"
 
@@ -60,7 +60,7 @@ compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", ve
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-util = { module = "androidx.compose.ui:util" }
 
-google-ksp = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "com-google-devtools-ksp" }
+google-ksp-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "com-google-devtools-ksp" }
 google-ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "com-google-devtools-ksp" }
 
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }

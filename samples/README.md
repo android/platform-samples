@@ -10,12 +10,16 @@ TODO: Add description
 TODO: Add description
 - [CameraX](/camera/camerax/src/main/java/com/example/platform/camera.x/CameraX.kt):
 TODO: Add description
+- [Conversion suggestions](/user-interface/text/src/main/java/com/example/platform/ui/text/ConversionSuggestions.kt):
+Demonstrates how to implement the incremental search feature for non-alphabet languages with the Conversion Suggestions API.
 - [DataAccess](/privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
 TODO: Add description
 - [Hyphenation](/user-interface/text/src/main/java/com/example/platform/ui/text/Hyphenation.kt):
 Demonstrates different options for the `android:hyphenationFrequency` attribute
 - [Immersive mode](/user-interface/window-insets/src/main/java/com/example/platform/ui/insets/ImmersiveMode.kt):
 Immersive mode enables your app to display full-screen by hiding system bars.
+- [LineBreak](/user-interface/text/src/main/java/com/example/platform/ui/text/LineBreak.kt):
+Demonstrates different options for the `android:lineBreakWordStyle` attribute.
 - [Linkify](/user-interface/text/src/main/java/com/example/platform/ui/text/Linkify.kt):
 Linkify is useful for creating links in TextViews.
 - [LocationPermissions](/location/src/main/java/com/example/platform/location/LocationPermissions.kt):
