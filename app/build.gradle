@@ -62,3 +62,8 @@ dependencies {
         implementation project("$it")
     }
 }
+
+// Link the assemble task to the sync task.
+afterEvaluate {
+    tasks.assembleDebug.finalizedBy(rootProject.tasks.syncSamplesInfo)
+}

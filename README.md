@@ -18,6 +18,8 @@ Browse the samples inside each topic samples folder:
 - [Storage](samples/storage)
 - [User-interface](samples/user-interface)
 
+You can find a list of all the available samples [here](samples/README.md).
+
 > **Important:** each sample is isolated from the rest and only contains the specific sample code.
 > The wiring into the main application is done under the hood and an implementation detail not
 > needed to understand the sample functionality.

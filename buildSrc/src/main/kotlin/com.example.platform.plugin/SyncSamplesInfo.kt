@@ -22,7 +22,7 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import java.io.File
 
-abstract class CreateRunConfig : DefaultTask() {
+abstract class SyncSamplesInfo : DefaultTask() {
 
     @get:Internal
     abstract val projectDir: DirectoryProperty
@@ -31,31 +31,55 @@ abstract class CreateRunConfig : DefaultTask() {
     fun create() {
         val projectDirFile = projectDir.asFile.get()
         val samplesFolder = File(projectDirFile, "samples")
-        val tag = "name = "
-        val sampleNames = mutableListOf<String>()
+        val samples = mutableListOf<SampleInfo>()
         samplesFolder.walkBottomUp().forEach { file ->
             if (file.extension == "kt") {
                 val text = file.readText()
                 if (text.contains("@Sample")) {
-                    val index = text.indexOf(tag)
-                    if (index >= 0) {
-                        val startIndex = index + tag.length + 1
-                        sampleNames.add(
-                            text.substring(startIndex until text.indexOf("\"", startIndex))
-                        )
-                    }
+                    val sample = SampleInfo(
+                        name = text.findTag("name = "),
+                        description = text.findTag("description = "),
+                        path = file.path.removePrefix(samplesFolder.path)
+                    )
+                    samples.add(sample)
                 }
             }
         }
 
-        sampleNames.forEach { sampleName ->
-            createRunConfig(projectDirFile, sampleName)
+        samples.forEach { sample ->
+            createRunConfig(projectDirFile, sample.name)
         }
+
+        createSamplesList(projectDirFile, samples)
 
         val ideaDir = File(projectDirFile, ".idea/runConfigurations")
         Runtime.getRuntime().exec("git add $ideaDir")
+    }
 
-        println("Done! Sync and build project")
+    private fun String.findTag(tag: String): String {
+        val index = indexOf(tag)
+        return if (index >= 0) {
+            val startIndex = index + tag.length + 1
+            substring(startIndex until indexOf("\"", startIndex))
+        } else {
+            ""
+        }
+    }
+}
+
+private data class SampleInfo(val name: String, val description: String, val path: String)
+
+private fun createSamplesList(projectDir: File, samples: List<SampleInfo>) {
+    val readme = buildString {
+        append("# Available Samples\n\n")
+
+        samples.sortedBy { it.name }.forEach {
+            append("- [${it.name}](${it.path}):\n${it.description}\n")
+        }
+    }
+    File(projectDir, "samples/README.md").apply {
+        createNewFile()
+        writeText(readme)
     }
 }
 
