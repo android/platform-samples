@@ -2,6 +2,8 @@
 
 - [Accessibility](/accessibility/src/main/java/com/example/platform/accessibility/Accessibility.kt):
 TODO: Add description
+- [App Widgets](/user-interface/appwidgets/src/main/java/com/example/platform/ui/appwidgets/AppWidgets.kt):
+Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples
 - [Audio Manager](/connectivity/audio/src/main/java/com/example/platform/connectivity/audio/AudioSample.kt):
 This sample will show you how get all audio sources and set an audio device. Covers Bluetooth, LEA, Wired and internal speakers
 - [Camera](/camera/camerax-mlkit/src/main/java/com/example/platform/camera/mlkit/CameraMLKit.kt):
