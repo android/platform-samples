@@ -24,8 +24,18 @@ Immersive mode enables your app to display full-screen by hiding system bars.
 Demonstrates different options for the `android:lineBreakWordStyle` attribute.
 - [Linkify](/user-interface/text/src/main/java/com/example/platform/ui/text/Linkify.kt):
 Linkify is useful for creating links in TextViews.
-- [LocationPermissions](/location/src/main/java/com/example/platform/location/LocationPermissions.kt):
-TODO: Add description
+- [Location - Background Location updates](/location/src/main/java/com/example/platform/location/bglocationaccess/BgLocationAccessScreen.kt):
+This Sample demonstrate how to access location and get location updates when app is in background
+- [Location - Create and monitor Geofence](/location/src/main/java/com/example/platform/location/geofencing/GeofencingScreen.kt):
+This Sample demonstrate best practices for Creating and monitoring geofence
+- [Location - Getting Current Location](/location/src/main/java/com/example/platform/location/currentLocation/CurrentLocationScreen.kt):
+This Sample demonstrate how to request of current location
+- [Location - Permissions](/location/src/main/java/com/example/platform/location/permission/LocationPermissionsScreen.kt):
+This Sample demonstrate best practices for Location Permission
+- [Location - Updates](/location/src/main/java/com/example/platform/location/locationupdates/LocationUpdatesScreen.kt):
+This Sample demonstrate how to get location updates
+- [Location - User Activity Recognition](/location/src/main/java/com/example/platform/location/useractivityrecog/UserActivityRecogScreen.kt):
+This Sample demonstrate detection of user activity like walking, driving 
 - [Media](/media/src/main/java/com/example/platform/media/Media.kt):
 TODO: Add description
 - [Multiple Permissions](/privacy/permissions/src/main/java/com/example/platform/privacy/permissions/MultiplePermissions.kt):
