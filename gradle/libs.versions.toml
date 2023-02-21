@@ -26,6 +26,7 @@ hilt = "2.44.2"
 kotlin = "1.8.10"
 ktlint = "0.48.1"
 coroutines = "1.6.4"
+play-services-location = "21.0.1"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
@@ -77,3 +78,5 @@ kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-te
 coil-base = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil-video = { module = "io.coil-kt:coil-video", version.ref = "coil" }
+
+play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
