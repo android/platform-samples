@@ -46,14 +46,17 @@ abstract class SyncSamplesInfo : DefaultTask() {
             }
         }
 
+        // Delete previously created file in case name changed
+        File(projectDirFile, ".idea/runConfigurations").walkBottomUp().forEach { file ->
+            if (file.isFile && file.name.startsWith("Sample-")) {
+                file.delete()
+            }
+        }
         samples.forEach { sample ->
             createRunConfig(projectDirFile, sample.name)
         }
 
         createSamplesList(projectDirFile, samples)
-
-        val ideaDir = File(projectDirFile, ".idea/runConfigurations")
-        Runtime.getRuntime().exec("git add $ideaDir")
     }
 
     private fun String.findTag(tag: String): String {
@@ -91,7 +94,7 @@ fun createRunConfig(projectDir: File, sampleName: String) {
     val sampleConfig = defaultConfig
         .replace("name=\"app\"", "name=\"$sampleName\"")
         .replace("</configuration>", "$startCommand\n</configuration>")
-    File(ideaDir, "$sampleName.xml").apply {
+    File(ideaDir, "Sample-${sampleName.replace(" ", "-")}.xml").apply {
         createNewFile()
         writeText(sampleConfig)
     }
