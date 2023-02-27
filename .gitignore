@@ -20,6 +20,11 @@ captures
 .idea/androidTestResultsUserPreferences.xml
 .idea/inspectionProfiles
 .idea/vcs.xml
+
+# Ignore all auto-generated configs except for app.xml. It's needed as template for the build
+.idea/runConfigurations
+!.idea/runConfigurations/app.xml
+
 gradle.xml
 *.iml
 
