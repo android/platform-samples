@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-plugins {
-    id("com.example.platform.sample")
-}
+package com.example.platform.location.utils
 
-android {
-    namespace = "com.example.platform.location"
-}
+//constants used for locations samples
 
-dependencies {
-    implementation(libs.play.services.location)
-    implementation(libs.kotlin.coroutines.play)
-    implementation(libs.work)
-    implementation(libs.work.ktx)
-}
+const val CUSTOM_INTENT_USER_ACTION = "USER-ACTIVITY-DETECTION-INTENT-ACTION"
+const val CUSTOM_REQUEST_CODE_USER_ACTION = 1000
+
+const val CUSTOM_INTENT_GEOFENCE = "GEOFENCE-TRANSITION-INTENT-ACTION"
+const val CUSTOM_REQUEST_CODE_GEOFENCE = 1001

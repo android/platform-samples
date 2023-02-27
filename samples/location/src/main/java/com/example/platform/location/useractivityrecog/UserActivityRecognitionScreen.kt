@@ -33,7 +33,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import com.example.platform.location.permission.LocationPermissions
-import com.example.platform.location.useractivityrecog.UserActivityTransitionManager.Companion.CUSTOM_INTENT_USER_ACTION
+import com.example.platform.location.utils.CUSTOM_INTENT_USER_ACTION
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState

@@ -23,6 +23,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresPermission
+import com.example.platform.location.utils.CUSTOM_INTENT_USER_ACTION
+import com.example.platform.location.utils.CUSTOM_REQUEST_CODE_USER_ACTION
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionRequest
@@ -32,11 +34,6 @@ import kotlinx.coroutines.tasks.await
 class UserActivityTransitionManager(context: Context) {
 
     companion object {
-        private const val TAG = "UserActivityTransitionManager"
-
-        const val CUSTOM_INTENT_USER_ACTION = "USER-ACTIVITY-DETECTION-INTENT-ACTION"
-        const val CUSTOM_REQUEST_CODE = 0
-
         fun getActivityType(int: Int): String {
             return when (int) {
                 0 -> "IN_VEHICLE"
@@ -95,7 +92,7 @@ class UserActivityTransitionManager(context: Context) {
     private val pendingIntent by lazy {
         PendingIntent.getBroadcast(
             context,
-            CUSTOM_REQUEST_CODE,
+            CUSTOM_REQUEST_CODE_USER_ACTION,
             Intent(CUSTOM_INTENT_USER_ACTION),
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
                 PendingIntent.FLAG_CANCEL_CURRENT
