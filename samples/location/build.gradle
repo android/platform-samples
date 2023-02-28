@@ -5,5 +5,5 @@ android {
 }
 
 dependencies {
-    // Add samples specific dependencies
+    implementation libs.play.services.location
 }
