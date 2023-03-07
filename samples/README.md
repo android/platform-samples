@@ -16,6 +16,8 @@ TODO: Add description
 Demonstrates how to implement the incremental search feature for non-alphabet languages with the Conversion Suggestions API.
 - [DataAccess](/privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
 TODO: Add description
+- [FindDevicesSample](/connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/FindDevicesSample.kt):
+This example will demonstrate how to scanning for Low Energy Devices
 - [Hyphenation](/user-interface/text/src/main/java/com/example/platform/ui/text/Hyphenation.kt):
 Demonstrates different options for the `android:hyphenationFrequency` attribute
 - [Immersive mode](/user-interface/window-insets/src/main/java/com/example/platform/ui/insets/ImmersiveMode.kt):
