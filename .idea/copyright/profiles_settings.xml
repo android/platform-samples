@@ -1,7 +1,7 @@
 <component name="CopyrightManager">
   <settings default="AOSP">
     <module2copyright>
-      <element module="Project Files" copyright="AOSP" />
+      <element module="All" copyright="AOSP" />
     </module2copyright>
   </settings>
 </component>

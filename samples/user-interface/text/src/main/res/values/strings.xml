@@ -12,7 +12,7 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
--->
+  -->
 <resources>
     <!-- Linkify -->
     <string name="linkify_web_urls">Web URL: https://developer.android.com. Click to open the link in a browser.</string>
