@@ -125,7 +125,7 @@
 
         <provider
             android:name=".glance.image.ImageFileProvider"
-            android:authorities="com.example.android.appwidget.fileprovider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

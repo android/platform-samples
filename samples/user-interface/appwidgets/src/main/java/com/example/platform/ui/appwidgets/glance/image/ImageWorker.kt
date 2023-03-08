@@ -162,7 +162,7 @@ class ImageWorker(
             // Use the FileProvider to create a content URI
             val contentUri = getUriForFile(
                 context,
-                "com.example.android.appwidget.fileprovider",
+                "${applicationContext.packageName}.provider",
                 imageFile
             )
 
