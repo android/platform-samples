@@ -1,7 +1,5 @@
 # Available Samples
 
-- [Accessibility](/accessibility/src/main/java/com/example/platform/accessibility/Accessibility.kt):
-TODO: Add description
 - [App Widgets](/user-interface/appwidgets/src/main/java/com/example/platform/ui/appwidgets/AppWidgets.kt):
 Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples
 - [Audio Manager](/connectivity/audio/src/main/java/com/example/platform/connectivity/audio/AudioSample.kt):
@@ -38,8 +36,6 @@ This Sample demonstrate best practices for Location Permission
 This Sample demonstrate how to get location updates
 - [Location - User Activity Recognition](/location/src/main/java/com/example/platform/location/useractivityrecog/UserActivityRecogScreen.kt):
 This Sample demonstrate detection of user activity like walking, driving 
-- [Media](/media/src/main/java/com/example/platform/media/Media.kt):
-TODO: Add description
 - [Multiple Permissions](/privacy/permissions/src/main/java/com/example/platform/privacy/permissions/MultiplePermissions.kt):
 Shows the recommended flow to request multiple RELATED runtime permissions
 - [PackageVisibility](/privacy/data/src/main/java/com/example/platform/privacy/data/PackageVisibility.kt):
@@ -48,13 +44,7 @@ TODO: Add description
 This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs
 - [Permissions using Compose](/privacy/permissions/src/main/java/com/example/platform/privacy/permissions/ComposePermissions.kt):
 This sample showcases how to request permission using Accompanist in Compose
-- [Power](/power/src/main/java/com/example/platform/power/Power.kt):
-TODO: Add description
-- [Security](/security/src/main/java/com/example/platform/security/Security.kt):
-TODO: Add description
 - [Single Permission](/privacy/permissions/src/main/java/com/example/platform/privacy/permissions/SinglePermission.kt):
 Shows the recommended flow to request single runtime permissions
-- [Storage](/storage/src/main/java/com/example/platform/storage/Storage.kt):
-TODO: Add description
 - [TextSpan](/user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.
