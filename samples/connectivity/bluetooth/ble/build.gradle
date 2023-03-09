@@ -1,9 +1,0 @@
-apply from: "$rootDir/gradle/sample-build.gradle"
-
-android {
-    namespace 'com.example.platform.connectivity.bluetooth.ble'
-}
-
-dependencies {
-    // Add samples specific dependencies
-}

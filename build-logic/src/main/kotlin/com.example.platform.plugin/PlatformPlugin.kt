@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,21 @@
  * limitations under the License.
  */
 
-plugins {
-    id("com.example.platform.sample")
-}
-    
+package com.example.platform.plugin
 
-android {
-    namespace = "com.example.platform.ui.insets"
-}
+import org.gradle.api.Plugin
+import org.gradle.api.Project
 
-dependencies {
-    // Add samples specific dependencies
+class PlatformPlugin : Plugin<Project> {
+    override fun apply(target: Project) {
+        with(target) {
+            tasks.register("createSample", CreateSample::class.java) {
+                it.projectDir.set(project.projectDir)
+            }
+
+            tasks.register("syncSamplesInfo", SyncSamplesInfo::class.java) {
+                it.projectDir.set(project.projectDir)
+            }
+        }
+    }
 }

@@ -16,31 +16,36 @@
 [versions]
 accompanist = "0.28.0"
 androidx-navigation = "2.5.3"
+androidGradlePlugin = "7.4.2"
 casa = "0.3.1"
 coil = "2.2.2"
-com-google-devtools-ksp = "1.8.10-1.0.9"
+ksp = "1.8.10-1.0.9"
 compose-bom = "2023.01.00"
 composeCompiler = "1.4.2"
-gradlePlugin = "7.3.1"
 hilt = "2.44.2"
 kotlin = "1.8.10"
+kotlin-serialization = "1.4.1"
 ktlint = "0.48.1"
 coroutines = "1.6.4"
 play-services-location = "21.0.1"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
-affectedmoduledetector = "com.dropbox.affectedmoduledetector:affectedmoduledetector:0.2.0"
-android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
+android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 
 androidx-activity = "androidx.activity:activity:1.6.1"
 androidx-core = "androidx.core:core-ktx:1.9.0"
+androidx-core-remoteviews = "androidx.core:core-remoteviews:1.0.0-beta03"
+androidx-glance-appwidget = "androidx.glance:glance-appwidget:1.0.0-alpha05"
+
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-fragment = "androidx.fragment:fragment-ktx:1.5.5"
 androidx-activity-compose = "androidx.activity:activity-compose:1.6.1"
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "androidx-navigation" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.5.1"
+
+androidx-work-runtime-ktx = "androidx.work:work-runtime-ktx:2.8.0"
 
 casa-base = { module = "com.google.android.catalog.framework:casa-base", version.ref = "casa" }
 casa-processor = { module = "com.google.android.catalog.framework:casa-processor", version.ref = "casa" }
@@ -61,22 +66,35 @@ compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", ve
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-util = { module = "androidx.compose.ui:util" }
 
-google-ksp-plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "com-google-devtools-ksp" }
-google-ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "com-google-devtools-ksp" }
+google-ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
-hilt-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
 
 kotlin-reflect = { module = "org.jetbrains.kotlin:kotlin-reflect", version.ref = "kotlin" }
-kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
-kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib", version.ref = "kotlin" }
-kotlin-stdlibJdk8 = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "coroutines" }
 kotlin-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "coroutines" }
+kotlin-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization" }
+
+kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 
 coil-base = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil-video = { module = "io.coil-kt:coil-video", version.ref = "coil" }
 
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
+
+[plugins]
+affectedmoduledetector = { id = "com.dropbox.affectedmoduledetector", version = "0.2.0" }
+versionCatalogUpdate = { id = "nl.littlerobots.version-catalog-update", version = "0.7.0" }
+benManesVersions = { id = "com.github.ben-manes.versions", version = "0.44.0" }
+
+android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
+android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
+android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
+hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-kapt = { id = "org.jetbrains.kotlin.kapt", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

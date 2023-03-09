@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-apply from: "$rootDir/gradle/sample-build.gradle"
+plugins {
+    id("com.example.platform.sample")
+}
 
 android {
-    namespace 'com.example.platform.location'
+    namespace = "com.example.platform.location"
 }
 
 dependencies {
-    implementation libs.play.services.location
+    implementation(libs.play.services.location)
 }

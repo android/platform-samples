@@ -14,12 +14,24 @@
  * limitations under the License.
  */
 
-apply from: "$rootDir/gradle/sample-build.gradle"
-
+plugins {
+    id("com.example.platform.sample")
+    alias(libs.plugins.kotlin.serialization)
+}
+    
 android {
-    namespace 'com.example.platform.privacy.transparency'
+    namespace = "com.example.platform.ui.appwidgets"
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
-    // Add samples specific dependencies
+    implementation(libs.kotlin.serialization.json)
+    // For traditional RemoteViews
+    implementation(libs.androidx.core.remoteviews)
+    // For building appwidgets with Glance
+    implementation(libs.androidx.glance.appwidget)
+    // Recommended to use WorkManager to load data for widgets
+    implementation(libs.androidx.work.runtime.ktx)
 }

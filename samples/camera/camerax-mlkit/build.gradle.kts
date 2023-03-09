@@ -15,24 +15,14 @@
  */
 
 plugins {
-    id 'org.jetbrains.kotlin.plugin.serialization' version "1.7.20"
+    id("com.example.platform.sample")
 }
-
-apply from: "$rootDir/gradle/sample-build.gradle"
+    
 
 android {
-    namespace 'com.example.platform.ui.appwidgets'
-    buildFeatures {
-        viewBinding true
-    }
+    namespace = "com.example.platform.camera.mlkit"
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.1'
-    // For traditional RemoteViews
-    implementation "androidx.core:core-remoteviews:1.0.0-beta03"
-    // For building appwidgets with Glance
-    implementation "androidx.glance:glance-appwidget:1.0.0-alpha05"
-    // Recommended to use WorkManager to load data for widgets
-    implementation "androidx.work:work-runtime-ktx:2.8.0"
+    // Add samples specific dependencies
 }

@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-apply from: "$rootDir/gradle/sample-build.gradle"
+plugins {
+    id("com.example.platform.sample")
+}
 
 android {
-    namespace 'com.example.platform.connectivity.audio'
+    namespace = "com.example.platform.camera.x"
 }
 
 dependencies {

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2022 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
-apply from: "$rootDir/gradle/sample-build.gradle"
+plugins {
+    id("com.example.platform.sample")
+}
 
 android {
-    namespace 'com.example.platform.privacy.data'
+    namespace = "com.example.platform.privacy.permissions"
 }
 
 dependencies {

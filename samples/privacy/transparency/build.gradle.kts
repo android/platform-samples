@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Google LLC
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,14 @@
  */
 
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "1.8.0"
+    id("com.example.platform.sample")
 }
-repositories {
-    mavenCentral()
+    
+
+android {
+    namespace = "com.example.platform.privacy.transparency"
+}
+
+dependencies {
+    // Add samples specific dependencies
 }

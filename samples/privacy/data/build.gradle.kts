@@ -20,7 +20,7 @@ plugins {
     
 
 android {
-    namespace = "com.example.platform.ui.insets"
+    namespace = "com.example.platform.privacy.data"
 }
 
 dependencies {
