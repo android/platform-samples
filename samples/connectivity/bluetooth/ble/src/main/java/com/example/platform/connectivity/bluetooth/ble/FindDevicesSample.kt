@@ -20,15 +20,14 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
-import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,50 +39,75 @@ import com.google.accompanist.permissions.MultiplePermissionsState
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.launch
+import java.util.concurrent.TimeUnit
 
 @Sample(
-    name = "FindDevicesSample",
+    name = "Find devices sample",
     description = "This example will demonstrate how to scanning for Low Energy Devices"
 )
 @Composable
-fun FindDevicesSamples() {
+fun FindDevicesSample() {
     val context = LocalContext.current
-    val bluetoothManager =
-        context.getSystemService<BluetoothManager>()
+    val bluetoothManager = context.getSystemService<BluetoothManager>()
 
-    FindBLEDevicesScreen(FindDeviceController(bluetoothManager!!.adapter))
+    if (bluetoothManager == null) {
+        Text(text = "Sample not supported in this device. Missing the Bluetooth Manager")
+    } else {
+        FindBLEDevicesScreen(FindDeviceController(bluetoothManager.adapter))
+    }
 }
 
 @SuppressLint("MissingPermission", "NewApi")
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun FindBLEDevicesScreen(
+private fun FindBLEDevicesScreen(
     findDeviceController: FindDeviceController,
 ) {
     val multiplePermissionsState =
         rememberMultiplePermissionsState(FindDeviceController.bluetoothPermissionSet)
 
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            if (multiplePermissionsState.allPermissionsGranted) {
-                ListOfDevicesWidget(findDeviceController)
-            } else {
-                PermissionWidget(multiplePermissionsState)
-            }
+        if (multiplePermissionsState.allPermissionsGranted) {
+            ListOfDevicesWidget(findDeviceController)
+        } else {
+            PermissionWidget(multiplePermissionsState)
         }
     }
 }
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-fun PermissionWidget(
-    multiplePermissionsState: MultiplePermissionsState,
-) {
+private fun PermissionWidget(permissionsState: MultiplePermissionsState) {
+    var showRationale by remember(permissionsState) {
+        mutableStateOf(false)
+    }
+
+    if (showRationale) {
+        AlertDialog(onDismissRequest = { showRationale = false }, title = {
+            Text(text = "")
+        }, text = {
+            Text(text = "")
+        }, confirmButton = {
+            TextButton(onClick = {
+                permissionsState.launchMultiplePermissionRequest()
+            }) {
+                Text("Continue")
+            }
+        }, dismissButton = {
+            TextButton(onClick = {
+                showRationale = false
+            }) {
+                Text("Dismiss")
+            }
+        })
+    }
+
     Button(onClick = {
-        multiplePermissionsState.launchMultiplePermissionRequest()
+        if (permissionsState.shouldShowRationale) {
+            showRationale = true
+        } else {
+            permissionsState.launchMultiplePermissionRequest()
+        }
     }) {
         Text(text = "Grant Permission")
     }
@@ -93,34 +117,45 @@ fun PermissionWidget(
 @SuppressLint("InlinedApi")
 @RequiresPermission(anyOf = [Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.BLUETOOTH_SCAN])
 @Composable
-fun ListOfDevicesWidget(findDeviceController: FindDeviceController) {
-    val bluetoothScanningUiState by findDeviceController.isScanning.collectAsState()
+private fun ListOfDevicesWidget(findDeviceController: FindDeviceController) {
+    val isScanning by findDeviceController.isScanning.collectAsState()
     val coroutineScope = rememberCoroutineScope()
 
-    if (bluetoothScanningUiState) {
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
         Button(onClick = {
-            findDeviceController.stopScan()
-        }) {
-            Text(text = "Stop Scanning")
-        }
-    } else {
-        Button(onClick = {
-            coroutineScope.launch {
-                findDeviceController.startScan(30 * 1000L)
+            if (isScanning) {
+                findDeviceController.stopScan()
+            } else {
+                coroutineScope.launch {
+                    findDeviceController.startScan(TimeUnit.SECONDS.toMillis(30))
+                }
             }
         }) {
-            Text(text = "Start Scanning")
+            Text(
+                text = if (isScanning) {
+                    "Stop Scanning"
+                } else {
+                    "Start Scanning"
+                }
+            )
         }
+        ListOfBLEDevices(findDeviceController)
     }
-
-    ListOfBLEDevices(findDeviceController)
 }
 
 @Composable
-fun ListOfBLEDevices(findDeviceController: FindDeviceController) {
+private fun ListOfBLEDevices(findDeviceController: FindDeviceController) {
     val devices by findDeviceController.listOfDevices.collectAsState()
 
-    LazyColumn {
+    LazyColumn(Modifier.padding(16.dp)) {
+        if (devices.isEmpty()) {
+            item {
+                Text(text = "No devices found")
+            }
+        }
         items(devices) { item ->
             BluetoothItem(bluetoothDevice = item)
         }
@@ -130,8 +165,10 @@ fun ListOfBLEDevices(findDeviceController: FindDeviceController) {
 
 @SuppressLint("MissingPermission")
 @Composable
-fun BluetoothItem(bluetoothDevice: BluetoothDevice) {
-    Text(bluetoothDevice.name,
+private fun BluetoothItem(bluetoothDevice: BluetoothDevice) {
+    Text(
+        bluetoothDevice.name,
         modifier = Modifier
-            .padding(8.dp, 0.dp))
+            .padding(8.dp, 0.dp)
+    )
 }

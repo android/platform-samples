@@ -24,14 +24,15 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 
 class FindDeviceController(private val bluetoothAdapter: BluetoothAdapter) {
 
@@ -40,12 +41,13 @@ class FindDeviceController(private val bluetoothAdapter: BluetoothAdapter) {
 
     //Scan settings control the latency and accuracy of results from the bluetooth stack.
     //Lower the latency the most power consumed.
-    private var scanSettings: ScanSettings =
-        ScanSettings.Builder().setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
-            .setScanMode(ScanSettings.SCAN_MODE_BALANCED).build()
+    private var scanSettings: ScanSettings = ScanSettings.Builder()
+        .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+        .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
+        .build()
 
-    var listOfDevices = MutableStateFlow<List<BluetoothDevice>>(foundDevices)
-    var isScanning = MutableStateFlow<Boolean>(false)
+    var listOfDevices = MutableStateFlow(foundDevices)
+    var isScanning = MutableStateFlow(false)
 
     companion object {
 
@@ -58,13 +60,17 @@ class FindDeviceController(private val bluetoothAdapter: BluetoothAdapter) {
 
         val bluetoothPermissionSet: List<String> =
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-                listOf(Manifest.permission.BLUETOOTH_CONNECT,
+                listOf(
+                    Manifest.permission.BLUETOOTH_CONNECT,
                     Manifest.permission.BLUETOOTH_SCAN,
-                    locationPermission)
+                    locationPermission
+                )
             } else {
-                listOf(Manifest.permission.BLUETOOTH,
+                listOf(
+                    Manifest.permission.BLUETOOTH,
                     Manifest.permission.BLUETOOTH_ADMIN,
-                    locationPermission)
+                    locationPermission
+                )
             }
     }
 
@@ -117,7 +123,8 @@ class FindDeviceController(private val bluetoothAdapter: BluetoothAdapter) {
 
         //To read bluetooth properties bluetooth connect is required for API 31 and above
         //for devices lower only bluetooth permission is required
-        @SuppressLint("MissingPermission")
+        @RequiresApi(Build.VERSION_CODES.S)
+        @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
         override fun onScanResult(callbackType: Int, result: ScanResult) {
             super.onScanResult(callbackType, result)
 
@@ -128,10 +135,6 @@ class FindDeviceController(private val bluetoothAdapter: BluetoothAdapter) {
                     listOfDevices.value = foundDevices
                 }
             }
-        }
-
-        override fun onScanFailed(errorCode: Int) {
-            super.onScanFailed(errorCode)
         }
     }
 }
