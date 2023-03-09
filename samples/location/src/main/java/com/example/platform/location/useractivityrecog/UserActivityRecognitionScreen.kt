@@ -17,7 +17,9 @@
 package com.example.platform.location.useractivityrecog
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.os.Build
+import androidx.annotation.RequiresPermission
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -30,30 +32,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import com.example.platform.location.permission.PermissionRequestCard
-import com.example.platform.location.permission.RationaleState
-import com.example.platform.location.permission.ShowRationale
+import com.example.platform.location.permission.LocationPermissions
 import com.example.platform.location.useractivityrecog.UserActivityTransitionManager.Companion.CUSTOM_INTENT_USER_ACTION
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
 import com.google.android.catalog.framework.annotations.Sample
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
+@SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
 @Sample(
     name = "Location - User Activity Recognition",
-    description = "This Sample demonstrate detection of user activity like walking, driving "
+    description = "This Sample demonstrate detection of user activity like walking, driving, etc."
 )
 @Composable
-fun UserActivityRecogScreen() {
-    val scope = rememberCoroutineScope()
-    val context = LocalContext.current
-    var currentUserActivity by remember {
-        mutableStateOf("")
-    }
-    val activityPermissionState = rememberPermissionState(
+fun UserActivityRecognitionScreen() {
+    val permissionsState = rememberPermissionState(
         permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             Manifest.permission.ACTIVITY_RECOGNITION
         } else {
@@ -61,22 +57,52 @@ fun UserActivityRecogScreen() {
         }
     )
 
-    var showRationale by remember { mutableStateOf(false) }
-    var rationaleState by remember {
-        mutableStateOf(RationaleState())
+    if (permissionsState.status.isGranted) {
+        // Only use precise accuracy if both permissions are granted
+        UserActivityRecognitionContent()
+    } else {
+        LocationPermissions(
+            text = "Activity transition",
+            rationale = "In order to use this feature please grant access by accepting " +
+                    "the activity recognition permission." +
+                    "\n\nWould you like to continue?",
+            locationState = permissionsState
+        )
     }
-    val manager = UserActivityTransitionManager(context)
+}
+
+@SuppressLint("InlinedApi")
+@RequiresPermission(
+    anyOf = [
+        Manifest.permission.ACTIVITY_RECOGNITION,
+        "com.google.android.gms.permission.ACTIVITY_RECOGNITION"
+    ]
+)
+@Composable
+fun UserActivityRecognitionContent() {
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val manager = remember {
+        UserActivityTransitionManager(context)
+    }
+    var currentUserActivity by remember {
+        mutableStateOf("")
+    }
 
     // Calling deregister on dispose
     DisposableEffect(LocalLifecycleOwner.current) {
         onDispose {
-            manager.deregisterActivityTransitions()
+            scope.launch(Dispatchers.IO) {
+                manager.deregisterActivityTransitions()
+            }
         }
     }
 
+    // Register a local broadcast to receive activity transition updates
     UserActivityBroadcastReceiver(systemAction = CUSTOM_INTENT_USER_ACTION) { userActivity ->
         currentUserActivity = userActivity
     }
+
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -84,47 +110,23 @@ fun UserActivityRecogScreen() {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
-        if (showRationale) {
-            ShowRationale(rationaleState)
-        }
+        Button(onClick = {
+            scope.launch(Dispatchers.IO) {
+                manager.registerActivityTransitions()
+            }
 
-        PermissionRequestCard(
-            isGranted = activityPermissionState.status.isGranted,
-            title = "Activity permission access"
-        ) {
-            if (activityPermissionState.status.shouldShowRationale) {
-                showRationale = true
-                rationaleState = RationaleState(
-                    "Request activity transition location",
-                    "In order to use this feature please grant access by accepting " +
-                            "the activity recognition permission." +
-                            "\n\nWould you like to continue?"
-                ) { accepted ->
-                    if (accepted) {
-                        activityPermissionState.launchPermissionRequest()
-                    }
-                    showRationale = false
-                }
-            } else {
-                activityPermissionState.launchPermissionRequest()
-            }
+        }) {
+            Text(text = "Register for activity transition updates")
         }
-
-        if (activityPermissionState.status.isGranted) {
-            Button(onClick = {
-                scope.launch {
-                    manager.registerActivityTransitions()
-                }
-            }) {
-                Text(text = "Register for activity transition updates")
+        Button(onClick = {
+            currentUserActivity = ""
+            scope.launch(Dispatchers.IO) {
+                manager.deregisterActivityTransitions()
             }
-            Button(onClick = {
-                scope.launch {
-                    manager.deregisterActivityTransitions()
-                }
-            }) {
-                Text(text = "Deregister for activity transition updates")
-            }
+        }) {
+            Text(text = "Deregister for activity transition updates")
+        }
+        if (currentUserActivity.isNotBlank()) {
             Text(
                 text = "CurrentActivity is = $currentUserActivity"
             )

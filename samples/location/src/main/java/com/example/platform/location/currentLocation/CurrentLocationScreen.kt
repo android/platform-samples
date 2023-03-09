@@ -18,6 +18,7 @@ package com.example.platform.location.currentLocation
 
 import android.Manifest
 import android.annotation.SuppressLint
+import androidx.annotation.RequiresPermission
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,8 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.platform.location.permission.RationaleState
-import com.example.platform.location.permission.ShowRationale
+import com.example.platform.location.permission.LocationPermissions
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -44,7 +44,9 @@ import com.google.android.catalog.framework.annotations.Sample
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.time.Instant
 
 @SuppressLint("MissingPermission")
@@ -55,22 +57,39 @@ import java.time.Instant
 )
 @Composable
 fun CurrentLocationScreen() {
+    val permissionsState = rememberMultiplePermissionsState(
+        permissions = listOf(
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+    )
+
+    if (permissionsState.permissions.any { it.status.isGranted }) {
+        // Only use precise accuracy if both permissions are granted
+        CurrentLocationContent(usePreciseLocation = permissionsState.allPermissionsGranted)
+    } else {
+        LocationPermissions(
+            text = "Location",
+            rationale = "In order to use this feature please grant access by accepting " +
+                    "either precise or approximate location permission." +
+                    "\n\nWould you like to continue?",
+            locationState = permissionsState
+        )
+    }
+}
+
+@RequiresPermission(
+    anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION]
+)
+@Composable
+fun CurrentLocationContent(usePreciseLocation: Boolean) {
     val scope = rememberCoroutineScope()
     val context = LocalContext.current
     val locationClient = remember {
         LocationServices.getFusedLocationProviderClient(context)
     }
-    val fineLocationState = rememberMultiplePermissionsState(
-        permissions = listOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
-        )
-    )
-    var locationStr by remember {
+    var locationInfo by remember {
         mutableStateOf("")
-    }
-
-    var showRationale by remember {
-        mutableStateOf(false)
     }
 
     Column(
@@ -81,41 +100,19 @@ fun CurrentLocationScreen() {
         verticalArrangement = Arrangement.spacedBy(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (showRationale) {
-            ShowRationale(rationaleState = RationaleState(
-                "Location Permission Access",
-                "Please grant Location access , as it is required to detect the current location of device." + "\n\nWould you like to continue?"
-            ) { accepted ->
-                if (accepted) {
-                    fineLocationState.launchMultiplePermissionRequest()
-                }
-                showRationale = false
-            })
-        }
         Button(onClick = {
-            if (fineLocationState.permissions[0].status.isGranted || fineLocationState.permissions[1].status.isGranted) {
-                // getting last known location is faster and minimizes battery usage
-                // This information may be out of date.
-                // Location may be null as previously no client has access location
-                // or location turned of in device setting.
-                // Please handle for null case as well as additional check can be added before using the method
-                scope.launch {
-                    locationClient.lastLocation.addOnCompleteListener {
-                        if (it.result == null) {
-                            locationStr =
-                                "No last known location. Try fetching the current location first"
-                        } else {
-                            locationStr =
-                                "Current location is \n" + "lat : ${it.result.latitude}\n" +
-                                        "long : ${it.result.longitude}\n" + "fetched at ${Instant.now()}"
-                        }
-                    }
-                }
-            } else {
-                if (fineLocationState.shouldShowRationale) {
-                    showRationale = true
+            // getting last known location is faster and minimizes battery usage
+            // This information may be out of date.
+            // Location may be null as previously no client has access location
+            // or location turned of in device setting.
+            // Please handle for null case as well as additional check can be added before using the method
+            scope.launch(Dispatchers.IO) {
+                val result = locationClient.lastLocation.await()
+                locationInfo = if (result == null) {
+                    "No last known location. Try fetching the current location first"
                 } else {
-                    fineLocationState.launchMultiplePermissionRequest()
+                    "Current location is \n" + "lat : ${result.latitude}\n" +
+                            "long : ${result.longitude}\n" + "fetched at ${Instant.now()}"
                 }
             }
         }) {
@@ -123,34 +120,28 @@ fun CurrentLocationScreen() {
         }
 
         Button(onClick = {
-            if (fineLocationState.permissions[0].status.isGranted || fineLocationState.permissions[1].status.isGranted) {
-                //To get more accurate or fresher device location use this method
-                scope.launch {
-                    locationClient.getCurrentLocation(
-                        Priority.PRIORITY_HIGH_ACCURACY, CancellationTokenSource().token
-                    ).addOnCompleteListener {
-                        it.result?.let { fetchedLocation ->
-                            locationStr =
-                                "Current location is \n" + "lat : ${fetchedLocation.latitude}\n" +
-                                        "long : ${fetchedLocation.longitude}\n" + "fetched at ${Instant.now()}"
-                        }
-                    }
-                }
-            } else {
-                if (fineLocationState.shouldShowRationale) {
-                    showRationale = true
+            //To get more accurate or fresher device location use this method
+            scope.launch(Dispatchers.IO) {
+                val priority = if (usePreciseLocation) {
+                    Priority.PRIORITY_HIGH_ACCURACY
                 } else {
-                    fineLocationState.launchMultiplePermissionRequest()
+                    Priority.PRIORITY_BALANCED_POWER_ACCURACY
+                }
+                val result = locationClient.getCurrentLocation(
+                    priority,
+                    CancellationTokenSource().token
+                ).await()
+                result?.let { fetchedLocation ->
+                    locationInfo =
+                        "Current location is \n" + "lat : ${fetchedLocation.latitude}\n" +
+                                "long : ${fetchedLocation.longitude}\n" + "fetched at ${Instant.now()}"
                 }
             }
         }) {
             Text(text = "Get current location")
         }
         Text(
-            text = locationStr
+            text = locationInfo
         )
-
     }
-
 }
-

@@ -19,161 +19,173 @@ package com.example.platform.location.locationupdates
 import android.Manifest
 import android.annotation.SuppressLint
 import android.os.Looper
-import android.util.Log
+import androidx.annotation.RequiresPermission
 import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
+import com.example.platform.location.permission.LocationPermissions
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.catalog.framework.annotations.Sample
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import java.time.Instant
+import java.util.concurrent.TimeUnit
 
 
 @SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
 @Sample(
-    name = "Location - Updates", description = "This Sample demonstrate how to get location updates"
+    name = "Location - Updates",
+    description = "This Sample demonstrate how to get location updates"
 )
 @Composable
 fun LocationUpdatesScreen() {
-    val context = LocalContext.current
-    val locationClient: FusedLocationProviderClient = remember {
-        LocationServices.getFusedLocationProviderClient(context)
-    }
-    val fineLocationState = rememberMultiplePermissionsState(
+    val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION
         )
     )
-    var receiveLocationUpdates by remember {
-        mutableStateOf(false)
-    }
 
-    var showRationale by remember {
-        mutableStateOf(false)
+    if (permissionsState.permissions.any { it.status.isGranted }) {
+        // Only use precise accuracy if both permissions are granted
+        LocationUpdatesContent(usePreciseLocation = permissionsState.allPermissionsGranted)
+    } else {
+        LocationPermissions(
+            text = "Location",
+            rationale = "In order to use this feature please grant access by accepting " +
+                    "either precise or approximate location permission." +
+                    "\n\nWould you like to continue?",
+            locationState = permissionsState
+        )
     }
-    var locationStr by remember {
+}
+
+@RequiresPermission(
+    anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION]
+)
+@Composable
+fun LocationUpdatesContent(usePreciseLocation: Boolean) {
+    // The location request that defines the location updates
+    var locationRequest by remember {
+        mutableStateOf<LocationRequest?>(null)
+    }
+    // Keeps track of received location updates as text
+    var locationUpdates by remember {
         mutableStateOf("")
     }
-    // Create a location request
-    // for more details about creating location request and
-    // to check whether location settings are appropriate.
-    // for location request
-    // see [https://developer.android.com/training/location/change-location-settings]
-    val locationRequest = LocationRequest.Builder(
-        Priority.PRIORITY_BALANCED_POWER_ACCURACY, 3 * 1000
-    ).build()
 
-    val locationCallBack: LocationCallback = remember {
-        object : LocationCallback() {
-            override fun onLocationResult(result: LocationResult) {
-                for (currentLocation in result.locations) {
-                    locationStr = "[${Instant.now()}]\n" +
-                            " @[lat : ${currentLocation.latitude}" +
-                            " lng : ${currentLocation.longitude}]\n" +
-                            locationStr
-                }
+    // Only register the location updates effect when we have a request
+    if (locationRequest != null) {
+        LocationUpdatesEffect(locationRequest!!) { result ->
+            // For each result update the text
+            for (currentLocation in result.locations) {
+                locationUpdates = "${Instant.now()}:\n" +
+                        "- @lat: ${currentLocation.latitude}\n" +
+                        "- @lng: ${currentLocation.longitude}\n" +
+                        "- Accuracy: ${currentLocation.accuracy}\n\n" +
+                        locationUpdates
             }
         }
     }
-    DisposableEffect(LocalLifecycleOwner.current) {
-        onDispose {
-            Log.d("TAG", "LocationUpdatesScreen: removing updates")
-            locationClient.removeLocationUpdates(locationCallBack)
-        }
-    }
 
-    Column(
-        Modifier
+    LazyColumn(
+        modifier = Modifier
             .fillMaxWidth()
             .animateContentSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        if (showRationale) {
-            ShowRationale(rationaleState = RationaleState(
-                "Location Permission Access",
-                "Please grant Location access , as it is required to get the" +
-                        " location updates for the  device." +
-                        "\n\nWould you like to continue?"
-            ) {
-                if (it) {
-                    fineLocationState.launchMultiplePermissionRequest()
-                }
-                showRationale = false
-            })
-        }
-
-        // Toggle to start and stop location updates
-        // before asking for periodic location updates,
-        // it's good practice to fetch the current location
-        // or get the last known location
-        Switch(checked = receiveLocationUpdates, onCheckedChange = {
-            receiveLocationUpdates = it
-            if (receiveLocationUpdates) {
-                if (fineLocationState.allPermissionsGranted) {
-                    locationClient.requestLocationUpdates(
-                        locationRequest, locationCallBack, Looper.getMainLooper()
-                    )
-                } else {
-                    if (fineLocationState.shouldShowRationale) {
-                        showRationale = true
+        item {
+            // Toggle to start and stop location updates
+            // before asking for periodic location updates,
+            // it's good practice to fetch the current location
+            // or get the last known location
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text(text = "Enable location updates")
+                Spacer(modifier = Modifier.padding(8.dp))
+                Switch(checked = locationRequest != null, onCheckedChange = { checked ->
+                    locationRequest = if (checked) {
+                        // Define the accuracy based on your needs and granted permissions
+                        val priority = if (usePreciseLocation) {
+                            Priority.PRIORITY_HIGH_ACCURACY
+                        } else {
+                            Priority.PRIORITY_BALANCED_POWER_ACCURACY
+                        }
+                        LocationRequest.Builder(priority, TimeUnit.SECONDS.toMillis(3)).build()
                     } else {
-                        fineLocationState.launchMultiplePermissionRequest()
+                        null
                     }
-                }
-            } else {
-                locationClient.removeLocationUpdates(locationCallBack)
+                })
             }
-        })
-        Text(text = locationStr)
-
+        }
+        item {
+            Text(text = locationUpdates)
+        }
     }
-
 }
 
-@Composable
-fun ShowRationale(rationaleState: RationaleState) {
-    AlertDialog(onDismissRequest = { rationaleState.onRationaleReply(false) }, title = {
-        Text(text = rationaleState.title)
-    }, text = {
-        Text(text = rationaleState.rationale)
-    }, confirmButton = {
-        TextButton(onClick = {
-            rationaleState.onRationaleReply(true)
-        }) {
-            Text("Continue")
-        }
-    }, dismissButton = {
-        TextButton(onClick = {
-            rationaleState.onRationaleReply(false)
-        }) {
-            Text("Dismiss")
-        }
-    })
-}
-
-data class RationaleState(
-    val title: String,
-    val rationale: String,
-    val onRationaleReply: (Boolean) -> Unit,
+/**
+ * An effect that request location updates based on the provided request and ensures that the
+ * updates are added and removed whenever the composable enters or exists the composition.
+ */
+@RequiresPermission(
+    anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION]
 )
+@Composable
+fun LocationUpdatesEffect(
+    locationRequest: LocationRequest,
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    onUpdate: (result: LocationResult) -> Unit,
+) {
+    val context = LocalContext.current
+    val currentOnUpdate by rememberUpdatedState(newValue = onUpdate)
+
+    // Whenever on of these parameters changes, dispose and restart the effect.
+    DisposableEffect(locationRequest, lifecycleOwner) {
+        val locationClient = LocationServices.getFusedLocationProviderClient(context)
+        val locationCallback: LocationCallback = object : LocationCallback() {
+            override fun onLocationResult(result: LocationResult) {
+                currentOnUpdate(result)
+            }
+        }
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_START) {
+                locationClient.requestLocationUpdates(
+                    locationRequest, locationCallback, Looper.getMainLooper()
+                )
+            } else if (event == Lifecycle.Event.ON_STOP) {
+                locationClient.removeLocationUpdates(locationCallback)
+            }
+        }
+
+        // Add the observer to the lifecycle
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        // When the effect leaves the Composition, remove the observer
+        onDispose {
+            locationClient.removeLocationUpdates(locationCallback)
+            lifecycleOwner.lifecycle.removeObserver(observer)
+        }
+    }
+}

@@ -23,25 +23,16 @@ import android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.animateContentSize
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.CheckCircle
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Button
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,7 +40,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -67,27 +57,31 @@ import com.google.android.catalog.framework.annotations.Sample
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun LocationPermissionScreen() {
+    val context = LocalContext.current
 
+    // Approximate location access is sufficient for most of use cases 
     val locationPermissionState = rememberPermissionState(
         Manifest.permission.ACCESS_COARSE_LOCATION
     )
 
+    // When precision is important request both permissions but make sure to handle the case where
+    // the user only grants ACCESS_COARSE_LOCATION
     val fineLocationPermissionState = rememberMultiplePermissionsState(
         listOf(
             Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION
         )
     )
 
+    // In really rare use cases, accessing background location might be needed.
     val bgLocationPermissionState = rememberPermissionState(
         Manifest.permission.ACCESS_BACKGROUND_LOCATION
     )
 
-    val context = LocalContext.current
-
-    var showRationale by remember { mutableStateOf(false) }
+    // Keeps track of the rationale dialog state, needed when the user requires further rationale
     var rationaleState by remember {
-        mutableStateOf(RationaleState())
+        mutableStateOf<RationaleState?>(null)
     }
+
     Box(
         Modifier
             .fillMaxSize()
@@ -99,43 +93,41 @@ fun LocationPermissionScreen() {
                 .animateContentSize(),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            if (showRationale) {
-                ShowRationale(rationaleState)
-            }
-            PermissionRequestCard(
+            // Show rationale dialog when needed
+            rationaleState?.run { PermissionRationaleDialog(rationaleState = this) }
+
+            PermissionRequestButton(
                 isGranted = locationPermissionState.status.isGranted,
                 title = "Approximate location access"
             ) {
                 if (locationPermissionState.status.shouldShowRationale) {
-                    showRationale = true
                     rationaleState = RationaleState(
                         "Request approximate location access",
                         "In order to use this feature please grant access by accepting " + "the location permission dialog." + "\n\nWould you like to continue?"
-                    ) {
-                        if (it) {
+                    ) { proceed ->
+                        if (proceed) {
                             locationPermissionState.launchPermissionRequest()
                         }
-                        showRationale = false
+                        rationaleState = null
                     }
                 } else {
                     locationPermissionState.launchPermissionRequest()
                 }
             }
 
-            PermissionRequestCard(
+            PermissionRequestButton(
                 isGranted = fineLocationPermissionState.allPermissionsGranted,
                 title = "Precise location access"
             ) {
                 if (fineLocationPermissionState.shouldShowRationale) {
-                    showRationale = true
                     rationaleState = RationaleState(
                         "Request Precise Location",
                         "In order to use this feature please grant access by accepting " + "the location permission dialog." + "\n\nWould you like to continue?"
-                    ) {
-                        if (it) {
+                    ) { proceed ->
+                        if (proceed) {
                             fineLocationPermissionState.launchMultiplePermissionRequest()
                         }
-                        showRationale = false
+                        rationaleState = null
                     }
                 } else {
                     fineLocationPermissionState.launchMultiplePermissionRequest()
@@ -146,21 +138,20 @@ fun LocationPermissionScreen() {
             // before Android Q, granting Fine or Coarse location access automatically grants Background
             // location access
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                PermissionRequestCard(
+                PermissionRequestButton(
                     isGranted = bgLocationPermissionState.status.isGranted,
                     title = "Background location access"
                 ) {
                     if (locationPermissionState.status.isGranted || fineLocationPermissionState.allPermissionsGranted) {
                         if (bgLocationPermissionState.status.shouldShowRationale) {
-                            showRationale = true
                             rationaleState = RationaleState(
                                 "Request background location",
                                 "In order to use this feature please grant access by accepting " + "the background location permission dialog." + "\n\nWould you like to continue?"
-                            ) {
-                                if (it) {
+                            ) { proceed ->
+                                if (proceed) {
                                     bgLocationPermissionState.launchPermissionRequest()
                                 }
-                                showRationale = false
+                                rationaleState = null
                             }
                         } else {
                             bgLocationPermissionState.launchPermissionRequest()
@@ -177,62 +168,8 @@ fun LocationPermissionScreen() {
         }
         FloatingActionButton(modifier = Modifier.align(Alignment.BottomEnd),
             onClick = { context.startActivity(Intent(ACTION_LOCATION_SOURCE_SETTINGS)) }) {
-            Icon(Icons.Outlined.Settings, "App Settings")
+            Icon(Icons.Outlined.Settings, "Location Settings")
         }
     }
 }
 
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-fun PermissionRequestCard(isGranted: Boolean, title: String, onClick: () -> Unit) {
-    if (isGranted) {
-        PermissionInfo(title)
-    } else {
-        Button(onClick = onClick) {
-            Text("Request $title")
-        }
-    }
-}
-
-@Composable
-fun PermissionInfo(title: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(Icons.Outlined.CheckCircle, title, modifier = Modifier.size(48.dp))
-        Spacer(Modifier.size(10.dp))
-        Text(text = title, modifier = Modifier.background(Color.Transparent))
-    }
-}
-
-@Composable
-fun ShowRationale(rationaleState: RationaleState) {
-    AlertDialog(onDismissRequest = { rationaleState.onRationaleReply(false) }, title = {
-        Text(text = rationaleState.title)
-    }, text = {
-        Text(text = rationaleState.rationale)
-    }, confirmButton = {
-        TextButton(onClick = {
-            rationaleState.onRationaleReply(true)
-        }) {
-            Text("Continue")
-        }
-    }, dismissButton = {
-        TextButton(onClick = {
-            rationaleState.onRationaleReply(false)
-        }) {
-            Text("Dismiss")
-        }
-    })
-}
-
-data class RationaleState(
-    val title: String,
-    val rationale: String,
-    val onRationaleReply: (Boolean) -> Unit,
-) {
-    constructor() : this("", "", {})
-}

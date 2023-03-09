@@ -16,25 +16,24 @@
 
 package com.example.platform.location.useractivityrecog
 
+import android.Manifest
 import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
+import androidx.annotation.RequiresPermission
 import com.google.android.gms.location.ActivityRecognition
 import com.google.android.gms.location.ActivityTransition
 import com.google.android.gms.location.ActivityTransitionRequest
 import com.google.android.gms.location.DetectedActivity
+import kotlinx.coroutines.tasks.await
 
 class UserActivityTransitionManager(context: Context) {
-    private val TAG = this.javaClass.canonicalName as String
-
-    // list of activity transitions to be monitored
-    private var activityTransitions = emptyList<ActivityTransition>()
-    private var activityRecogClient = ActivityRecognition.getClient(context)
 
     companion object {
+        private const val TAG = "UserActivityTransitionManager"
+
         const val CUSTOM_INTENT_USER_ACTION = "USER-ACTIVITY-DETECTION-INTENT-ACTION"
         const val CUSTOM_REQUEST_CODE = 0
 
@@ -52,7 +51,6 @@ class UserActivityTransitionManager(context: Context) {
             }
         }
 
-
         fun getTransitionType(int: Int): String {
             return when (int) {
                 0 -> "STARTED"
@@ -62,40 +60,9 @@ class UserActivityTransitionManager(context: Context) {
         }
     }
 
-    private val pendingIntent by lazy {
-        PendingIntent.getBroadcast(
-            context,
-            CUSTOM_REQUEST_CODE,
-            Intent(CUSTOM_INTENT_USER_ACTION),
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
-                PendingIntent.FLAG_CANCEL_CURRENT
-            } else {
-                PendingIntent.FLAG_MUTABLE
-            }
-        )
-    }
-
-    private fun getUserActivity(detectedActivity: Int, transitionType: Int): ActivityTransition {
-        return ActivityTransition.Builder().setActivityType(detectedActivity)
-            .setActivityTransition(transitionType).build()
-
-    }
-
-    @SuppressLint("MissingPermission")
-    fun registerActivityTransitions() {
-        activityRecogClient.requestActivityTransitionUpdates(
-            ActivityTransitionRequest(
-                activityTransitions
-            ), pendingIntent
-        ).addOnSuccessListener {
-            Log.d(TAG, "registerActivityTransitions: Success")
-        }.addOnFailureListener { exception ->
-            Log.d(TAG, "registerActivityTransitions: FAIL\n$exception")
-        }
-    }
-
-    init {
-        activityTransitions = listOf(
+    // list of activity transitions to be monitored
+    private val activityTransitions: List<ActivityTransition> by lazy {
+        listOf(
             getUserActivity(
                 DetectedActivity.IN_VEHICLE, ActivityTransition.ACTIVITY_TRANSITION_ENTER
             ),
@@ -123,14 +90,51 @@ class UserActivityTransitionManager(context: Context) {
         )
     }
 
-    @SuppressLint("MissingPermission")
-    fun deregisterActivityTransitions() {
-        activityRecogClient.removeActivityUpdates(pendingIntent).addOnSuccessListener {
-            Log.d(TAG, "deregisterActivityTransitions: Success")
-        }.addOnFailureListener { exception ->
-            Log.d(TAG, "deregisterActivityTransitions: FAIL\n$exception")
-        }
+    private val activityClient = ActivityRecognition.getClient(context)
+
+    private val pendingIntent by lazy {
+        PendingIntent.getBroadcast(
+            context,
+            CUSTOM_REQUEST_CODE,
+            Intent(CUSTOM_INTENT_USER_ACTION),
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                PendingIntent.FLAG_CANCEL_CURRENT
+            } else {
+                PendingIntent.FLAG_MUTABLE
+            }
+        )
     }
 
+    private fun getUserActivity(detectedActivity: Int, transitionType: Int): ActivityTransition {
+        return ActivityTransition.Builder().setActivityType(detectedActivity)
+            .setActivityTransition(transitionType).build()
+
+    }
+
+    @SuppressLint("InlinedApi")
+    @RequiresPermission(
+        anyOf = [
+            Manifest.permission.ACTIVITY_RECOGNITION,
+            "com.google.android.gms.permission.ACTIVITY_RECOGNITION"
+        ]
+    )
+    suspend fun registerActivityTransitions() = kotlin.runCatching {
+        activityClient.requestActivityTransitionUpdates(
+            ActivityTransitionRequest(
+                activityTransitions
+            ), pendingIntent
+        ).await()
+    }
+
+    @SuppressLint("InlinedApi")
+    @RequiresPermission(
+        anyOf = [
+            Manifest.permission.ACTIVITY_RECOGNITION,
+            "com.google.android.gms.permission.ACTIVITY_RECOGNITION"
+        ]
+    )
+    suspend fun deregisterActivityTransitions() = kotlin.runCatching {
+        activityClient.removeActivityUpdates(pendingIntent).await()
+    }
 }
 
