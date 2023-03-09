@@ -17,6 +17,8 @@
 package com.example.platform.connectivity.audio.viewmodel
 
 import android.media.AudioDeviceInfo
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.platform.connectivity.audio.datasource.PlatformAudioSource
@@ -34,9 +36,8 @@ import kotlinx.coroutines.launch
 /**
  * View model for Active device and list of devices we can connect to
  */
-class AudioDeviceViewModel constructor(
-    private val platformAudioSource: PlatformAudioSource
-) : ViewModel() {
+@RequiresApi(Build.VERSION_CODES.S)
+class AudioDeviceViewModel(private val platformAudioSource: PlatformAudioSource) : ViewModel() {
 
     /**
      * Get active audio device and pass to UI
@@ -56,7 +57,8 @@ class AudioDeviceViewModel constructor(
             started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000)
         )
 
-    // Convert AudioDeviceInfo to a ViewModel, also removes the connected device so we list only the device we can connect to
+    // Convert AudioDeviceInfo to a ViewModel, also removes the connected device so we list only
+    // the device we can connect to
     private var availableDevices: Flow<List<AudioDeviceUI>> =
         combine(
             platformAudioSource.getActivePlatformAudioSourceStream,

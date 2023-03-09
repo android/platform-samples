@@ -16,10 +16,11 @@
 
 package com.example.platform.connectivity.audio.datasource
 
-import android.annotation.SuppressLint
 import android.media.AudioDeviceCallback
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
+import android.os.Build
+import androidx.annotation.RequiresApi
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -33,17 +34,17 @@ import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
 /**
- * Manages Audio Device states and keeps alist of list we can connect to.
+ * Manages Audio Device states and keeps a list of list we can connect to.
  * Keeps track of active audio device
  * Can switch to any audio device in the audio platform include bluetooth and LEA devices
  * Keeps the states of what we are trying connect too
  */
+@RequiresApi(Build.VERSION_CODES.S)
 class PlatformAudioSource(
-    private val audioManager: AudioManager
+    private val audioManager: AudioManager,
 ) {
 
     //Flow based on the active audio stream
-    @SuppressLint("NewApi")
     val getActivePlatformAudioSourceStream: Flow<AudioDeviceInfo?> = callbackFlow {
 
         val listener =
@@ -69,7 +70,6 @@ class PlatformAudioSource(
 
 
     //This flow keeps a list of audio devices available in the platform
-    @SuppressLint("NewApi")
     val getAudioDevicesStream: Flow<List<AudioDeviceInfo>> = callbackFlow {
 
         trySend(audioManager.availableCommunicationDevices)
@@ -98,7 +98,7 @@ class PlatformAudioSource(
             }
         }
 
-        this@PlatformAudioSource.setOnConnectingDeviceStateChangedListener(onStateChangeListener)
+        setOnConnectingDeviceStateChangedListener(onStateChangeListener)
 
         awaitClose {
             audioManager.unregisterAudioDeviceCallback(audioDeviceCallback)
@@ -114,7 +114,6 @@ class PlatformAudioSource(
      * Switches platform audio source
      * Bluetooth devices can take upto 30 seconds to connect
      */
-    @SuppressLint("NewApi")
     suspend fun setAudioSource(audioDeviceInfo: AudioDeviceInfo): Boolean {
         setAudioSourceResponse = CompletableDeferred()
         pendingDeviceId = audioDeviceInfo.id

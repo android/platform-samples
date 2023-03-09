@@ -16,10 +16,11 @@
 
 package com.example.platform.connectivity.audio
 
-import android.content.Context
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
+import android.os.Build
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,10 +30,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -42,6 +45,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.core.content.getSystemService
 import com.example.platform.connectivity.audio.datasource.PlatformAudioSource
 import com.example.platform.connectivity.audio.viewmodel.AudioDeviceUI
 import com.example.platform.connectivity.audio.viewmodel.AudioDeviceViewModel
@@ -53,24 +57,28 @@ import com.google.android.catalog.framework.annotations.Sample
     name = "Audio Manager",
     description = "This sample will show you how get all audio sources and set an audio device. Covers Bluetooth, LEA, Wired and internal speakers"
 )
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun AudioSample() {
     val context = LocalContext.current
-
-    val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+    val audioManager = context.getSystemService<AudioManager>()!!
     val viewModel = AudioDeviceViewModel(PlatformAudioSource(audioManager))
     AudioSampleScreen(viewModel)
 }
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
-fun AudioSampleScreen(viewModel: AudioDeviceViewModel) {
+private fun AudioSampleScreen(viewModel: AudioDeviceViewModel) {
+    val context = LocalContext.current
     val uiStateAvailableDevices by viewModel.availableDeviceUiState.collectAsState()
     val uiStateActiveDevice by viewModel.activeDeviceUiState.collectAsState()
     val uiStateErrorMessage by viewModel.errorUiState.collectAsState()
 
-    uiStateErrorMessage?.let {
-        Toast.makeText(LocalContext.current, uiStateErrorMessage, Toast.LENGTH_LONG).show()
-        viewModel.onErrorMessageShown()
+    if (uiStateErrorMessage != null) {
+        LaunchedEffect(uiStateErrorMessage) {
+            Toast.makeText(context, uiStateErrorMessage, Toast.LENGTH_LONG).show()
+            viewModel.onErrorMessageShown()
+        }
     }
 
     Column(
@@ -80,9 +88,8 @@ fun AudioSampleScreen(viewModel: AudioDeviceViewModel) {
     ) {
         ActiveAudioSource(uiStateActiveDevice)
         Text(
-            stringResource(id = R.string.selectdevice),
-            modifier = Modifier
-                .padding(8.dp, 12.dp),
+            text = stringResource(id = R.string.selectdevice),
+            modifier = Modifier.padding(8.dp, 12.dp),
             style = MaterialTheme.typography.displayMedium
         )
         AvailableDevicesList(uiStateAvailableDevices, viewModel::setAudioDevice)
@@ -90,12 +97,15 @@ fun AudioSampleScreen(viewModel: AudioDeviceViewModel) {
 }
 
 @Composable
-fun AvailableDevicesList(
+private fun AvailableDevicesList(
     audioDeviceWidgetUiState: AudioDeviceViewModel.AudioDeviceListUiState,
-    onDeviceSelected: (AudioDeviceInfo) -> Unit
+    onDeviceSelected: (AudioDeviceInfo) -> Unit,
 ) {
     when (audioDeviceWidgetUiState) {
-        AudioDeviceViewModel.AudioDeviceListUiState.Loading -> {}
+        AudioDeviceViewModel.AudioDeviceListUiState.Loading -> {
+            CircularProgressIndicator()
+        }
+
         is AudioDeviceViewModel.AudioDeviceListUiState.Success -> {
             ListOfAudioDevices(audioDeviceWidgetUiState.audioDevices, onDeviceSelected)
         }
@@ -103,17 +113,21 @@ fun AvailableDevicesList(
 }
 
 @Composable
-fun ActiveAudioSource(activeAudioDeviceUiState: AudioDeviceViewModel.ActiveAudioDeviceUiState) =
+private fun ActiveAudioSource(activeAudioDeviceUiState: AudioDeviceViewModel.ActiveAudioDeviceUiState) =
     when (activeAudioDeviceUiState) {
         AudioDeviceViewModel.ActiveAudioDeviceUiState.NotActive -> {
-            ActiveAudioSource(stringResource(id = R.string.nodevice), "", R.drawable.phone_icon)
+            ActiveAudioSource(
+                title = stringResource(id = R.string.nodevice),
+                subTitle = "",
+                resId = R.drawable.phone_icon
+            )
         }
 
         is AudioDeviceViewModel.ActiveAudioDeviceUiState.OnActiveDevice -> {
             ActiveAudioSource(
-                stringResource(id = R.string.connected),
-                activeAudioDeviceUiState.audioDevice.getDeviceName(),
-                activeAudioDeviceUiState.audioDevice.resIconId
+                title = stringResource(id = R.string.connected),
+                subTitle = activeAudioDeviceUiState.audioDevice.getDeviceName(),
+                resId = activeAudioDeviceUiState.audioDevice.resIconId
             )
         }
     }
@@ -122,7 +136,7 @@ fun ActiveAudioSource(activeAudioDeviceUiState: AudioDeviceViewModel.ActiveAudio
  * Shows user the active audio source
  */
 @Composable
-fun ActiveAudioSource(title: String, subTitle: String, resId: Int) {
+private fun ActiveAudioSource(title: String, subTitle: String, resId: Int) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.padding(vertical = 12.dp)
@@ -151,7 +165,10 @@ fun ActiveAudioSource(title: String, subTitle: String, resId: Int) {
  * Build an list of Audio Devices we can connect to
  */
 @Composable
-fun ListOfAudioDevices(devices: List<AudioDeviceUI>, onDeviceSelected: (AudioDeviceInfo) -> Unit) {
+private fun ListOfAudioDevices(
+    devices: List<AudioDeviceUI>,
+    onDeviceSelected: (AudioDeviceInfo) -> Unit,
+) {
     LazyColumn {
         items(devices) { item ->
             AudioItem(audioDevice = item, onDeviceSelected = onDeviceSelected)
@@ -163,9 +180,9 @@ fun ListOfAudioDevices(devices: List<AudioDeviceUI>, onDeviceSelected: (AudioDev
  * Displays the audio device with Icon and Text
  */
 @Composable
-fun AudioItem(
+private fun AudioItem(
     audioDevice: AudioDeviceUI,
-    onDeviceSelected: (AudioDeviceInfo) -> Unit
+    onDeviceSelected: (AudioDeviceInfo) -> Unit,
 ) {
     Box(modifier = Modifier
         .fillMaxWidth()
@@ -179,19 +196,10 @@ fun AudioItem(
                 contentDescription = null,
                 tint = Color.White
             )
-            Column {
-                Text(
-                    audioDevice.getDeviceName(),
-                    modifier = Modifier
-                        .padding(8.dp, 0.dp),
-                    audioDevice.getStatusColor()
-                )
-                Text(
-                    "",
-                    modifier = Modifier.padding(8.dp, 0.dp),
-                    audioDevice.getStatusColor()
-                )
-            }
+            Text(
+                text = audioDevice.getDeviceName(),
+                color = audioDevice.getStatusColor()
+            )
         }
     }
 }
