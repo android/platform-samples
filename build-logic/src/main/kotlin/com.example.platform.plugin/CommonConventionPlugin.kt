@@ -46,7 +46,7 @@ class CommonConventionPlugin : Plugin<Project> {
             pluginManager.withPlugin("java") {
                 extensions.configure<JavaPluginExtension> {
                     toolchain {
-                        it.languageVersion.set(JavaLanguageVersion.of(8 ))
+                        it.languageVersion.set(JavaLanguageVersion.of(11 ))
                     }
                 }
             }
@@ -55,8 +55,8 @@ class CommonConventionPlugin : Plugin<Project> {
                 extensions.configure<KotlinJvmOptions> {
                     // Treat all Kotlin warnings as errors
                     allWarningsAsErrors = true
-                    // Set JVM target to 1.8
-                    jvmTarget = "1.8"
+                    // Set JVM target to 11
+                    jvmTarget = "11"
                     // Allow use of @OptIn
                     freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
                     // Enable default methods in interfaces

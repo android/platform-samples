@@ -25,6 +25,14 @@ import org.gradle.api.tasks.options.Option
 import java.io.File
 import java.util.Locale
 
+/**
+ * This task is used to create a new sample in the project. Given a path and a name it generates
+ * the folder structure (if not there) and the sample target (using compose target) based on the
+ * provided name.
+ *
+ * Usage:
+ * $ ./gradlew createSample --path folder/optional-subfolder --name SampleName
+ */
 abstract class CreateSample : DefaultTask() {
 
     var samplePath: String = ""
@@ -62,8 +70,9 @@ abstract class CreateSample : DefaultTask() {
         val packagePath = samplePath.replace("/", ".").replace("-", ".")
         val samplePackage = "com.example.platform.${packagePath}"
 
+        // Create module structure if it doesn't exists.
         if (!directory.exists()) {
-            File(directory, "build.gradle").apply {
+            File(directory, "build.gradle.kts").apply {
                 parentFile.mkdirs()
                 createNewFile()
                 writeText(sampleBuildTemplate(samplePackage))
@@ -76,6 +85,7 @@ abstract class CreateSample : DefaultTask() {
             }
         }
 
+        // Create sample target file using Compose target
         val sampleName = sampleName.replaceFirstChar {
             if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
         }
@@ -86,18 +96,13 @@ abstract class CreateSample : DefaultTask() {
             writeText(sampleTemplate(samplePackage, sampleName))
         }
 
-        createRunConfig(projectDirFile, sampleName)
-
-        val ideaDir = File(projectDirFile, ".idea/runConfigurations")
-        Runtime.getRuntime().exec("git add $ideaDir")
+        // Track new created files
         Runtime.getRuntime().exec("git add $directory")
-
         println("Done! Sync and build project")
     }
 }
 
-private const val PLUGIN_PATH = "\$rootDir/gradle/sample-build.gradle"
-private fun sampleBuildTemplate(samplePackage: String) = """
+private const val PROJECT_LICENSE = """
 /*
  * Copyright 2023 The Android Open Source Project
  *
@@ -113,11 +118,17 @@ private fun sampleBuildTemplate(samplePackage: String) = """
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+"""
 
-apply from: "$PLUGIN_PATH"
+private fun sampleBuildTemplate(samplePackage: String) = """
+$PROJECT_LICENSE
+
+plugins {
+    id("com.example.platform.sample")
+}
 
 android {
-    namespace '$samplePackage'
+    namespace = '$samplePackage'
 }
 
 dependencies {
@@ -126,21 +137,7 @@ dependencies {
 """.trimIndent()
 
 private fun sampleTemplate(samplePackage: String, moduleName: String) = """
-/*
- * Copyright 2023 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     https://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+$PROJECT_LICENSE
 
 package $samplePackage
 
@@ -161,23 +158,6 @@ fun $moduleName() {
 private fun readmeTemplate(sampleName: String) = """
 # $sampleName samples
 
-// TODO
-
-## License
-
-```
-Copyright 2023 The Android Open Source Project
- 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-    https://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+// TODO: provide minimal instructions
 ```
 """.trimIndent()

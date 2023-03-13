@@ -45,11 +45,10 @@ class SamplePlugin : Plugin<Project> {
                 apply<CommonConventionPlugin>()
             }
 
-
             pluginManager.withPlugin("java") {
                 extensions.configure<JavaPluginExtension> {
                     toolchain {
-                        it.languageVersion.set(JavaLanguageVersion.of(8))
+                        it.languageVersion.set(JavaLanguageVersion.of(11))
                     }
                 }
             }
@@ -57,7 +56,7 @@ class SamplePlugin : Plugin<Project> {
             // TODO: remove when KSP starts respecting the Java/Kotlin toolchain
             tasks.withType(KotlinCompile::class.java).configureEach {
                 it.kotlinOptions {
-                    jvmTarget = "1.8"
+                    jvmTarget = "11"
                 }
             }
 
@@ -71,8 +70,8 @@ class SamplePlugin : Plugin<Project> {
 
 
                     compileOptions {
-                        sourceCompatibility = JavaVersion.VERSION_1_8
-                        targetCompatibility = JavaVersion.VERSION_1_8
+                        sourceCompatibility = JavaVersion.VERSION_11
+                        targetCompatibility = JavaVersion.VERSION_11
                     }
 
                     buildFeatures {

@@ -24,5 +24,6 @@ android {
 
 dependencies {
     implementation(libs.play.services.location)
+    // Adds better support for Kotlin coroutines when using Play Services Task API.
     implementation(libs.kotlin.coroutines.play)
 }

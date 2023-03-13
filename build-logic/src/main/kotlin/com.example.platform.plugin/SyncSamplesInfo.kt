@@ -86,7 +86,7 @@ private fun createSamplesList(projectDir: File, samples: List<SampleInfo>) {
     }
 }
 
-fun createRunConfig(projectDir: File, sampleName: String) {
+private fun createRunConfig(projectDir: File, sampleName: String) {
     val ideaDir = File(projectDir, ".idea/runConfigurations")
     val startCommand =
         "<option name=\"ACTIVITY_EXTRA_FLAGS\" value=\"-e start &quot;$sampleName&quot;\" />"
