@@ -64,10 +64,9 @@ class SamplePlugin : Plugin<Project> {
                 configure<LibraryExtension> {
                     compileSdk = 33
                     defaultConfig {
-                        minSdk = 26
+                        minSdk = 21
                         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                     }
-
 
                     compileOptions {
                         sourceCompatibility = JavaVersion.VERSION_11
@@ -81,7 +80,6 @@ class SamplePlugin : Plugin<Project> {
                     composeOptions {
                         kotlinCompilerExtensionVersion = libs.findVersion("composeCompiler").get().toString()
                     }
-
                 }
             }
 

@@ -68,6 +68,7 @@ import java.io.File
     description = "This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs",
     documentation = "https://developer.android.com/training/permissions/evaluating"
 )
+@Deprecated("sorry")
 @Composable
 fun Permissionless() {
     LazyColumn(
@@ -267,7 +268,7 @@ private fun PickContactCard() {
             Toast.makeText(context, "No contact selected", Toast.LENGTH_SHORT).show()
             return@rememberLauncherForActivityResult
         }
-        context.contentResolver.query(uri, null, null, null).use { cursor ->
+        context.contentResolver.query(uri, null, null, null, null).use { cursor ->
             // If the cursor returned is valid, get the phone number and (or) name
             contactInfo = if (cursor != null && cursor.moveToFirst()) {
                 (0 until cursor.columnCount).joinToString("\n") {
