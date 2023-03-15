@@ -48,7 +48,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -80,13 +83,17 @@ dependencies {
     implementation(libs.coil.video)
 
     // include all available samples.
-    (project.extra["samples"] as List<String>).forEach {
-        implementation(project("$it"))
+    val samples: List<String> by project.extra
+    samples.forEach {
+        implementation(project(it))
     }
 }
 
+tasks.register("syncSamplesInfo", com.example.platform.plugin.SyncSamplesInfo::class.java) {
+    projectDir.set(project.projectDir)
+}
 // Link the assemble task to the sync task.
 // TODO: move syncSamplesInfo task here, as this can break isolated projects
 afterEvaluate {
-    tasks.findByName("assembleDebug")?.finalizedBy(rootProject.tasks.findByName("syncSamplesInfo"))
+    tasks.findByName("assembleDebug")?.finalizedBy(tasks.findByName("syncSamplesInfo"))
 }

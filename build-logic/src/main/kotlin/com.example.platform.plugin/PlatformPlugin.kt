@@ -25,10 +25,6 @@ class PlatformPlugin : Plugin<Project> {
             tasks.register("createSample", CreateSample::class.java) {
                 it.projectDir.set(project.projectDir)
             }
-
-            tasks.register("syncSamplesInfo", SyncSamplesInfo::class.java) {
-                it.projectDir.set(project.projectDir)
-            }
         }
     }
 }
