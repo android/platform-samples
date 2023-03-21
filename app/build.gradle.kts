@@ -90,7 +90,7 @@ dependencies {
 }
 
 tasks.register("syncSamplesInfo", com.example.platform.plugin.SyncSamplesInfo::class.java) {
-    projectDir.set(project.projectDir)
+    projectDir.set(project.rootDir)
 }
 // Link the assemble task to the sync task.
 // TODO: move syncSamplesInfo task here, as this can break isolated projects
