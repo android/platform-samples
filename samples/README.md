@@ -38,8 +38,8 @@ This Sample demonstrate how to get location updates
 This Sample demonstrate detection of user activity like walking, driving, etc.
 - [Multiple Permissions](/privacy/permissions/src/main/java/com/example/platform/privacy/permissions/MultiplePermissions.kt):
 Shows the recommended flow to request multiple RELATED runtime permissions
-- [PackageVisibility](/privacy/data/src/main/java/com/example/platform/privacy/data/PackageVisibility.kt):
-TODO: Add description
+- [Package Visibility](/privacy/data/src/main/java/com/example/platform/privacy/data/PackageVisibility.kt):
+A sample that showcase how the package visibility queries affects the available packages
 - [Permissionless](/privacy/permissions/src/main/java/com/example/platform/privacy/permissions/Permissionless.kt):
 This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs
 - [Permissions using Compose](/privacy/permissions/src/main/java/com/example/platform/privacy/permissions/ComposePermissions.kt):
