@@ -8,14 +8,10 @@ A collection of samples of different Android OS platform APIs.
 
 Browse the samples inside each topic samples folder:
 
-- [Accessibility](samples/accessibility)
 - [Camera](samples/camera)
-- [Media & connectivity](samples/media)
-- [Privacy](samples/privacy)
+- [Connectivity](samples/connectivity)
 - [Location](samples/location)
-- [Power](samples/power)
-- [Security](samples/security)
-- [Storage](samples/storage)
+- [Privacy](samples/privacy)
 - [User-interface](samples/user-interface)
 
 You can find a list of all the available samples [here](samples/README.md).
