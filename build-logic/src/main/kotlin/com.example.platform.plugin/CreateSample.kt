@@ -128,7 +128,7 @@ plugins {
 }
 
 android {
-    namespace = '$samplePackage'
+    namespace = "$samplePackage"
 }
 
 dependencies {
