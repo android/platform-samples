@@ -71,13 +71,17 @@ abstract class CreateSample : DefaultTask() {
         val samplePackage = "com.example.platform.${packagePath}"
 
         // Create module structure if it doesn't exists.
-        if (!directory.exists()) {
+        if (!File(directory, "build.gradle.kts").exists()) {
+            println("Creating build.gradle.kts for module")
             File(directory, "build.gradle.kts").apply {
                 parentFile.mkdirs()
                 createNewFile()
                 writeText(sampleBuildTemplate(samplePackage))
             }
+        }
 
+        if (!File(directory, "README.md").exists()) {
+            println("Creating README for module")
             File(directory, "README.md").apply {
                 parentFile.mkdirs()
                 createNewFile()
