@@ -22,6 +22,7 @@ import android.appwidget.AppWidgetProviderInfo
 import android.content.Context
 import android.content.Intent
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -49,6 +50,7 @@ import com.google.android.catalog.framework.annotations.Sample
     description = "Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples",
     documentation = "https://developer.android.com/develop/ui/views/appwidgets/overview"
 )
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppWidgets() {
     val context = LocalContext.current
@@ -82,6 +84,7 @@ fun AppWidgets() {
  * depending on the default launcher implementation. Also, it does not callback if user cancels the
  * request.
  */
+@RequiresApi(Build.VERSION_CODES.O)
 private fun AppWidgetProviderInfo.pin(context: Context) {
     val successCallback = PendingIntent.getBroadcast(
         context,
@@ -120,6 +123,7 @@ private fun AppInfoText() {
  *
  * This class contains all the info we provide via the XML meta-data for each provider.
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun WidgetInfoCard(providerInfo: AppWidgetProviderInfo) {
