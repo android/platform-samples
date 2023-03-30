@@ -56,13 +56,13 @@ compose-animation-animation = { module = "androidx.compose.animation:animation" 
 compose-foundation-foundation = { module = "androidx.compose.foundation:foundation" }
 compose-foundation-layout = { module = "androidx.compose.foundation:layout" }
 compose-material3 = { module = "androidx.compose.material3:material3" }
-compose-material-material = { module = "androidx.compose.material:material", version.ref = "compose-bom" }
-compose-material-iconsext = { module = "androidx.compose.material:material-icons-extended", version.ref = "compose-bom" }
+compose-material-material = { module = "androidx.compose.material:material" }
+compose-material-iconsext = { module = "androidx.compose.material:material-icons-extended" }
 compose-runtime-runtime = { module = "androidx.compose.runtime:runtime" }
 compose-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 compose-ui-tooling-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "compose-bom" }
-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose-bom" }
+compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-util = { module = "androidx.compose.ui:util" }
 

@@ -33,7 +33,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Platform Samples"
 include(":app")
-include(":samples")
 
 // Dynamically include samples under /app-catalog/samples/ folder
 val samples = buildList<String> {

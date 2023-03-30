@@ -2,12 +2,16 @@
 
 A collection of samples of different Android OS platform APIs.
 
-> **Note:** the goal of these samples are to showcase certain functionality in isolation and might
-> use simplified code. For best practices follow our documentation and check
+> **Note:** the goal of these samples are to showcase certain functionality in isolation and they 
+> might use simplified code. The project uses the
+> [casa-android](https://github.com/google/casa-android) (intended only for demo projects).
+> 
+> For best practices follow our documentation and check
 > [Now In Android](https://github.com/android/nowinandroid)
 
 Browse the samples inside each topic samples folder:
 
+- [Accessibility](samples/accessibility)
 - [Camera](samples/camera)
 - [Connectivity](samples/connectivity)
 - [Location](samples/location)
@@ -24,18 +28,22 @@ You can find a list of all the available samples [here](samples/README.md).
 
 1. Clone the repository
 2. Open the whole project in Android Studio.
-3. Sync & Run
+3. Sync & Run `app` configuration
 
-This will open the samples list screen that allows you to navigate throughout the different
+The app will open with the samples list screen that allows you to navigate throughout the different
 categories and available samples.
+
+> **Note:** the `app` module is required to bring together all the samples but it's not relevant
+> for their functionality, you can simply ignore it.
 
 ### Deeplink to sample
 
 To open a specific sample directly you can use one of the auto-generated configurations.
 
-1. Open Run Configuration dropdown
-2. Select sample name
-3. Run
+1. Build the project at least once
+2. Open `Run Configuration` dropdown
+3. Select sample name
+4. Run
 
 > **Tip:** use `⌃⌥R` or `Alt+Shift+F10` shortcut to open the full list and launch the selected one. 
 
@@ -52,7 +60,7 @@ Make sure to read the [Contributing](CONTRIBUTING.md) page first though.
 ## License
 
 ```
-Copyright 2022 The Android Open Source Project
+Copyright 2023 The Android Open Source Project
  
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

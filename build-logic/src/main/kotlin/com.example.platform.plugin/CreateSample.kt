@@ -23,6 +23,7 @@ import org.gradle.api.tasks.Internal
 import org.gradle.api.tasks.TaskAction
 import org.gradle.api.tasks.options.Option
 import java.io.File
+import java.time.LocalDate
 import java.util.Locale
 
 /**
@@ -100,15 +101,13 @@ abstract class CreateSample : DefaultTask() {
             writeText(sampleTemplate(samplePackage, sampleName))
         }
 
-        // Track new created files
-        Runtime.getRuntime().exec("git add $directory")
         println("Done! Sync and build project")
     }
 }
 
-private const val PROJECT_LICENSE = """
+private val projectLicense = """
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright ${LocalDate.now().year} The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,7 +124,7 @@ private const val PROJECT_LICENSE = """
 """
 
 private fun sampleBuildTemplate(samplePackage: String) = """
-$PROJECT_LICENSE
+$projectLicense
 
 plugins {
     id("com.example.platform.sample")
@@ -141,7 +140,7 @@ dependencies {
 """.trimIndent()
 
 private fun sampleTemplate(samplePackage: String, moduleName: String) = """
-$PROJECT_LICENSE
+$projectLicense
 
 package $samplePackage
 
