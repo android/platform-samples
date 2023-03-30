@@ -1,11 +1,15 @@
-# PackageVisibility samples
+# Privacy - Data minimization samples
 
-// TODO
+This module contains samples that shows how your app can
+[minimize the visibility](src/main/java/com/example/platform/privacy/data/PackageVisibility.kt) into
+the set of other installed apps and your use of non-resettable device identifiers by using
+[Package Visibility APIs](https://developer.android.com/training/package-visibility/declaring) and
+appropriated [identifiers](https://developer.android.com/training/articles/user-data-ids#common-use-cases).
 
 ## License
 
 ```
-Copyright 2022 The Android Open Source Project
+Copyright 2023 The Android Open Source Project
  
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

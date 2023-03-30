@@ -1,11 +1,16 @@
-# DataAccess samples
+# Privacy - Transparency and control samples
 
-// TODO
+Help users understand how your app accesses their data, and give users more control.
+
+## [Data access](src/main/java/com/example/platform/privacy/transparency/DataAccess.kt)
+
+The sample showcases how to use data access auditing APIs to detect when your app, or an SDK
+dependency, performs operations that are associated with a permission.
 
 ## License
 
 ```
-Copyright 2022 The Android Open Source Project
+Copyright 2023 The Android Open Source Project
  
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
