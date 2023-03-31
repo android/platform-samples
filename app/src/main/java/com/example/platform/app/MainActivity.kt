@@ -24,6 +24,11 @@ import com.google.android.catalog.framework.ui.CatalogActivity
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.HiltAndroidApp
 
+/**
+ * Main app for the platform samples catalog necessary for injecting the list of available samples
+ *
+ * Check [casa-android](https://github.com/google/casa-android#create-catalog-app) setup
+ */
 @HiltAndroidApp
 class MainApp : Application(), ImageLoaderFactory {
 
@@ -37,5 +42,8 @@ class MainApp : Application(), ImageLoaderFactory {
     }
 }
 
+/**
+ * Entry point for the platform samples catalog using the [CatalogActivity].
+ */
 @AndroidEntryPoint
 class MainActivity : CatalogActivity()
