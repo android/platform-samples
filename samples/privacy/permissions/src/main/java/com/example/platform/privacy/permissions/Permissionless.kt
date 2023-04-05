@@ -16,9 +16,11 @@
 
 package com.example.platform.privacy.permissions
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.speech.RecognizerIntent
 import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
@@ -50,6 +52,7 @@ import androidx.compose.ui.text.ExperimentalTextApi
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.UrlAnnotation
 import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
@@ -68,7 +71,6 @@ import java.io.File
     description = "This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs",
     documentation = "https://developer.android.com/training/permissions/evaluating"
 )
-@Deprecated("sorry")
 @Composable
 fun Permissionless() {
     LazyColumn(
@@ -92,6 +94,9 @@ fun Permissionless() {
         }
         item {
             OpenDocumentsCard()
+        }
+        item {
+            SpeechRecognizerCard()
         }
     }
 }
@@ -384,6 +389,55 @@ private fun OpenDocumentsCard() {
 
         if (documentInfo.isNotBlank()) {
             Text(text = documentInfo, modifier = Modifier.padding(16.dp))
+        }
+    }
+}
+
+@Composable
+fun SpeechRecognizerCard() {
+    var text by rememberSaveable {
+        mutableStateOf("")
+    }
+
+    val launcher = rememberLauncherForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        text = if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
+                .orEmpty()
+                .joinToString()
+        } else {
+            "Speech cancelled"
+        }
+    }
+
+    Card(
+        Modifier
+            .fillMaxWidth()
+            .animateContentSize()
+    ) {
+        TextButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+                intent.putExtra(
+                    RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM
+                )
+                launcher.launch(intent)
+            }
+        ) {
+            Text(text = "Speak")
+        }
+
+        if (text.isNotBlank()) {
+            Text(
+                text = text,
+                modifier = Modifier
+                    .padding(16.dp)
+                    .fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
