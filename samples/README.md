@@ -10,6 +10,8 @@ TODO: Add description
 TODO: Add description
 - [CameraX](/camera/camerax/src/main/java/com/example/platform/camera.x/CameraX.kt):
 TODO: Add description
+- [Clickable Links (View)](/accessibility/src/main/java/com/example/platform/accessibility/ClickableLinksView.kt):
+Use URLSpan to display hyperlinks. This helps accessibility services detect
 - [Color Contrast](/accessibility/src/main/java/com/example/platform/accessibility/ColorContrast.kt):
 This sample demonstrates the importance of proper color contrast and how to 
 - [Conversion suggestions](/user-interface/text/src/main/java/com/example/platform/ui/text/ConversionSuggestions.kt):
@@ -26,6 +28,8 @@ Immersive mode enables your app to display full-screen by hiding system bars.
 Demonstrates different options for the `android:lineBreakWordStyle` attribute.
 - [Linkify](/user-interface/text/src/main/java/com/example/platform/ui/text/Linkify.kt):
 Linkify is useful for creating links in TextViews.
+- [Live Region (View)](/accessibility/src/main/java/com/example/platform/accessibility/LiveRegionView.kt):
+Utilize LiveRegion to automatically notify users of accessibility services
 - [Location - Background Location updates](/location/src/main/java/com/example/platform/location/bglocationaccess/BgLocationAccessScreen.kt):
 This Sample demonstrate how to access location and get location updates when app is in background
 - [Location - Create and monitor Geofence](/location/src/main/java/com/example/platform/location/geofencing/GeofencingScreen.kt):

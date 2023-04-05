@@ -22,6 +22,9 @@ plugins {
 
 android {
     namespace = "com.example.platform.accessibility"
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
