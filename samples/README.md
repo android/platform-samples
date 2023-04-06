@@ -10,8 +10,6 @@ TODO: Add description
 TODO: Add description
 - [CameraX](/camera/camerax/src/main/java/com/example/platform/camera.x/CameraX.kt):
 TODO: Add description
-- [Clickable Links (View)](/accessibility/src/main/java/com/example/platform/accessibility/ClickableLinksView.kt):
-Use URLSpan to display hyperlinks. This helps accessibility services detect
 - [Color Contrast](/accessibility/src/main/java/com/example/platform/accessibility/ColorContrast.kt):
 This sample demonstrates the importance of proper color contrast and how to 
 - [Conversion suggestions](/user-interface/text/src/main/java/com/example/platform/ui/text/ConversionSuggestions.kt):
@@ -52,5 +50,7 @@ This sample demonstrate how you can avoid requesting permission for certain acti
 This sample showcases how to request permission using Accompanist in Compose
 - [Single Permission](/privacy/permissions/src/main/java/com/example/platform/privacy/permissions/SinglePermission.kt):
 Shows the recommended flow to request single runtime permissions
+- [Speakable Text](/accessibility/src/main/java/com/example/platform/accessibility/SpeakableText.kt):
+The sample demonstrates the importance of having proper labels for
 - [TextSpan](/user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.
