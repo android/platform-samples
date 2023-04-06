@@ -28,6 +28,7 @@ kotlin-serialization = "1.4.1"
 ktlint = "0.48.1"
 coroutines = "1.6.4"
 play-services-location = "21.0.1"
+work = "2.8.1"
 
 [libraries]
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
@@ -84,6 +85,8 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil-video = { module = "io.coil-kt:coil-video", version.ref = "coil" }
 
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
+work = { module = "androidx.work:work-runtime", version.ref = "work"}
+work-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "work"}
 
 [plugins]
 affectedmoduledetector = { id = "com.dropbox.affectedmoduledetector", version = "0.2.0" }
