@@ -10,14 +10,12 @@ TODO: Add description
 TODO: Add description
 - [CameraX](/camera/camerax/src/main/java/com/example/platform/camera.x/CameraX.kt):
 TODO: Add description
-- [Clickable Links (View)](/accessibility/src/main/java/com/example/platform/accessibility/ClickableLinksView.kt):
-Use URLSpan to display hyperlinks. This helps accessibility services detect
 - [Color Contrast](/accessibility/src/main/java/com/example/platform/accessibility/ColorContrast.kt):
 This sample demonstrates the importance of proper color contrast and how to 
 - [Conversion suggestions](/user-interface/text/src/main/java/com/example/platform/ui/text/ConversionSuggestions.kt):
 Demonstrates how to implement the incremental search feature for non-alphabet languages with the Conversion Suggestions API.
 - [Data Access](/privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
-Coming soon
+Demonstrates how to implement data access auditing for your app to identify 
 - [Find devices sample](/connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/FindDevicesSample.kt):
 This example will demonstrate how to scanning for Low Energy Devices
 - [Hyphenation](/user-interface/text/src/main/java/com/example/platform/ui/text/Hyphenation.kt):
