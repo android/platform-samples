@@ -16,6 +16,7 @@
 
 package com.example.platform.privacy.permissions
 
+import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -34,6 +35,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -59,6 +61,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.FileProvider
 import androidx.core.database.getStringOrNull
 import coil.compose.AsyncImage
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -94,6 +99,9 @@ fun Permissionless() {
         }
         item {
             OpenDocumentsCard()
+        }
+        item {
+            CallPhoneCard()
         }
         item {
             SpeechRecognizerCard()
@@ -171,6 +179,7 @@ sealed class CameraRequest {
  * Register the provided camera related contract and display the UI to request and show the returned
  * value from the camera.
  */
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun CameraRequestCard(
     actionTitle: String,
@@ -198,6 +207,32 @@ private fun CameraRequestCard(
         Toast.makeText(context, "Captured? $isSuccessful", Toast.LENGTH_SHORT).show()
     }
 
+    fun launchCamera() {
+        scope.launch {
+            // On click create a new file (outside of the main thread!) and launch the
+            // camera request with the new file URI
+            request = CameraRequest.Pending(
+                context.createTemporaryFile(fileName, fileType)
+            )
+            launcher.launch(request.uri)
+        }
+    }
+
+    // Calling the camera intent does not require CAMERA permission unless the app declares it in
+    // the AndroidManifest and user rejects it. This is a special behavior from the Camera intent
+    // to avoid surprising users that previously rejected Camera but the system shows a camera.
+    // This project contains camera sample using the permission, thus we need to request it
+    val cameraPermission = rememberPermissionState(
+        permission = Manifest.permission.CAMERA
+    ) { granted ->
+        if (granted) {
+            launchCamera()
+        }
+    }
+    var rationale by remember(cameraPermission.status) {
+        mutableStateOf(false)
+    }
+
     Card(
         Modifier
             .fillMaxWidth()
@@ -206,13 +241,10 @@ private fun CameraRequestCard(
         TextButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = {
-                scope.launch {
-                    // On click create a new file (outside of the main thread!) and launch the
-                    // camera request with the new file URI
-                    request = CameraRequest.Pending(
-                        context.createTemporaryFile(fileName, fileType)
-                    )
-                    launcher.launch(request.uri)
+                if (cameraPermission.status.isGranted) {
+                    launchCamera()
+                } else {
+                    rationale = true
                 }
             }
         ) {
@@ -233,6 +265,38 @@ private fun CameraRequestCard(
                     }
             )
         }
+    }
+
+    if (rationale) {
+        AlertDialog(
+            onDismissRequest = {
+                rationale = false
+            },
+            title = {
+                Text(text = "Camera permission required")
+            },
+            text = {
+                Text(text = "Calling the camera intent does not require CAMERA permission unless the app declares it in the AndroidManifest. This project contains camera sample, thus we need to request it")
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        cameraPermission.launchPermissionRequest()
+                    }
+                ) {
+                    Text("Continue")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        rationale = false
+                    }
+                ) {
+                    Text("Dismiss")
+                }
+            }
+        )
     }
 }
 
@@ -389,6 +453,29 @@ private fun OpenDocumentsCard() {
 
         if (documentInfo.isNotBlank()) {
             Text(text = documentInfo, modifier = Modifier.padding(16.dp))
+        }
+    }
+}
+
+@Composable
+fun CallPhoneCard() {
+    val context = LocalContext.current
+
+    Card(
+        Modifier
+            .fillMaxWidth()
+            .animateContentSize()
+    ) {
+        TextButton(
+            modifier = Modifier.fillMaxWidth(),
+            onClick = {
+                val intent = Intent(Intent.ACTION_DIAL, Uri.parse("tel:123456789")).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                }
+                context.startActivity(intent)
+            }
+        ) {
+            Text(text = "Call phone")
         }
     }
 }
