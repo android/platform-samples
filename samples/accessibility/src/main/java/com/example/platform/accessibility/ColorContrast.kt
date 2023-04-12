@@ -57,11 +57,6 @@ fun ColorContrast() {
 }
 
 @Composable
-fun TextWithPadding(text: String) {
-    Text(text = text, modifier = Modifier.padding(30.dp))
-}
-
-@Composable
 fun TextWithProperColorContrast(text: String) {
     Text(text, color = Color.Blue, modifier = Modifier.padding(30.dp))
 }
