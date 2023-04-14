@@ -1,142 +1,100 @@
-name: Build & test
+name: Build
 
 on:
   push:
     branches:
       - main
-    paths-ignore:
-      - '**.md'
   pull_request:
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
-    # Skip build if head commit contains 'skip ci'
-    if: "!contains(github.event.head_commit.message, 'skip ci')"
-
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 60
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          # Fetch expanded history, which is needed for affected module detection
-          fetch-depth: '500'
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Validate Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: set up JDK
-        uses: actions/setup-java@v1
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
         with:
-          java-version: 17
+          distribution: 'zulu'
+          java-version: 11
 
-      - name: Generate cache key
-        run: ./checksum.sh checksum.txt
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
-      - uses: actions/cache@v2
+      - name: Check spotless
+        run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache
+
+      - name: Check lint
+        run: ./gradlew lintDebug
+
+      - name: Build all build type and flavor permutations
+        run: ./gradlew assemble
+
+      - name: Run local tests
+        run: ./gradlew testDebug
+
+      - name: Upload build outputs (APKs)
+        uses: actions/upload-artifact@v3
         with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
+          name: build-outputs
+          path: app/build/outputs
 
-      - name: Build
-        run: |
-          ./gradlew --scan --stacktrace \
-              spotlessCheck \
-              assemble \
-              lintDebug
-
-      - name: Unit Tests
-        run: |
-          ./scripts/run-tests.sh \
-              --unit-tests \
-              --run-affected \
-              --affected-base-ref=$BASE_REF
-
-      - name: Upload test results
+      - name: Upload build reports
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: test-results-robolectric
-          path: |
-            **/build/test-results/*
-            **/build/reports/*
+          name: build-reports
+          path: app/build/reports
 
-  test:
-    runs-on: macos-latest
+  androidTest:
     needs: build
-    timeout-minutes: 50
-
+    runs-on: macOS-latest # enables hardware acceleration in the virtual machine
+    timeout-minutes: 55
     strategy:
-      # Allow tests to continue on other devices if they fail on one device.
-      fail-fast: false
       matrix:
-        api-level: [ 26, 28 ]
-        shard: [ 0, 1 ] # Need to update shard-count below if this changes
-
-    env:
-      TERM: dumb
+        api-level: [26, 30]
 
     steps:
-      - uses: actions/checkout@v2
-        with:
-          # Fetch expanded history, which is needed for affected module detection
-          fetch-depth: '500'
+      - name: Checkout
+        uses: actions/checkout@v3
 
       - name: Copy CI gradle.properties
         run: mkdir -p ~/.gradle ; cp .github/ci-gradle.properties ~/.gradle/gradle.properties
 
-      - name: set up JDK
-        uses: actions/setup-java@v1
+      - name: Set up JDK 11
+        uses: actions/setup-java@v3
         with:
-          java-version: 17
+          distribution: 'zulu'
+          java-version: 11
 
-      - name: Generate cache key
-        run: ./checksum.sh checksum.txt
+      - name: Setup Gradle
+        uses: gradle/gradle-build-action@v2
 
-      - uses: actions/cache@v2
-        with:
-          path: |
-            ~/.gradle/caches/modules-*
-            ~/.gradle/caches/jars-*
-            ~/.gradle/caches/build-cache-*
-          key: gradle-${{ hashFiles('checksum.txt') }}
-
-      # Determine what emulator image to use. We run all API 28+ emulators using
-      # the google_apis image
-      - name: Determine emulator target
-        id: determine-target
-        env:
-          API_LEVEL: ${{ matrix.api-level }}
-        run: |
-          TARGET="default"
-          if [ "$API_LEVEL" -ge "28" ]; then
-            TARGET="google_apis"
-          fi
-          echo "::set-output name=TARGET::$TARGET"
-
-      - name: Run tests
+      - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: ${{ steps.determine-target.outputs.TARGET }}
-          profile: Galaxy Nexus
-          script: ./scripts/run-tests.sh --log-file=logcat.txt --run-affected --affected-base-ref=$BASE_REF --shard-index=${{ matrix.shard }} --shard-count=2
+          arch: x86_64
+          disable-animations: true
+          disk-size: 6000M
+          heap-size: 600M
+          script: ./gradlew connectedDebugAndroidTest
 
-      - name: Upload logs
+      - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
-          name: logs-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
-          path: logcat.txt
-
-      - name: Upload test results
-        if: always()
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-results-${{ matrix.api-level }}-${{ steps.determine-target.outputs.TARGET }}-${{ matrix.shard }}
-          path: |
-            **/build/reports/*
-            **/build/outputs/*/connected/*
+          name: test-reports-${{ matrix.api-level }}
+          path: '*/build/reports/androidTests'

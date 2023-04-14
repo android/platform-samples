@@ -1,0 +1,53 @@
+name: Feature request
+description: File a feature request
+title: "[FR]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this report!
+  - type: checkboxes
+    attributes:
+      label: Is there an existing FR for this?
+      description: Please search to see if a similar FR already exists
+      options:
+        - label: I have searched the existing issues
+          required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: For which area is this FR?
+      multiple: true
+      required: true
+      options:
+        - General
+        - Accessibility
+        - Camera
+        - Connectivity
+        - Location
+        - Permissions
+        - Privacy
+        - User Interface
+  - type: textarea
+    id: sample-path
+    attributes:
+      label: Is it for a specific sample?
+      description: Please add the sample entry point file name of the affected sample
+      placeholder: e.g SinglePermission.kt
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: Describe the feature request
+      description: Be clear about the problem and possible solutions
+      placeholder: I want to...
+    validations:
+      required: true
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Code of Conduct
+      description: By submitting this issue, you agree to follow our [Code of Conduct](CODE_OF_CONDUCT.md)
+      options:
+        - label: I agree to follow this project's Code of Conduct
+          required: true
