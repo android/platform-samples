@@ -18,11 +18,12 @@ plugins {
     id("com.example.platform.sample")
 }
 
-
 android {
     namespace = "com.example.platform.camera"
+    viewBinding.isEnabled = true
 }
 
 dependencies {
     // Add samples specific dependencies
 }
+

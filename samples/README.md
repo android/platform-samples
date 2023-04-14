@@ -6,8 +6,8 @@ Showcases how to pin widget within the app. Check the launcher widget menu for a
 This sample will show you how get all audio sources and set an audio device. Covers Bluetooth, LEA, Wired and internal speakers
 - [Camera](/camera/camerax-mlkit/src/main/java/com/example/platform/camera/mlkit/CameraMLKit.kt):
 TODO: Add description
-- [Camera2](/camera/camera2/src/main/java/com/example/platform/camera/camera2/Camera2.kt):
-TODO: Add description
+- [Camera2 - Preview](/camera/camera2/src/main/java/com/example/platform/camera/preview/Camera2Preview.kt):
+Demonstrates displaying processed pixel data directly from the camera sensor 
 - [CameraX](/camera/camerax/src/main/java/com/example/platform/camera.x/CameraX.kt):
 TODO: Add description
 - [Color Contrast](/accessibility/src/main/java/com/example/platform/accessibility/ColorContrast.kt):
