@@ -16,12 +16,15 @@
 
 package com.example.platform.ui.appwidgets.glance.weather
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import com.example.platform.ui.appwidgets.R
 import kotlinx.coroutines.delay
 import java.time.Instant
 import java.time.ZoneId
 import kotlin.random.Random
 
+@RequiresApi(Build.VERSION_CODES.O)
 object WeatherRepo {
 
     /**

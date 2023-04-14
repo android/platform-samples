@@ -20,15 +20,27 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -41,6 +53,7 @@ import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
+@RequiresApi(Build.VERSION_CODES.M)
 @Sample(
     name = "Find devices sample",
     description = "This example will demonstrate how to scanning for Low Energy Devices"
@@ -146,6 +159,7 @@ private fun ListOfDevicesWidget(findDeviceController: FindDeviceController) {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.M)
 @Composable
 private fun ListOfBLEDevices(findDeviceController: FindDeviceController) {
     val devices by findDeviceController.listOfDevices.collectAsState()

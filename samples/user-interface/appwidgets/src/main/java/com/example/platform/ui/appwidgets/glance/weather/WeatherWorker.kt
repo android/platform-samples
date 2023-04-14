@@ -17,6 +17,8 @@
 package com.example.platform.ui.appwidgets.glance.weather
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
@@ -28,6 +30,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkerParameters
 import java.time.Duration
 
+@RequiresApi(Build.VERSION_CODES.O)
 class WeatherWorker(
     private val context: Context,
     workerParameters: WorkerParameters,

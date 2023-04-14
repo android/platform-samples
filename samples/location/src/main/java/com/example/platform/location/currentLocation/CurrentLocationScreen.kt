@@ -112,7 +112,7 @@ fun CurrentLocationContent(usePreciseLocation: Boolean) {
                     "No last known location. Try fetching the current location first"
                 } else {
                     "Current location is \n" + "lat : ${result.latitude}\n" +
-                            "long : ${result.longitude}\n" + "fetched at ${Instant.now()}"
+                            "long : ${result.longitude}\n" + "fetched at ${System.currentTimeMillis()}"
                 }
             }
         }) {
@@ -134,7 +134,7 @@ fun CurrentLocationContent(usePreciseLocation: Boolean) {
                 result?.let { fetchedLocation ->
                     locationInfo =
                         "Current location is \n" + "lat : ${fetchedLocation.latitude}\n" +
-                                "long : ${fetchedLocation.longitude}\n" + "fetched at ${Instant.now()}"
+                                "long : ${fetchedLocation.longitude}\n" + "fetched at ${System.currentTimeMillis()}"
                 }
             }
         }) {

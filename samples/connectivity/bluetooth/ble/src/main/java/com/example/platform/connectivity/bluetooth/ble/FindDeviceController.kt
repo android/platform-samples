@@ -34,6 +34,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.M)
 class FindDeviceController(private val bluetoothAdapter: BluetoothAdapter) {
 
     private var foundDevices = listOf<BluetoothDevice>()

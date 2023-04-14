@@ -89,7 +89,7 @@ class PlatformAudioSource(
             override fun onStateChanged(state: DeviceState) {
 
                 if (state == DeviceState.Connected || state == DeviceState.Failed) {
-                    pendingDeviceId = null
+                    pendingDeviceId = Int.MIN_VALUE
                     waitForDeviceCallback?.cancel()
                     setAudioSourceResponse.complete(state == DeviceState.Connected)
                 }
@@ -108,7 +108,7 @@ class PlatformAudioSource(
     private var waitForDeviceCallback: Job? = null
     private var setAudioSourceResponse: CompletableDeferred<Boolean> = CompletableDeferred()
     private lateinit var onConnectingDeviceStateChangedListener: OnConnectingDeviceStateChangedListener
-    var pendingDeviceId: Int? = null
+    var pendingDeviceId: Int = Int.MIN_VALUE
 
     /**
      * Switches platform audio source

@@ -1,3 +1,5 @@
+![Build](https://github.com/android/platform-samples/actions/workflows/build.yml/badge.svg)
+
 # Platform Samples
 
 A collection of samples of different Android OS platform APIs.
@@ -5,7 +7,6 @@ A collection of samples of different Android OS platform APIs.
 > **Note:** the goal of these samples are to showcase certain functionality in isolation and they 
 > might use simplified code. The project uses the
 > [casa-android](https://github.com/google/casa-android) (intended only for demo projects).
-> 
 > For best practices follow our documentation and check
 > [Now In Android](https://github.com/android/nowinandroid)
 
@@ -74,4 +75,3 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
-

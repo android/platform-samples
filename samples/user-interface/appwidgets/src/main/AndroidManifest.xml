@@ -63,6 +63,7 @@
         </receiver>
         <receiver
             android:name=".rv.weather.WeatherForecastAppWidget"
+            android:enabled="@bool/weather_appwidget_enabled"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />

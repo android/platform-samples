@@ -65,13 +65,12 @@ class AudioDeviceViewModel(private val platformAudioSource: PlatformAudioSource)
             platformAudioSource.getAudioDevicesStream
         ) { activeDevice: AudioDeviceInfo?, devices: List<AudioDeviceInfo> ->
             devices.map { audioDeviceInfo ->
-                when (audioDeviceInfo.id) {
-                    platformAudioSource.pendingDeviceId -> audioDeviceInfo.toAudioDeviceUI(
-                        AudioDeviceState.Connecting
-                    )
-
-                    activeDevice?.id -> audioDeviceInfo.toAudioDeviceUI(AudioDeviceState.Connected)
-                    else -> audioDeviceInfo.toAudioDeviceUI(AudioDeviceState.Available)
+                if (audioDeviceInfo.id == platformAudioSource.pendingDeviceId) {
+                    audioDeviceInfo.toAudioDeviceUI(AudioDeviceState.Connecting)
+                } else if (audioDeviceInfo.id == activeDevice?.id) {
+                    audioDeviceInfo.toAudioDeviceUI(AudioDeviceState.Connected)
+                } else {
+                    audioDeviceInfo.toAudioDeviceUI(AudioDeviceState.Available)
                 }
             }
         }.map { value ->

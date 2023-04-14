@@ -17,15 +17,18 @@
 package com.example.platform.ui.text
 
 import android.annotation.SuppressLint
+import android.os.Build
 import android.os.Bundle
 import android.text.Layout
 import android.view.View
 import android.widget.ArrayAdapter
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.platform.ui.text.databinding.HyphenationFragmentBinding
 import com.example.platform.ui.text.utils.doOnItemSelected
 import com.google.android.catalog.framework.annotations.Sample
 
+@RequiresApi(Build.VERSION_CODES.M)
 @Sample(
     name = "Hyphenation",
     description = "Demonstrates different options for the `android:hyphenationFrequency` attribute"

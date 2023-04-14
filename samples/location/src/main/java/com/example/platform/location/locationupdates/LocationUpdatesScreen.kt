@@ -48,7 +48,6 @@ import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
-import java.time.Instant
 import java.util.concurrent.TimeUnit
 
 
@@ -100,7 +99,7 @@ fun LocationUpdatesContent(usePreciseLocation: Boolean) {
         LocationUpdatesEffect(locationRequest!!) { result ->
             // For each result update the text
             for (currentLocation in result.locations) {
-                locationUpdates = "${Instant.now()}:\n" +
+                locationUpdates = "${System.currentTimeMillis()}:\n" +
                         "- @lat: ${currentLocation.latitude}\n" +
                         "- @lng: ${currentLocation.longitude}\n" +
                         "- Accuracy: ${currentLocation.accuracy}\n\n" +

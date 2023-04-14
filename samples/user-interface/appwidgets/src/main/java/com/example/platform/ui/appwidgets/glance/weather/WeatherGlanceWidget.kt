@@ -17,6 +17,8 @@
 package com.example.platform.ui.appwidgets.glance.weather
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -382,6 +384,7 @@ fun DailyForecast(
 /**
  * Force update the weather info after user click
  */
+@RequiresApi(Build.VERSION_CODES.O)
 class UpdateWeatherAction : ActionCallback {
     override suspend fun onAction(
         context: Context,

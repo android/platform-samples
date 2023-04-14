@@ -17,6 +17,8 @@
 package com.example.platform.ui.appwidgets.glance.weather
 
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 
 /**
@@ -24,6 +26,7 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
  *
  * Use this class to handle widget lifecycle specific events like onEnable/Disable.
  */
+@RequiresApi(Build.VERSION_CODES.O)
 class WeatherGlanceWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget = WeatherGlanceWidget()
 

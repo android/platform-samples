@@ -42,7 +42,7 @@ import coil.memory.MemoryCache
 import coil.request.ErrorResult
 import coil.request.ImageRequest
 import com.example.platform.ui.appwidgets.glance.toPx
-import java.time.Duration
+import java.util.concurrent.TimeUnit
 import kotlin.math.roundToInt
 
 
@@ -86,7 +86,7 @@ class ImageWorker(
                 "$uniqueWorkName-workaround",
                 ExistingWorkPolicy.KEEP,
                 OneTimeWorkRequestBuilder<ImageWorker>().apply {
-                    setInitialDelay(Duration.ofDays(365))
+                    setInitialDelay(365, TimeUnit.DAYS)
                 }.build()
             )
         }

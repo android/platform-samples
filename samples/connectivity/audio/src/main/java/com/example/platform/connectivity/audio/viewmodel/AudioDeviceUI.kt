@@ -17,6 +17,8 @@
 package com.example.platform.connectivity.audio.viewmodel
 
 import android.media.AudioDeviceInfo
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -43,6 +45,7 @@ data class AudioDeviceUI(
 /**
  * Convert AudioDeviceInfo into a ViewModel so we can display it.
  */
+@RequiresApi(Build.VERSION_CODES.M)
 fun AudioDeviceInfo.toAudioDeviceUI(audioDeviceState: AudioDeviceState): AudioDeviceUI {
     return AudioDeviceUI(
         friendlyName = productName.toString(),
