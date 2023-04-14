@@ -2,8 +2,6 @@
 
 # Platform Samples
 
-![Build](https://github.com/android/platform-samples/actions/workflows/build.yml/badge.svg)
-
 A collection of samples of different Android OS platform APIs.
 
 > **Note:** the goal of these samples are to showcase certain functionality in isolation and they 
