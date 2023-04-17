@@ -1,6 +1,11 @@
-# FindDevicesSample samples
+# Bluetooth Low Energy (BLE) samples
 
-// TODO
+This moudle contains samples related to Bluetooth BLE APIs
+
+- [Find devices](src/main/java/com/example/platform/connectivity/bluetooth/ble/FindDevicesSample.kt)
+
+More info at 
+https://developer.android.com/guide/topics/connectivity/bluetooth/ble-overview
 
 ## License
 

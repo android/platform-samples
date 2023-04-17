@@ -1,6 +1,11 @@
-# Connectivity samples
+# Audio samples
 
-> Audio Manager Sample Complete
+This module includes Audio Samples around Android Platform
+
+- [Audio Manager](src/main/java/com/example/platform/connectivity/audio/AudioSample.kt)
+
+For more check out the documentation at
+https://developer.android.com/guide/topics/media
 
 ## License
 

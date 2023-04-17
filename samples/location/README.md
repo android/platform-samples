@@ -1,18 +1,17 @@
 # Location samples
 
 The samples in this directory address various scenarios of building location aware apps
-[Location Permissions](src/main/java/com/example/platform/location/permission/LocationPermissionsScreen.kt)
-[Get Current Location](src/main/java/com/example/platform/location/currentLocation/CurrentLocationScreen.kt)
-[Receive Location Updates](src/main/java/com/example/platform/location/locationupdates/LocationUpdatesScreen.kt)
-[Background Location Access](src/main/java/com/example/platform/location/bglocationaccess/BgLocationAccessScreen.kt)
-[Create and Monitor Geofences](src/main/java/com/example/platform/location/geofencing/GeofencingScreen.kt)
-[User Activity Recognition](src/main/java/com/example/platform/location/useractivityrecog/UserActivityRecognitionScreen.kt)
+- [Location Permissions](src/main/java/com/example/platform/location/permission/LocationPermissionsScreen.kt)
+- [Get Current Location](src/main/java/com/example/platform/location/currentLocation/CurrentLocationScreen.kt)
+- [Receive Location Updates](src/main/java/com/example/platform/location/locationupdates/LocationUpdatesScreen.kt)
+- [Background Location Access](src/main/java/com/example/platform/location/bglocationaccess/BgLocationAccessScreen.kt)
+- [Create and Monitor Geofences](src/main/java/com/example/platform/location/geofencing/GeofencingScreen.kt)
+- [User Activity Recognition](src/main/java/com/example/platform/location/useractivityrecog/UserActivityRecognitionScreen.kt)
 
 > **Important:** All samples run independent of each other.
 
 These samples showcase the use case in a simplified manner. For more details on how to build location
-aware apps please refer
-https://developer.android.com/training/location
+aware apps please refer https://developer.android.com/training/location
 
 ## License
 
