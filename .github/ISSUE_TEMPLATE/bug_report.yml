@@ -30,7 +30,7 @@ body:
         - User Interface
     validations:
       required: true
-  - type: textarea
+  - type: input
     id: sample-path
     attributes:
       label: In a specific sample?
