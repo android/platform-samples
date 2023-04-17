@@ -74,6 +74,7 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.compose.bom))
     implementation(libs.casa.ui)
 
     implementation(libs.hilt.android)
