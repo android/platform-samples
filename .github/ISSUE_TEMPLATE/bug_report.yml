@@ -19,7 +19,6 @@ body:
     attributes:
       label: In which area is the issue?
       multiple: true
-      required: true
       options:
         - General
         - Accessibility
@@ -29,6 +28,8 @@ body:
         - Permissions
         - Privacy
         - User Interface
+    validations:
+      required: true
   - type: textarea
     id: sample-path
     attributes:
