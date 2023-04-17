@@ -25,7 +25,7 @@ attribute to apply automatic hyphenation to a `TextView`.
 Android 13 (API level 33) introduced 2 new options, `fullFast` and `normalFast`. These are the same
 as `full` and `normal`, but use faster algorithm for better performance.
 
-### [Line break]src/main/java/com/example/platform/ui/text/LineBreak.kt)
+### [Line break](src/main/java/com/example/platform/ui/text/LineBreak.kt)
 
 This feature is relevant to _languages written without spaces between words_, such as Japanese and
 Chinese. This particular demo works only when the device locale is set to Japanese.
