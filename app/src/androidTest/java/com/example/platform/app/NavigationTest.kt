@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.example.platform.app
 
+import android.os.Build
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.filterToOne
 import androidx.compose.ui.test.hasImeAction
@@ -57,16 +58,21 @@ class NavigationTest {
     fun testSamplesOpen() {
         val searchLabel = "Search button"
         composeTestRule.apply {
-            onNodeWithText(activity.getString(R.string.app_name)).assertIsDisplayed()
-            onNodeWithContentDescription(searchLabel).performClick()
+            val platformLabel = onNodeWithText(activity.getString(R.string.app_name))
+            val searchButton = onNodeWithContentDescription(searchLabel)
+            platformLabel.assertIsDisplayed()
+            searchButton.performClick()
             activity.catalogSamples.forEach {
-                onNode(hasImeAction(ImeAction.Search)).performTextInput(it.name)
-                onAllNodesWithText(it.name)
-                    .filterToOne(hasImeAction(ImeAction.Search).not() and hasText(it.description))
-                    .assertIsDisplayed()
-                    .performClick()
-                Espresso.pressBack()
-                onNodeWithContentDescription(searchLabel).performClick()
+                if (Build.VERSION.SDK_INT >= it.minSDK) {
+                    onNode(hasImeAction(ImeAction.Search)).performTextInput(it.name)
+                    onAllNodesWithText(it.name)
+                        .filterToOne(hasImeAction(ImeAction.Search).not() and hasText(it.description))
+                        .assertIsDisplayed()
+                        .performClick()
+                    Espresso.pressBack()
+                    platformLabel.assertIsDisplayed()
+                    searchButton.performClick()
+                }
             }
         }
     }
