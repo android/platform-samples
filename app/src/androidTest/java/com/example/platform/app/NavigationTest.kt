@@ -18,16 +18,14 @@ package com.example.platform.app
 
 import android.os.Build
 import androidx.compose.ui.test.assertIsDisplayed
-import androidx.compose.ui.test.filterToOne
-import androidx.compose.ui.test.hasImeAction
+import androidx.compose.ui.test.hasScrollAction
+import androidx.compose.ui.test.hasScrollToIndexAction
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.onAllNodesWithText
-import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.compose.ui.test.performTextInput
-import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.test.performScrollToKey
 import androidx.test.espresso.Espresso
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
@@ -56,22 +54,20 @@ class NavigationTest {
 
     @Test
     fun testSamplesOpen() {
-        val searchLabel = "Search button"
         composeTestRule.apply {
             val platformLabel = onNodeWithText(activity.getString(R.string.app_name))
-            val searchButton = onNodeWithContentDescription(searchLabel)
-            platformLabel.assertIsDisplayed()
-            searchButton.performClick()
+            val scrollNode = onAllNodes(hasScrollAction() and hasScrollToIndexAction()).onFirst()
+
+            // For each sample find it in the list, open it and go back
             activity.catalogSamples.forEach {
+                // Skip disabled samples
                 if (Build.VERSION.SDK_INT >= it.minSDK) {
-                    onNode(hasImeAction(ImeAction.Search)).performTextInput(it.name)
-                    onAllNodesWithText(it.name)
-                        .filterToOne(hasImeAction(ImeAction.Search).not() and hasText(it.description))
-                        .assertIsDisplayed()
-                        .performClick()
+                    scrollNode.performScrollToKey(it.route)
+                    onNode(hasText(it.name) and hasText(it.description)).performClick()
+
+                    // Go back
                     Espresso.pressBack()
                     platformLabel.assertIsDisplayed()
-                    searchButton.performClick()
                 }
             }
         }
