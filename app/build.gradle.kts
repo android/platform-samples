@@ -39,7 +39,7 @@ android {
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = "com.example.platform.app.AppTestRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -88,6 +88,18 @@ dependencies {
     samples.forEach {
         implementation(project(it))
     }
+
+    // Testing
+    kaptAndroidTest(libs.hilt.compiler)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.hilt.testing)
+    androidTestImplementation(libs.junit4)
 }
 
 tasks.register("syncSamplesInfo", com.example.platform.plugin.SyncSamplesInfo::class.java) {

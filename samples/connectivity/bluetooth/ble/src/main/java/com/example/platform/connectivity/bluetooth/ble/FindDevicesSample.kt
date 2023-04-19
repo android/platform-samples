@@ -63,7 +63,7 @@ fun FindDevicesSample() {
     val context = LocalContext.current
     val bluetoothManager = context.getSystemService<BluetoothManager>()
 
-    if (bluetoothManager == null) {
+    if (bluetoothManager == null || bluetoothManager.adapter == null) {
         Text(text = "Sample not supported in this device. Missing the Bluetooth Manager")
     } else {
         FindBLEDevicesScreen(FindDeviceController(bluetoothManager.adapter))
