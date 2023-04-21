@@ -4,11 +4,7 @@
 Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples
 - [Audio Manager](/connectivity/audio/src/main/java/com/example/platform/connectivity/audio/AudioSample.kt):
 This sample will show you how get all audio sources and set an audio device. Covers Bluetooth, LEA, Wired and internal speakers
-- [Camera](/camera/camerax-mlkit/src/main/java/com/example/platform/camera/mlkit/CameraMLKit.kt):
-TODO: Add description
 - [Camera2](/camera/camera2/src/main/java/com/example/platform/camera/camera2/Camera2.kt):
-TODO: Add description
-- [CameraX](/camera/camerax/src/main/java/com/example/platform/camera.x/CameraX.kt):
 TODO: Add description
 - [Color Contrast](/accessibility/src/main/java/com/example/platform/accessibility/ColorContrast.kt):
 This sample demonstrates the importance of proper color contrast and how to 
