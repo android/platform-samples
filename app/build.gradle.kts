@@ -76,6 +76,7 @@ android {
 dependencies {
     implementation(platform(libs.compose.bom))
     implementation(libs.casa.ui)
+    implementation(libs.androidx.appcompat)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)

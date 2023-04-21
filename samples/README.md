@@ -40,6 +40,8 @@ This Sample demonstrate detection of user activity like walking, driving, etc.
 Shows the recommended flow to request multiple RELATED runtime permissions
 - [Package Visibility](/privacy/data/src/main/java/com/example/platform/privacy/data/PackageVisibility.kt):
 A sample that showcase how the package visibility queries affects the available packages
+- [PdfRenderer](/graphics/src/main/java/com/example/platform/graphics/PdfRenderer.kt):
+Demonstrates how to use PdfRenderer to display PDF documents on the screen.
 - [Permissionless](/privacy/permissions/src/main/java/com/example/platform/privacy/permissions/Permissionless.kt):
 This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs
 - [Permissions using Compose](/privacy/permissions/src/main/java/com/example/platform/privacy/permissions/ComposePermissions.kt):
