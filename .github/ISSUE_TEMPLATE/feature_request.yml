@@ -18,18 +18,18 @@ body:
     id: area
     attributes:
       label: For which area is this FR?
-      multiple: true
-      required: true
+      multiple: false
       options:
         - General
         - Accessibility
         - Camera
         - Connectivity
         - Location
-        - Permissions
         - Privacy
         - User Interface
-  - type: textarea
+    validations:
+      required: true
+  - type: input
     id: sample-path
     attributes:
       label: Is it for a specific sample?

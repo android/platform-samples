@@ -2,8 +2,6 @@
 
 # Platform Samples
 
-![Build](https://github.com/android/platform-samples/actions/workflows/build.yml/badge.svg)
-
 A collection of samples of different Android OS platform APIs.
 
 > **Note:** the goal of these samples are to showcase certain functionality in isolation and they 
@@ -20,12 +18,11 @@ Browse the samples inside each topic samples folder:
 - [Location](samples/location)
 - [Privacy](samples/privacy)
 - [User-interface](samples/user-interface)
+- More to come...
 
 You can find a list of all the available samples [here](samples/README.md).
 
-> **Important:** each sample is isolated from the rest and only contains the specific sample code.
-> The wiring into the main application is done under the hood and an implementation detail not
-> needed to understand the sample functionality.
+> 🚧 **Work-in-Progress:** we are working on brining more existing and new samples into this format.
 
 ## How to run
 
@@ -37,7 +34,8 @@ The app will open with the samples list screen that allows you to navigate throu
 categories and available samples.
 
 > **Note:** the `app` module is required to bring together all the samples but it's not relevant
-> for their functionality, you can simply ignore it.
+> for their functionality, you can simply ignore it. The wiring is done under the hood and an
+> implementation detail not needed to understand any sample functionality.
 
 ### Deeplink to sample
 

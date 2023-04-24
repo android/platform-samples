@@ -1,6 +1,10 @@
-# Accessibility samples
+# Camera2 samples
 
-> Work-in progress
+This is a catalog of camera2-specific APIs to demonstrate the usage and capabilities of the API.
+
+> 🚧 **Work-in-Progress:** we are working on brining more existing and new samples for camera2
+
+Check out our guides at https://developer.android.com/training/camera2
 
 ## License
 
@@ -19,4 +23,3 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
-
