@@ -14,17 +14,12 @@
  * limitations under the License.
  */
 
-package com.example.platform.camera.camera2
+package com.example.platform.camera.common
 
-import androidx.compose.runtime.Composable
-import com.google.android.catalog.framework.annotations.Sample
+import java.util.concurrent.Executor
 
-@Sample(
-    name = "Camera2",
-    description = "TODO: Add description"
-)
-@Composable
-fun Camera2() {
-    // TODO: implement your sample. 
-    // You can also use Activity or Fragment, simply tag them with the @Sample annotation
+internal class DirectExecutor : Executor {
+    override fun execute(r: Runnable) {
+        r.run()
+    }
 }
