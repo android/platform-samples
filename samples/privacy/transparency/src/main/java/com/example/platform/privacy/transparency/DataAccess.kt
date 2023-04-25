@@ -17,6 +17,7 @@
 package com.example.platform.privacy.transparency
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AppOpsManager
 import android.app.AsyncNotedAppOp
 import android.app.SyncNotedAppOp
@@ -33,13 +34,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -60,6 +61,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+@SuppressLint("MissingPermission")
 @Sample(
     name = "Data Access",
     description = "Demonstrates how to implement data access auditing for your app to identify " +
@@ -91,6 +93,7 @@ fun DataAccess() {
     }
 }
 
+@SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.R)
 @RequiresPermission(
     Manifest.permission.ACCESS_FINE_LOCATION

@@ -17,7 +17,6 @@ package com.example.platform.camera.preview
 
 import android.Manifest
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.hardware.camera2.CameraCaptureSession
 import android.hardware.camera2.CameraCharacteristics
@@ -25,19 +24,18 @@ import android.hardware.camera2.CameraDevice
 import android.hardware.camera2.CameraManager
 import android.hardware.camera2.params.OutputConfiguration
 import android.hardware.camera2.params.SessionConfiguration
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
-import android.provider.Settings
 import android.util.Log
 import android.view.LayoutInflater
-import android.view.SurfaceHolder
 import android.view.Surface
+import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -214,6 +212,7 @@ class Camera2Preview : Fragment() {
      * - Configures the camera session
      * - Starts the preview by dispatching a repeating capture request
      */
+    @RequiresPermission(Manifest.permission.CAMERA)
     private fun initializeCamera() = lifecycleScope.launch(Dispatchers.Main) {
         binding.fragmentCamera2PreviewAction.visibility = View.GONE
 
@@ -237,6 +236,7 @@ class Camera2Preview : Fragment() {
     /**
      * Opens the camera and returns the opened device (as the result of the suspend coroutine)
      */
+    @RequiresPermission(Manifest.permission.CAMERA)
     private suspend fun openCamera(
         manager: CameraManager,
         cameraId: String,
