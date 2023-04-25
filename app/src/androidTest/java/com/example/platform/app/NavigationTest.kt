@@ -16,6 +16,7 @@
 
 package com.example.platform.app
 
+import android.Manifest
 import android.os.Build
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasScrollAction
@@ -27,6 +28,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToKey
 import androidx.test.espresso.Espresso
+import androidx.test.rule.GrantPermissionRule
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest
 import org.junit.Rule
@@ -51,6 +53,15 @@ class NavigationTest {
      */
     @get:Rule(order = 2)
     val composeTestRule = createAndroidComposeRule<MainActivity>()
+
+    /**
+     * Avoids showing permission dialog when running certain samples
+     */
+    @get:Rule(order = 3)
+    val grantPermissionRule: GrantPermissionRule = GrantPermissionRule.grant(
+        Manifest.permission.ACCESS_FINE_LOCATION,
+        Manifest.permission.CAMERA,
+    )
 
     @Test
     fun testSamplesOpen() {
