@@ -55,7 +55,8 @@ import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
     name = "Audio Manager",
-    description = "This sample will show you how get all audio sources and set an audio device. Covers Bluetooth, LEA, Wired and internal speakers"
+    description = "This sample will show you how get all audio sources and set an audio device. Covers Bluetooth, LEA, Wired and internal speakers",
+    documentation = "https://developer.android.com/guide/topics/media-apps/media-apps-overview"
 )
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable

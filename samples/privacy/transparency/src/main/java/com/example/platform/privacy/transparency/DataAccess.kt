@@ -33,13 +33,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -63,7 +63,8 @@ import kotlinx.coroutines.tasks.await
 @Sample(
     name = "Data Access",
     description = "Demonstrates how to implement data access auditing for your app to identify " +
-            "unexpected data access, even from third-party SDKs and libraries."
+            "unexpected data access, even from third-party SDKs and libraries.",
+    documentation = "https://developer.android.com/guide/topics/data/audit-access"
 )
 
 @OptIn(ExperimentalPermissionsApi::class)

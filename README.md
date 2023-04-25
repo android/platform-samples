@@ -15,6 +15,7 @@ Browse the samples inside each topic samples folder:
 - [Accessibility](samples/accessibility)
 - [Camera](samples/camera)
 - [Connectivity](samples/connectivity)
+- [Graphics](samples/graphics)
 - [Location](samples/location)
 - [Privacy](samples/privacy)
 - [User-interface](samples/user-interface)

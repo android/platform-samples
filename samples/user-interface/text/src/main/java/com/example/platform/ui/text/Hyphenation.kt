@@ -31,7 +31,8 @@ import com.google.android.catalog.framework.annotations.Sample
 @RequiresApi(Build.VERSION_CODES.M)
 @Sample(
     name = "Hyphenation",
-    description = "Demonstrates different options for the `android:hyphenationFrequency` attribute"
+    description = "Demonstrates different options for the `android:hyphenationFrequency` attribute",
+    documentation = "https://developer.android.com/reference/android/widget/TextView#attr_android:hyphenationFrequency"
 )
 class Hyphenation : Fragment(R.layout.hyphenation_fragment) {
 

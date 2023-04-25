@@ -31,7 +31,8 @@ import com.google.android.catalog.framework.annotations.Sample
 @RequiresApi(33)
 @Sample(
     name = "LineBreak",
-    description = "Demonstrates different options for the `android:lineBreakWordStyle` attribute."
+    description = "Demonstrates different options for the `android:lineBreakWordStyle` attribute.",
+    documentation = "https://developer.android.com/about/versions/13/features#japanese-wrapping"
 )
 class LineBreak : Fragment(R.layout.line_break_fragment) {
 

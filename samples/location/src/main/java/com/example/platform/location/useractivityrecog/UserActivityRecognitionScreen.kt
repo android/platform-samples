@@ -45,7 +45,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPermissionsApi::class)
 @Sample(
     name = "Location - User Activity Recognition",
-    description = "This Sample demonstrate detection of user activity like walking, driving, etc."
+    description = "This Sample demonstrate detection of user activity like walking, driving, etc.",
+    documentation = "https://developer.android.com/training/location/transitions"
 )
 @Composable
 fun UserActivityRecognitionScreen() {

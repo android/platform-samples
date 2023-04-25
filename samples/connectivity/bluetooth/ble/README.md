@@ -1,6 +1,6 @@
 # Bluetooth Low Energy (BLE) samples
 
-This moudle contains samples related to Bluetooth BLE APIs
+This module contains samples related to Bluetooth BLE APIs
 
 - [Find devices](src/main/java/com/example/platform/connectivity/bluetooth/ble/FindDevicesSample.kt)
 
