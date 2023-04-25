@@ -46,6 +46,8 @@ Demonstrates how to use PdfRenderer to display PDF documents on the screen.
 This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs
 - [Permissions using Compose](/privacy/permissions/src/main/java/com/example/platform/privacy/permissions/ComposePermissions.kt):
 This sample showcases how to request permission using Accompanist in Compose
+- [Picture in Picture (PiP)](/user-interface/picture-in-picture/src/main/java/com/example/android/pip/PiPSampleActivity.kt):
+Basic usage of Picture-in-Picture mode showcasing a video activity PiP and an action activity PiP modes
 - [Single Permission](/privacy/permissions/src/main/java/com/example/platform/privacy/permissions/SinglePermission.kt):
 Shows the recommended flow to request single runtime permissions
 - [Speakable Text](/accessibility/src/main/java/com/example/platform/accessibility/SpeakableText.kt):

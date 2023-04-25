@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ Copyright 2017 The Android Open Source Project
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<resources>
+    <string name="app_name">PictureInPicture</string>
+
+    <!-- Stopwatch -->
+    <eat-comment />
+    <string name="clear">Clear</string>
+    <string name="start">Start</string>
+    <string name="pause">Pause</string>
+    <string name="enter_picture_in_picture">Enter Picture-in-Picture mode</string>
+    <string name="explanation_main"><![CDATA[
+    This sample shows a stopwatch. Click on the button above to turn the screen into the
+    picture-in-picture mode. The stopwatch keeps on working seamlessly between mode changes.
+    The stopwatch controls are available in the picture-in-picture mode through the overlay actions.
+    ]]></string>
+    <string name="switch_media_session">Switch to using MediaSession</string>
+
+    <!-- Movie -->
+    <eat-comment />
+    <string name="play">Play</string>
+    <string name="fast_forward">Fast forward</string>
+    <string name="fast_rewind">Fast rewind</string>
+    <string name="minimize">Minimize</string>
+    <string name="explanation_movie"><![CDATA[
+    This sample demonstrates basic usage of Picture-in-Picture mode for handheld devices.
+    The sample plays a video. The video keeps on playing when the app is turned in to
+    Picture-in-Picture mode. On Picture-in-Picture screen, the app shows an action item to pause or
+    resume the video.\n\n
+    Movie: (c) copyright 2008, Blender Foundation. See https://peach.blender.org/.
+    ]]></string>
+    <string name="switch_custom">Switch to custom actions example</string>
+    <string name="title_bigbuckbunny">Big Buck Bunny</string>
+</resources>
