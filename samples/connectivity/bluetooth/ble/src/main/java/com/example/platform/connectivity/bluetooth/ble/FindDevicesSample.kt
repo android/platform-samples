@@ -56,7 +56,8 @@ import java.util.concurrent.TimeUnit
 @RequiresApi(Build.VERSION_CODES.M)
 @Sample(
     name = "Find devices sample",
-    description = "This example will demonstrate how to scanning for Low Energy Devices"
+    description = "This example will demonstrate how to scanning for Low Energy Devices",
+    documentation = "https://developer.android.com/guide/topics/connectivity/bluetooth"
 )
 @Composable
 fun FindDevicesSample() {

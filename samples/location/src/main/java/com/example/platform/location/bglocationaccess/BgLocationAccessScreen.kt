@@ -66,7 +66,8 @@ import java.util.concurrent.TimeUnit
 @OptIn(ExperimentalPermissionsApi::class)
 @Sample(
     name = "Location - Background Location updates",
-    description = "This Sample demonstrate how to access location and get location updates when app is in background"
+    description = "This Sample demonstrate how to access location and get location updates when app is in background",
+    documentation = "https://developer.android.com/training/location/background"
 )
 @Composable
 fun BgLocationAccessScreen() {

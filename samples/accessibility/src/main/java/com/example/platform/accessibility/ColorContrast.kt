@@ -20,17 +20,18 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
-import com.google.android.catalog.framework.annotations.Sample
 import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
     name = "Color Contrast",
     description = "This sample demonstrates the importance of proper color contrast and how to " +
-            "audit your app to ensure proper color contrast."
+            "audit your app to ensure proper color contrast.",
+    documentation = "https://support.google.com/accessibility/android/answer/7158390"
 )
 @Composable
 fun ColorContrast() {

@@ -34,7 +34,8 @@ import com.google.android.catalog.framework.annotations.Sample
     name = "Speakable Text",
     description = "The sample demonstrates the importance of having proper labels for" +
             " interactive elements and how to audit your app for content label related " +
-            "improvements."
+            "improvements.",
+    documentation = "https://developer.android.com/guide/topics/ui/accessibility/apps#describe-ui-element"
 )
 
 @Preview

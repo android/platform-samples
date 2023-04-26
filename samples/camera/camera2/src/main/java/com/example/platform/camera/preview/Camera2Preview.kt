@@ -58,6 +58,7 @@ import kotlin.coroutines.suspendCoroutine
     name = "Camera2 - Preview",
     description = "Demonstrates displaying processed pixel data directly from the camera sensor "
             + "to the screen.",
+    documentation = "https://developer.android.com/training/camera2"
 )
 class Camera2Preview : Fragment() {
     /**

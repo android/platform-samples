@@ -71,7 +71,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPermissionsApi::class)
 @Sample(
     name = "Location - Create and monitor Geofence",
-    description = "This Sample demonstrate best practices for Creating and monitoring geofence"
+    description = "This Sample demonstrate best practices for Creating and monitoring geofence",
+    documentation = "https://developer.android.com/training/location/geofencing"
 )
 @Composable
 fun GeofencingScreen() {
