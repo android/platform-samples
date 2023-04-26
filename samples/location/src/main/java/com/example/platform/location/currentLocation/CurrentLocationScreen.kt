@@ -47,13 +47,13 @@ import com.google.android.gms.tasks.CancellationTokenSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
-import java.time.Instant
 
 @SuppressLint("MissingPermission")
 @OptIn(ExperimentalPermissionsApi::class)
 @Sample(
     name = "Location - Getting Current Location",
-    description = "This Sample demonstrate how to request of current location"
+    description = "This Sample demonstrate how to request of current location",
+    documentation = "https://developer.android.com/training/location/retrieve-current"
 )
 @Composable
 fun CurrentLocationScreen() {

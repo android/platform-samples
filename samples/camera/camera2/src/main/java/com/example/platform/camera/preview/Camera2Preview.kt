@@ -56,6 +56,7 @@ import kotlin.coroutines.suspendCoroutine
     name = "Camera2 - Preview",
     description = "Demonstrates displaying processed pixel data directly from the camera sensor "
             + "to the screen.",
+    documentation = "https://developer.android.com/training/camera2"
 )
 class Camera2Preview : Fragment() {
     /**
@@ -136,7 +137,17 @@ class Camera2Preview : Fragment() {
         super.onStart()
         when {
             isPermissionGranted() -> view?.post(::initializeCamera)
-            else -> requestCameraPermission()
+            shouldShowRequestPermissionRationale(Manifest.permission.CAMERA) -> {
+                showActionMessage("This sample requires CAMERA permission to work. Please grant it") {
+                    requestCameraPermission()
+                }
+            }
+
+            else -> {
+                showActionMessage("Grant permission") {
+                    requestCameraPermission()
+                }
+            }
         }
     }
 
@@ -153,13 +164,18 @@ class Camera2Preview : Fragment() {
         when (isGranted) {
             true -> view?.post(::initializeCamera)
             false -> view?.let {
-                binding.fragmentCamera2PreviewAction.visibility = View.VISIBLE
-                val message = "Permissions not granted: Try again"
-                binding.fragmentCamera2PreviewAction.text = message
-                binding.fragmentCamera2PreviewAction.setOnClickListener {
+                showActionMessage("Permissions not granted: Try again") {
                     requestCameraPermission()
                 }
             }
+        }
+    }
+
+    private fun showActionMessage(message: String, action: () -> Unit) {
+        binding.fragmentCamera2PreviewAction.visibility = View.VISIBLE
+        binding.fragmentCamera2PreviewAction.text = message
+        binding.fragmentCamera2PreviewAction.setOnClickListener {
+            action()
         }
     }
 
@@ -216,21 +232,28 @@ class Camera2Preview : Fragment() {
     private fun initializeCamera() = lifecycleScope.launch(Dispatchers.Main) {
         binding.fragmentCamera2PreviewAction.visibility = View.GONE
 
-        // Open the selected camera
-        camera = openCamera(cameraManager, cameraIds.first(), cameraHandler)
+        try {
+            // Open the selected camera
+            camera = openCamera(cameraManager, cameraIds.first(), cameraHandler)
 
-        // Creates list of Surfaces where the camera will output frames
-        val targets = listOf(binding.fragmentCamera2PreviewViewfinder.holder.surface)
+            // Creates list of Surfaces where the camera will output frames
+            val targets = listOf(binding.fragmentCamera2PreviewViewfinder.holder.surface)
 
-        // Start a capture session using our open camera and list of Surfaces where frames will go
-        session = createCaptureSession(camera, targets, cameraHandler)
-        val captureRequest = camera.createCaptureRequest(
-            CameraDevice.TEMPLATE_PREVIEW,
-        ).apply { addTarget(binding.fragmentCamera2PreviewViewfinder.holder.surface) }
+            // Start a capture session using our open camera and list of Surfaces where frames will go
+            session = createCaptureSession(camera, targets, cameraHandler)
+            val captureRequest = camera.createCaptureRequest(
+                CameraDevice.TEMPLATE_PREVIEW,
+            ).apply { addTarget(binding.fragmentCamera2PreviewViewfinder.holder.surface) }
 
-        // This will keep sending the capture request as frequently as possible until the
-        // session is torn down or session.stopRepeating() is called
-        session.setRepeatingRequest(captureRequest.build(), null, cameraHandler)
+            // This will keep sending the capture request as frequently as possible until the
+            // session is torn down or session.stopRepeating() is called
+            session.setRepeatingRequest(captureRequest.build(), null, cameraHandler)
+        } catch (e: Exception) {
+            Log.e(TAG, "initializeCamera failed", e)
+            showActionMessage("Camera init failed: Try again") {
+                view?.post(::initializeCamera)
+            }
+        }
     }
 
     /**

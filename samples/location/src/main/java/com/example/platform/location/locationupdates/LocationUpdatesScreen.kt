@@ -55,7 +55,8 @@ import java.util.concurrent.TimeUnit
 @OptIn(ExperimentalPermissionsApi::class)
 @Sample(
     name = "Location - Updates",
-    description = "This Sample demonstrate how to get location updates"
+    description = "This Sample demonstrate how to get location updates",
+    documentation = "https://developer.android.com/training/location/request-updates"
 )
 @Composable
 fun LocationUpdatesScreen() {

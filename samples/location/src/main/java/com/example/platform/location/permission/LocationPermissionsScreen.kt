@@ -52,7 +52,8 @@ import com.google.android.catalog.framework.annotations.Sample
 @RequiresApi(Build.VERSION_CODES.Q)
 @Sample(
     name = "Location - Permissions",
-    description = "This Sample demonstrate best practices for Location Permission"
+    description = "This Sample demonstrate best practices for Location Permission",
+    documentation = "https://developer.android.com/training/location/permissions"
 )
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -172,4 +173,3 @@ fun LocationPermissionScreen() {
         }
     }
 }
-

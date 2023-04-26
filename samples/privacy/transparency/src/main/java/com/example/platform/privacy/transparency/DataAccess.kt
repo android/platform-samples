@@ -65,7 +65,8 @@ import kotlinx.coroutines.tasks.await
 @Sample(
     name = "Data Access",
     description = "Demonstrates how to implement data access auditing for your app to identify " +
-            "unexpected data access, even from third-party SDKs and libraries."
+            "unexpected data access, even from third-party SDKs and libraries.",
+    documentation = "https://developer.android.com/guide/topics/data/audit-access"
 )
 
 @OptIn(ExperimentalPermissionsApi::class)

@@ -20,6 +20,7 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +53,16 @@ class PdfRendererViewModel(application: Application) : AndroidViewModel(applicat
 
     /** [PdfRenderer] that renders the PDF. */
     private val pdfRenderer = fileDescriptor.map { fd ->
-        if (fd == null) null else PdfRenderer(fd)
+        if (fd == null) {
+            null
+        } else {
+            try {
+                PdfRenderer(fd)
+            } catch (e: Exception) {
+                Log.e("PDFRenderer", "PDF could not be rendered", e)
+                null
+            }
+        }
     }.flowOn(Dispatchers.IO).stateInUi(null)
 
     /** The index of the current page. */
