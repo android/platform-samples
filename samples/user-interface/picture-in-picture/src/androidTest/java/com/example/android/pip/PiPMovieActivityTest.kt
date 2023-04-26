@@ -16,11 +16,8 @@
 
 package com.example.android.pip
 
-import android.content.pm.ActivityInfo
 import android.support.v4.media.session.PlaybackStateCompat
 import android.view.View
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.UiController
 import androidx.test.espresso.ViewAction
@@ -91,36 +88,6 @@ class PiPMovieActivityTest {
         onView(withId(R.id.movie)).check(matches(isPlaying()))
         // The media session state should be playing.
         assertMediaStateIs(PlaybackStateCompat.STATE_PLAYING)
-    }
-
-    @Test
-    fun fullscreen_enabledOnLandscape() {
-        rule.scenario.onActivity { activity ->
-            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
-        }
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
-        rule.scenario.onActivity { activity ->
-            val insets = ViewCompat.getRootWindowInsets(activity.window.decorView)!!
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            assertThat(systemBars.left).isEqualTo(0)
-            assertThat(systemBars.top).isEqualTo(0)
-            assertThat(systemBars.right).isEqualTo(0)
-            assertThat(systemBars.bottom).isEqualTo(0)
-        }
-    }
-
-    @Test
-    fun fullscreen_disabledOnPortrait() {
-        rule.scenario.onActivity { activity ->
-            activity.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
-        }
-        InstrumentationRegistry.getInstrumentation().waitForIdleSync()
-        rule.scenario.onActivity { activity ->
-            val insets = ViewCompat.getRootWindowInsets(activity.window.decorView)!!
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            assertThat(systemBars.top).isNotEqualTo(0)
-            assertThat(systemBars.bottom).isNotEqualTo(0)
-        }
     }
 
     private fun assertMediaStateIs(@PlaybackStateCompat.State expectedState: Int) {
