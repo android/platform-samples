@@ -31,7 +31,7 @@ import com.google.android.catalog.framework.annotations.Sample
     name = "Color Contrast",
     description = "This sample demonstrates the importance of proper color contrast and how to " +
             "audit your app to ensure proper color contrast.",
-    documentation = "https://developer.android.com/guide/topics/ui/accessibility/apps#text-visibility"
+    documentation = "https://support.google.com/accessibility/android/answer/7158390"
 )
 @Composable
 fun ColorContrast() {

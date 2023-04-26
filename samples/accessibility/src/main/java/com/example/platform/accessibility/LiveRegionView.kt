@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit
     name = "Live Region (View)",
     description = "Utilize LiveRegion to automatically notify users of accessibility services" +
             " about changes to a view",
-    documentation = "https://developer.android.com/reference/kotlin/androidx/compose/ui/semantics/LiveRegionMode"
+    documentation = "https://developer.android.com/reference/android/view/View#attr_android:accessibilityLiveRegion"
 )
 class LiveRegionView : Fragment(R.layout.liveregion_fragment) {
 
