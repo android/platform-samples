@@ -53,16 +53,7 @@ class PdfRendererViewModel(application: Application) : AndroidViewModel(applicat
 
     /** [PdfRenderer] that renders the PDF. */
     private val pdfRenderer = fileDescriptor.map { fd ->
-        if (fd == null) {
-            null
-        } else {
-            try {
-                PdfRenderer(fd)
-            } catch (e: Exception) {
-                Log.e("PDFRenderer", "PDF could not be rendered", e)
-                null
-            }
-        }
+        if (fd == null) null else PdfRenderer(fd)
     }.flowOn(Dispatchers.IO).stateInUi(null)
 
     /** The index of the current page. */
@@ -123,4 +114,3 @@ class PdfRendererViewModel(application: Application) : AndroidViewModel(applicat
         initialValue
     )
 }
-
