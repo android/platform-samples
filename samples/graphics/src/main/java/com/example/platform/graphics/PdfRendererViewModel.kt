@@ -20,10 +20,9 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.graphics.pdf.PdfRenderer
 import android.os.ParcelFileDescriptor
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.asCoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -33,10 +32,13 @@ import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import java.io.File
+import java.util.concurrent.Executors
 
 private const val FILENAME = "sample.pdf"
 
 class PdfRendererViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val ioDispatcher = Executors.newSingleThreadExecutor().asCoroutineDispatcher()
 
     /** The file descriptor of the opened PDF file. */
     private val fileDescriptor = flow {
@@ -49,12 +51,12 @@ class PdfRendererViewModel(application: Application) : AndroidViewModel(applicat
             }
         }
         emit(ParcelFileDescriptor.open(file, ParcelFileDescriptor.MODE_READ_ONLY))
-    }.flowOn(Dispatchers.IO).stateInUi(null)
+    }.flowOn(ioDispatcher).stateInUi(null)
 
     /** [PdfRenderer] that renders the PDF. */
     private val pdfRenderer = fileDescriptor.map { fd ->
         if (fd == null) null else PdfRenderer(fd)
-    }.flowOn(Dispatchers.IO).stateInUi(null)
+    }.flowOn(ioDispatcher).stateInUi(null)
 
     /** The index of the current page. */
     private val pageIndex = MutableStateFlow(0)
@@ -93,7 +95,7 @@ class PdfRendererViewModel(application: Application) : AndroidViewModel(applicat
                 page.render(bitmap, null, null, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY)
             }
         }
-    }.flowOn(Dispatchers.IO).stateInUi(null)
+    }.flowOn(ioDispatcher).stateInUi(null)
 
     override fun onCleared() {
         pdfRenderer.value?.close()
