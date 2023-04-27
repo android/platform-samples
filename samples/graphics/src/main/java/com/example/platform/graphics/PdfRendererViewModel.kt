@@ -105,8 +105,12 @@ class PdfRendererViewModel(application: Application) : AndroidViewModel(applicat
     }.flowOn(Dispatchers.IO).stateInUi(null)
 
     override fun onCleared() {
-        pdfRenderer.value?.close()
-        fileDescriptor.value?.close()
+        try {
+            pdfRenderer.value?.close()
+            fileDescriptor.value?.close()
+        } catch (e: Exception) {
+            // silent exception when closing.
+        }
     }
 
     fun previous() {

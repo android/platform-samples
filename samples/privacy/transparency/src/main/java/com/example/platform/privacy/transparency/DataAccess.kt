@@ -17,6 +17,7 @@
 package com.example.platform.privacy.transparency
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.AppOpsManager
 import android.app.AsyncNotedAppOp
 import android.app.SyncNotedAppOp
@@ -60,6 +61,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
+@SuppressLint("MissingPermission")
 @Sample(
     name = "Data Access",
     description = "Demonstrates how to implement data access auditing for your app to identify " +
@@ -92,6 +94,7 @@ fun DataAccess() {
     }
 }
 
+@SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.R)
 @RequiresPermission(
     Manifest.permission.ACCESS_FINE_LOCATION

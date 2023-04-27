@@ -35,6 +35,7 @@ import android.view.SurfaceHolder
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
@@ -227,6 +228,7 @@ class Camera2Preview : Fragment() {
      * - Configures the camera session
      * - Starts the preview by dispatching a repeating capture request
      */
+    @RequiresPermission(Manifest.permission.CAMERA)
     private fun initializeCamera() = lifecycleScope.launch(Dispatchers.Main) {
         binding.fragmentCamera2PreviewAction.visibility = View.GONE
 
@@ -257,6 +259,7 @@ class Camera2Preview : Fragment() {
     /**
      * Opens the camera and returns the opened device (as the result of the suspend coroutine)
      */
+    @RequiresPermission(Manifest.permission.CAMERA)
     private suspend fun openCamera(
         manager: CameraManager,
         cameraId: String,

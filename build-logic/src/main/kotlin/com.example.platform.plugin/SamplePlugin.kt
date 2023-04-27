@@ -65,6 +65,7 @@ class SamplePlugin : Plugin<Project> {
                     compileSdk = 33
                     defaultConfig {
                         minSdk = 21
+                        targetSdk = 33
                         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                     }
 
