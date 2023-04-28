@@ -39,7 +39,7 @@ abstract class SyncSamplesInfo : DefaultTask() {
                     val sample = SampleInfo(
                         name = text.findTag("name = "),
                         description = text.findTag("description = "),
-                        path = file.path.removePrefix(samplesFolder.path)
+                        path = file.path.removePrefix(samplesFolder.path + "/"),
                     )
                     samples.add(sample)
                 }
