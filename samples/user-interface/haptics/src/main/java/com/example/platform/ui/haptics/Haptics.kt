@@ -31,8 +31,8 @@ import com.example.platform.ui.haptics.bounce.BounceRoute
 import com.example.platform.ui.haptics.bounce.BounceViewModel
 import com.example.platform.ui.haptics.expand.ExpandRoute
 import com.example.platform.ui.haptics.expand.ExpandViewModel
-import com.example.platform.ui.haptics.home.HomeRoute
-import com.example.platform.ui.haptics.home.HomeViewModel
+import com.example.platform.ui.haptics.vibrations.VibrationsRoute
+import com.example.platform.ui.haptics.vibrations.VibrationsViewModel
 import com.example.platform.ui.haptics.resist.ResistRoute
 import com.example.platform.ui.haptics.resist.ResistViewModel
 import com.example.platform.ui.haptics.wobble.WobbleRoute
@@ -50,12 +50,12 @@ fun VibrationEffects() {
     val context = LocalContext.current
     val application = context.applicationContext as Application
     val snackbarHostState = remember { SnackbarHostState() }
-    val viewModel: HomeViewModel = viewModel(
-        factory = HomeViewModel.provideFactory(application),
+    val viewModel: VibrationsViewModel = viewModel(
+        factory = VibrationsViewModel.provideFactory(application),
     )
     val coroutineScope = rememberCoroutineScope()
     Box {
-        HomeRoute(
+        VibrationsRoute(
             viewModel = viewModel,
             onShowMessage = { message ->
                 coroutineScope.launch {

@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.platform.ui.haptics.home
+package com.example.platform.ui.haptics.vibrations
 
 import android.app.Application
 import android.os.Build
@@ -21,7 +21,6 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.HapticFeedbackConstants
 import android.view.View
-import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -30,7 +29,7 @@ import com.example.platform.ui.haptics.R
 /**
  * The state object the home screen needs to render the haptic feedback categories and buttons.
  */
-data class HomeUiState(val hapticCategories: List<HapticCategory> = emptyList())
+data class VibrationsUiState(val hapticCategories: List<HapticCategory> = emptyList())
 
 /**
  * Represents a category of haptic effects and constants on the home screen.
@@ -62,9 +61,9 @@ enum class HapticCategoryType {
 /**
  * ViewModel that handles the business logic of the home screen.
  */
-class HomeViewModel(
+class VibrationsViewModel(
     private val vibrator: Vibrator,
-    val homeUiState: HomeUiState,
+    val vibrationsUiState: VibrationsUiState,
 ) : ViewModel() {
 
     /**
@@ -114,30 +113,30 @@ class HomeViewModel(
 
                 // This state object is responsible for providing all the information necessary
                 // for the UI to build the home page of buttons, separated into categories.
-                val viewModelState = HomeUiState(
+                val viewModelState = VibrationsUiState(
                     hapticCategories = listOf(
                         // List of predefined effects.
                         HapticCategory(
-                            application.getString(R.string.home_screen_predefined_effects),
+                            application.getString(R.string.vibrations_screen_predefined_effects),
                             categoryType = HapticCategoryType.PREDEFINED_EFFECTS,
                             buttons = listOf(
                                 HapticButton(
-                                    label = application.getString(R.string.home_screen_tick),
+                                    label = application.getString(R.string.vibrations_screen_tick),
                                     worksOnUserDevice = isAndroidQOrLater,
                                     hapticId = VibrationEffect.EFFECT_TICK
                                 ),
                                 HapticButton(
-                                    application.getString(R.string.home_screen_click),
+                                    application.getString(R.string.vibrations_screen_click),
                                     worksOnUserDevice = isAndroidQOrLater,
                                     VibrationEffect.EFFECT_CLICK
                                 ),
                                 HapticButton(
-                                    application.getString(R.string.home_screen_heavy_click),
+                                    application.getString(R.string.vibrations_screen_heavy_click),
                                     worksOnUserDevice = isAndroidQOrLater,
                                     VibrationEffect.EFFECT_HEAVY_CLICK
                                 ),
                                 HapticButton(
-                                    application.getString(R.string.home_screen_double_click),
+                                    application.getString(R.string.vibrations_screen_double_click),
                                     worksOnUserDevice = isAndroidQOrLater,
                                     VibrationEffect.EFFECT_DOUBLE_CLICK
                                 ),
@@ -145,16 +144,16 @@ class HomeViewModel(
                         ),
                         // List of haptic feedback constants.
                         HapticCategory(
-                            application.getString(R.string.home_screen_haptic_feedback_constants),
+                            application.getString(R.string.vibrations_screen_haptic_feedback_constants),
                             categoryType = HapticCategoryType.HAPTIC_FEEDBACK_CONSTANTS,
                             buttons = listOf(
                                 HapticButton(
-                                    application.getString(R.string.home_screen_confirm),
+                                    application.getString(R.string.vibrations_screen_confirm),
                                     isAndroidROrLater,
                                     HapticFeedbackConstants.CONFIRM
                                 ),
                                 HapticButton(
-                                    application.getString(R.string.home_screen_reject),
+                                    application.getString(R.string.vibrations_screen_reject),
                                     isAndroidROrLater,
                                     HapticFeedbackConstants.REJECT
                                 ),
@@ -162,46 +161,46 @@ class HomeViewModel(
                         ),
                         // List of composition primitives.
                         HapticCategory(
-                            application.getString(R.string.home_screen_composition_primitives),
+                            application.getString(R.string.vibrations_screen_composition_primitives),
                             categoryType = HapticCategoryType.COMPOSITION_PRIMITIVES,
                             buttons = listOf(
                                 HapticButton(
-                                    application.getString(R.string.home_screen_low_tick),
+                                    application.getString(R.string.vibrations_screen_low_tick),
                                     isAndroidSOrLater && isPrimitiveSupported(vibrator, VibrationEffect.Composition.PRIMITIVE_LOW_TICK),
                                     VibrationEffect.Composition.PRIMITIVE_LOW_TICK
                                 ),
                                 HapticButton(
-                                    application.getString(R.string.home_screen_tick),
+                                    application.getString(R.string.vibrations_screen_tick),
                                     isPrimitiveSupported(vibrator, VibrationEffect.Composition.PRIMITIVE_TICK),
                                     VibrationEffect.Composition.PRIMITIVE_TICK
                                 ),
                                 HapticButton(
-                                    application.getString(R.string.home_screen_click),
+                                    application.getString(R.string.vibrations_screen_click),
                                     isPrimitiveSupported(vibrator, VibrationEffect.Composition.PRIMITIVE_CLICK),
                                     VibrationEffect.Composition.PRIMITIVE_CLICK
                                 ),
                                 HapticButton(
-                                    application.getString(R.string.home_screen_slow_rise),
+                                    application.getString(R.string.vibrations_screen_slow_rise),
                                     isPrimitiveSupported(vibrator, VibrationEffect.Composition.PRIMITIVE_SLOW_RISE),
                                     VibrationEffect.Composition.PRIMITIVE_SLOW_RISE
                                 ),
                                 HapticButton(
-                                    application.getString(R.string.home_screen_quick_rise),
+                                    application.getString(R.string.vibrations_screen_quick_rise),
                                     isPrimitiveSupported(vibrator, VibrationEffect.Composition.PRIMITIVE_QUICK_RISE),
                                     VibrationEffect.Composition.PRIMITIVE_QUICK_RISE
                                 ),
                                 HapticButton(
-                                    application.getString(R.string.home_screen_quick_fall),
+                                    application.getString(R.string.vibrations_screen_quick_fall),
                                     isPrimitiveSupported(vibrator, VibrationEffect.Composition.PRIMITIVE_QUICK_FALL),
                                     VibrationEffect.Composition.PRIMITIVE_QUICK_FALL
                                 ),
                                 HapticButton(
-                                    application.getString(R.string.home_screen_spin),
+                                    application.getString(R.string.vibrations_screen_spin),
                                     isAndroidSOrLater && isPrimitiveSupported(vibrator, VibrationEffect.Composition.PRIMITIVE_SPIN),
                                     VibrationEffect.Composition.PRIMITIVE_SPIN
                                 ),
                                 HapticButton(
-                                    application.getString(R.string.home_screen_thud),
+                                    application.getString(R.string.vibrations_screen_thud),
                                     isAndroidSOrLater && isPrimitiveSupported(vibrator, VibrationEffect.Composition.PRIMITIVE_THUD),
                                     VibrationEffect.Composition.PRIMITIVE_THUD
                                 ),
@@ -210,8 +209,8 @@ class HomeViewModel(
                         ),
                     )
                 )
-                return HomeViewModel(
-                    vibrator = vibrator, homeUiState = viewModelState,
+                return VibrationsViewModel(
+                    vibrator = vibrator, vibrationsUiState = viewModelState,
                 ) as T
             }
         }

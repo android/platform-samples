@@ -13,7 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.platform.ui.haptics.home
+
+package com.example.platform.ui.haptics.vibrations
 
 import android.annotation.SuppressLint
 import android.os.VibrationEffect
@@ -39,20 +40,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeRoute(
-    viewModel: HomeViewModel,
+fun VibrationsRoute(
+    viewModel: VibrationsViewModel,
     onShowMessage: (String) -> Unit,
 ) {
-    HomeScreen(
-        homeUiState = viewModel.homeUiState,
+    VibrationsScreen(
+        vibrationsUiState = viewModel.vibrationsUiState,
         onButtonClicked = viewModel::onButtonClicked,
         onShowMessage = onShowMessage,
     )
 }
 
 @Composable
-private fun HomeScreen(
-    homeUiState: HomeUiState,
+private fun VibrationsScreen(
+    vibrationsUiState: VibrationsUiState,
     onButtonClicked: (view: View, hapticCategory: HapticCategoryType, hapticId: Int) -> Unit,
     onShowMessage: (message: String) -> Unit,
 ) {
@@ -63,8 +64,8 @@ private fun HomeScreen(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        for (category in homeUiState.hapticCategories) {
-            HomeHapticCategory(label = category.label) {
+        for (category in vibrationsUiState.hapticCategories) {
+            HapticCategory(label = category.label) {
                 // 2 buttons for ever row for each haptic feedback category.
                 for (buttons in category.buttons.chunked(2)) {
                     Row(
@@ -74,13 +75,13 @@ private fun HomeScreen(
                         horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
                         for (button in buttons) {
-                            HomeHapticButton(
+                            HapticButton(
                                 label = button.label,
                                 isAvailable = button.worksOnUserDevice,
                                 onClick = { view ->
                                     if (!button.worksOnUserDevice) {
                                         onShowMessage("${button.label} is not supported on this device.")
-                                        return@HomeHapticButton
+                                        return@HapticButton
                                     }
                                     onButtonClicked(view, category.categoryType, button.hapticId)
                                 }
@@ -94,7 +95,7 @@ private fun HomeScreen(
 }
 
 @Composable
-private fun HomeHapticCategory(
+private fun HapticCategory(
     label: String,
     content: @Composable () -> Unit
 ) {
@@ -117,7 +118,7 @@ private fun HomeHapticCategory(
 }
 
 @Composable
-private fun HomeHapticButton(
+private fun HapticButton(
     label: String,
     onClick: (view: View) -> Unit,
     modifier: Modifier = Modifier,
@@ -151,8 +152,8 @@ private fun HomeHapticButton(
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen(
-        homeUiState = HomeUiState(
+    VibrationsScreen(
+        vibrationsUiState = VibrationsUiState(
             listOf(
                 HapticCategory(
                     "Effects",

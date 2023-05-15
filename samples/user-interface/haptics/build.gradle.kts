@@ -18,12 +18,8 @@ plugins {
     id("com.example.platform.sample")
 }
 
-
 android {
     namespace = "com.example.platform.ui.haptics"
-    buildFeatures {
-        viewBinding = true
-    }
 }
 
 dependencies {
