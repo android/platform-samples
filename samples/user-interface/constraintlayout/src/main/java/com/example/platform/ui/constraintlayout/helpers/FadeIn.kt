@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-plugins {
-    id("com.example.platform.sample")
-}
+package com.example.platform.ui.constraintlayout.helpers
 
-android {
-    namespace = "com.example.platform.ui.constraintlayout"
-    buildFeatures {
-        viewBinding = true
+import android.content.Context
+import android.util.AttributeSet
+import android.view.View
+import androidx.constraintlayout.motion.widget.MotionHelper
+
+class FadeIn @JvmOverloads constructor(
+    context: Context,
+    attrs: AttributeSet? = null,
+    defStyleAttr: Int = 0,
+) : MotionHelper(context, attrs, defStyleAttr) {
+
+    override fun setProgress(view: View?, progress: Float) {
+        view?.alpha = progress
     }
-}
-
-dependencies {
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.mdc)
-    implementation(libs.lottie)
 }

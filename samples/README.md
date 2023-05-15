@@ -38,6 +38,8 @@ This Sample demonstrate best practices for Location Permission
 This Sample demonstrate how to get location updates
 - [Location - User Activity Recognition](location/src/main/java/com/example/platform/location/useractivityrecog/UserActivityRecognitionScreen.kt):
 This Sample demonstrate detection of user activity like walking, driving, etc.
+- [MotionLayout - 01. Basic](user-interface/constraintlayout/src/main/java/com/example/platform/ui/constraintlayout/MotionLayout.kt):
+Basic motion example using referenced ConstraintLayout files
 - [Multiple Permissions](privacy/permissions/src/main/java/com/example/platform/privacy/permissions/MultiplePermissions.kt):
 Shows the recommended flow to request multiple RELATED runtime permissions
 - [Package Visibility](privacy/data/src/main/java/com/example/platform/privacy/data/PackageVisibility.kt):
