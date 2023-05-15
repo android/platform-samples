@@ -8,6 +8,8 @@ This sample will show you how get all audio sources and set an audio device. Cov
 Demonstrates displaying processed pixel data directly from the camera sensor 
 - [Color Contrast](accessibility/src/main/java/com/example/platform/accessibility/ColorContrast.kt):
 This sample demonstrates the importance of proper color contrast and how to 
+- [ConstraintLayout - 1. Centering Views](user-interface/constraintlayout/src/main/java/com/example/platform/ui/constraintlayout/ConstraintLayout.kt):
+Center child views horizontally or vertically.
 - [Conversion suggestions](user-interface/text/src/main/java/com/example/platform/ui/text/ConversionSuggestions.kt):
 Demonstrates how to implement the incremental search feature for non-alphabet languages with the Conversion Suggestions API.
 - [Data Access](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
