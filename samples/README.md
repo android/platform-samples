@@ -16,6 +16,8 @@ Demonstrates how to implement the incremental search feature for non-alphabet la
 Demonstrates how to implement data access auditing for your app to identify 
 - [Find devices sample](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/FindDevicesSample.kt):
 This example will demonstrate how to scanning for Low Energy Devices
+- [Haptics - 1. Vibration effects](user-interface/haptics/src/main/java/com/example/platform/ui/haptics/Haptics.kt):
+Shows various vibration effects.
 - [Hyphenation](user-interface/text/src/main/java/com/example/platform/ui/text/Hyphenation.kt):
 Demonstrates different options for the `android:hyphenationFrequency` attribute
 - [Immersive mode](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/ImmersiveMode.kt):
