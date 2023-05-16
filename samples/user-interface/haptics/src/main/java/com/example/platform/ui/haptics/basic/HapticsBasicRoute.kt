@@ -41,7 +41,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun HapticsBasicRoute(
-    viewModel: VibrationsViewModel,
+    viewModel: HapticsBasicViewModel,
     onShowMessage: (String) -> Unit,
 ) {
     HapticsBasicScreen(
@@ -151,7 +151,7 @@ private fun HapticButton(
 @SuppressLint("InlinedApi")
 @Preview(showBackground = true)
 @Composable
-fun HomeScreenPreview() {
+fun HapticsBasicScreenPreview() {
     HapticsBasicScreen(
         hapticsBasicUiState = HapticsBasicUiState(
             listOf(

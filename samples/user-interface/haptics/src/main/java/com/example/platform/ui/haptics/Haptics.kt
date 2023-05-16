@@ -32,7 +32,7 @@ import com.example.platform.ui.haptics.bounce.BounceViewModel
 import com.example.platform.ui.haptics.expand.ExpandRoute
 import com.example.platform.ui.haptics.expand.ExpandViewModel
 import com.example.platform.ui.haptics.basic.HapticsBasicRoute
-import com.example.platform.ui.haptics.basic.VibrationsViewModel
+import com.example.platform.ui.haptics.basic.HapticsBasicViewModel
 import com.example.platform.ui.haptics.resist.ResistRoute
 import com.example.platform.ui.haptics.resist.ResistViewModel
 import com.example.platform.ui.haptics.wobble.WobbleRoute
@@ -50,8 +50,8 @@ fun HapticsBasic() {
     val context = LocalContext.current
     val application = context.applicationContext as Application
     val snackbarHostState = remember { SnackbarHostState() }
-    val viewModel: VibrationsViewModel = viewModel(
-        factory = VibrationsViewModel.provideFactory(application),
+    val viewModel: HapticsBasicViewModel = viewModel(
+        factory = HapticsBasicViewModel.provideFactory(application),
     )
     val coroutineScope = rememberCoroutineScope()
     Box {

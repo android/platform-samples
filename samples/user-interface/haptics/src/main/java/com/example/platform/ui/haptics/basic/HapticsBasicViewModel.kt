@@ -61,7 +61,7 @@ enum class HapticCategoryType {
 /**
  * ViewModel that handles the business logic of the home screen.
  */
-class VibrationsViewModel(
+class HapticsBasicViewModel(
     private val vibrator: Vibrator,
     val hapticsBasicUiState: HapticsBasicUiState,
 ) : ViewModel() {
@@ -209,7 +209,7 @@ class VibrationsViewModel(
                         ),
                     )
                 )
-                return VibrationsViewModel(
+                return HapticsBasicViewModel(
                     vibrator = vibrator, hapticsBasicUiState = viewModelState,
                 ) as T
             }
