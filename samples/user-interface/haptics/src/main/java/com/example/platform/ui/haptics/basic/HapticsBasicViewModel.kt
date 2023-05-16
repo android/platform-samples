@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.platform.ui.haptics.vibrations
+package com.example.platform.ui.haptics.basic
 
 import android.app.Application
 import android.os.Build
@@ -29,7 +29,7 @@ import com.example.platform.ui.haptics.R
 /**
  * The state object the home screen needs to render the haptic feedback categories and buttons.
  */
-data class VibrationsUiState(val hapticCategories: List<HapticCategory> = emptyList())
+data class HapticsBasicUiState(val hapticCategories: List<HapticCategory> = emptyList())
 
 /**
  * Represents a category of haptic effects and constants on the home screen.
@@ -63,7 +63,7 @@ enum class HapticCategoryType {
  */
 class VibrationsViewModel(
     private val vibrator: Vibrator,
-    val vibrationsUiState: VibrationsUiState,
+    val hapticsBasicUiState: HapticsBasicUiState,
 ) : ViewModel() {
 
     /**
@@ -113,7 +113,7 @@ class VibrationsViewModel(
 
                 // This state object is responsible for providing all the information necessary
                 // for the UI to build the home page of buttons, separated into categories.
-                val viewModelState = VibrationsUiState(
+                val viewModelState = HapticsBasicUiState(
                     hapticCategories = listOf(
                         // List of predefined effects.
                         HapticCategory(
@@ -210,7 +210,7 @@ class VibrationsViewModel(
                     )
                 )
                 return VibrationsViewModel(
-                    vibrator = vibrator, vibrationsUiState = viewModelState,
+                    vibrator = vibrator, hapticsBasicUiState = viewModelState,
                 ) as T
             }
         }

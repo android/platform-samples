@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.platform.ui.haptics.vibrations
+package com.example.platform.ui.haptics.basic
 
 import android.annotation.SuppressLint
 import android.os.VibrationEffect
@@ -40,20 +40,20 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun VibrationsRoute(
+fun HapticsBasicRoute(
     viewModel: VibrationsViewModel,
     onShowMessage: (String) -> Unit,
 ) {
-    VibrationsScreen(
-        vibrationsUiState = viewModel.vibrationsUiState,
+    HapticsBasicScreen(
+        hapticsBasicUiState = viewModel.hapticsBasicUiState,
         onButtonClicked = viewModel::onButtonClicked,
         onShowMessage = onShowMessage,
     )
 }
 
 @Composable
-private fun VibrationsScreen(
-    vibrationsUiState: VibrationsUiState,
+private fun HapticsBasicScreen(
+    hapticsBasicUiState: HapticsBasicUiState,
     onButtonClicked: (view: View, hapticCategory: HapticCategoryType, hapticId: Int) -> Unit,
     onShowMessage: (message: String) -> Unit,
 ) {
@@ -64,7 +64,7 @@ private fun VibrationsScreen(
         horizontalAlignment = Alignment.Start,
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        for (category in vibrationsUiState.hapticCategories) {
+        for (category in hapticsBasicUiState.hapticCategories) {
             HapticCategory(label = category.label) {
                 // 2 buttons for ever row for each haptic feedback category.
                 for (buttons in category.buttons.chunked(2)) {
@@ -152,8 +152,8 @@ private fun HapticButton(
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
-    VibrationsScreen(
-        vibrationsUiState = VibrationsUiState(
+    HapticsBasicScreen(
+        hapticsBasicUiState = HapticsBasicUiState(
             listOf(
                 HapticCategory(
                     "Effects",
