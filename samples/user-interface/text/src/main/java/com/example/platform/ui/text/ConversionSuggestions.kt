@@ -27,7 +27,8 @@ import com.google.android.catalog.framework.annotations.Sample
 @Sample(
     name = "Conversion suggestions",
     description = "Demonstrates how to implement the incremental search feature for non-alphabet languages with the Conversion Suggestions API.",
-    documentation = "https://developer.android.com/about/versions/13/features#text-conversion"
+    documentation = "https://developer.android.com/about/versions/13/features#text-conversion",
+    tags = ["text"]
 )
 class ConversionSuggestions : Fragment(R.layout.conversion_suggestions_fragment) {
 

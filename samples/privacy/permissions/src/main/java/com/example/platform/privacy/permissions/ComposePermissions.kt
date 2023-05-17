@@ -36,7 +36,8 @@ import com.google.android.catalog.framework.annotations.Sample
 @Sample(
     name = "Permissions using Compose",
     description = "This sample showcases how to request permission using Accompanist in Compose",
-    documentation = "https://google.github.io/accompanist/permissions/"
+    documentation = "https://google.github.io/accompanist/permissions/",
+    tags = ["permissions"]
 )
 @Composable
 fun ComposePermissions() {
