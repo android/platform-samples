@@ -19,8 +19,19 @@ package com.example.platform.ui.constraintlayout
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commitNow
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.platform.ui.constraintlayout.databinding.Motion16ViewpagerBinding
 import com.example.platform.ui.constraintlayout.databinding.Motion20RevealBinding
+import com.example.platform.ui.constraintlayout.databinding.Motion21ContainerBinding
+import com.example.platform.ui.constraintlayout.databinding.Motion22ListFragmentBinding
+import com.example.platform.ui.constraintlayout.databinding.Motion23ViewpagerBinding
+import com.example.platform.ui.constraintlayout.databinding.Motion24YoutubeBinding
+import com.example.platform.ui.constraintlayout.view.TextListAdapter
+import com.example.platform.ui.constraintlayout.view.feedProgressTo
+import com.example.platform.ui.constraintlayout.view.doOnTransitionCompleted
 import com.google.android.catalog.framework.annotations.Sample
+import com.google.android.material.tabs.TabLayoutMediator
 
 @Sample(
     name = "MotionLayout - 01. Basic",
@@ -134,15 +145,30 @@ class SidePanelFragment : Fragment(R.layout.motion_14_side_panel)
 )
 class ParallaxFragment : Fragment(R.layout.motion_15_parallax)
 
-// TODO
-/*
 @Sample(
     name = "MotionLayout - 16. ViewPager",
     description = "Using MotionLayout with ViewPager",
     documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
 )
- */
-class ViewPagerFragment : Fragment(R.layout.motion_16_viewpager)
+class ViewPagerFragment : Fragment(R.layout.motion_16_viewpager) {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = Motion16ViewpagerBinding.bind(view)
+        val pages = listOf(
+            R.layout.motion_16_viewpager_page1,
+            R.layout.motion_16_viewpager_page2,
+            R.layout.motion_16_viewpager_page3,
+        )
+        binding.pager.adapter = object : FragmentStateAdapter(this) {
+            override fun getItemCount() = pages.size
+            override fun createFragment(position: Int) = Fragment(pages[position])
+        }
+        binding.pager.feedProgressTo(binding.parallax.motionLayout)
+        TabLayoutMediator(binding.tabs, binding.pager) { tab, position ->
+            tab.text = "Page ${position + 1}"
+        }.attach()
+    }
+}
 
 @Sample(
     name = "MotionLayout - 17. Complex Motion 1",
@@ -182,43 +208,120 @@ class ComplexMotion4Fragment : Fragment(R.layout.motion_20_reveal) {
             }
         }
     }
-    }
+}
 
-/*
 @Sample(
     name = "MotionLayout - 21. Fragment transition 1",
     description = "Using MotionLayout with ViewPager",
     documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
 )
- */
-class FragmentTransitionFragment : Fragment(R.layout.motion_21_main_fragment)
+class FragmentTransitionFragment : Fragment(R.layout.motion_21_container) {
 
-/*
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = Motion21ContainerBinding.bind(view)
+        if (savedInstanceState == null) {
+            childFragmentManager.commitNow {
+                replace(R.id.container, FirstFragment())
+            }
+        }
+        binding.motionLayout.doOnTransitionCompleted { currentId ->
+            when (currentId) {
+                R.id.start -> childFragmentManager.commitNow {
+                    setCustomAnimations(0, R.animator.hide)
+                    replace(R.id.container, FirstFragment())
+                }
+
+                R.id.end -> childFragmentManager.commitNow {
+                    setCustomAnimations(R.animator.show, 0)
+                    replace(R.id.container, SecondFragment())
+                }
+            }
+        }
+    }
+}
+
+class FirstFragment : Fragment(R.layout.motion_21_first_fragment)
+class SecondFragment : Fragment(R.layout.motion_21_second_fragment)
+
 @Sample(
     name = "MotionLayout - 22. Fragment transition 2",
     description = "Using MotionLayout with ViewPager",
     documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
 )
- */
-class FragmentTransition2Fragment : Fragment(R.layout.motion_22_list_fragment)
+class FragmentTransition2Fragment : Fragment(R.layout.motion_21_container) {
 
-/*
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = Motion21ContainerBinding.bind(view)
+        if (savedInstanceState == null) {
+            childFragmentManager.commitNow {
+                replace(R.id.container, FirstFragment())
+            }
+        }
+        binding.motionLayout.doOnTransitionCompleted { currentId ->
+            when (currentId) {
+                R.id.start -> childFragmentManager.commitNow {
+                    setCustomAnimations(0, R.animator.hide)
+                    replace(R.id.container, FirstFragment())
+                }
+
+                R.id.end -> childFragmentManager.commitNow {
+                    setCustomAnimations(R.animator.show, 0)
+                    replace(R.id.container, ListFragment())
+                }
+            }
+        }
+    }
+}
+
+class ListFragment : Fragment(R.layout.motion_22_list_fragment) {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = Motion22ListFragmentBinding.bind(view)
+        binding.list.adapter = TextListAdapter(
+            view.context.resources.getStringArray(R.array.animals).asList(),
+        )
+    }
+}
+
 @Sample(
     name = "MotionLayout - 23. Lottie",
     description = "Using MotionLayout and Lottie with ViewPager",
     documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
 )
- */
-class LottieFragment : Fragment(R.layout.motion_23_parallax)
+class LottieFragment : Fragment(R.layout.motion_23_viewpager) {
 
-/*
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = Motion23ViewpagerBinding.bind(view)
+        val pages = listOf(
+            R.layout.motion_16_viewpager_page1,
+            R.layout.motion_16_viewpager_page2,
+            R.layout.motion_16_viewpager_page3,
+        )
+        binding.pager.adapter = object : FragmentStateAdapter(this) {
+            override fun getItemCount() = pages.size
+            override fun createFragment(position: Int) = Fragment(pages[position])
+        }
+        binding.pager.feedProgressTo(binding.parallax.motionLayout)
+        TabLayoutMediator(binding.tabs, binding.pager) { tab, position ->
+            tab.text = "Page ${position + 1}"
+        }.attach()
+    }
+}
+
 @Sample(
     name = "MotionLayout - 24. YouTube-like motion",
     description = "Example showing a transition like YouTube",
     documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
 )
- */
-class YoutubeFragment : Fragment(R.layout.motion_24_youtube)
+class YoutubeFragment : Fragment(R.layout.motion_24_youtube) {
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val binding = Motion24YoutubeBinding.bind(view)
+        binding.recyclerviewFront.adapter = TextListAdapter(
+            view.context.resources.getStringArray(R.array.animals).asList(),
+        )
+    }
+}
 
 @Sample(
     name = "MotionLayout - 25. KeyTrigger",

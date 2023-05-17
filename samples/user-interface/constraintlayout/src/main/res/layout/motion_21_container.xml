@@ -18,14 +18,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/motionLayout"
     android:layout_width="match_parent"
-    android:layout_height="230dp"
-    app:layoutDescription="@xml/scene_23"
-    app:motionProgress="0">
+    android:layout_height="match_parent"
+    app:layoutDescription="@xml/main_scene">
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animation_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:lottie_rawRes="@raw/walkthrough" />
+    <com.example.platform.ui.constraintlayout.view.TouchFrameLayout
+        android:id="@+id/container"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

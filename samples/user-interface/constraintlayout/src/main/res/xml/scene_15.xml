@@ -40,24 +40,24 @@
             motion:layout_constraintTop_toTopOf="parent" />
         <Constraint
             android:id="@id/trees1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="338dp"
+            android:layout_height="55dp"
             android:layout_marginLeft="30dp"
             android:layout_marginBottom="60dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintLeft_toLeftOf="parent" />
         <Constraint
             android:id="@id/trees2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="338dp"
+            android:layout_height="55dp"
             android:layout_marginLeft="90dp"
             android:layout_marginBottom="30dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintLeft_toLeftOf="parent" />
         <Constraint
             android:id="@id/car"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="42dp"
+            android:layout_height="19dp"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="8dp"
             motion:layout_constraintBottom_toBottomOf="parent"
@@ -75,24 +75,24 @@
             motion:layout_constraintTop_toTopOf="parent" />
         <Constraint
             android:id="@id/trees1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="338dp"
+            android:layout_height="55dp"
             android:layout_marginLeft="0dp"
             android:layout_marginBottom="60dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintLeft_toLeftOf="parent" />
         <Constraint
             android:id="@id/trees2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="338dp"
+            android:layout_height="55dp"
             android:layout_marginLeft="20dp"
             android:layout_marginBottom="30dp"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintLeft_toLeftOf="parent" />
         <Constraint
             android:id="@id/car"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="42dp"
+            android:layout_height="19dp"
             android:layout_marginRight="20dp"
             android:layout_marginBottom="8dp"
             motion:layout_constraintBottom_toBottomOf="parent"

@@ -14,7 +14,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
 -->
-<com.example.platform.ui.constraintlayout.view.ViewPagerHeader
+<androidx.constraintlayout.motion.widget.MotionLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -54,4 +54,4 @@
         tools:layout_editor_absoluteX="7dp"
         tools:layout_editor_absoluteY="194dp" />
 
-</com.example.platform.ui.constraintlayout.view.ViewPagerHeader>
+</androidx.constraintlayout.motion.widget.MotionLayout>

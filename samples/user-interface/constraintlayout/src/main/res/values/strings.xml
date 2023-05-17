@@ -165,4 +165,36 @@ The lake was formed about 2 million years ago and is a part of the Lake Tahoe Ba
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+    <string-array name="animals">
+        <item>Dogs</item>
+        <item>Cats</item>
+        <item>Horses</item>
+        <item>Cows</item>
+        <item>Pigs</item>
+        <item>Sheep</item>
+        <item>Goats</item>
+        <item>Elephants</item>
+        <item>Bears</item>
+        <item>Monkeys</item>
+        <item>Bats</item>
+        <item>Deer</item>
+        <item>Raccoons</item>
+        <item>Squirrels</item>
+        <item>Opossums</item>
+        <item>Chipmunks</item>
+        <item>Mice</item>
+        <item>Rats</item>
+        <item>Rabbits</item>
+        <item>Guinea pigs</item>
+        <item>Hamsters</item>
+        <item>Dolphins</item>
+        <item>Whales</item>
+        <item>Seals</item>
+        <item>Walruses</item>
+        <item>Otters</item>
+        <item>Lemurs</item>
+        <item>Platypus</item>
+        <item>Kangaroos</item>
+    </string-array>
+
 </resources>

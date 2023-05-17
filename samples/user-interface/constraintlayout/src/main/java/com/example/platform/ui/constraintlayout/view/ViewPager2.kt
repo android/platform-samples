@@ -16,25 +16,21 @@
 
 package com.example.platform.ui.constraintlayout.view
 
-import android.content.Context
-import android.util.AttributeSet
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 
-class ViewPagerHeader @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0,
-) : MotionLayout(context, attrs, defStyleAttr), ViewPager.OnPageChangeListener {
+fun ViewPager2.feedProgressTo(motionLayout: MotionLayout) {
+    registerOnPageChangeCallback(
+        object : ViewPager2.OnPageChangeCallback() {
 
-    override fun onPageScrollStateChanged(state: Int) {
-    }
-
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        val numPages = 3
-        progress = (position + positionOffset) / (numPages - 1)
-    }
-
-    override fun onPageSelected(position: Int) {
-    }
+            override fun onPageScrolled(
+                position: Int,
+                positionOffset: Float,
+                positionOffsetPixels: Int,
+            ) {
+                val itemCount = adapter?.itemCount ?: return
+                motionLayout.progress = (position + positionOffset) / (itemCount - 1)
+            }
+        },
+    )
 }

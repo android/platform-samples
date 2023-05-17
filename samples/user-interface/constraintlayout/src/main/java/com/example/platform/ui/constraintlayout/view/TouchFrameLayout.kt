@@ -28,19 +28,19 @@ class TouchFrameLayout @JvmOverloads constructor(
     defStyleAttr: Int = 0,
 ) : FrameLayout(context, attributeSet, defStyleAttr), NestedScrollingParent2 {
 
-    private val motionLayout: NestedScrollingParent2
-        get() = parent as NestedScrollingParent2
+    private val motionLayout: NestedScrollingParent2?
+        get() = parent as? NestedScrollingParent2
 
     override fun onStartNestedScroll(child: View, target: View, axes: Int, type: Int): Boolean {
-        return motionLayout.onStartNestedScroll(child, target, axes, type)
+        return motionLayout?.onStartNestedScroll(child, target, axes, type) ?: false
     }
 
     override fun onNestedScrollAccepted(child: View, target: View, axes: Int, type: Int) {
-        return motionLayout.onNestedScrollAccepted(child, target, axes, type)
+        motionLayout?.onNestedScrollAccepted(child, target, axes, type)
     }
 
     override fun onStopNestedScroll(target: View, type: Int) {
-        motionLayout.onStopNestedScroll(target, type)
+        motionLayout?.onStopNestedScroll(target, type)
     }
 
     override fun onNestedScroll(
@@ -51,7 +51,7 @@ class TouchFrameLayout @JvmOverloads constructor(
         dyUnconsumed: Int,
         type: Int,
     ) {
-        motionLayout.onNestedScroll(
+        motionLayout?.onNestedScroll(
             target,
             dxConsumed,
             dyConsumed,
@@ -62,6 +62,6 @@ class TouchFrameLayout @JvmOverloads constructor(
     }
 
     override fun onNestedPreScroll(target: View, dx: Int, dy: Int, consumed: IntArray, type: Int) {
-        motionLayout.onNestedPreScroll(target, dx, dy, consumed, type)
+        motionLayout?.onNestedPreScroll(target, dx, dy, consumed, type)
     }
 }

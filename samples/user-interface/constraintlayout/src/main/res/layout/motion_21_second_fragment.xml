@@ -18,28 +18,29 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
-    android:background="?attr/colorAccent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?attr/colorAccent"
     app:layoutDescription="@xml/scene_21_second_fragment">
 
     <com.example.platform.ui.constraintlayout.helpers.FadeIn
         android:id="@+id/fadeIn"
-        app:onShow="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:onShow="true" />
 
     <com.example.platform.ui.constraintlayout.helpers.FadeOut
         android:id="@+id/fadeOut"
-        app:onHide="true"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        app:onHide="true" />
 
     <TextView
         android:id="@+id/message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="SecondFragment"
+        android:textColor="?attr/colorOnSecondary"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -50,6 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_android_black_24dp"
+        app:tint="?attr/colorOnSecondary"
         tools:layout_editor_absoluteX="194dp"
         tools:layout_editor_absoluteY="183dp" />
 

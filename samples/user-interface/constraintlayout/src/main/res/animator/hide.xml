@@ -14,18 +14,10 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
 -->
-<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/motionLayout"
-    android:layout_width="match_parent"
-    android:layout_height="230dp"
-    app:layoutDescription="@xml/scene_23"
-    app:motionProgress="0">
-
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/animation_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:lottie_rawRes="@raw/walkthrough" />
-
-</androidx.constraintlayout.motion.widget.MotionLayout>
+<objectAnimator
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:duration="500"
+    android:propertyName="onHide"
+    android:valueFrom="0"
+    android:valueTo="1"
+    android:valueType="floatType" />

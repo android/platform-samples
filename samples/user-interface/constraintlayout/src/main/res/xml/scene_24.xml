@@ -101,13 +101,13 @@
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintTop_toBottomOf="@id/top_image_container" />
 
-        <Constraint android:id="@id/image_play">
-            <PropertySet motion:alpha="0" />
-        </Constraint>
+        <Constraint
+            android:id="@id/image_play"
+            android:alpha="0" />
 
-        <Constraint android:id="@id/image_clear">
-            <PropertySet motion:alpha="0" />
-        </Constraint>
+        <Constraint
+            android:id="@id/image_clear"
+            android:alpha="0" />
 
         <Constraint
             android:id="@id/bottom_nav"
@@ -172,7 +172,6 @@
             <PropertySet motion:alpha="1" />
         </Constraint>
 
-
         <Constraint
             android:id="@id/bottom_nav"
             android:layout_width="0dp"
@@ -182,4 +181,5 @@
             motion:layout_constraintLeft_toLeftOf="parent"
             motion:layout_constraintRight_toRightOf="parent" />
     </ConstraintSet>
+
 </MotionScene>
