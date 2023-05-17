@@ -17,7 +17,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/motionLayout"
+    android:id="@+id/rootMotionLayout"
     android:background="?attr/colorPrimaryDark">
 
     <include layout="@layout/motion_12_drawerlayout_content"/>

@@ -18,7 +18,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/motionLayout"
+    android:id="@+id/rootMotionLayout"
     android:background="?attr/colorPrimary"
     app:layoutDescription="@xml/scene_14">
 

@@ -32,13 +32,9 @@ The lake was formed about 2 million years ago and is a part of the Lake Tahoe Ba
     <string name="lake_tahoe_image">Image of Lake Tahoe</string>
     <string name="lake_tahoe_title">Lake Tahoe</string>
     <string name="android_button">Android Button</string>
-    <string name="centering_views">Centering Views</string>
     <string name="centered_button">Centered Button</string>
-    <string name="basic_arrange">Basic Arrange</string>
-    <string name="advanced_arrangement">Advanced Arrangement</string>
     <string name="aspect_ratio">Aspect Ratio</string>
     <string name="basic_chains">Basic Chains</string>
-    <string name="constraintset">ConstraintSet</string>
     <string name="advanced_chains">Advanced Chains</string>
     <string name="guidelines">Guidelines</string>
     <string name="button_1">Button 1</string>
@@ -160,10 +156,25 @@ The lake was formed about 2 million years ago and is a part of the Lake Tahoe Ba
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="lorem">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
-    <string name="cat">Cat</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="face">Engineer\'s face</string>
+    <string name="add_a_photo">Add a photo</string>
+    <string name="info">Info</string>
+    <string name="open">Open</string>
+    <string name="monterey">Monterey</string>
+    <string name="california">California</string>
+    <string name="name">Nicolas Roard</string>
+    <string name="extra_info">A bunch of extra information</string>
+    <string name="information">Information</string>
+    <string name="directions">Directions</string>
+    <string name="sight_seeing">Sight-Seeing</string>
+    <string name="page_1">Page 1</string>
+    <string name="page_2">Page 2</string>
+    <string name="page_3">Page 3</string>
+    <string name="first_fragment">FirstFragment</string>
+    <string name="second_fragment">SecondFragment</string>
 
     <string-array name="animals">
         <item>Dogs</item>

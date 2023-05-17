@@ -18,11 +18,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/motionLayout"
-    app:layoutDescription="@xml/scene_10_header"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minHeight="50dp"
     android:background="#1e376b"
+    android:minHeight="50dp"
+    app:layoutDescription="@xml/scene_10_header"
     app:layout_scrollFlags="scroll|enterAlways|snap|exitUntilCollapsed">
 
     <ImageView
@@ -30,24 +30,25 @@
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:background="?attr/colorAccent"
+        android:contentDescription="@null"
         android:scaleType="centerCrop"
-        android:src="@drawable/monterey"/>
+        android:src="@drawable/monterey" />
 
     <TextView
         android:id="@+id/label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:transformPivotX="0dp"
-        android:transformPivotY="0dp"
-        android:text="Monterey"
+        android:text="@string/monterey"
         android:textColor="#FFF"
-        android:textSize="32sp" />
+        android:textSize="32sp"
+        android:transformPivotX="0dp"
+        android:transformPivotY="0dp" />
 
     <TextView
         android:id="@+id/sublabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="California"
+        android:text="@string/california"
         android:textColor="#FFF"
         android:textSize="24sp"
         app:fontFamily="cursive" />

@@ -29,7 +29,6 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:background="?attr/colorAccent"
-        android:text="Button"
         tools:layout_editor_absoluteX="215dp"
         tools:layout_editor_absoluteY="223dp" />
 

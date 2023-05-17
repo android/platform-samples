@@ -16,9 +16,9 @@
 -->
 <androidx.constraintlayout.motion.widget.MotionLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layoutDescription="@xml/scene_19">
 
     <include layout="@layout/motion_19_coordination_header" />
@@ -29,6 +29,7 @@
         android:id="@+id/fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/ic_add_a_photo_24dp"/>
+        android:contentDescription="@string/add_a_photo"
+        app:srcCompat="@drawable/ic_add_a_photo_24dp" />
 
 </androidx.constraintlayout.motion.widget.MotionLayout>

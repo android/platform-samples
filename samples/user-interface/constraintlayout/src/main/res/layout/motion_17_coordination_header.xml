@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:transformPivotX="0dp"
         android:transformPivotY="0dp"
-        android:text="Monterey"
+        android:text="@string/monterey"
         android:textColor="#FFF"
         android:textSize="32sp" />
 
@@ -45,7 +45,7 @@
         android:id="@+id/sublabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="California"
+        android:text="@string/california"
         android:textColor="#FFF"
         android:textSize="24sp"
         app:fontFamily="cursive" />

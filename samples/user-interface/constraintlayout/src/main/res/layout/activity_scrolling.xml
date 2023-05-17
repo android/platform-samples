@@ -16,11 +16,12 @@
 -->
 <androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="false"
-    android:background="?android:attr/windowBackground">
+    android:background="?android:attr/windowBackground"
+    tools:ignore="Overdraw">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
@@ -28,7 +29,7 @@
         android:layout_height="@dimen/app_bar_height"
         android:theme="@style/ThemeOverlay.Material3.DynamicColors.Dark">
 
-        <include layout="@layout/motion_10_coordinatorlayout_header"/>
+        <include layout="@layout/motion_10_coordinatorlayout_header" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
