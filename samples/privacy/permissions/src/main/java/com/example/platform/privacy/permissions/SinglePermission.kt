@@ -36,7 +36,8 @@ import com.google.android.catalog.framework.annotations.Sample
 @Sample(
     name = "Single Permission",
     description = "Shows the recommended flow to request single runtime permissions",
-    documentation = "https://developer.android.com/training/permissions/requesting"
+    documentation = "https://developer.android.com/training/permissions/requesting",
+    tags = ["permissions"]
 )
 class SinglePermission : Fragment() {
 
