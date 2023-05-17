@@ -86,6 +86,8 @@ compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 compose-ui-ui = { module = "androidx.compose.ui:ui" }
 compose-ui-util = { module = "androidx.compose.ui:util" }
 
+mdc = "com.google.android.material:material:1.9.0"
+
 google-ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
@@ -103,6 +105,8 @@ kotlin-gradlePlugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", ve
 coil-base = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil-video = { module = "io.coil-kt:coil-video", version.ref = "coil" }
+
+lottie = "com.airbnb.android:lottie:6.0.0"
 
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
 work = { module = "androidx.work:work-runtime", version.ref = "work"}
