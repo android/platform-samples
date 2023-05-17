@@ -82,7 +82,7 @@ class ImageFilter1Fragment : Fragment(R.layout.motion_04_imagefilter)
 class ImageFilter2Fragment : Fragment(R.layout.motion_05_imagefilter)
 
 @Sample(
-    name = "MotionLayout - 06. Keyframe",
+    name = "MotionLayout - 06. Keyframe position",
     description = "Use a simple keyframe to change the interpolated motion",
     documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
     tags = ["motion-layout"],
@@ -90,7 +90,7 @@ class ImageFilter2Fragment : Fragment(R.layout.motion_05_imagefilter)
 class KeyframePositionFragment : Fragment(R.layout.motion_06_keyframe)
 
 @Sample(
-    name = "MotionLayout - 07. Keyframe",
+    name = "MotionLayout - 07. Keyframe interpolation",
     description = "More complex keyframe, adding rotation interpolation",
     documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
     tags = ["motion-layout"],
@@ -98,7 +98,7 @@ class KeyframePositionFragment : Fragment(R.layout.motion_06_keyframe)
 class KeyframeInterpolationFragment : Fragment(R.layout.motion_07_keyframe)
 
 @Sample(
-    name = "MotionLayout - 08. Keyframe",
+    name = "MotionLayout - 08. Keyframe cycle",
     description = "Basic example of using a keyframe cycle",
     documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
     tags = ["motion-layout"],
