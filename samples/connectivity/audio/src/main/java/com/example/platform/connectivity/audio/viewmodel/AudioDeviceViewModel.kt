@@ -21,6 +21,7 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.platform.connectivity.audio.datasource.AudioLoopSource
 import com.example.platform.connectivity.audio.datasource.PlatformAudioSource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -31,6 +32,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 /**
@@ -39,6 +41,8 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.S)
 class AudioDeviceViewModel(private val platformAudioSource: PlatformAudioSource) : ViewModel() {
 
+    private val audioLoopSource = AudioLoopSource()
+    val isRecording: StateFlow<Boolean> = audioLoopSource.isRecording.asStateFlow()
     /**
      * Get active audio device and pass to UI
      */
@@ -100,12 +104,29 @@ class AudioDeviceViewModel(private val platformAudioSource: PlatformAudioSource)
 
             if (!success) {
                 _errorUiState.update { "Error Connecting to Device" }
+            }else{
+                audioLoopSource.setPreferredDevice(audioDeviceInfo)
             }
         }
     }
 
     fun onErrorMessageShown() {
         _errorUiState.update { null }
+    }
+
+    fun onStartAudioLoop(){
+        if(!audioLoopSource.startAudioLoop()){
+            _errorUiState.update { "Error Starting Recording" }
+        }
+    }
+
+    fun onStopAudioLoop(){
+        audioLoopSource.stopAudioLoop()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        audioLoopSource.stopAudioLoop()
     }
 
     sealed interface AudioDeviceListUiState {

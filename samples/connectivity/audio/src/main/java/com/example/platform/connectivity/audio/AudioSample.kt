@@ -16,6 +16,7 @@
 
 package com.example.platform.connectivity.audio
 
+import android.Manifest
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.os.Build
@@ -30,14 +31,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,20 +58,76 @@ import com.example.platform.connectivity.audio.viewmodel.AudioDeviceUI
 import com.example.platform.connectivity.audio.viewmodel.AudioDeviceViewModel
 import com.example.platform.connectivity.audio.viewmodel.getDeviceName
 import com.example.platform.connectivity.audio.viewmodel.getStatusColor
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.MultiplePermissionsState
+import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.android.catalog.framework.annotations.Sample
+import kotlinx.coroutines.flow.asStateFlow
 
 @Sample(
     name = "Audio Manager",
     description = "This sample will show you how get all audio sources and set an audio device. Covers Bluetooth, LEA, Wired and internal speakers",
     documentation = "https://developer.android.com/guide/topics/media-apps/media-apps-overview"
 )
+@OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
 fun AudioSample() {
     val context = LocalContext.current
     val audioManager = context.getSystemService<AudioManager>()!!
     val viewModel = AudioDeviceViewModel(PlatformAudioSource(audioManager))
-    AudioSampleScreen(viewModel)
+
+    val multiplePermissionsState =
+        rememberMultiplePermissionsState(
+            listOf(
+                Manifest.permission.RECORD_AUDIO
+            )
+        )
+
+    if (multiplePermissionsState.allPermissionsGranted) {
+        AudioSampleScreen(viewModel)
+    } else {
+        PermissionWidget(multiplePermissionsState)
+    }
+}
+
+
+@OptIn(ExperimentalPermissionsApi::class)
+@Composable
+private fun PermissionWidget(permissionsState: MultiplePermissionsState) {
+    var showRationale by remember(permissionsState) {
+        mutableStateOf(false)
+    }
+
+    if (showRationale) {
+        AlertDialog(onDismissRequest = { showRationale = false }, title = {
+            Text(text = "")
+        }, text = {
+            Text(text = "")
+        }, confirmButton = {
+            TextButton(onClick = {
+                permissionsState.launchMultiplePermissionRequest()
+            }) {
+                Text("Continue")
+            }
+        }, dismissButton = {
+            TextButton(onClick = {
+                showRationale = false
+            }) {
+                Text("Dismiss")
+            }
+        })
+    }
+
+    Button(onClick = {
+        if (permissionsState.shouldShowRationale) {
+            showRationale = true
+        } else {
+            permissionsState.launchMultiplePermissionRequest()
+        }
+    }) {
+        Text(text = "Grant Permission")
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.S)
@@ -74,6 +137,7 @@ private fun AudioSampleScreen(viewModel: AudioDeviceViewModel) {
     val uiStateAvailableDevices by viewModel.availableDeviceUiState.collectAsState()
     val uiStateActiveDevice by viewModel.activeDeviceUiState.collectAsState()
     val uiStateErrorMessage by viewModel.errorUiState.collectAsState()
+    val uiStateRecording by viewModel.isRecording.collectAsState()
 
     if (uiStateErrorMessage != null) {
         LaunchedEffect(uiStateErrorMessage) {
@@ -88,6 +152,17 @@ private fun AudioSampleScreen(viewModel: AudioDeviceViewModel) {
             .padding(16.dp)
     ) {
         ActiveAudioSource(uiStateActiveDevice)
+        Row() {
+            if(!uiStateRecording) {
+                Button(onClick = { viewModel.onStartAudioLoop() }) {
+                    Text(text = "Start Recording")
+                }
+            }else {
+                Button(onClick = { viewModel.onStopAudioLoop() }) {
+                    Text(text = "Stop Recording")
+                }
+            }
+        }
         Text(
             text = stringResource(id = R.string.selectdevice),
             modifier = Modifier.padding(8.dp, 12.dp),
