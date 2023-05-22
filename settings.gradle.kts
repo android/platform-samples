@@ -35,14 +35,15 @@ rootProject.name = "Platform Samples"
 include(":app")
 
 // Dynamically include samples under /app-catalog/samples/ folder
-val samples = buildList<String> {
+val samples = buildList {
+    val separator = File.separator
     // Find all build.gradle files under samples folder
     settingsDir.walk()
         .filter { it.name == "build.gradle" || it.name == "build.gradle.kts" }
-        .filter { it.path.contains("/samples/") }
+        .filter { it.path.contains("${separator}samples${separator}") }
         .map { it.parent.substring(rootDir.path.length) }
         .forEach {
-            add(it.replace("/", ":"))
+            add(it.replace(separator, ":"))
         }
 }
 
