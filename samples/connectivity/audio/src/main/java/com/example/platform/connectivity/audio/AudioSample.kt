@@ -59,15 +59,16 @@ import com.example.platform.connectivity.audio.viewmodel.AudioDeviceViewModel
 import com.example.platform.connectivity.audio.viewmodel.getDeviceName
 import com.example.platform.connectivity.audio.viewmodel.getStatusColor
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.MultiplePermissionsState
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.google.accompanist.permissions.PermissionState
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import com.google.android.catalog.framework.annotations.Sample
-import kotlinx.coroutines.flow.asStateFlow
 
 @Sample(
     name = "Audio Manager",
     description = "This sample will show you how get all audio sources and set an audio device. Covers Bluetooth, LEA, Wired and internal speakers",
-    documentation = "https://developer.android.com/guide/topics/media-apps/media-apps-overview"
+    documentation = "https://developer.android.com/guide/topics/media-apps/media-apps-overview",
 )
 @OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.S)
@@ -77,55 +78,64 @@ fun AudioSample() {
     val audioManager = context.getSystemService<AudioManager>()!!
     val viewModel = AudioDeviceViewModel(PlatformAudioSource(audioManager))
 
-    val multiplePermissionsState =
-        rememberMultiplePermissionsState(
-            listOf(
-                Manifest.permission.RECORD_AUDIO
-            )
-        )
+    val recordingAudioPermission = rememberPermissionState(
+        Manifest.permission.RECORD_AUDIO,
+    )
 
-    if (multiplePermissionsState.allPermissionsGranted) {
+    if (recordingAudioPermission.status.isGranted) {
         AudioSampleScreen(viewModel)
     } else {
-        PermissionWidget(multiplePermissionsState)
+        PermissionWidget(recordingAudioPermission)
     }
 }
 
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
-private fun PermissionWidget(permissionsState: MultiplePermissionsState) {
+private fun PermissionWidget(permissionsState: PermissionState) {
     var showRationale by remember(permissionsState) {
         mutableStateOf(false)
     }
 
     if (showRationale) {
-        AlertDialog(onDismissRequest = { showRationale = false }, title = {
-            Text(text = "")
-        }, text = {
-            Text(text = "")
-        }, confirmButton = {
-            TextButton(onClick = {
-                permissionsState.launchMultiplePermissionRequest()
-            }) {
-                Text("Continue")
-            }
-        }, dismissButton = {
-            TextButton(onClick = {
-                showRationale = false
-            }) {
-                Text("Dismiss")
-            }
-        })
+        AlertDialog(
+            onDismissRequest = { showRationale = false },
+            title = {
+                Text(text = "")
+            },
+            text = {
+                Text(text = "")
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        permissionsState.launchPermissionRequest()
+                    },
+                ) {
+                    Text("Continue")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showRationale = false
+                    },
+                ) {
+                    Text("Dismiss")
+                }
+            },
+        )
     }
 
-    Button(onClick = {
-        if (permissionsState.shouldShowRationale) {
-            showRationale = true
-        } else {
-            permissionsState.launchMultiplePermissionRequest()
-        }
-    }) {
+    Button(
+        onClick = {
+            if (permissionsState.status.shouldShowRationale) {
+                showRationale = true
+            } else {
+                permissionsState.launchPermissionRequest()
+            }
+        },
+    ) {
         Text(text = "Grant Permission")
     }
 }
@@ -149,28 +159,28 @@ private fun AudioSampleScreen(viewModel: AudioDeviceViewModel) {
     Column(
         Modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(16.dp),
     ) {
         ActiveAudioSource(uiStateActiveDevice)
-        Row() {
-            if(!uiStateRecording) {
-                Button(onClick = { viewModel.onStartAudioLoop() }) {
-                    Text(text = "Start Recording")
+        Row {
+            Button(onClick = { viewModel.onToggleAudioRecording() }) {
+                val recordingText = if (uiStateRecording) {
+                    "Stop Recording"
+                } else {
+                    "Start Recording"
                 }
-            }else {
-                Button(onClick = { viewModel.onStopAudioLoop() }) {
-                    Text(text = "Stop Recording")
-                }
+                Text(text = recordingText)
             }
         }
-        Text(
-            text = stringResource(id = R.string.selectdevice),
-            modifier = Modifier.padding(8.dp, 12.dp),
-            style = MaterialTheme.typography.displayMedium
-        )
-        AvailableDevicesList(uiStateAvailableDevices, viewModel::setAudioDevice)
     }
+    Text(
+        text = stringResource(id = R.string.selectdevice),
+        modifier = Modifier.padding(8.dp, 12.dp),
+        style = MaterialTheme.typography.displayMedium,
+    )
+    AvailableDevicesList(uiStateAvailableDevices, viewModel::setAudioDevice)
 }
+
 
 @Composable
 private fun AvailableDevicesList(
@@ -195,7 +205,7 @@ private fun ActiveAudioSource(activeAudioDeviceUiState: AudioDeviceViewModel.Act
             ActiveAudioSource(
                 title = stringResource(id = R.string.nodevice),
                 subTitle = "",
-                resId = R.drawable.phone_icon
+                resId = R.drawable.phone_icon,
             )
         }
 
@@ -203,7 +213,7 @@ private fun ActiveAudioSource(activeAudioDeviceUiState: AudioDeviceViewModel.Act
             ActiveAudioSource(
                 title = stringResource(id = R.string.connected),
                 subTitle = activeAudioDeviceUiState.audioDevice.getDeviceName(),
-                resId = activeAudioDeviceUiState.audioDevice.resIconId
+                resId = activeAudioDeviceUiState.audioDevice.resIconId,
             )
         }
     }
@@ -215,23 +225,23 @@ private fun ActiveAudioSource(activeAudioDeviceUiState: AudioDeviceViewModel.Act
 private fun ActiveAudioSource(title: String, subTitle: String, resId: Int) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.padding(vertical = 12.dp)
+        modifier = Modifier.padding(vertical = 12.dp),
     ) {
         Icon(
             painterResource(resId),
             contentDescription = null,
-            tint = MaterialTheme.colorScheme.primary
+            tint = MaterialTheme.colorScheme.primary,
         )
         Column {
             Text(
                 title, modifier = Modifier.padding(8.dp, 0.dp),
                 color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.headlineMedium,
             )
             Text(
                 subTitle, modifier = Modifier.padding(8.dp, 0.dp),
                 color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.headlineSmall
+                style = MaterialTheme.typography.headlineSmall,
             )
         }
     }
@@ -260,9 +270,11 @@ private fun AudioItem(
     audioDevice: AudioDeviceUI,
     onDeviceSelected: (AudioDeviceInfo) -> Unit,
 ) {
-    Box(modifier = Modifier
-        .fillMaxWidth()
-        .clickable { onDeviceSelected(audioDevice.audioDeviceInfo) }) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { onDeviceSelected(audioDevice.audioDeviceInfo) },
+    ) {
         Row(
             modifier = Modifier.padding(12.dp, 8.dp),
             verticalAlignment = Alignment.CenterVertically,
@@ -270,11 +282,11 @@ private fun AudioItem(
             Icon(
                 painterResource(audioDevice.resIconId),
                 contentDescription = null,
-                tint = Color.White
+                tint = Color.White,
             )
             Text(
                 text = audioDevice.getDeviceName(),
-                color = audioDevice.getStatusColor()
+                color = audioDevice.getStatusColor(),
             )
         }
     }

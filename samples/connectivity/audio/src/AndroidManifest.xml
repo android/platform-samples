@@ -15,7 +15,7 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- Request legacy Bluetooth permissions on older devices. -->
+    <!-- Request the ability to record audio -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
 
 </manifest>

@@ -32,7 +32,6 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 /**
@@ -43,6 +42,7 @@ class AudioDeviceViewModel(private val platformAudioSource: PlatformAudioSource)
 
     private val audioLoopSource = AudioLoopSource()
     val isRecording: StateFlow<Boolean> = audioLoopSource.isRecording.asStateFlow()
+
     /**
      * Get active audio device and pass to UI
      */
@@ -58,7 +58,7 @@ class AudioDeviceViewModel(private val platformAudioSource: PlatformAudioSource)
             scope = viewModelScope,
             initialValue = ActiveAudioDeviceUiState.NotActive,
             //Keep flow subscribed for 5 seconds, helps with configuration changes
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000)
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
         )
 
     // Convert AudioDeviceInfo to a ViewModel, also removes the connected device so we list only
@@ -66,7 +66,7 @@ class AudioDeviceViewModel(private val platformAudioSource: PlatformAudioSource)
     private var availableDevices: Flow<List<AudioDeviceUI>> =
         combine(
             platformAudioSource.getActivePlatformAudioSourceStream,
-            platformAudioSource.getAudioDevicesStream
+            platformAudioSource.getAudioDevicesStream,
         ) { activeDevice: AudioDeviceInfo?, devices: List<AudioDeviceInfo> ->
             devices.map { audioDeviceInfo ->
                 if (audioDeviceInfo.id == platformAudioSource.pendingDeviceId) {
@@ -89,7 +89,7 @@ class AudioDeviceViewModel(private val platformAudioSource: PlatformAudioSource)
         }.stateIn(
             scope = viewModelScope,
             initialValue = AudioDeviceListUiState.Loading,
-            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000)
+            started = SharingStarted.WhileSubscribed(stopTimeoutMillis = 5_000),
         )
 
     private val _errorUiState = MutableStateFlow<String?>(null)
@@ -104,7 +104,7 @@ class AudioDeviceViewModel(private val platformAudioSource: PlatformAudioSource)
 
             if (!success) {
                 _errorUiState.update { "Error Connecting to Device" }
-            }else{
+            } else {
                 audioLoopSource.setPreferredDevice(audioDeviceInfo)
             }
         }
@@ -114,14 +114,14 @@ class AudioDeviceViewModel(private val platformAudioSource: PlatformAudioSource)
         _errorUiState.update { null }
     }
 
-    fun onStartAudioLoop(){
-        if(!audioLoopSource.startAudioLoop()){
-            _errorUiState.update { "Error Starting Recording" }
+    fun onToggleAudioRecording() {
+        if (!audioLoopSource.isRecording.value) {
+            if (!audioLoopSource.startAudioLoop()) {
+                _errorUiState.update { "Error Starting Recording" }
+            }
+        } else {
+            audioLoopSource.stopAudioLoop()
         }
-    }
-
-    fun onStopAudioLoop(){
-        audioLoopSource.stopAudioLoop()
     }
 
     override fun onCleared() {
