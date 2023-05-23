@@ -105,6 +105,9 @@ class CallNotificationSample : ComponentActivity() {
                 }
 
                 notificationSource.onCancelNotification()
+
+                //Using a toast message to keep example simple. We should be using a snackbar
+                //https://developer.android.com/jetpack/compose/layouts/material#snackbar
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             }
         }
