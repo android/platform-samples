@@ -30,7 +30,8 @@
         android:gravity="center"
         android:lineBreakWordStyle="phrase"
         android:text="@string/line_break_sample"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        tools:targetApi="33" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/control"
