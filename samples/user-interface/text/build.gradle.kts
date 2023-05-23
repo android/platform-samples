@@ -28,4 +28,5 @@ android {
 
 dependencies {
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.mdc)
 }
