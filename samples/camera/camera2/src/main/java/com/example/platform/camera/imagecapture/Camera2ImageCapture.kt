@@ -375,31 +375,35 @@ class Camera2ImageCapture : Fragment() {
         cameraId: String,
         handler: Handler? = null,
     ): CameraDevice = suspendCancellableCoroutine { cont ->
-        manager.openCamera(
-            cameraId,
-            object : CameraDevice.StateCallback() {
-                override fun onOpened(device: CameraDevice) = cont.resume(device)
+        try {
+            manager.openCamera(
+                cameraId,
+                object : CameraDevice.StateCallback() {
+                    override fun onOpened(device: CameraDevice) = cont.resume(device)
 
-                override fun onDisconnected(device: CameraDevice) {
-                    Log.w(TAG, "Camera $cameraId has been disconnected")
-                }
-
-                override fun onError(device: CameraDevice, error: Int) {
-                    val msg = when (error) {
-                        ERROR_CAMERA_DEVICE -> "Fatal (device)"
-                        ERROR_CAMERA_DISABLED -> "Device policy"
-                        ERROR_CAMERA_IN_USE -> "Camera in use"
-                        ERROR_CAMERA_SERVICE -> "Fatal (service)"
-                        ERROR_MAX_CAMERAS_IN_USE -> "Maximum cameras in use"
-                        else -> "Unknown"
+                    override fun onDisconnected(device: CameraDevice) {
+                        Log.w(TAG, "Camera $cameraId has been disconnected")
                     }
-                    val exc = RuntimeException("Camera $cameraId error: ($error) $msg")
-                    Log.e(TAG, exc.message, exc)
-                    if (cont.isActive) cont.resumeWithException(exc)
-                }
-            },
-            handler,
-        )
+
+                    override fun onError(device: CameraDevice, error: Int) {
+                        val msg = when (error) {
+                            ERROR_CAMERA_DEVICE -> "Fatal (device)"
+                            ERROR_CAMERA_DISABLED -> "Device policy"
+                            ERROR_CAMERA_IN_USE -> "Camera in use"
+                            ERROR_CAMERA_SERVICE -> "Fatal (service)"
+                            ERROR_MAX_CAMERAS_IN_USE -> "Maximum cameras in use"
+                            else -> "Unknown"
+                        }
+                        val exc = RuntimeException("Camera $cameraId error: ($error) $msg")
+                        Log.e(TAG, exc.message, exc)
+                        if (cont.isActive) cont.resumeWithException(exc)
+                    }
+                },
+                handler,
+            )
+        } catch (e: SecurityException) {
+            requestCameraPermission()
+        }
     }
 
     /**
