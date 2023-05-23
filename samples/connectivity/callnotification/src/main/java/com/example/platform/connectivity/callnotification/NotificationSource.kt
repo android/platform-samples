@@ -46,7 +46,7 @@ class NotificationSource<T>(
     companion object {
 
         const val ChannelId = "1234"
-
+        const val ChannelIntID = 1234
         /*
         Notification state sent via in intent to inform receiving broadcast what action the user wants to take
          */
@@ -120,21 +120,21 @@ class NotificationSource<T>(
      * Will post incoming call to sysUI
      */
     fun postIncomingCall() {
-        notificationManager.notify(1234, onCreateIncomingCallNotification())
+        notificationManager.notify(ChannelIntID, onCreateIncomingCallNotification())
     }
 
     /**
      * Posts an in call notification, if a notification has already been posted then it will update to a on going call notification
      */
     fun postOnGoingCall() {
-        notificationManager.notify(1234, onCreateIncallNotification())
+        notificationManager.notify(ChannelIntID, onCreateIncallNotification())
     }
 
     /**
      * Will cancel notification and dismiss from sysUI
      */
     fun onCancelNotification() {
-        notificationManager.cancel(1234)
+        notificationManager.cancel(ChannelIntID)
     }
 
     /**
