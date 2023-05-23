@@ -55,7 +55,10 @@ import com.google.android.catalog.framework.annotations.Sample
 )
 class CallNotificationSample : ComponentActivity() {
 
-    var notificationSource: NotificationSource<NotificationReceiver>? = null
+    companion object {
+        lateinit var notificationSource: NotificationSource<NotificationReceiver>
+    }
+
 
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,7 +81,7 @@ class CallNotificationSample : ComponentActivity() {
                     )
 
                     if (callPermission.status.isGranted) {
-                        EntryPoint(notificationSource!!)
+                        EntryPoint(notificationSource)
                     } else {
                         PermissionWidget(callPermission)
                     }
@@ -95,30 +98,23 @@ class CallNotificationSample : ComponentActivity() {
                     NotificationSource.Companion.NotificationState.CANCEL.ordinal,
                 )
 
-                var message = "No User Input"
-
-                when (notificationStateValue) {
-                    NotificationSource.Companion.NotificationState.ANSWER.ordinal -> message =
-                        "Answered"
-
-                    NotificationSource.Companion.NotificationState.REJECT.ordinal -> message =
-                        "Rejected"
-
-                    else -> {
-                        message =
-                            "Cancelled"
-                    }
+                val message = when (notificationStateValue) {
+                    NotificationSource.Companion.NotificationState.ANSWER.ordinal -> "Answered"
+                    NotificationSource.Companion.NotificationState.REJECT.ordinal -> "Rejected"
+                    else -> "Cancelled"
                 }
 
+                notificationSource.onCancelNotification()
                 Toast.makeText(context, message, Toast.LENGTH_LONG).show()
             }
         }
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
 
-        notificationSource?.onCancelNotification()
+        notificationSource.onCancelNotification()
     }
 }
 

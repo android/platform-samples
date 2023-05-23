@@ -28,6 +28,7 @@ import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.RingtoneManager
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MAX
 import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
@@ -65,14 +66,14 @@ class NotificationSource<T>(
         const val NOTIFICATION_ACTION = "NOTIFICATION_ACTION"
 
         //Channel for on going call, this has low importance so that the notification is not always shown
-        @SuppressLint("NewApi")
+        @RequiresApi(Build.VERSION_CODES.O)
         val notificationChannelOngoing = NotificationChannel(
             ChannelId, "Call Notifications",
             NotificationManager.IMPORTANCE_LOW,
         )
 
         //Notification channel for incoming calls. Will play ringtone, will be no dismissible and will stay on screen until user interacts with notification.
-        @SuppressLint("NewApi")
+        @RequiresApi(Build.VERSION_CODES.O)
         fun notificationChannelIncoming(): NotificationChannel {
             val notification = NotificationChannel(
                 ChannelId, "Call Notifications",
@@ -92,7 +93,7 @@ class NotificationSource<T>(
         }
 
         @SuppressLint("NewApi")
-        var fakeCaller = Person.Builder()
+        val fakeCaller = Person.Builder()
             .setName("Jane Doe")
             .setImportant(true)
             .build()
