@@ -52,6 +52,7 @@ import com.google.android.catalog.framework.annotations.Sample
 @Sample(
     name = "Call Notification Sample",
     description = "Sample demonstrating how to make incoming call notifications and in call notifications",
+    documentation = "https://developer.android.com/reference/android/app/Notification.CallStyle"
 )
 class CallNotificationSample : ComponentActivity() {
 
@@ -104,7 +105,7 @@ class CallNotificationSample : ComponentActivity() {
                     else -> "Cancelled"
                 }
 
-                notificationSource.onCancelNotification()
+                notificationSource.cancelNotification()
 
                 //Using a toast message to keep example simple. We should be using a snackbar
                 //https://developer.android.com/jetpack/compose/layouts/material#snackbar
@@ -117,7 +118,7 @@ class CallNotificationSample : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        notificationSource.onCancelNotification()
+        notificationSource.cancelNotification()
     }
 }
 

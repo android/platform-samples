@@ -27,11 +27,10 @@ import android.content.Intent
 import android.media.AudioAttributes
 import android.media.AudioManager
 import android.media.RingtoneManager
-import android.os.Build
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.PRIORITY_MAX
 import androidx.core.app.NotificationCompat.VISIBILITY_PUBLIC
+import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.Person
 import androidx.core.content.getSystemService
 
@@ -66,15 +65,15 @@ class NotificationSource<T>(
         const val NOTIFICATION_ACTION = "NOTIFICATION_ACTION"
 
         //Channel for on going call, this has low importance so that the notification is not always shown
-        @RequiresApi(Build.VERSION_CODES.O)
-        val notificationChannelOngoing = NotificationChannel(
+        @SuppressLint("NewApi")
+        private val notificationChannelOngoing = NotificationChannel(
             ChannelId, "Call Notifications",
             NotificationManager.IMPORTANCE_LOW,
         )
 
         //Notification channel for incoming calls. Will play ringtone, will be no dismissible and will stay on screen until user interacts with notification.
-        @RequiresApi(Build.VERSION_CODES.O)
-        fun notificationChannelIncoming(): NotificationChannel {
+        @SuppressLint("NewApi")
+        private fun notificationChannelIncoming(): NotificationChannel {
             val notification = NotificationChannel(
                 ChannelId, "Call Notifications",
                 NotificationManager.IMPORTANCE_HIGH,
@@ -93,7 +92,7 @@ class NotificationSource<T>(
         }
 
         @SuppressLint("NewApi")
-        val fakeCaller = Person.Builder()
+        private val fakeCaller = Person.Builder()
             .setName("Jane Doe")
             .setImportant(true)
             .build()
@@ -110,30 +109,28 @@ class NotificationSource<T>(
         PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_IMMUTABLE)
 
     init {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            notificationManager.createNotificationChannel(notificationChannelIncoming())
-            notificationManager.createNotificationChannel(notificationChannelOngoing)
-        }
+        val managerCompat = NotificationManagerCompat.from(context)
+        managerCompat.createNotificationChannels(listOf(notificationChannelIncoming(), notificationChannelOngoing))
     }
 
     /**
      * Will post incoming call to sysUI
      */
     fun postIncomingCall() {
-        notificationManager.notify(ChannelIntID, onCreateIncomingCallNotification())
+        notificationManager.notify(ChannelIntID, getIncomingCallNotification())
     }
 
     /**
      * Posts an in call notification, if a notification has already been posted then it will update to a on going call notification
      */
     fun postOnGoingCall() {
-        notificationManager.notify(ChannelIntID, onCreateIncallNotification())
+        notificationManager.notify(ChannelIntID, getIncallNotification())
     }
 
     /**
      * Will cancel notification and dismiss from sysUI
      */
-    fun onCancelNotification() {
+    fun cancelNotification() {
         notificationManager.cancel(ChannelIntID)
     }
 
@@ -141,7 +138,7 @@ class NotificationSource<T>(
      * Creates a notification for incoming calls.
      * This notification plays a ringtone and is not dismissible
      */
-    private fun onCreateIncomingCallNotification(): Notification {
+    private fun getIncomingCallNotification(): Notification {
         val receiveCallIntent = Intent(context, notificationBroadcastClass)
         receiveCallIntent.putExtra(NOTIFICATION_ACTION, NotificationState.ANSWER.ordinal)
 
@@ -178,7 +175,7 @@ class NotificationSource<T>(
     /**
      * Creates an in call notification which is hidden but shows the user the state of the call
      */
-    private fun onCreateIncallNotification(): Notification {
+    private fun getIncallNotification(): Notification {
         val cancelCallIntent =
             Intent(context, notificationBroadcastClass)
         cancelCallIntent.putExtra("message", "Call Rejected")
