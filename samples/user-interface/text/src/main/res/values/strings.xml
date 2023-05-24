@@ -51,4 +51,12 @@
         so suddenly that Alice had not a moment to think about stopping herself before she found
         herself falling down a very deep well.
     </string>
+
+    <!-- Downloadable fonts -->
+    <string name="font_family">Font family</string>
+    <string name="apply">Apply</string>
+    <string name="example_text">The quick brown fox jumps over the lazy dog.</string>
+    <string name="invalid_font_family">Invalid font family</string>
+    <string name="font_request_error">Font request failed with reason code: %d</string>
+
 </resources>

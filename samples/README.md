@@ -14,6 +14,8 @@ Center child views horizontally or vertically.
 Demonstrates how to implement the incremental search feature for non-alphabet languages with the Conversion Suggestions API.
 - [Data Access](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
 Demonstrates how to implement data access auditing for your app to identify 
+- [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
+Download fonts instead of bundling them in the app resources.
 - [Find devices sample](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/FindDevicesSample.kt):
 This example will demonstrate how to scanning for Low Energy Devices
 - [Haptics - 1. Vibration effects](user-interface/haptics/src/main/java/com/example/platform/ui/haptics/Haptics.kt):

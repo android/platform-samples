@@ -35,7 +35,8 @@
             android:paddingHorizontal="@dimen/spacing_large"
             android:paddingVertical="@dimen/spacing_medium"
             android:text="@string/english_paragraph"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            tools:targetApi="26" />
 
     </ScrollView>
 
