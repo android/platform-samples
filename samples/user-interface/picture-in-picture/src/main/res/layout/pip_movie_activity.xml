@@ -14,8 +14,8 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -53,8 +53,8 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_picture_in_picture_alt"
                 android:drawablePadding="@dimen/spacing_medium"
-                android:drawableTint="@android:color/black"
-                android:text="@string/enter_picture_in_picture" />
+                android:text="@string/enter_picture_in_picture"
+                app:drawableTint="@android:color/black" />
 
             <TextView
                 android:id="@+id/explanation"
@@ -64,14 +64,8 @@
                 android:hyphenationFrequency="normal"
                 android:justificationMode="inter_word"
                 android:text="@string/explanation_movie"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-            <Button
-                android:id="@+id/switch_example"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:text="@string/switch_custom" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                tools:targetApi="26" />
 
         </LinearLayout>
 

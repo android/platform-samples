@@ -15,8 +15,6 @@
  limitations under the License.
 -->
 <resources>
-    <string name="app_name">PictureInPicture</string>
-
     <!-- Stopwatch -->
     <eat-comment />
     <string name="clear">Clear</string>
@@ -28,7 +26,6 @@
     picture-in-picture mode. The stopwatch keeps on working seamlessly between mode changes.
     The stopwatch controls are available in the picture-in-picture mode through the overlay actions.
     ]]></string>
-    <string name="switch_media_session">Switch to using MediaSession</string>
 
     <!-- Movie -->
     <eat-comment />
@@ -41,8 +38,7 @@
     The sample plays a video. The video keeps on playing when the app is turned in to
     Picture-in-Picture mode. On Picture-in-Picture screen, the app shows an action item to pause or
     resume the video.\n\n
-    Movie: (c) copyright 2008, Blender Foundation. See https://peach.blender.org/.
+    Movie: © copyright 2008, Blender Foundation. See https://peach.blender.org/.
     ]]></string>
-    <string name="switch_custom">Switch to custom actions example</string>
     <string name="title_bigbuckbunny">Big Buck Bunny</string>
 </resources>

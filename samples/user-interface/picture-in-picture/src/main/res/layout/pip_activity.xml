@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2021 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +13,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
 -->
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
@@ -41,11 +39,12 @@
         android:layout_height="@dimen/button_size"
         android:layout_margin="@dimen/spacing_medium"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/clear"
         android:src="@drawable/ic_refresh_24dp"
-        app:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@id/stopwatch_background"
         app:layout_constraintStart_toStartOf="@id/stopwatch_background"
-        app:layout_constraintTop_toTopOf="@id/stopwatch_background" />
+        app:layout_constraintTop_toTopOf="@id/stopwatch_background"
+        app:tint="@android:color/white" />
 
     <ImageButton
         android:id="@+id/start_or_pause"
@@ -53,11 +52,12 @@
         android:layout_height="@dimen/button_size"
         android:layout_margin="@dimen/spacing_medium"
         android:background="?attr/selectableItemBackgroundBorderless"
+        android:contentDescription="@string/start"
         android:src="@drawable/ic_play_arrow_24dp"
-        app:tint="@android:color/white"
         app:layout_constraintBottom_toBottomOf="@id/stopwatch_background"
         app:layout_constraintEnd_toEndOf="@id/stopwatch_background"
-        app:layout_constraintTop_toTopOf="@id/stopwatch_background" />
+        app:layout_constraintTop_toTopOf="@id/stopwatch_background"
+        app:tint="@android:color/white" />
 
     <TextView
         android:id="@+id/time"
@@ -72,6 +72,7 @@
         app:layout_constraintEnd_toStartOf="@id/start_or_pause"
         app:layout_constraintStart_toEndOf="@id/clear"
         app:layout_constraintTop_toTopOf="@id/stopwatch_background"
+        tools:targetApi="26"
         tools:text="12:34:56" />
 
     <ScrollView
@@ -96,8 +97,8 @@
                 android:layout_height="wrap_content"
                 android:drawableStart="@drawable/ic_picture_in_picture_alt"
                 android:drawablePadding="@dimen/spacing_medium"
-                android:drawableTint="@android:color/black"
                 android:text="@string/enter_picture_in_picture"
+                app:drawableTint="@android:color/black"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/stopwatch_background" />
 
@@ -108,14 +109,8 @@
                 android:hyphenationFrequency="normal"
                 android:justificationMode="inter_word"
                 android:text="@string/explanation_main"
-                android:textAppearance="@style/TextAppearance.AppCompat.Body1" />
-
-            <Button
-                android:id="@+id/switch_example"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_medium"
-                android:text="@string/switch_media_session" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+                tools:targetApi="26" />
 
         </LinearLayout>
 
