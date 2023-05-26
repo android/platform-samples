@@ -21,7 +21,6 @@ import android.content.Context
 import android.net.Uri
 import android.os.Build
 import android.telecom.DisconnectCause
-import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.telecom.CallAttributesCompat
 import androidx.core.telecom.CallControlCallback
@@ -29,16 +28,9 @@ import androidx.core.telecom.CallControlScope
 import androidx.core.telecom.CallEndpointCompat
 import androidx.core.telecom.CallsManager
 import com.example.platform.connectivity.audio.datasource.AudioLoopSource
-import com.example.platform.connectivity.telecom.screen.CallStatusUI
-import com.example.platform.connectivity.telecom.screen.EndPointUI
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -80,49 +72,9 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
     var callControlScope: CallControlScope? = null
     var fakeCallSession = AudioLoopSource()
 
-    private val callNotificationSource = CallNotificationSource(context)
+    // private val callNotificationSource = CallNotificationSource(context)
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
     var callsManager = CallsManager(context)
-    val callState = MutableStateFlow(CallState.NOCALL)
-
-
-    @SuppressLint("NewApi")
-    var availableEndpoint: Flow<List<EndPointUI>> = emptyFlow()
-
-    var callStatus: Flow<CallStatusUI> =
-        callState.map { callState ->
-
-            getCallStatus(emptyList(), null, null, callState)
-        }
-
-
-    private fun getCallStatus(
-        audioDevices: List<CallEndpointCompat>,
-        activeDevice: CallEndpointCompat?,
-        isMuted: Boolean?,
-        callState: CallState,
-    ): CallStatusUI {
-        var callStatusUI = CallStatusUI()
-        callStatusUI.caller = "John Doe"
-       // callStatusUI.isActive = isActive
-
-        callStatusUI.currentAudioDevice = activeDevice?.name.toString()
-
-        callStatusUI.isMuted = isMuted
-
-        callStatusUI.audioDevices = audioDevices
-
-        when (callState) {
-            CallState.INCOMING -> callStatusUI.callState = "Incoming Call"
-            CallState.OUTGOING -> callStatusUI.callState = "Dialing Out Call"
-            CallState.INCALL -> callStatusUI.callState = "In Call"
-            else -> {
-                callStatusUI.callState = "No Call"
-            }
-        }
-
-        return callStatusUI
-    }
 
     enum class CallState {
         NOCALL,
@@ -138,7 +90,7 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
     }
 
     fun makeOutGoingCall() {
-        callState.value = CallState.OUTGOING
+        viewModel.currentCallState.update { CallState.OUTGOING }
         makeCall(OUTGOING_CALL_ATTRIBUTES)
     }
 
@@ -155,7 +107,7 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
 
                 setCallback(callControlCallback)
 
-               availableEndpoints
+                availableEndpoints
                     .onEach { viewModel.availableAudioRoutes.value = it }
                     .launchIn(coroutineScopes)
 
@@ -166,27 +118,6 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
                 isMuted
                     .onEach { viewModel.isMuted.value = it }
                     .launchIn(coroutineScope)
-
-                /*availableEndpoint =
-                    combine(
-                        availableEndpoints,
-                        currentCallEndpoint,
-                    ) { availableDevices: List<CallEndpointCompat>, activeDevice: CallEndpointCompat ->
-                        availableDevices.map {
-                            EndPointUI(isActive = activeDevice.name == it.name, it)
-                        }
-                    }*/
-
-              /* callStatus = combine(
-                    availableEndpoints,
-                    currentCallEndpoint,
-                    callState
-                ) { availableDevices: List<CallEndpointCompat>, activeDevice: CallEndpointCompat, callState: CallState ->
-
-                    //getCallStatus(availableDevices, activeDevice, false, callState)
-                }*/
-
-
             }
 
             if (callAttributes.direction == CallAttributesCompat.DIRECTION_INCOMING) {
@@ -207,7 +138,7 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
                     startCall()
                 } else {
                     //todo update error state
-                    callState.value = CallState.NOCALL
+                    endCall()
                 }
             }
         }
@@ -218,7 +149,7 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
         coroutineScope.launch {
             callControlScope?.let {
                 it.disconnect(DisconnectCause(DisconnectCause.REJECTED))
-                callState.value = CallState.NOCALL
+                endCall()
             }
         }
     }
@@ -231,14 +162,14 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
         }
     }
 
-    fun onToggleCallHold() {
+    fun toggleCallHold(b: Boolean) {
         coroutineScope.launch {
             callControlScope?.let {
-                if ( viewModel.isActive.value) {
+                if (!b) {
                     if (it.setInactive()) {
                         holdCall()
-                   }
-               } else {
+                    }
+                } else {
                     if (it.setActive()) {
                         startCall()
                     }
@@ -260,7 +191,6 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
     }
 
     private fun startCall() {
-
         fakeCallSession.startAudioLoop()
         viewModel.isActive.update { true }
         viewModel.currentCallState.update { CallState.INCALL }
@@ -270,10 +200,7 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
         fakeCallSession.stopAudioLoop()
         //callNotificationSource.onCancelNotification()
         viewModel.isActive.update { false }
-        callStatus =
-            callState.map { callState ->
-                getCallStatus(emptyList(), null, null, callState)
-            }
+
         viewModel.currentCallState.update { CallState.NOCALL }
         viewModel.activeAudioRoute.update { null }
         viewModel.availableAudioRoutes.update { emptyList() }
@@ -296,12 +223,9 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
     }
 
     fun toggleMute(b: Boolean) {
-
+        viewModel.isMuted.update { !viewModel.isMuted.value }
     }
 
-    fun toggleCallHold(b: Boolean) {
-
-    }
 
     private val callControlCallback = object : CallControlCallback {
         override suspend fun onSetActive(): Boolean {

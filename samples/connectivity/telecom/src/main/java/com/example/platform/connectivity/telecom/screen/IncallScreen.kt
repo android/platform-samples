@@ -23,6 +23,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -48,6 +49,7 @@ import com.example.platform.connectivity.telecom.TelecomManager
 fun IncallScreen(callViewModel: TelecomManager) {
     val callEndPoints by callViewModel.viewModel.availableAudioRoutes.collectAsState()
     val muteState by callViewModel.viewModel.isMuted.collectAsState()
+    val activeState by callViewModel.viewModel.isActive.collectAsState()
 
     IncallBottomBar(
         callEndPoints,
@@ -55,6 +57,7 @@ fun IncallScreen(callViewModel: TelecomManager) {
         callViewModel::toggleMute,
         callViewModel::toggleCallHold,
         { callViewModel.OnHangUp() },
+        activeState,
         callViewModel::setEndpoint
     )
 }
@@ -66,6 +69,7 @@ fun IncallBottomBar(
     onMuteChanged: (Boolean) -> Unit,
     onHoldCall: (Boolean) -> Unit,
     onHangUp: () -> Unit,
+    activeState: Boolean,
     onAudioDeviceSelected: (CallEndpointCompat) -> Unit,
 ) {
 
@@ -90,20 +94,18 @@ fun IncallBottomBar(
                     expanded = audioDeviceWidgetState,
                     onDismissRequest = { audioDeviceWidgetState = false },
                 ) {
-                    LazyColumn {
-                        items(endPoints) { item: CallEndpointCompat ->
-                            CallEndPointItem(
-                                endPointUI = item,
-                                onDeviceSelected = onAudioDeviceSelected,
-                            )
-                        }
+                    endPoints.forEach{
+                        CallEndPointItem(
+                            endPointUI = it,
+                            onDeviceSelected = onAudioDeviceSelected,
+                        )
                     }
                 }
             }
             ToggleButton(
                 R.drawable.arrow_down_float,
                 R.drawable.arrow_down_float,
-                muteState,
+                activeState,
                 onHoldCall,
             )
         },
@@ -152,11 +154,11 @@ private fun CallEndPointItem(
         text = { Text(endPointUI.name.toString()) },
         onClick = { onDeviceSelected(endPointUI) },
         leadingIcon = {
+
             Icon(
-                Icons.Outlined.Email,
+                Icons.Outlined.Phone,
                 contentDescription = null,
             )
-        },
-        trailingIcon = { Text("F11", textAlign = TextAlign.Center) },
+        }
     )
 }
