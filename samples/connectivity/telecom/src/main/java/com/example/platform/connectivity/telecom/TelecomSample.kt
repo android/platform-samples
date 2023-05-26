@@ -18,17 +18,18 @@
 package com.example.platform.connectivity.telecom
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -40,36 +41,52 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.platform.connectivity.telecom.screen.CallStatusUI
+import com.example.platform.connectivity.callnotification.NotificationSource
 import com.example.platform.connectivity.telecom.screen.CallStatusWidget
 import com.example.platform.connectivity.telecom.screen.DialerScreen
 import com.example.platform.connectivity.telecom.screen.IncallScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.MultiplePermissionsState
-import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import com.google.accompanist.permissions.rememberPermissionState
 import com.google.android.catalog.framework.annotations.Sample
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Sample(
     name = "TelecomSample",
     description = "TODO: Add description",
 )
-class TelecomSample: ComponentActivity() {
+class TelecomSample : ComponentActivity() {
 
     companion object {
+        //Bad practise memory leak concerns however simple implementation for broadcast receiver
         lateinit var callViewModel: VoipViewModel
     }
 
+    lateinit var notificationSource: NotificationSource<NotificationReceiver>
 
     @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         callViewModel = VoipViewModel(this)
+        notificationSource = NotificationSource(this, NotificationReceiver::class.java)
+
+
+        CoroutineScope(Dispatchers.Unconfined).launch {
+            callViewModel.currentCallState.collect {
+                when (it) {
+                    TelecomManager.CallState.INCOMING -> notificationSource.postIncomingCall()
+                    TelecomManager.CallState.INCALL -> notificationSource.postOnGoingCall()
+                    else -> {
+                        notificationSource.cancelNotification()
+                    }
+                }
+            }
+        }
 
         setContent {
             MaterialTheme {
@@ -98,6 +115,24 @@ class TelecomSample: ComponentActivity() {
             }
         }
     }
+
+    class NotificationReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                val notificationStateValue = it.getIntExtra(
+                    NotificationSource.NOTIFICATION_ACTION,
+                    NotificationSource.Companion.NotificationState.CANCEL.ordinal,
+                )
+
+                when (notificationStateValue) {
+                    NotificationSource.Companion.NotificationState.ANSWER.ordinal -> callViewModel.answerCall()
+                    NotificationSource.Companion.NotificationState.REJECT.ordinal -> callViewModel.rejectCall()
+                    else -> callViewModel.disconnectCall()
+                }
+            }
+        }
+
+    }
 }
 
 @Preview
@@ -112,26 +147,37 @@ fun EntryPoint(callViewModel: VoipViewModel) {
 }
 
 @Composable
-fun CallingStatus(callViewModel: VoipViewModel){
+fun CallingStatus(callViewModel: VoipViewModel) {
 
     CallStatusWidget(callViewModel)
 }
 
 @Composable
-fun CallingBottomBar(callViewModel: VoipViewModel){
+fun CallingBottomBar(callViewModel: VoipViewModel) {
 
     val callScreenState by callViewModel.currentCallState.collectAsState()
 
-    when(callScreenState){
-        TelecomManager.CallState.INCALL -> { IncallScreen(callViewModel) }
-        TelecomManager.CallState.INCOMING -> { IncallScreen(callViewModel) }
-        TelecomManager.CallState.OUTGOING -> { OutgoingCall() }
-        else -> { DialerScreen(callViewModel) }
+    when (callScreenState) {
+        TelecomManager.CallState.INCALL -> {
+            IncallScreen(callViewModel)
+        }
+
+        TelecomManager.CallState.INCOMING -> {
+
+        }
+
+        TelecomManager.CallState.OUTGOING -> {
+            OutgoingCall()
+        }
+
+        else -> {
+            DialerScreen(callViewModel)
+        }
     }
 }
 
 @Composable
-fun OutgoingCall(){
+fun OutgoingCall() {
     Text(
         text = "Dialing out...",
         color = MaterialTheme.colorScheme.primary,
