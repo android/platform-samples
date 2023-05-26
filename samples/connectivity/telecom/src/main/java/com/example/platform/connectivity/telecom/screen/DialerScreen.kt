@@ -23,12 +23,15 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
-import com.example.platform.connectivity.telecom.TelecomManager
+import androidx.core.telecom.CallAttributesCompat
+import com.example.platform.connectivity.telecom.VoipViewModel
 
 @Composable
-fun DialerScreen(callViewModel: TelecomManager) {
-
-    DialerBottomBar({callViewModel.makeOutGoingCall() }, { callViewModel.fakeIncomingCall()})
+fun DialerScreen(callViewModel: VoipViewModel) {
+    DialerBottomBar(
+        { callViewModel.onMakeCall(CallAttributesCompat.DIRECTION_OUTGOING) },
+        { callViewModel.onMakeCall(CallAttributesCompat.DIRECTION_INCOMING) },
+    )
 }
 
 @Composable
@@ -41,23 +44,23 @@ fun DialerBottomBar(
             icon = {
                 Icon(
                     painter = painterResource(id = R.drawable.sym_call_outgoing),
-                    contentDescription = "Outgoing Call"
+                    contentDescription = "Outgoing Call",
                 )
             },
             label = { Text("Outgoing Call") },
             selected = false,
-            onClick = onOutgoingCall
+            onClick = onOutgoingCall,
         )
         NavigationBarItem(
             icon = {
                 Icon(
                     painter = painterResource(id = R.drawable.sym_call_incoming),
-                    contentDescription = "Incoming Call"
+                    contentDescription = "Incoming Call",
                 )
             },
             label = { Text("Incoming Call") },
             selected = false,
-            onClick = onIncomingCall
+            onClick = onIncomingCall,
         )
     }
 }
