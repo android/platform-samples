@@ -19,10 +19,7 @@ package com.example.platform.connectivity.telecom.screen
 import android.R
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.DropdownMenu
@@ -41,22 +38,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.core.telecom.CallEndpointCompat
-import com.example.platform.connectivity.telecom.TelecomManager
+import com.example.platform.connectivity.telecom.R.drawable
+import com.example.platform.connectivity.telecom.VoipViewModel
 
 @Composable
-fun IncallScreen(callViewModel: TelecomManager) {
-    val callEndPoints by callViewModel.viewModel.availableAudioRoutes.collectAsState()
-    val muteState by callViewModel.viewModel.isMuted.collectAsState()
-    val activeState by callViewModel.viewModel.isActive.collectAsState()
+fun IncallScreen(callViewModel: VoipViewModel) {
+    val callEndPoints by callViewModel.availableAudioRoutes.collectAsState()
+    val muteState by callViewModel.isMuted.collectAsState()
+    val activeState by callViewModel.isActive.collectAsState()
 
     IncallBottomBar(
         callEndPoints,
         muteState,
         callViewModel::toggleMute,
-        callViewModel::toggleCallHold,
-        { callViewModel.OnHangUp() },
+        callViewModel::toggleHoldCall,
+        { callViewModel.disconnectCall()},
         activeState,
         callViewModel::setEndpoint
     )
@@ -78,15 +75,15 @@ fun IncallBottomBar(
     BottomAppBar(
         actions = {
             ToggleButton(
-                R.drawable.arrow_down_float,
-                R.drawable.arrow_down_float,
+               drawable.mic_off,
+                drawable.mic_on,
                 muteState,
                 onMuteChanged,
             )
             Box {
                 IconButton(onClick = { audioDeviceWidgetState = !audioDeviceWidgetState }) {
                     Icon(
-                        painter = painterResource(id = R.drawable.arrow_down_float),
+                        painter = painterResource(id = drawable.speaker),
                         contentDescription = "Localized description",
                     )
                 }
@@ -103,8 +100,8 @@ fun IncallBottomBar(
                 }
             }
             ToggleButton(
-                R.drawable.arrow_down_float,
-                R.drawable.arrow_down_float,
+                R.drawable.ic_menu_call,
+                R.drawable.stat_sys_phone_call_on_hold,
                 activeState,
                 onHoldCall,
             )
@@ -116,7 +113,7 @@ fun IncallBottomBar(
                 elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation(),
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.arrow_down_float),
+                    painter = painterResource(id = drawable.call_end),
                     "Localized description",
                 )
             }

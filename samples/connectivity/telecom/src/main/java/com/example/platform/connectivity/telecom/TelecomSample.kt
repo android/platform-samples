@@ -61,7 +61,7 @@ import com.google.android.catalog.framework.annotations.Sample
 class TelecomSample: ComponentActivity() {
 
     companion object {
-        lateinit var callViewModel: TelecomManager
+        lateinit var callViewModel: VoipViewModel
     }
 
 
@@ -69,7 +69,7 @@ class TelecomSample: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        callViewModel = TelecomManager(this, VoipViewModel())
+        callViewModel = VoipViewModel(this)
 
         setContent {
             MaterialTheme {
@@ -90,7 +90,7 @@ class TelecomSample: ComponentActivity() {
                         )
 
                     if (multiplePermissionsState.allPermissionsGranted) {
-                        EntryPoint()
+                        EntryPoint(callViewModel)
                     } else {
                         PermissionWidget(multiplePermissionsState)
                     }
@@ -102,25 +102,25 @@ class TelecomSample: ComponentActivity() {
 
 @Preview
 @Composable
-fun EntryPoint() {
+fun EntryPoint(callViewModel: VoipViewModel) {
     Box(modifier = Modifier.fillMaxSize()) {
-        CallingStatus(TelecomSample.Companion.callViewModel)
+        CallingStatus(callViewModel)
         Box(modifier = Modifier.align(Alignment.BottomCenter)) {
-            CallingBottomBar(TelecomSample.Companion.callViewModel)
+            CallingBottomBar(callViewModel)
         }
     }
 }
 
 @Composable
-fun CallingStatus(callViewModel: TelecomManager){
+fun CallingStatus(callViewModel: VoipViewModel){
 
-    CallStatusWidget(callViewModel.viewModel)
+    CallStatusWidget(callViewModel)
 }
 
 @Composable
-fun CallingBottomBar(callViewModel: TelecomManager){
+fun CallingBottomBar(callViewModel: VoipViewModel){
 
-    val callScreenState by callViewModel.viewModel.currentCallState.collectAsState()
+    val callScreenState by callViewModel.currentCallState.collectAsState()
 
     when(callScreenState){
         TelecomManager.CallState.INCALL -> { IncallScreen(callViewModel) }

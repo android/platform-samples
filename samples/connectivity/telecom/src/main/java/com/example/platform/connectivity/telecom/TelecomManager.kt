@@ -72,8 +72,7 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
     var callControlScope: CallControlScope? = null
     var fakeCallSession = AudioLoopSource()
 
-    // private val callNotificationSource = CallNotificationSource(context)
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private val coroutineScope = CoroutineScope(Dispatchers.Unconfined)
     var callsManager = CallsManager(context)
 
     enum class CallState {
@@ -90,18 +89,16 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
     }
 
     fun makeOutGoingCall() {
-        viewModel.currentCallState.update { CallState.OUTGOING }
         makeCall(OUTGOING_CALL_ATTRIBUTES)
     }
 
-    fun fakeIncomingCall() {
+    fun makeIncomingCall() {
         makeCall(INCOMING_CALL_ATTRIBUTES)
     }
 
     private fun makeCall(callAttributes: CallAttributesCompat) {
 
-        CoroutineScope(Dispatchers.Unconfined).launch {
-            val coroutineScopes = this
+        coroutineScope.launch {
             callsManager.addCall(callAttributes) {
                 callControlScope = this
 
@@ -109,7 +106,7 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
 
                 availableEndpoints
                     .onEach { viewModel.availableAudioRoutes.value = it }
-                    .launchIn(coroutineScopes)
+                    .launchIn(coroutineScope)
 
                 currentCallEndpoint
                     .onEach { viewModel.activeAudioRoute.value = it }
@@ -118,16 +115,23 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
                 isMuted
                     .onEach { viewModel.isMuted.value = it }
                     .launchIn(coroutineScope)
+
+                onCallReady(callAttributes.direction)
             }
 
-            if (callAttributes.direction == CallAttributesCompat.DIRECTION_INCOMING) {
-                onAnswerCall()
-            } else {
-                onCallActive()
-            }
 
             //this will start foreground service
             //callNotificationSource.postOnGoingCall()
+        }
+    }
+
+    private fun onCallReady(callDirection: Int) {
+        coroutineScope.launch {
+            if (callDirection == CallAttributesCompat.DIRECTION_INCOMING) {
+                viewModel.onCallStateChanged(CallState.INCOMING)
+            } else {
+                viewModel.onCallStateChanged(CallState.OUTGOING)
+            }
         }
     }
 
@@ -154,32 +158,27 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
         }
     }
 
-    suspend fun onCallActive() {
+    suspend fun setCallActive() : Boolean {
         callControlScope?.let {
             if (it.setActive()) {
-                startCall()
+               startCall()
             }
         }
+        return false
     }
 
-    fun toggleCallHold(b: Boolean) {
-        coroutineScope.launch {
-            callControlScope?.let {
-                if (!b) {
-                    if (it.setInactive()) {
-                        holdCall()
-                    }
-                } else {
-                    if (it.setActive()) {
-                        startCall()
-                    }
-                }
+    suspend fun setCallInActive() : Boolean {
+        callControlScope?.let {
+            if (it.setInactive()) {
+                holdCall()
+                return true
             }
         }
+        return false
     }
 
     @SuppressLint("NewApi")
-    fun OnHangUp() {
+    fun hangUp() {
         coroutineScope.launch {
             callControlScope?.disconnect(DisconnectCause(DisconnectCause.LOCAL))
             endCall()
@@ -193,17 +192,13 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
     private fun startCall() {
         fakeCallSession.startAudioLoop()
         viewModel.isActive.update { true }
-        viewModel.currentCallState.update { CallState.INCALL }
+        viewModel.onCallStateChanged(CallState.INCALL)
     }
 
     private fun endCall() {
         fakeCallSession.stopAudioLoop()
-        //callNotificationSource.onCancelNotification()
         viewModel.isActive.update { false }
-
-        viewModel.currentCallState.update { CallState.NOCALL }
-        viewModel.activeAudioRoute.update { null }
-        viewModel.availableAudioRoutes.update { emptyList() }
+        viewModel.onCallStateChanged(CallState.NOCALL)
     }
 
     private fun holdCall() {
@@ -216,10 +211,6 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
         coroutineScope.launch {
             callControlScope?.requestEndpointChange(callEndpoint)
         }
-    }
-
-    private fun hasError(message: String) {
-
     }
 
     fun toggleMute(b: Boolean) {
