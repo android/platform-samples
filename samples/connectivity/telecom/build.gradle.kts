@@ -28,4 +28,5 @@ dependencies {
     implementation("androidx.core:core-telecom:1.0.0-alpha01")
     implementation(project(mapOf("path" to ":samples:connectivity:audio")))
     implementation(project(mapOf("path" to ":samples:connectivity:callnotification")))
+
 }

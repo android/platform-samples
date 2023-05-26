@@ -27,45 +27,18 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.telecom.CallEndpointCompat
 import com.example.platform.connectivity.telecom.TelecomManager
 import com.example.platform.connectivity.telecom.VoipViewModel
-
-class CallStatusUI {
-    var caller: String? = null
-    var isActive: Boolean = false
-    var currentAudioDevice: String? = null
-    var isMuted: Boolean? = false
-    var callState: String? = null
-    var audioDevices : List<CallEndpointCompat> = emptyList()
-}
-
-class EndPointUI(var isActive: Boolean, var callEndpoint: CallEndpointCompat)
-
-@Preview
-@Composable
-fun CallStatusWidget() {
-    val tempCaller = CallStatusUI()
-    tempCaller.caller = "Luke Hopkins"
-    tempCaller.isActive = false
-    tempCaller.currentAudioDevice = "Speaker"
-    tempCaller.isMuted = false
-    tempCaller.callState = "Not in call"
-
-   // CallStatusWidget(tempCaller)
-}
 
 @Composable
 fun CallStatusWidget(callViewModel: VoipViewModel) {
 
     val callState by callViewModel.currentCallState.collectAsState()
-    val callStatus = when(callState)
-    {
-        TelecomManager.CallState.INCALL ->  "In Call"
-        TelecomManager.CallState.INCOMING ->  "Incoming Call"
-        TelecomManager.CallState.OUTGOING ->  "Outgoing Call"
+    val callStatus = when (callState) {
+        TelecomManager.CallState.INCALL -> "In Call"
+        TelecomManager.CallState.INCOMING -> "Incoming Call"
+        TelecomManager.CallState.OUTGOING -> "Outgoing Call"
         else -> "No Call"
     }
 
@@ -102,7 +75,7 @@ fun CallStatusWidget(callViewModel: VoipViewModel) {
                 style = MaterialTheme.typography.headlineMedium,
             )
 
-            activeDevices.forEach{
+            activeDevices.forEach {
                 Text(
                     text = String.format("Caller: %s", it.name),
                     color = MaterialTheme.colorScheme.primary,

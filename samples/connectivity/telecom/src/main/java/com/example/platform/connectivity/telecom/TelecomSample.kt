@@ -18,11 +18,11 @@
 package com.example.platform.connectivity.telecom
 
 import android.Manifest
+
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.provider.Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Box
@@ -41,7 +41,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import com.example.platform.connectivity.callnotification.NotificationSource
 import com.example.platform.connectivity.telecom.screen.CallStatusWidget
 import com.example.platform.connectivity.telecom.screen.DialerScreen
@@ -57,12 +56,11 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalPermissionsApi::class)
 @Sample(
     name = "TelecomSample",
-    description = "TODO: Add description",
+    description = "Example application showing incoming and outgoing calls using the telecom jetpack library",
 )
 class TelecomSample : ComponentActivity() {
 
     companion object {
-        //Bad practise memory leak concerns however simple implementation for broadcast receiver
         lateinit var callViewModel: VoipViewModel
     }
 
@@ -135,7 +133,6 @@ class TelecomSample : ComponentActivity() {
     }
 }
 
-@Preview
 @Composable
 fun EntryPoint(callViewModel: VoipViewModel) {
     Box(modifier = Modifier.fillMaxSize()) {
@@ -175,6 +172,7 @@ fun CallingBottomBar(callViewModel: VoipViewModel) {
         }
     }
 }
+
 
 @Composable
 fun OutgoingCall() {
