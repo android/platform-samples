@@ -58,5 +58,7 @@ Basic usage of Picture-in-Picture mode showcasing a video activity PiP and an ac
 Shows the recommended flow to request single runtime permissions
 - [Speakable Text](accessibility/src/main/java/com/example/platform/accessibility/SpeakableText.kt):
 The sample demonstrates the importance of having proper labels for
+- [TelecomSample](connectivity/telecom/src/main/java/com/example/platform/connectivity/telecom/TelecomSample.kt):
+TODO: Add description
 - [TextSpan](user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.
