@@ -98,6 +98,7 @@ class SamplePlugin : Plugin<Project> {
                 "implementation"(libs.findLibrary("androidx.fragment").get())
                 "implementation"(libs.findLibrary("androidx.activity.compose").get())
                 "implementation"(libs.findLibrary("compose.foundation.foundation").get())
+                "implementation"(libs.findLibrary("compose.runtime.livedata").get())
                 "implementation"(libs.findLibrary("androidx.lifecycle.viewmodel.compose").get())
                 "implementation"(libs.findLibrary("compose.ui.ui").get())
                 "implementation"(libs.findLibrary("compose.material3").get())
