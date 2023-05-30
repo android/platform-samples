@@ -30,7 +30,8 @@ import com.google.android.catalog.framework.annotations.Sample
 @Sample(
     name = "TextSpan",
     description = "buildSpannedString is useful for quickly building a rich text.",
-    documentation = "https://developer.android.com/kotlin/ktx#core"
+    documentation = "https://developer.android.com/kotlin/ktx#core",
+    tags = ["text"]
 )
 class TextSpanFragment : Fragment(R.layout.text_span_fragment) {
 

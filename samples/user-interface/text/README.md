@@ -2,6 +2,19 @@
 
 This sample demonstrates several text-related features in Android.
 
+### [Downloadable Fonts](src/main/java/com/example/platform/ui/text/DownloadableFonts.kt)
+
+Apps can create a [font resource][1] XML and declare it in their 'AndroidManifest.xml' to let the
+system prefetch the font. The font family can be used with `android:fontFamily` in layout XMLs.
+
+Alternatively, apps can use [`FontsContractCompat`][2] to download fonts dynamically.
+
+Read [Use Downloadable Fonts][3] for the detail.
+
+[1]: https://developer.android.com/guide/topics/resources/font-resource#downloadable-font
+[2]: https://developer.android.com/reference/androidx/core/provider/FontsContractCompat
+[3]: https://developer.android.com/develop/ui/views/text-and-emoji/downloadable-fonts
+
 ### [Text Span](src/main/java/com/example/platform/ui/text/TextSpan.kt)
 
 [`buildSpannedString`](https://developer.android.com/reference/kotlin/androidx/core/text/package-summary#buildSpannedString(kotlin.Function1))

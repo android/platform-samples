@@ -27,12 +27,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.platform.ui.haptics.basic.HapticsBasicRoute
+import com.example.platform.ui.haptics.basic.HapticsBasicViewModel
 import com.example.platform.ui.haptics.bounce.BounceRoute
 import com.example.platform.ui.haptics.bounce.BounceViewModel
 import com.example.platform.ui.haptics.expand.ExpandRoute
 import com.example.platform.ui.haptics.expand.ExpandViewModel
-import com.example.platform.ui.haptics.basic.HapticsBasicRoute
-import com.example.platform.ui.haptics.basic.HapticsBasicViewModel
 import com.example.platform.ui.haptics.resist.ResistRoute
 import com.example.platform.ui.haptics.resist.ResistViewModel
 import com.example.platform.ui.haptics.wobble.WobbleRoute
@@ -44,6 +44,7 @@ import kotlinx.coroutines.launch
     name = "Haptics - 1. Vibration effects",
     description = "Shows various vibration effects.",
     documentation = "https://source.android.com/docs/core/interaction/haptics",
+    tags = ["haptics"],
 )
 @Composable
 fun HapticsBasic() {
@@ -74,6 +75,7 @@ fun HapticsBasic() {
     name = "Haptics - 2. Resist",
     description = "Simulates resistance by increasing the intensity and reducing the duration between vibration effects.",
     documentation = "https://source.android.com/docs/core/interaction/haptics",
+    tags = ["haptics"],
 )
 @Composable
 fun Resist() {
@@ -89,6 +91,7 @@ fun Resist() {
     name = "Haptics - 3. Expand",
     description = "Expands and collapses a circle with haptics with an added tick to sharpen that the animation has ended.",
     documentation = "https://source.android.com/docs/core/interaction/haptics",
+    tags = ["haptics"],
 )
 @Composable
 fun Expand() {
@@ -104,6 +107,7 @@ fun Expand() {
     name = "Haptics - 4. Bounce",
     description = "Play primitive effects to simulate physical interactions.",
     documentation = "https://source.android.com/docs/core/interaction/haptics",
+    tags = ["haptics"],
 )
 @Composable
 fun Bounce() {
@@ -119,6 +123,7 @@ fun Bounce() {
     name = "Haptics - 5. Wobble",
     description = "Play primitive effects to simulate physical interactions.",
     documentation = "https://source.android.com/docs/core/interaction/haptics",
+    tags = ["haptics"],
 )
 @Composable
 fun Wobble() {

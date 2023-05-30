@@ -17,7 +17,6 @@
 package com.example.android.pip
 
 import android.app.PictureInPictureParams
-import android.content.Intent
 import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Build
@@ -32,17 +31,22 @@ import android.util.Rational
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.doOnLayout
 import com.example.android.pip.databinding.PipMovieActivityBinding
 import com.example.android.pip.widget.MovieView
+import com.google.android.catalog.framework.annotations.Sample
 
 /**
  * Demonstrates usage of Picture-in-Picture when using [MediaSessionCompat].
  */
-
+@Sample(
+    name = "Picture in Picture (PiP) - Video playback",
+    description = "Basic usage of Picture-in-Picture mode showcasing video playback",
+    documentation = "https://developer.android.com/develop/ui/views/picture-in-picture",
+)
 @RequiresApi(Build.VERSION_CODES.O)
 class PiPMovieActivity : AppCompatActivity() {
 
@@ -104,20 +108,11 @@ class PiPMovieActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         try {
-            Linkify.addLinks(binding.explanation, Linkify.ALL)
+            Linkify.addLinks(binding.explanation, Linkify.WEB_URLS)
         } catch (e: Exception) {
             Log.w("PiP", "Failed to add links", e)
         }
         binding.pip.setOnClickListener { minimize() }
-        binding.switchExample.setOnClickListener {
-            startActivity(
-                Intent(
-                    this@PiPMovieActivity,
-                    PiPSampleActivity::class.java,
-                ),
-            )
-            finish()
-        }
 
         // Configure parameters for the picture-in-picture mode. We do this at the first layout of
         // the MovieView because we use its layout position and size.
@@ -235,15 +230,15 @@ class PiPMovieActivity : AppCompatActivity() {
      * @param config The current [Configuration].
      */
     private fun adjustFullScreen(config: Configuration) {
-        val insetsController = ViewCompat.getWindowInsetsController(window.decorView)
-        insetsController?.systemBarsBehavior =
+        val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+        insetsController.systemBarsBehavior =
             WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         if (config.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            insetsController?.hide(WindowInsetsCompat.Type.systemBars())
+            insetsController.hide(WindowInsetsCompat.Type.systemBars())
             binding.scroll.visibility = View.GONE
             binding.movie.setAdjustViewBounds(false)
         } else {
-            insetsController?.show(WindowInsetsCompat.Type.systemBars())
+            insetsController.show(WindowInsetsCompat.Type.systemBars())
             binding.scroll.visibility = View.VISIBLE
             binding.movie.setAdjustViewBounds(true)
         }

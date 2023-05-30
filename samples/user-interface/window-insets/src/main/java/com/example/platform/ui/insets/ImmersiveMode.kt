@@ -17,8 +17,6 @@
 package com.example.platform.ui.insets
 
 import android.app.Activity
-import android.os.Build
-import android.view.WindowInsetsController
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -84,12 +82,7 @@ private enum class BehaviorOption(
     // of the navigation bar.
     Default(
         title = "BEHAVIOR_DEFAULT",
-        // TODO: Remove the version guard once BEHAVIOR_DEFAULT is in AndroidX.
-        value = if (Build.VERSION.SDK_INT >= 32) {
-            WindowInsetsController.BEHAVIOR_DEFAULT
-        } else {
-            WindowInsetsControllerCompat.BEHAVIOR_SHOW_BARS_BY_SWIPE
-        }
+        value = WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
     ),
 
     // "Sticky immersive mode". Swipe from the edge to temporarily reveal the hidden bar.

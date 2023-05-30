@@ -14,6 +14,7 @@
  limitations under the License.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.android.pip">
 
     <application>
@@ -23,18 +24,15 @@
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="true"
             android:supportsPictureInPicture="true"
-            android:theme="@style/PiPAppTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:theme="@style/PiPAppTheme"
+            tools:targetApi="24" />
 
         <activity
             android:name=".PiPMovieActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:supportsPictureInPicture="true"
-            android:theme="@style/PiPAppTheme" />
+            android:theme="@style/PiPAppTheme"
+            tools:targetApi="24" />
 
     </application>
 

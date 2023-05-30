@@ -57,8 +57,8 @@ private const val REQUEST_START_OR_PAUSE = 4
  * Demonstrates usage of Picture-in-Picture mode on phones and tablets.
  */
 @Sample(
-    name = "Picture in Picture (PiP)",
-    description = "Basic usage of Picture-in-Picture mode showcasing a video activity PiP and an action activity PiP modes",
+    name = "Picture in Picture (PiP) - Stopwatch",
+    description = "Basic usage of Picture-in-Picture mode showcasing a stopwatch",
     documentation = "https://developer.android.com/develop/ui/views/picture-in-picture",
 )
 @RequiresApi(Build.VERSION_CODES.O)
@@ -93,10 +93,6 @@ class PiPSampleActivity : AppCompatActivity() {
         binding.startOrPause.setOnClickListener { viewModel.startOrPause() }
         binding.pip.setOnClickListener {
             enterPictureInPictureMode(updatePictureInPictureParams(viewModel.started.value == true))
-        }
-        binding.switchExample.setOnClickListener {
-            startActivity(Intent(this@PiPSampleActivity, PiPMovieActivity::class.java))
-            finish()
         }
         // Observe data from the viewModel.
         viewModel.time.observe(this) { time -> binding.time.text = time }

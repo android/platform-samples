@@ -1,5 +1,6 @@
+
 /*
- * Copyright 2023 Google LLC
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +15,14 @@
  * limitations under the License.
  */
 
+
 plugins {
     id("com.example.platform.sample")
 }
-    
 
 android {
-    namespace = "com.example.platform.ui.text"
-    buildFeatures {
-        viewBinding = true
-    }
+    namespace = "com.example.platform.connectivity.callnotification"
 }
 
 dependencies {
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.mdc)
 }

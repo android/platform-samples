@@ -27,7 +27,8 @@ import java.util.regex.Pattern
 @Sample(
     name = "Linkify",
     description = "Linkify is useful for creating links in TextViews.",
-    documentation = "https://developer.android.com/reference/kotlin/androidx/core/text/util/LinkifyCompat"
+    documentation = "https://developer.android.com/reference/kotlin/androidx/core/text/util/LinkifyCompat",
+    tags = ["text"]
 )
 class Linkify: Fragment(R.layout.linkify_fragment) {
 
