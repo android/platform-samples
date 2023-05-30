@@ -18,13 +18,13 @@ accompanist = "0.28.0"
 androidx-navigation = "2.5.3"
 androidGradlePlugin = "7.4.2"
 casa = "0.4.0"
-coil = "2.2.2"
+coil = "2.3.0"
 ksp = "1.8.10-1.0.9"
-compose-bom = "2023.04.00"
+compose-bom = "2023.05.01"
 composeCompiler = "1.4.2"
 hilt = "2.44.2"
 kotlin = "1.8.10"
-kotlin-serialization = "1.4.1"
+kotlin-serialization = "1.5.0"
 ktlint = "0.48.1"
 coroutines = "1.6.4"
 play-services-location = "21.0.1"
@@ -42,16 +42,16 @@ androidxUiAutomator = "2.2.0"
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
 
-androidx-activity = "androidx.activity:activity:1.7.0"
-androidx-core = "androidx.core:core-ktx:1.10.0"
+androidx-activity = "androidx.activity:activity:1.7.2"
+androidx-core = "androidx.core:core-ktx:1.10.1"
 androidx-core-remoteviews = "androidx.core:core-remoteviews:1.0.0-beta03"
 androidx-glance-appwidget = "androidx.glance:glance-appwidget:1.0.0-alpha05"
 
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-media = "androidx.media:media:1.6.0"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
-androidx-fragment = "androidx.fragment:fragment-ktx:1.5.6"
-androidx-activity-compose = "androidx.activity:activity-compose:1.7.0"
+androidx-fragment = "androidx.fragment:fragment-ktx:1.5.7"
+androidx-activity-compose = "androidx.activity:activity-compose:1.7.2"
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "androidx-navigation" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidx-navigation" }
