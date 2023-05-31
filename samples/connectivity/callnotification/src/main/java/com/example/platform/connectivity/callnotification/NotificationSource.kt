@@ -46,6 +46,7 @@ class NotificationSource<T>(
 
         const val ChannelId = "1234"
         const val ChannelIntID = 1234
+
         /*
         Notification state sent via in intent to inform receiving broadcast what action the user wants to take
          */
@@ -96,6 +97,13 @@ class NotificationSource<T>(
             .setName("Jane Doe")
             .setImportant(true)
             .build()
+
+        /**
+         * Cancel notification and dismiss from sysUI
+         */
+        fun cancelNotification(context: Context) {
+            context.getSystemService<NotificationManager>()?.cancel(ChannelIntID)
+        }
     }
 
     private val notificationManager = context.getSystemService<NotificationManager>()!!
@@ -110,7 +118,12 @@ class NotificationSource<T>(
 
     init {
         val managerCompat = NotificationManagerCompat.from(context)
-        managerCompat.createNotificationChannels(listOf(notificationChannelIncoming(), notificationChannelOngoing))
+        managerCompat.createNotificationChannels(
+            listOf(
+                notificationChannelIncoming(),
+                notificationChannelOngoing,
+            ),
+        )
     }
 
     /**
@@ -125,13 +138,6 @@ class NotificationSource<T>(
      */
     fun postOnGoingCall() {
         notificationManager.notify(ChannelIntID, getIncallNotification())
-    }
-
-    /**
-     * Will cancel notification and dismiss from sysUI
-     */
-    fun cancelNotification() {
-        notificationManager.cancel(ChannelIntID)
     }
 
     /**

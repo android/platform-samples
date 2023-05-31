@@ -36,10 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.platform.location.permission.LocationPermissions
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.example.platform.base.PermissionBox
 import com.google.android.catalog.framework.annotations.Sample
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -49,37 +46,30 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @SuppressLint("MissingPermission")
-@OptIn(ExperimentalPermissionsApi::class)
 @Sample(
     name = "Location - Getting Current Location",
     description = "This Sample demonstrate how to request of current location",
-    documentation = "https://developer.android.com/training/location/retrieve-current"
+    documentation = "https://developer.android.com/training/location/retrieve-current",
 )
 @Composable
 fun CurrentLocationScreen() {
-    val permissionsState = rememberMultiplePermissionsState(
-        permissions = listOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
+    val permissions = listOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
     )
-
-    if (permissionsState.permissions.any { it.status.isGranted }) {
-        // Only use precise accuracy if both permissions are granted
-        CurrentLocationContent(usePreciseLocation = permissionsState.allPermissionsGranted)
-    } else {
-        LocationPermissions(
-            text = "Location",
-            rationale = "In order to use this feature please grant access by accepting " +
-                    "either precise or approximate location permission." +
-                    "\n\nWould you like to continue?",
-            locationState = permissionsState
-        )
-    }
+    PermissionBox(
+        permissions = permissions,
+        requiredPermissions = listOf(permissions.first()),
+        onGranted = {
+            CurrentLocationContent(
+                usePreciseLocation = it.contains(Manifest.permission.ACCESS_FINE_LOCATION),
+            )
+        },
+    )
 }
 
 @RequiresPermission(
-    anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION]
+    anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION],
 )
 @Composable
 fun CurrentLocationContent(usePreciseLocation: Boolean) {
@@ -98,50 +88,54 @@ fun CurrentLocationContent(usePreciseLocation: Boolean) {
             .animateContentSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Button(onClick = {
-            // getting last known location is faster and minimizes battery usage
-            // This information may be out of date.
-            // Location may be null as previously no client has access location
-            // or location turned of in device setting.
-            // Please handle for null case as well as additional check can be added before using the method
-            scope.launch(Dispatchers.IO) {
-                val result = locationClient.lastLocation.await()
-                locationInfo = if (result == null) {
-                    "No last known location. Try fetching the current location first"
-                } else {
-                    "Current location is \n" + "lat : ${result.latitude}\n" +
-                            "long : ${result.longitude}\n" + "fetched at ${System.currentTimeMillis()}"
+        Button(
+            onClick = {
+                // getting last known location is faster and minimizes battery usage
+                // This information may be out of date.
+                // Location may be null as previously no client has access location
+                // or location turned of in device setting.
+                // Please handle for null case as well as additional check can be added before using the method
+                scope.launch(Dispatchers.IO) {
+                    val result = locationClient.lastLocation.await()
+                    locationInfo = if (result == null) {
+                        "No last known location. Try fetching the current location first"
+                    } else {
+                        "Current location is \n" + "lat : ${result.latitude}\n" +
+                                "long : ${result.longitude}\n" + "fetched at ${System.currentTimeMillis()}"
+                    }
                 }
-            }
-        }) {
+            },
+        ) {
             Text("Get last known location")
         }
 
-        Button(onClick = {
-            //To get more accurate or fresher device location use this method
-            scope.launch(Dispatchers.IO) {
-                val priority = if (usePreciseLocation) {
-                    Priority.PRIORITY_HIGH_ACCURACY
-                } else {
-                    Priority.PRIORITY_BALANCED_POWER_ACCURACY
+        Button(
+            onClick = {
+                //To get more accurate or fresher device location use this method
+                scope.launch(Dispatchers.IO) {
+                    val priority = if (usePreciseLocation) {
+                        Priority.PRIORITY_HIGH_ACCURACY
+                    } else {
+                        Priority.PRIORITY_BALANCED_POWER_ACCURACY
+                    }
+                    val result = locationClient.getCurrentLocation(
+                        priority,
+                        CancellationTokenSource().token,
+                    ).await()
+                    result?.let { fetchedLocation ->
+                        locationInfo =
+                            "Current location is \n" + "lat : ${fetchedLocation.latitude}\n" +
+                                    "long : ${fetchedLocation.longitude}\n" + "fetched at ${System.currentTimeMillis()}"
+                    }
                 }
-                val result = locationClient.getCurrentLocation(
-                    priority,
-                    CancellationTokenSource().token
-                ).await()
-                result?.let { fetchedLocation ->
-                    locationInfo =
-                        "Current location is \n" + "lat : ${fetchedLocation.latitude}\n" +
-                                "long : ${fetchedLocation.longitude}\n" + "fetched at ${System.currentTimeMillis()}"
-                }
-            }
-        }) {
+            },
+        ) {
             Text(text = "Get current location")
         }
         Text(
-            text = locationInfo
+            text = locationInfo,
         )
     }
 }

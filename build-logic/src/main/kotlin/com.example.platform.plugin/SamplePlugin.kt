@@ -26,6 +26,7 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.project
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 class SamplePlugin : Plugin<Project> {
@@ -85,6 +86,11 @@ class SamplePlugin : Plugin<Project> {
             }
 
             dependencies {
+                // Do not add the shared module to itself
+                if (!project.displayName.contains("samples:base")) {
+                    "implementation"(project(":samples:base"))
+                }
+
                 "implementation"(platform(libs.findLibrary("compose.bom").get()))
                 "androidTestImplementation"(platform(libs.findLibrary("compose.bom").get()))
 
@@ -98,6 +104,8 @@ class SamplePlugin : Plugin<Project> {
                 "implementation"(libs.findLibrary("androidx.fragment").get())
                 "implementation"(libs.findLibrary("androidx.activity.compose").get())
                 "implementation"(libs.findLibrary("compose.foundation.foundation").get())
+                "implementation"(libs.findLibrary("compose.runtime.runtime").get())
+                "implementation"(libs.findLibrary("compose.runtime.livedata").get())
                 "implementation"(libs.findLibrary("androidx.lifecycle.viewmodel.compose").get())
                 "implementation"(libs.findLibrary("compose.ui.ui").get())
                 "implementation"(libs.findLibrary("compose.material3").get())

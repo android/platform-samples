@@ -51,8 +51,7 @@ import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.example.platform.base.PermissionBox
 import com.google.android.catalog.framework.annotations.Sample
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
@@ -66,38 +65,30 @@ import kotlinx.coroutines.tasks.await
     name = "Data Access",
     description = "Demonstrates how to implement data access auditing for your app to identify " +
             "unexpected data access, even from third-party SDKs and libraries.",
-    documentation = "https://developer.android.com/guide/topics/data/audit-access"
+    documentation = "https://developer.android.com/guide/topics/data/audit-access",
 )
 
-@OptIn(ExperimentalPermissionsApi::class)
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun DataAccess() {
-    val permissionsState = rememberMultiplePermissionsState(
-        permissions = listOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
+    val permissions = listOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
     )
-
-    if (permissionsState.allPermissionsGranted) {
+    // Requires at least coarse permission
+    PermissionBox(
+        permissions = permissions,
+        requiredPermissions = listOf(permissions.first()),
+    ) {
         // Only proceed if we have fine location access, as it's needed by WifiManager
         DataAccessAuditContent()
-    } else {
-        LocationPermissions(
-            text = "Location Permission (Precise Needed)",
-            rationale = "In order to use this feature please grant access by accepting " +
-                    "precise location permission." +
-                    "\n\nWould you like to continue?",
-            locationState = permissionsState
-        )
     }
 }
 
 @SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.R)
 @RequiresPermission(
-    Manifest.permission.ACCESS_FINE_LOCATION
+    Manifest.permission.ACCESS_FINE_LOCATION,
 )
 @Composable
 fun DataAccessAuditContent() {
@@ -122,42 +113,48 @@ fun DataAccessAuditContent() {
             .animateContentSize()
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Button(onClick = {
-            // grab scan results from WifiManager creates a sync access
-            scope.launch(Dispatchers.IO) {
-                wifiManager.scanResults
-            }
-        }) {
+        Button(
+            onClick = {
+                // grab scan results from WifiManager creates a sync access
+                scope.launch(Dispatchers.IO) {
+                    wifiManager.scanResults
+                }
+            },
+        ) {
             Text("Trigger Sync Access (Get Wifi Scan Results)")
         }
-        Button(onClick = {
-            // grab current location creates an async access
-            scope.launch(Dispatchers.IO) {
-                locationClient.getCurrentLocation(
-                    Priority.PRIORITY_BALANCED_POWER_ACCURACY,
-                    CancellationTokenSource().token
-                ).await()
-            }
-        }) {
+        Button(
+            onClick = {
+                // grab current location creates an async access
+                scope.launch(Dispatchers.IO) {
+                    locationClient.getCurrentLocation(
+                        Priority.PRIORITY_BALANCED_POWER_ACCURACY,
+                        CancellationTokenSource().token,
+                    ).await()
+                }
+            },
+        ) {
             Text(text = "Trigger Async Access (Get current location)")
         }
-        Button(onClick = {
-            // noteOp triggers self access
-            scope.launch(Dispatchers.IO) {
-                AppOpsManagerCompat.noteOp(
-                    context,
-                    AppOpsManager.OPSTR_FINE_LOCATION,
-                    Process.myUid(),
-                    context.packageName
-                )
-            }
-        }) {
+        Button(
+            onClick = {
+                // noteOp triggers self access
+                scope.launch(Dispatchers.IO) {
+                    AppOpsManagerCompat.noteOp(
+                        context,
+                        AppOpsManager.OPSTR_FINE_LOCATION,
+                        Process.myUid(),
+                        context.packageName,
+                    )
+                }
+            },
+        ) {
             Text(text = "Trigger Self Access (NoteOp)")
         }
         Text(
-            text = dataAccessUpdates
+            text = dataAccessUpdates,
         )
     }
 }
