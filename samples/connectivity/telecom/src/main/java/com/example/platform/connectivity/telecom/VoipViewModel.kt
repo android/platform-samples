@@ -16,7 +16,6 @@
 
 package com.example.platform.connectivity.telecom
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.core.telecom.CallAttributesCompat
@@ -28,27 +27,28 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-class VoipViewModel(context: Context): ViewModel(){
+class VoipViewModel(context: Context) : ViewModel() {
     val isMuted = MutableStateFlow(false)
     val isActive = MutableStateFlow(false)
-    val activeAudioRoute : MutableStateFlow<CallEndpointCompat?> = MutableStateFlow(null)
-    val availableAudioRoutes : MutableStateFlow<List<CallEndpointCompat>> = MutableStateFlow(emptyList())
+    val activeAudioRoute: MutableStateFlow<CallEndpointCompat?> = MutableStateFlow(null)
+    val availableAudioRoutes: MutableStateFlow<List<CallEndpointCompat>> =
+        MutableStateFlow(emptyList())
     val currentCallState = MutableStateFlow(TelecomManager.CallState.NOCALL)
 
     var CallerName = "Jane Doe"
 
     private val telecomManager = TelecomManager(context, this)
 
-    fun onMakeCall(callDirection: Int){
-        when(callDirection){
+    fun onMakeCall(callDirection: Int) {
+        when (callDirection) {
             CallAttributesCompat.DIRECTION_INCOMING -> telecomManager.makeIncomingCall()
             else -> telecomManager.makeOutGoingCall()
         }
     }
 
-    fun toggleHoldCall(toggle: Boolean){
+    fun toggleHoldCall(toggle: Boolean) {
         viewModelScope.launch {
-            val hasError = when(toggle) {
+            val hasError = when (toggle) {
 
                 true -> telecomManager.setCallActive()
 
@@ -58,36 +58,42 @@ class VoipViewModel(context: Context): ViewModel(){
         }
     }
 
-    fun toggleMute(toggle: Boolean){
+    fun toggleMute(toggle: Boolean) {
         telecomManager.toggleMute(toggle)
     }
 
-    fun answerCall(){
+    fun answerCall() {
         telecomManager.onAnswerCall()
     }
 
 
-    fun rejectCall(){
+    fun rejectCall() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             telecomManager.onRejectCall()
         }
     }
 
-    fun disconnectCall(){
+    fun disconnectCall() {
         telecomManager.hangUp()
     }
 
     fun setEndpoint(callEndpointCompat: CallEndpointCompat) {
         telecomManager.setEndpoint(callEndpointCompat)
     }
-    fun onCallStateChanged(callState : TelecomManager.CallState){
+
+    fun onCallStateChanged(callState: TelecomManager.CallState) {
         currentCallState.update { callState }
 
-        when(callState){
-            TelecomManager.CallState.OUTGOING -> {fakeDialingCall()}
+        when (callState) {
+            TelecomManager.CallState.OUTGOING -> {
+                fakeDialingCall()
+            }
+
             TelecomManager.CallState.INCOMING -> {}
             TelecomManager.CallState.INCALL -> {}
-            else -> { onDialerScreen() }
+            else -> {
+                onDialerScreen()
+            }
         }
     }
 
@@ -95,7 +101,7 @@ class VoipViewModel(context: Context): ViewModel(){
      * Fake a dialing out Call
      * Waits for 5 Seconds before setting the call to active
      */
-    private fun fakeDialingCall(){
+    private fun fakeDialingCall() {
         viewModelScope.launch {
             delay(5000)
             telecomManager.setCallActive()
@@ -109,7 +115,8 @@ class VoipViewModel(context: Context): ViewModel(){
         availableAudioRoutes.update { emptyList() }
     }
 
-    fun onErrorMessage(){
+    fun onErrorMessage() {
 
     }
 }
+

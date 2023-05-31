@@ -118,10 +118,6 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
 
                 onCallReady(callAttributes.direction)
             }
-
-
-            //this will start foreground service
-            //callNotificationSource.postOnGoingCall()
         }
     }
 
@@ -162,6 +158,7 @@ class TelecomManager(private val context: Context, val viewModel: VoipViewModel)
         callControlScope?.let {
             if (it.setActive()) {
                startCall()
+                return true
             }
         }
         return false

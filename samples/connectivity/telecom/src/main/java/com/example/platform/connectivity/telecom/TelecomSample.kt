@@ -70,7 +70,6 @@ class TelecomSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        callViewModel = VoipViewModel(this)
         notificationSource = NotificationSource(this, NotificationReceiver::class.java)
 
 
@@ -105,6 +104,7 @@ class TelecomSample : ComponentActivity() {
                         )
 
                     if (multiplePermissionsState.allPermissionsGranted) {
+                        callViewModel = VoipViewModel(this)
                         EntryPoint(callViewModel)
                     } else {
                         PermissionWidget(multiplePermissionsState)
@@ -132,6 +132,7 @@ class TelecomSample : ComponentActivity() {
 
     }
 }
+
 
 @Composable
 fun EntryPoint(callViewModel: VoipViewModel) {
