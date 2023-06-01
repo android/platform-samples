@@ -70,6 +70,7 @@ class TelecomSample : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        callViewModel = VoipViewModel(this)
         notificationSource = NotificationSource(this, NotificationReceiver::class.java)
 
 

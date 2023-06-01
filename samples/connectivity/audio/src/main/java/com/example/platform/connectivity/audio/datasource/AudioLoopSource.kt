@@ -58,8 +58,8 @@ class AudioLoopSource {
             AudioFormat.CHANNEL_OUT_MONO,
             AudioFormat.ENCODING_PCM_16BIT,
         )
-        
-        lateinit var audioSampler : AudioRecord
+
+        var audioSampler : AudioRecord? = null
 
         //Audio track for audio playback
         private var audioTrack = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -108,15 +108,15 @@ class AudioLoopSource {
             )
         }
 
-        if (audioSampler.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
+        if (audioSampler?.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
             return false
         }
 
         audioTrack.playbackRate = sampleRate
 
         job = coroutineScope.launch {
-            if (audioSampler.state == AudioRecord.STATE_INITIALIZED) {
-                audioSampler.startRecording()
+            if (audioSampler?.state == AudioRecord.STATE_INITIALIZED) {
+                audioSampler?.startRecording()
             }
 
             val data = ByteArray(bufferSize)
@@ -126,7 +126,7 @@ class AudioLoopSource {
 
             while (isActive) {
 
-                val bytesRead = audioSampler.read(data, 0, bufferSize)
+                val bytesRead = audioSampler!!.read(data, 0, bufferSize)
 
                 if (bytesRead > 0) {
                     audioTrack.write(data, 0, bytesRead)
@@ -143,7 +143,7 @@ class AudioLoopSource {
     fun stopAudioLoop() {
         job?.cancel("Stop Recording", null)
         isRecording.update { false }
-        audioSampler.stop()
+        audioSampler?.stop()
         audioTrack.stop()
     }
 
@@ -153,7 +153,7 @@ class AudioLoopSource {
     fun setPreferredDevice(audioDeviceInfo: AudioDeviceInfo) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             audioTrack.preferredDevice = audioDeviceInfo
-            audioSampler.preferredDevice = audioDeviceInfo
+            audioSampler?.preferredDevice = audioDeviceInfo
         } else {
             //Not required AudioManger will deal with routing in the PlatformAudioSource class
         }
