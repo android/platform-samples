@@ -58,16 +58,8 @@ class AudioLoopSource {
             AudioFormat.CHANNEL_OUT_MONO,
             AudioFormat.ENCODING_PCM_16BIT,
         )
-
-
-        @SuppressLint("MissingPermission")
-        val audioSampler = AudioRecord(
-            MediaRecorder.AudioSource.VOICE_COMMUNICATION,
-            sampleRate,
-            AudioFormat.CHANNEL_IN_MONO,
-            AudioFormat.ENCODING_PCM_16BIT,
-            bufferSize,
-        )
+        
+        lateinit var audioSampler : AudioRecord
 
         //Audio track for audio playback
         private var audioTrack = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -103,7 +95,19 @@ class AudioLoopSource {
     /**
      * Gets buffer from Audio Recorder and loops back to the audio track
      */
+    @SuppressLint("MissingPermission")
     fun startAudioLoop(): Boolean {
+
+        if(audioSampler == null){
+            audioSampler = AudioRecord(
+                MediaRecorder.AudioSource.VOICE_COMMUNICATION,
+                sampleRate,
+                AudioFormat.CHANNEL_IN_MONO,
+                AudioFormat.ENCODING_PCM_16BIT,
+                bufferSize,
+            )
+        }
+
         if (audioSampler.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
             return false
         }
