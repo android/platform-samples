@@ -15,6 +15,7 @@
 #
 [versions]
 accompanist = "0.28.0"
+androidx-datastore = "1.0.0"
 androidx-navigation = "2.5.3"
 androidGradlePlugin = "7.4.2"
 casa = "0.4.0"
@@ -50,6 +51,7 @@ androidx-glance-appwidget = "androidx.glance:glance-appwidget:1.0.0-alpha05"
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-media = "androidx.media:media:1.6.0"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
 androidx-fragment = "androidx.fragment:fragment-ktx:1.5.7"
 androidx-activity-compose = "androidx.activity:activity-compose:1.7.2"
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "androidx-navigation" }
