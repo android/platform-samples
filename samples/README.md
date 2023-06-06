@@ -68,3 +68,5 @@ Shows the recommended flow to request single runtime permissions
 The sample demonstrates the importance of having proper labels for
 - [TextSpan](user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.
+- [WindowInsetsAnimation](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/WindowInsetsAnimation.kt):
+Shows how to react to the on-screen keyboard (IME) changing visibility, and also controlling the IME's visibility.

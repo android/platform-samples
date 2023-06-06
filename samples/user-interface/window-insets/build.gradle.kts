@@ -17,12 +17,15 @@
 plugins {
     id("com.example.platform.sample")
 }
-    
 
 android {
     namespace = "com.example.platform.ui.insets"
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
-    // Add samples specific dependencies
+    implementation(libs.mdc)
+    implementation(libs.androidx.dynamicanimation)
 }
