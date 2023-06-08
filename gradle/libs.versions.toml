@@ -52,6 +52,7 @@ androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-media = "androidx.media:media:1.6.0"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
+androidx-dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
 androidx-fragment = "androidx.fragment:fragment-ktx:1.5.7"
 androidx-activity-compose = "androidx.activity:activity-compose:1.7.2"
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "androidx-navigation" }
