@@ -37,7 +37,7 @@ import java.io.BufferedInputStream
 import java.io.File
 import kotlin.math.max
 
-class ImageViewerFragment() : Fragment() {
+class AdvancedImageViewer() : Fragment() {
     /**
      *  Android ViewBinding.
      */
@@ -186,7 +186,7 @@ class ImageViewerFragment() : Fragment() {
     }
 
     companion object {
-        private val TAG = ImageViewerFragment::class.java.simpleName
+        private val TAG = AdvancedImageViewer::class.java.simpleName
 
         /**
          * Argument keys

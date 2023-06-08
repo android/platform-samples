@@ -44,9 +44,9 @@
         android:contentDescription="@string/capture"
         android:scaleType="fitCenter" />
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/fragment_camera2_image_capture_container_view"
-        android:layout_width="match_parent"
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/fragment_camera2_image_capture_image_view"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
 </FrameLayout>

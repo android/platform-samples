@@ -306,21 +306,13 @@ class Camera2ImageCapture : Fragment() {
 
                     // Display the photo taken to user
                     lifecycleScope.launch(Dispatchers.Main) {
-                        val isDepth = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
-                                result.format == ImageFormat.DEPTH_JPEG
+                        binding.fragmentCamera2ImageCaptureViewfinder.visibility = View.GONE
+                        binding.fragmentCamera2ImageCaptureButton.visibility = View.GONE
 
                         parentFragmentManager.commit {
-                            val bundle = bundleOf(
-                                ImageViewerFragment.ARG_KEY_IS_DEPTH to isDepth,
-                                ImageViewerFragment.ARG_KEY_LOCATION to output.absolutePath,
-                                ImageViewerFragment.ARG_KEY_ORIENTATION to result.orientation,
-                            )
-
-                            setReorderingAllowed(true)
-                            add<ImageViewerFragment>(
-                                R.id.fragment_camera2_image_capture_container_view,
-                                args = bundle,
-                            )
+                            binding.fragmentCamera2ImageCaptureImageView.setContent {
+                                SimpleImageViewer(location = output.absolutePath)
+                            }
                         }
                     }
                 }
