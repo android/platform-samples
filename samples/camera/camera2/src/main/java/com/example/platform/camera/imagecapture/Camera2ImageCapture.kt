@@ -34,8 +34,11 @@ import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.os.bundleOf
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.add
+import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.example.platform.camera.R
 import com.example.platform.camera.common.*
@@ -58,9 +61,8 @@ import kotlin.coroutines.suspendCoroutine
 @Sample(
     name = "Camera2 - Image Capture",
     description = "This sample demonstrates how to capture and image and encode it into a JPEG "
-            + "container. Includes enable torch (flash) support is available.",
+            + "container. Includes torch (flash) support is available.",
     documentation = "https://developer.android.com/training/camera2/capture-sessions-requests",
-    owners = ["Mozart Louis (mozart@google.com)"],
 )
 class Camera2ImageCapture : Fragment() {
     /**
@@ -307,16 +309,19 @@ class Camera2ImageCapture : Fragment() {
                         val isDepth = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q &&
                                 result.format == ImageFormat.DEPTH_JPEG
 
-                        parentFragmentManager.beginTransaction().add(
-                            R.id.fragment_camera2_image_capture_layout,
-                            ImageViewerFragment(
-                                isDepth,
-                                output.absolutePath,
-                                result.orientation,
-                            ),
-                            "1111",
-                        )
-                            .commit()
+                        parentFragmentManager.commit {
+                            val bundle = bundleOf(
+                                ImageViewerFragment.ARG_KEY_IS_DEPTH to isDepth,
+                                ImageViewerFragment.ARG_KEY_LOCATION to output.absolutePath,
+                                ImageViewerFragment.ARG_KEY_ORIENTATION to result.orientation,
+                            )
+
+                            setReorderingAllowed(true)
+                            add<ImageViewerFragment>(
+                                R.id.fragment_camera2_image_capture_container_view,
+                                args = bundle,
+                            )
+                        }
                     }
                 }
 
@@ -350,7 +355,6 @@ class Camera2ImageCapture : Fragment() {
             // Start a capture session using our open camera and list of Surfaces where frames will
             // go.
             session = createCaptureSession(camera, targets, cameraHandler)
-
 
             val captureRequest = camera.createCaptureRequest(
                 CameraDevice.TEMPLATE_PREVIEW,

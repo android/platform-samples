@@ -14,7 +14,6 @@
   ~ limitations under the License.
   -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/fragment_camera2_image_capture_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -44,5 +43,10 @@
         android:background="@drawable/ic_shutter"
         android:contentDescription="@string/capture"
         android:scaleType="fitCenter" />
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/fragment_camera2_image_capture_container_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
 </FrameLayout>

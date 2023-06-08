@@ -25,13 +25,9 @@ android {
 
 dependencies {
     // EXIF Interface
-    implementation("androidx.exifinterface:exifinterface:1.3.6")
+    implementation(libs.androidx.exifinterface)
 
     // ViewPager2
-    implementation("androidx.viewpager2:viewpager2:1.0.0")
-
-    // Glide
-    implementation("com.github.bumptech.glide:glide:4.15.1")
-    kapt("com.github.bumptech.glide:compiler:4.15.1")
+    implementation(libs.androidx.viewpager2)
 }
 

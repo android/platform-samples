@@ -29,8 +29,7 @@ import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.viewpager2.widget.ViewPager2
-import com.bumptech.glide.Glide
-import com.example.platform.camera.databinding.FragmentCamera2ImageCaptureBinding
+import coil.load
 import com.example.platform.camera.databinding.FragmentImageViewerBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,11 +37,7 @@ import java.io.BufferedInputStream
 import java.io.File
 import kotlin.math.max
 
-class ImageViewerFragment(
-    private val isDepth: Boolean,
-    private val location: String,
-    private val orientation: Int,
-) : Fragment() {
+class ImageViewerFragment() : Fragment() {
     /**
      *  Android ViewBinding.
      */
@@ -64,7 +59,21 @@ class ImageViewerFragment(
 
     /** Bitmap transformation derived from passed arguments */
     private val bitmapTransformation: Matrix by lazy {
-        decodeExifOrientation(orientation)
+        decodeExifOrientation(requireArguments().getInt(ARG_KEY_ORIENTATION))
+    }
+
+    /**
+     * Whether or not the resulting image has depth data or not.
+     */
+    private val isDepth: Boolean by lazy {
+        requireArguments().getBoolean(ARG_KEY_IS_DEPTH)
+    }
+
+    /**
+     * Location of the image file to load.
+     */
+    private val location: String by lazy {
+        requireArguments().getString(ARG_KEY_LOCATION, "")
     }
 
     /** Data backing our Bitmap viewpager */
@@ -87,8 +96,9 @@ class ImageViewerFragment(
                 bitmapList,
                 itemViewFactory = { imageViewFactory() },
             ) { view, item, _ ->
-                view as ImageView
-                Glide.with(view).load(item).into(view)
+                (view as ImageView).load(item) {
+                    crossfade(true)
+                }
             }
         }
 
@@ -177,6 +187,13 @@ class ImageViewerFragment(
 
     companion object {
         private val TAG = ImageViewerFragment::class.java.simpleName
+
+        /**
+         * Argument keys
+         */
+        const val ARG_KEY_IS_DEPTH = "depth"
+        const val ARG_KEY_ORIENTATION = "orientation"
+        const val ARG_KEY_LOCATION = "location"
 
         /** Maximum size of [Bitmap] decoded */
         private const val DOWN_SAMPLE_SIZE: Int = 1024  // 1MP
