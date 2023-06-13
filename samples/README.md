@@ -70,3 +70,5 @@ The sample demonstrates the importance of having proper labels for
 buildSpannedString is useful for quickly building a rich text.
 - [WindowInsetsAnimation](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/WindowInsetsAnimation.kt):
 Shows how to react to the on-screen keyboard (IME) changing visibility, and also controlling the IME's visibility.
+- [WindowManager](user-interface/windowmanager/src/main/java/com/example/platform/ui/windowmanager/demos/WindowDemosActivity.kt):
+Demonstrates how to use the Jetpack WindowManager library.
