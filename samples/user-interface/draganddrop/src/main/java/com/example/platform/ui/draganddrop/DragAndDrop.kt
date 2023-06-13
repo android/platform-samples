@@ -47,21 +47,16 @@ import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
 
+private const val TAG = "DragDropSample"
+private const val MAX_LENGTH = 200
+
 @RequiresApi(24)
 @Sample(
     name = "Drag and Drop",
     description = "Demonstrates basic Drag and Drop functionality.",
-    documentation = "https://developer.android.com/develop/ui/views/layout/sw-keyboard",
+    documentation = "https://developer.android.com/develop/ui/views/touch-and-input/drag-drop",
 )
 class DragAndDropActivity : AppCompatActivity() {
-
-    companion object {
-        private const val LOG_TAG = "DragDropSample"
-        private const val MAX_LENGTH = 200
-        fun logE(message: String) {
-            Log.e(LOG_TAG, message)
-        }
-    }
 
     private lateinit var binding: DragAndDropActivityBinding
 
@@ -192,12 +187,12 @@ class DragAndDropActivity : AppCompatActivity() {
                 contentResolver.openFileDescriptor(item.uri, "r")
             } catch (e: FileNotFoundException) {
                 e.printStackTrace()
-                logE("FileNotFound")
+                Log.e(TAG, "FileNotFound")
                 return
             }
 
             if (parcelFileDescriptor == null) {
-                logE("Could not load file")
+                Log.e(TAG, "Could not load file")
                 binding.textDropTarget.text =
                     resources.getString(R.string.drop_error, item.uri.toString())
             } else {
@@ -209,7 +204,7 @@ class DragAndDropActivity : AppCompatActivity() {
                         it.read(bytes, 0, MAX_LENGTH)
                     }
                 } catch (e: java.lang.Exception) {
-                    logE("Unable to read file: ${e.message}")
+                    Log.e(TAG, "Unable to read file: ${e.message}")
                 } finally {
                     parcelFileDescriptor.close()
                 }
@@ -244,7 +239,7 @@ class DragAndDropActivity : AppCompatActivity() {
                 )
             }
         } ?: run {
-            logE("Clip data is missing URI")
+            Log.e(TAG, "Clip data is missing URI")
         }
     }
 
