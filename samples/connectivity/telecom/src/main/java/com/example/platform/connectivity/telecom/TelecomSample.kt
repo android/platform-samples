@@ -73,20 +73,7 @@ class TelecomSample : ComponentActivity() {
         callViewModel = VoipViewModel(this)
         notificationSource = NotificationSource(this, NotificationReceiver::class.java)
 
-
-        CoroutineScope(Dispatchers.Unconfined).launch {
-            callViewModel.currentCallState.collect {
-                when (it) {
-                    TelecomManager.CallState.INCOMING -> notificationSource.postIncomingCall()
-                    TelecomManager.CallState.INCALL -> notificationSource.postOnGoingCall()
-                    else -> {
-                        notificationSource.cancelNotification()
-                    }
-                }
-            }
-        }
-
-        setContent {
+                setContent {
             MaterialTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
@@ -109,6 +96,18 @@ class TelecomSample : ComponentActivity() {
                         EntryPoint(callViewModel)
                     } else {
                         PermissionWidget(multiplePermissionsState)
+                    }
+                }
+            }
+        }
+
+        CoroutineScope(Dispatchers.Main).launch {
+            callViewModel.currentCallState.collect {
+                when (it) {
+                    TelecomManager.CallState.INCOMING -> notificationSource.postIncomingCall()
+                    TelecomManager.CallState.INCALL -> notificationSource.postOnGoingCall()
+                    else -> {
+                        notificationSource.cancelNotification()
                     }
                 }
             }
