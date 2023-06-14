@@ -219,11 +219,29 @@ class Camera2ImageCapture : Fragment() {
         }
     }
 
+    private fun showImage(imageLocation: String) {
+        binding.fragmentCamera2ImageCaptureButton.visibility = View.GONE
+        binding.fragmentCamera2PostCaptureBackButton.visibility = View.VISIBLE
+        binding.fragmentCamera2ImageCaptureImageView.setContent {
+            SimpleImageViewer(location = imageLocation)
+        }
+    }
+
+    private fun returnToImageCapture() {
+        binding.fragmentCamera2ImageCaptureButton.visibility = View.VISIBLE
+        binding.fragmentCamera2PostCaptureBackButton.visibility = View.GONE
+        binding.fragmentCamera2ImageCaptureImageView.setContent {  }
+    }
+
     private fun setUpCamera() {
         binding.fragmentCamera2ImageCaptureButton.setOnApplyWindowInsetsListener { v, insets ->
             v.translationX = (-insets.systemWindowInsetRight).toFloat()
             v.translationY = (-insets.systemWindowInsetBottom).toFloat()
             insets.consumeSystemWindowInsets()
+        }
+
+        binding.fragmentCamera2PostCaptureBackButton.setOnClickListener {
+            returnToImageCapture()
         }
 
         binding.fragmentCamera2ImageCaptureViewfinder.holder.addCallback(
@@ -306,14 +324,7 @@ class Camera2ImageCapture : Fragment() {
 
                     // Display the photo taken to user
                     lifecycleScope.launch(Dispatchers.Main) {
-                        binding.fragmentCamera2ImageCaptureViewfinder.visibility = View.GONE
-                        binding.fragmentCamera2ImageCaptureButton.visibility = View.GONE
-
-                        parentFragmentManager.commit {
-                            binding.fragmentCamera2ImageCaptureImageView.setContent {
-                                SimpleImageViewer(location = output.absolutePath)
-                            }
-                        }
+                        showImage(output.absolutePath)
                     }
                 }
 

@@ -49,4 +49,14 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />
 
+    <ImageButton
+        android:id="@+id/fragment_camera2_post_capture_back_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_gravity="top|start"
+        android:layout_margin="16dp"
+        android:background="@drawable/ic_back"
+        android:scaleType="fitCenter"
+        android:visibility="gone" />
+
 </FrameLayout>
