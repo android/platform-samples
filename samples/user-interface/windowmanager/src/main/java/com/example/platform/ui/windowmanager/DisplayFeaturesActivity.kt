@@ -17,6 +17,7 @@
 package com.example.platform.ui.windowmanager
 
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -127,7 +128,9 @@ class DisplayFeaturesActivity : AppCompatActivity() {
                         }
                     )
             }
-            featureView.foreground = ColorDrawable(color)
+            if (Build.VERSION.SDK_INT >= 23) {
+                featureView.foreground = ColorDrawable(color)
+            }
 
             rootLayout.addView(featureView, lp)
             featureView.id = View.generateViewId()

@@ -17,10 +17,12 @@
 package com.example.platform.ui.windowmanager
 
 import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
 import androidx.window.layout.WindowLayoutInfo
@@ -107,13 +109,13 @@ class RxActivity : AppCompatActivity() {
             val color = if (foldFeature != null) {
                 if (foldFeature.isSeparating) {
                     stateStringBuilder.append(getString(R.string.screens_are_separated))
-                    getColor(R.color.color_feature_separating)
+                    ActivityCompat.getColor(this, R.color.color_feature_separating)
                 } else {
                     stateStringBuilder.append(getString(R.string.screens_are_not_separated))
-                    getColor(R.color.color_feature_not_separating)
+                    ActivityCompat.getColor(this, R.color.color_feature_not_separating)
                 }
             } else {
-                getColor(R.color.color_feature_unknown)
+                ActivityCompat.getColor(this, R.color.color_feature_unknown)
             }
             if (foldFeature != null) {
                 stateStringBuilder
@@ -134,7 +136,9 @@ class RxActivity : AppCompatActivity() {
                         }
                     )
             }
-            featureView.foreground = ColorDrawable(color)
+            if (Build.VERSION.SDK_INT >= 23) {
+                featureView.foreground = ColorDrawable(color)
+            }
 
             rootLayout.addView(featureView, lp)
             featureView.id = View.generateViewId()
