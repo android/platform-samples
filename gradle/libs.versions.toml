@@ -17,6 +17,7 @@
 accompanist = "0.28.0"
 androidx-datastore = "1.0.0"
 androidx-navigation = "2.5.3"
+androidx-window = "1.1.0-alpha03"
 androidGradlePlugin = "7.4.2"
 casa = "0.4.0"
 coil = "2.3.0"
@@ -60,6 +61,10 @@ androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragme
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidx-navigation" }
 androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
+androidx-startup = 'androidx.startup:startup-runtime:1.1.1'
+androidx-window = { module = "androidx.window:window", version.ref = "androidx-window" }
+androidx-window-java = { module = "androidx.window:window-java", version.ref = "androidx-window" }
+androidx-window-rxjava2 = { module = "androidx.window:window-rxjava2", version.ref = "androidx-window" }
 
 androidx-test-core = { group = "androidx.test", name = "core-ktx", version.ref = "androidxTestCore" }
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
@@ -112,6 +117,8 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil-video = { module = "io.coil-kt:coil-video", version.ref = "coil" }
 
 lottie = "com.airbnb.android:lottie:6.0.0"
+
+rxjava2-android = 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
 work = { module = "androidx.work:work-runtime", version.ref = "work"}
