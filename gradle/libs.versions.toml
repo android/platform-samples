@@ -17,7 +17,7 @@
 accompanist = "0.28.0"
 androidx-datastore = "1.0.0"
 androidx-navigation = "2.6.0"
-androidx-window = "1.1.0-alpha02"
+androidx-window = "1.1.0-alpha03"
 androidGradlePlugin = "7.4.2"
 casa = "0.4.2"
 coil = "2.3.0"
