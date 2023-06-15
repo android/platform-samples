@@ -25,6 +25,5 @@ android {
 dependencies {
     implementation(libs.play.services.location)
     implementation(libs.kotlin.coroutines.play)
-    implementation(libs.work)
-    implementation(libs.work.ktx)
+    implementation(libs.androidx.work.runtime.ktx)
 }

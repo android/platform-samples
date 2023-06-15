@@ -29,6 +29,7 @@ import org.gradle.kotlin.dsl.dependencies
 import org.gradle.kotlin.dsl.project
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+@Suppress("UnstableApiUsage")
 class SamplePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
@@ -66,6 +67,7 @@ class SamplePlugin : Plugin<Project> {
                     compileSdk = 33
                     defaultConfig {
                         minSdk = 21
+                        @Suppress("DEPRECATION")
                         targetSdk = 33
                         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                     }
@@ -80,7 +82,8 @@ class SamplePlugin : Plugin<Project> {
                     }
 
                     composeOptions {
-                        kotlinCompilerExtensionVersion = libs.findVersion("composeCompiler").get().toString()
+                        kotlinCompilerExtensionVersion =
+                            libs.findVersion("composeCompiler").get().toString()
                     }
                 }
             }
