@@ -64,11 +64,11 @@ class SamplePlugin : Plugin<Project> {
 
             pluginManager.withPlugin("com.android.library") {
                 configure<LibraryExtension> {
-                    compileSdk = 33
+                    compileSdk = 34
                     defaultConfig {
                         minSdk = 21
                         @Suppress("DEPRECATION")
-                        targetSdk = 33
+                        targetSdk = 34
                         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                     }
 

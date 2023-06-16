@@ -35,10 +35,9 @@ class BoundsImageView @JvmOverloads constructor(
         paint.strokeWidth = 4f
     }
 
-
-    override fun onDraw(canvas: Canvas?) {
+    override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
-        canvas?.drawLine(0f, 0f, width.toFloat(), height.toFloat(), paint)
-        canvas?.drawLine(0f, height.toFloat(), width.toFloat(), 0f, paint)
+        canvas.drawLine(0f, 0f, width.toFloat(), height.toFloat(), paint)
+        canvas.drawLine(0f, height.toFloat(), width.toFloat(), 0f, paint)
     }
 }
