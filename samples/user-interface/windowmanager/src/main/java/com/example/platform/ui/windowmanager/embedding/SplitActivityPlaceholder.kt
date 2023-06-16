@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,19 +15,20 @@
  */
 
 package com.example.platform.ui.windowmanager.embedding
-
 import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import com.example.platform.ui.windowmanager.R
+import com.example.platform.ui.windowmanager.databinding.ActivitySplitActivityPlaceholderLayoutBinding
 
 open class SplitActivityPlaceholder : AppCompatActivity() {
+
+    lateinit var viewBinding: ActivitySplitActivityPlaceholderLayoutBinding
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_split_activity_list_placeholder_layout)
+        viewBinding = ActivitySplitActivityPlaceholderLayoutBinding.inflate(layoutInflater)
+        setContentView(viewBinding.root)
 
-        findViewById<View>(R.id.root_split_activity_layout)
-            .setBackgroundColor(Color.parseColor("#eeeeee"))
+        viewBinding.rootSplitActivityLayout.setBackgroundColor(Color.parseColor("#eeeeee"))
     }
 }

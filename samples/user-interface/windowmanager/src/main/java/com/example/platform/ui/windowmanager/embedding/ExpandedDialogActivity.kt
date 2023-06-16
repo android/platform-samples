@@ -1,5 +1,5 @@
 /*
- * Copyright 2021 The Android Open Source Project
+ * Copyright 2022 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,15 +15,30 @@
  */
 
 package com.example.platform.ui.windowmanager.embedding
-import android.graphics.Color
-import android.os.Bundle
-import android.view.View
-import com.example.platform.ui.windowmanager.R
 
-open class SplitActivityF : SplitActivityBase() {
+import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+
+/** Activity to show a dialog. */
+class ExpandedDialogActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        findViewById<View>(R.id.root_split_activity_layout)
-            .setBackgroundColor(Color.parseColor("#ffebee"))
+        showDialog()
+    }
+
+    private fun showDialog() {
+        val dialog = AlertDialog.Builder(this)
+            .setTitle("Dialog in expanded activity")
+            .setMessage("To demo showing dialog that can expand over a split")
+            .setNeutralButton("Close") { _, _ ->
+                finish()
+            }
+            .setOnDismissListener {
+                finish()
+            }
+
+        dialog.show()
     }
 }

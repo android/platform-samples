@@ -1,11 +1,11 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,66 +16,36 @@
 
 package com.example.platform.ui.windowmanager
 
-import android.annotation.SuppressLint
 import android.content.res.Configuration
 import android.os.Bundle
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.RecyclerView
 import androidx.window.layout.WindowMetricsCalculator
-import com.example.platform.ui.windowmanager.databinding.ActivityWindowMetricsBinding
 import com.example.platform.ui.windowmanager.infolog.InfoLogAdapter
 
 class WindowMetricsActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityWindowMetricsBinding
 
     private val adapter = InfoLogAdapter()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityWindowMetricsBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-
-        binding.recyclerView.adapter = adapter
+        setContentView(R.layout.activity_window_metrics)
+        findViewById<RecyclerView>(R.id.recycler_view).adapter = adapter
         adapter.append("onCreate", "triggered")
 
-        logCurrentWindowMetrics("onCreate")
-
-        val container: ViewGroup = binding.root
-
-        // Add a utility view to the container to hook into
-        // View.onConfigurationChanged.
-        // This is required for all activities, even those that don't
-        // handle configuration changes.
-        // We also can't use Activity.onConfigurationChanged, since there
-        // are situations where that won't be called when the configuration
-        // changes.
-        // View.onConfigurationChanged is called in those scenarios.
-        // https://issuetracker.google.com/202338815
-        container.addView(object : View(this) {
-            override fun onConfigurationChanged(newConfig: Configuration?) {
-                super.onConfigurationChanged(newConfig)
-                logCurrentWindowMetrics("Config.Change")
-            }
-        })
+        updateMetrics()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun logCurrentWindowMetrics(tag: String) {
-        val windowMetrics = WindowMetricsCalculator.getOrCreate()
-            .computeCurrentWindowMetrics(this@WindowMetricsActivity)
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        updateMetrics()
+    }
+
+    private fun updateMetrics() {
+        val windowMetrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(this)
         val width = windowMetrics.bounds.width()
         val height = windowMetrics.bounds.height()
-        adapter.append(
-            tag,
-            "width: $width, " +
-                "height: $height, " +
-                "widthDp: ${width / resources.displayMetrics.density}, " +
-                "heightDp: ${height / resources.displayMetrics.density}"
-        )
-        runOnUiThread {
-            adapter.notifyDataSetChanged()
-        }
+        adapter.append("WindowMetrics update", "width: $width, height: $height")
+        adapter.notifyDataSetChanged()
     }
 }

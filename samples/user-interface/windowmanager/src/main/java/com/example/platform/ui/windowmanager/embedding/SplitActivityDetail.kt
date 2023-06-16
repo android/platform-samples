@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,7 +15,6 @@
  */
 
 package com.example.platform.ui.windowmanager.embedding
-
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -31,15 +30,13 @@ open class SplitActivityDetail : AppCompatActivity() {
         findViewById<View>(R.id.root_split_activity_layout)
             .setBackgroundColor(Color.parseColor("#fff3e0"))
 
-        findViewById<TextView>(R.id.item_detail_text)
-            .setText(intent.getStringExtra(EXTRA_SELECTED_ITEM))
+        findViewById<TextView>(R.id.item_detail_text).text = intent.getStringExtra(EXTRA_SELECTED_ITEM)
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
 
-        findViewById<TextView>(R.id.item_detail_text)
-            .setText(intent?.getStringExtra(EXTRA_SELECTED_ITEM))
+        findViewById<TextView>(R.id.item_detail_text).text = intent?.getStringExtra(EXTRA_SELECTED_ITEM)
     }
 
     companion object {

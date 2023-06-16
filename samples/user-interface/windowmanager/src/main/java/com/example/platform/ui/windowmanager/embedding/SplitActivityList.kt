@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,33 +15,44 @@
  */
 
 package com.example.platform.ui.windowmanager.embedding
-
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat
-import androidx.core.util.Consumer
-import androidx.window.core.ExperimentalWindowApi
-import androidx.window.embedding.SplitController
-import androidx.window.embedding.SplitInfo
-import com.example.platform.ui.windowmanager.R
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.example.platform.ui.windowmanager.embedding.SplitActivityDetail.Companion.EXTRA_SELECTED_ITEM
+import androidx.window.embedding.SplitController
+import com.example.platform.ui.windowmanager.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-@OptIn(ExperimentalWindowApi::class)
 open class SplitActivityList : AppCompatActivity() {
-    lateinit var splitController: SplitController
-    val splitChangeListener = SplitStateChangeListener()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_split_activity_list_layout)
         findViewById<View>(R.id.root_split_activity_layout)
             .setBackgroundColor(Color.parseColor("#e0f7fa"))
+        val splitController = SplitController.getInstance(this)
 
-        splitController = SplitController.getInstance()
+        lifecycleScope.launch {
+            // The block passed to repeatOnLifecycle is executed when the lifecycle
+            // is at least STARTED and is cancelled when the lifecycle is STOPPED.
+            // It automatically restarts the block when the lifecycle is STARTED again.
+            lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                splitController.splitInfoList(this@SplitActivityList)
+                    .collect { newSplitInfos ->
+                        withContext(Dispatchers.Main) {
+                            findViewById<View>(R.id.infoButton).visibility =
+                                if (newSplitInfos.isEmpty()) View.VISIBLE else View.GONE
+                        }
+                    }
+            }
+        }
     }
 
     open fun onItemClick(view: View) {
@@ -49,28 +60,5 @@ open class SplitActivityList : AppCompatActivity() {
         val startIntent = Intent(this, SplitActivityDetail::class.java)
         startIntent.putExtra(EXTRA_SELECTED_ITEM, text)
         startActivity(startIntent)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        splitController.addSplitListener(
-            this,
-            ContextCompat.getMainExecutor(this),
-            splitChangeListener
-        )
-    }
-
-    override fun onStop() {
-        super.onStop()
-        splitController.removeSplitListener(
-            splitChangeListener
-        )
-    }
-
-    inner class SplitStateChangeListener : Consumer<List<SplitInfo>> {
-        override fun accept(newSplitInfos: List<SplitInfo>) {
-            findViewById<View>(R.id.infoButton).visibility =
-                if (newSplitInfos.isEmpty()) View.VISIBLE else View.GONE
-        }
     }
 }
