@@ -24,6 +24,7 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.Arrangement
@@ -31,19 +32,27 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -55,6 +64,7 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import com.example.platform.base.PermissionBox
 import com.google.android.catalog.framework.annotations.Sample
+import kotlinx.coroutines.delay
 
 @SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.M)
@@ -97,6 +107,9 @@ fun FindDevicesSample() {
 @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
 @Composable
 private fun FindDevicesScreen() {
+    var scanning by remember {
+        mutableStateOf(true)
+    }
     val devices = remember {
         mutableStateListOf<BluetoothDevice>()
     }
@@ -106,9 +119,24 @@ private fun FindDevicesScreen() {
         .build()
 
     // This effect will start scanning for devices when the screen is visible
-    BluetoothScanEffect(scanSettings) {
-        if (!devices.contains(it)) {
-            devices.add(it)
+    // If scanning is stop removing the effect will stop the scanning.
+    if (scanning) {
+        BluetoothScanEffect(
+            scanSettings = scanSettings,
+            onScanFailed = {
+                scanning = false
+                Log.w("FindDevicesSample", "Scan failed with error: $it")
+            },
+            onDeviceFound = { device ->
+                if (!devices.contains(device)) {
+                    devices.add(device)
+                }
+            },
+        )
+        // Stop scanning after a while
+        LaunchedEffect(true) {
+            delay(15000)
+            scanning = false
         }
     }
 
@@ -116,12 +144,19 @@ private fun FindDevicesScreen() {
         Row(
             Modifier
                 .fillMaxWidth()
+                .height(54.dp)
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = "Finding devices", style = MaterialTheme.typography.titleSmall)
-            CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+            Text(text = "Discovered devices", style = MaterialTheme.typography.titleSmall)
+            if (scanning) {
+                CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+            } else {
+                IconButton(onClick = { scanning = true }) {
+                    Icon(imageVector = Icons.Rounded.Refresh, contentDescription = null)
+                }
+            }
         }
 
         LazyColumn(
@@ -145,10 +180,13 @@ private fun FindDevicesScreen() {
 @Composable
 private fun BluetoothDeviceItem(bluetoothDevice: BluetoothDevice) {
     Row(
-        modifier = Modifier.padding(vertical = 8.dp),
+        modifier = Modifier
+            .padding(vertical = 8.dp)
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text(bluetoothDevice.name)
+        Text(bluetoothDevice.name ?: "N/A")
+
         Text(bluetoothDevice.address)
     }
 }
@@ -159,10 +197,17 @@ private fun BluetoothDeviceItem(bluetoothDevice: BluetoothDevice) {
 private fun BluetoothScanEffect(
     scanSettings: ScanSettings,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    onScanFailed: (Int) -> Unit,
     onDeviceFound: (device: BluetoothDevice) -> Unit,
 ) {
     val context = LocalContext.current
-    val adapter = context.getSystemService<BluetoothManager>()?.adapter ?: return
+    val adapter = context.getSystemService<BluetoothManager>()?.adapter
+
+    if (adapter == null) {
+        onScanFailed(ScanCallback.SCAN_FAILED_INTERNAL_ERROR)
+        return
+    }
+
     val currentOnDeviceFound by rememberUpdatedState(onDeviceFound)
 
     DisposableEffect(lifecycleOwner, scanSettings) {
@@ -170,6 +215,11 @@ private fun BluetoothScanEffect(
             override fun onScanResult(callbackType: Int, result: ScanResult) {
                 super.onScanResult(callbackType, result)
                 currentOnDeviceFound(result.device)
+            }
+
+            override fun onScanFailed(errorCode: Int) {
+                super.onScanFailed(errorCode)
+                onScanFailed(errorCode)
             }
         }
 

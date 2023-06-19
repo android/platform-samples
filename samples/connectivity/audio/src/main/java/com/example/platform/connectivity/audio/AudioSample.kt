@@ -23,6 +23,7 @@ import android.os.Build
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -93,24 +94,30 @@ private fun AudioSampleScreen(viewModel: AudioDeviceViewModel) {
             .fillMaxSize()
             .padding(16.dp),
     ) {
-        ActiveAudioSource(uiStateActiveDevice)
-        Row {
-            Button(onClick = { viewModel.onToggleAudioRecording() }) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            ActiveAudioSource(uiStateActiveDevice)
+            Button(
+                onClick = { viewModel.onToggleAudioRecording() },
+            ) {
                 val recordingText = if (uiStateRecording) {
-                    "Stop Recording"
+                    "Stop"
                 } else {
-                    "Start Recording"
+                    "Record"
                 }
                 Text(text = recordingText)
             }
         }
+        Text(
+            text = stringResource(id = R.string.selectdevice),
+            modifier = Modifier.padding(8.dp, 12.dp),
+            style = MaterialTheme.typography.titleLarge,
+        )
+        AvailableDevicesList(uiStateAvailableDevices, viewModel::setAudioDevice)
     }
-    Text(
-        text = stringResource(id = R.string.selectdevice),
-        modifier = Modifier.padding(8.dp, 12.dp),
-        style = MaterialTheme.typography.displayMedium,
-    )
-    AvailableDevicesList(uiStateAvailableDevices, viewModel::setAudioDevice)
 }
 
 
@@ -168,7 +175,7 @@ private fun ActiveAudioSource(title: String, subTitle: String, resId: Int) {
             Text(
                 title, modifier = Modifier.padding(8.dp, 0.dp),
                 color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.headlineMedium,
+                style = MaterialTheme.typography.titleSmall,
             )
             Text(
                 subTitle, modifier = Modifier.padding(8.dp, 0.dp),
@@ -187,9 +194,13 @@ private fun ListOfAudioDevices(
     devices: List<AudioDeviceUI>,
     onDeviceSelected: (AudioDeviceInfo) -> Unit,
 ) {
-    LazyColumn {
-        items(devices) { item ->
-            AudioItem(audioDevice = item, onDeviceSelected = onDeviceSelected)
+    if (devices.isEmpty()) {
+        Text(text = "No devices found", modifier = Modifier.padding(8.dp))
+    } else {
+        LazyColumn {
+            items(devices) { item ->
+                AudioItem(audioDevice = item, onDeviceSelected = onDeviceSelected)
+            }
         }
     }
 }
