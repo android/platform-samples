@@ -1,11 +1,11 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2020 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -23,6 +23,7 @@ import android.view.View
 import android.view.View.MeasureSpec.AT_MOST
 import android.view.View.MeasureSpec.EXACTLY
 import android.widget.FrameLayout
+import com.example.platform.ui.windowmanager.util.adjustFeaturePositionOffset
 import androidx.window.layout.DisplayFeature
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowLayoutInfo
@@ -130,37 +131,36 @@ class SplitLayout : FrameLayout {
         windowLayoutInfo?.displayFeatures
             ?.firstOrNull { feature -> isValidFoldFeature(feature) }
             ?.let { feature ->
-                getFeaturePositionInViewRect(feature, this)?.let {
-                    if (feature.bounds.left == 0) { // Horizontal layout
-                        val topRect = Rect(
-                            paddingLeft, paddingTop,
-                            paddingLeft + paddedWidth, it.top
-                        )
-                        val bottomRect = Rect(
-                            paddingLeft, it.bottom,
-                            paddingLeft + paddedWidth, paddingTop + paddedHeight
-                        )
+                val featureBounds = adjustFeaturePositionOffset(feature, this)
+                if (feature.bounds.left == 0) { // Horizontal layout
+                    val topRect = Rect(
+                        paddingLeft, paddingTop,
+                        paddingLeft + paddedWidth, featureBounds.top
+                    )
+                    val bottomRect = Rect(
+                        paddingLeft, featureBounds.bottom,
+                        paddingLeft + paddedWidth, paddingTop + paddedHeight
+                    )
 
-                        if (measureAndCheckMinSize(topRect, startView) &&
-                            measureAndCheckMinSize(bottomRect, endView)
-                        ) {
-                            return arrayOf(topRect, bottomRect)
-                        }
-                    } else if (feature.bounds.top == 0) { // Vertical layout
-                        val leftRect = Rect(
-                            paddingLeft, paddingTop,
-                            it.left, paddingTop + paddedHeight
-                        )
-                        val rightRect = Rect(
-                            it.right, paddingTop,
-                            paddingLeft + paddedWidth, paddingTop + paddedHeight
-                        )
+                    if (measureAndCheckMinSize(topRect, startView) &&
+                        measureAndCheckMinSize(bottomRect, endView)
+                    ) {
+                        return arrayOf(topRect, bottomRect)
+                    }
+                } else if (feature.bounds.top == 0) { // Vertical layout
+                    val leftRect = Rect(
+                        paddingLeft, paddingTop,
+                        featureBounds.left, paddingTop + paddedHeight
+                    )
+                    val rightRect = Rect(
+                        featureBounds.right, paddingTop,
+                        paddingLeft + paddedWidth, paddingTop + paddedHeight
+                    )
 
-                        if (measureAndCheckMinSize(leftRect, startView) &&
-                            measureAndCheckMinSize(rightRect, endView)
-                        ) {
-                            return arrayOf(leftRect, rightRect)
-                        }
+                    if (measureAndCheckMinSize(leftRect, startView) &&
+                        measureAndCheckMinSize(rightRect, endView)
+                    ) {
+                        return arrayOf(leftRect, rightRect)
                     }
                 }
             }
@@ -191,8 +191,7 @@ class SplitLayout : FrameLayout {
             childView.measuredHeightAndState and MEASURED_STATE_TOO_SMALL == 0
     }
 
-    private fun isValidFoldFeature(displayFeature: DisplayFeature) =
-        (displayFeature as? FoldingFeature)?.let { feature ->
-            getFeaturePositionInViewRect(feature, this) != null
-        } ?: false
+    private fun isValidFoldFeature(displayFeature: DisplayFeature): Boolean {
+        return displayFeature is FoldingFeature
+    }
 }

@@ -6,7 +6,7 @@
   you may not use this file except in compliance with the License.
   You may obtain a copy of the License at
 
-       https://www.apache.org/licenses/LICENSE-2.0
+       http://www.apache.org/licenses/LICENSE-2.0
 
   Unless required by applicable law or agreed to in writing, software
   distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,14 +16,14 @@
   -->
 
 <resources>
-    <color name="color_primary">#6200EE</color>
-    <color name="color_primary_dark">#3700B3</color>
-    <color name="color_accent">#03DAC5</color>
+    <color name="colorPrimary">#6200EE</color>
+    <color name="colorPrimaryDark">#3700B3</color>
+    <color name="colorAccent">#03DAC5</color>
 
-    <color name="color_feature_not_separating">#7700FF00</color>
-    <color name="color_feature_separating">#77FF0000</color>
-    <color name="color_feature_unknown">#77000000</color>
+    <color name="colorFeatureFold">#7700FF00</color>
 
-    <color name="color_split_content_background">#3B6BDB4C</color>
-    <color name="color_split_controls_background">#475ABFF3</color>
+    <color name="colorSplitContentBackground">#3B6BDB4C</color>
+    <color name="colorSplitControlsBackground">#475ABFF3</color>
+
+    <color name="imeBackground">#EEEEEE</color>
 </resources>

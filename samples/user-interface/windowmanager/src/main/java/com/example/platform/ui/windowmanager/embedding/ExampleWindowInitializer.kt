@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,21 +15,27 @@
  */
 
 package com.example.platform.ui.windowmanager.embedding
-
 import android.content.Context
 import androidx.startup.Initializer
-import androidx.window.core.ExperimentalWindowApi
+
+import androidx.window.embedding.RuleController
 import androidx.window.embedding.SplitController
+import androidx.window.embedding.SplitController.SplitSupportStatus.Companion.SPLIT_AVAILABLE
 import com.example.platform.ui.windowmanager.R
 
 /**
  * Initializes SplitController with a set of statically defined rules.
  */
-@OptIn(ExperimentalWindowApi::class)
-class ExampleWindowInitializer : Initializer<SplitController> {
-    override fun create(context: Context): SplitController {
-        SplitController.initialize(context, R.xml.main_split_config)
-        return SplitController.getInstance()
+class ExampleWindowInitializer : Initializer<RuleController> {
+
+    private val mDemoActivityEmbeddingController = DemoActivityEmbeddingController.getInstance()
+
+    override fun create(context: Context): RuleController {
+        return RuleController.getInstance(context).apply {
+            if (SplitController.getInstance(context).splitSupportStatus == SPLIT_AVAILABLE) {
+                setRules(RuleController.parseRules(context, R.xml.main_split_config))
+            }
+        }
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> {

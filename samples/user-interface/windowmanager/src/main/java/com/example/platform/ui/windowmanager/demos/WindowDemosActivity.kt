@@ -1,11 +1,11 @@
 /*
- * Copyright 2020 The Android Open Source Project
+ * Copyright 2021 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      https://www.apache.org/licenses/LICENSE-2.0
+ *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,10 +21,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.platform.ui.windowmanager.DisplayFeaturesActivity
 import com.example.platform.ui.windowmanager.R
-import com.example.platform.ui.windowmanager.RxActivity
 import com.example.platform.ui.windowmanager.SplitLayoutActivity
 import com.example.platform.ui.windowmanager.WindowMetricsActivity
-import com.example.platform.ui.windowmanager.databinding.ActivityWindowDemosBinding
 import com.example.platform.ui.windowmanager.embedding.SplitActivityList
 import com.google.android.catalog.framework.annotations.Sample
 
@@ -35,13 +33,9 @@ import com.google.android.catalog.framework.annotations.Sample
 )
 class WindowDemosActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityWindowDemosBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        binding = ActivityWindowDemosBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_window_demos)
         val demoItems = listOf(
             DemoItem(
                 buttonTitle = getString(R.string.activity_embedding),
@@ -50,7 +44,7 @@ class WindowDemosActivity : AppCompatActivity() {
             ),
             DemoItem(
                 buttonTitle = getString(R.string.display_features),
-                description = getString(R.string.show_all_display_features_description),
+                description = getString(R.string.show_all_display_features_config_change_description),
                 clazz = DisplayFeaturesActivity::class.java
             ),
             DemoItem(
@@ -63,11 +57,6 @@ class WindowDemosActivity : AppCompatActivity() {
                 description = getString(R.string.split_layout_demo_description),
                 clazz = SplitLayoutActivity::class.java
             ),
-            DemoItem(
-                buttonTitle = getString(R.string.rxJava),
-                description = getString(R.string.rx_description),
-                clazz = RxActivity::class.java
-            )
         )
         val recyclerView = findViewById<RecyclerView>(R.id.demo_recycler_view)
 
