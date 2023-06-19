@@ -23,7 +23,7 @@
         window:finishPrimaryWithSecondary="always"
         window:finishSecondaryWithPrimary="adjacent">
         <SplitPairFilter
-            window:primaryActivityName="com.sa"
+            window:primaryActivityName="com.example.platform.ui.windowmanager.embedding.SplitActivityList"
             window:secondaryActivityName="com.example.platform.ui.windowmanager.embedding.SplitActivityDetail"/>
     </SplitPairRule>
     <SplitPlaceholderRule
