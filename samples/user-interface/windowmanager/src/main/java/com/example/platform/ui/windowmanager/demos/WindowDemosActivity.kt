@@ -24,6 +24,8 @@ import com.example.platform.ui.windowmanager.R
 import com.example.platform.ui.windowmanager.SplitLayoutActivity
 import com.example.platform.ui.windowmanager.WindowMetricsActivity
 import com.example.platform.ui.windowmanager.embedding.SplitActivityList
+import com.example.platform.ui.windowmanager.embedding.SplitAttributesToggleMainActivity
+import com.example.platform.ui.windowmanager.embedding.SplitDeviceStateActivityA
 import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
@@ -56,6 +58,16 @@ class WindowDemosActivity : AppCompatActivity() {
                 buttonTitle = getString(R.string.split_layout),
                 description = getString(R.string.split_layout_demo_description),
                 clazz = SplitLayoutActivity::class.java
+            ),
+            DemoItem(
+                buttonTitle = getString(R.string.split_layout_with_attributes),
+                description = getString(R.string.split_layout_attributes_demo_description),
+                clazz = SplitAttributesToggleMainActivity::class.java
+            ),
+            DemoItem(
+                buttonTitle = getString(R.string.split_layout_with_state),
+                description = getString(R.string.split_layout_with_state_demo_description),
+                clazz = SplitDeviceStateActivityA::class.java
             ),
         )
         val recyclerView = findViewById<RecyclerView>(R.id.demo_recycler_view)
