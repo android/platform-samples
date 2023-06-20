@@ -83,4 +83,22 @@
     <string name="activity_embedding_description">Launch Activity Embedding Demo</string>
     <string name="split_rules">Split Layout with Rules</string>
     <string name="split_rules_demo_description">Demo of all the different rules that can be used when splitting layout</string>
+    <string name="choose_the_configuration_to_update_the_layout">Choose the configuration to update the layout:</string>
+    <string name="launch_a_and_b">Launch A and B</string>
+    <string name="split_a_with_b">Split A With B</string>
+    <string name="launch_a">Launch A</string>
+    <string name="use_a_placeholder_for_a">Use a placeholder for A</string>
+    <string name="placeholder_is_sticky">Placeholder is sticky</string>
+    <string name="toggle_fullscreen_mode">Toggle fullscreen mode</string>
+    <string name="also_show_horizontal_layout_in_tabletop_mode">Also show horizontal layout in tabletop mode</string>
+    <string name="show_fullscreen_in_portrait">Show fullscreen in portrait</string>
+    <string name="show_different_layout_with_size">Show different layout with size</string>
+    <string name="also_show_fullscreen_in_book_mode">Also show fullscreen in book mode</string>
+    <string name="show_layout_that_follows_the_hinge_when_it_is_separated_by_hinge">Show layout that follows the hinge when it is separated by hinge</string>
+    <string name="swap_the_position_of_primary_and_secondary_container">Swap the position of primary and secondary container</string>
+    <string name="launch_activity_to_side">Launch activity to side</string>
+    <string name="split_layout_with_attributes">Split Layout with Attributes</string>
+    <string name="split_layout_attributes_demo_description">Demo of different parameters that can be used to split the layout</string>
+    <string name="split_layout_with_state">Split Layout with State</string>
+    <string name="split_layout_with_state_demo_description">Demo of a Split Layout that react to the device state</string>
 </resources>

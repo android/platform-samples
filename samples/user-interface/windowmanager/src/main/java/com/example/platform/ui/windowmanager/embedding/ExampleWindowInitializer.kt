@@ -17,10 +17,32 @@
 package com.example.platform.ui.windowmanager.embedding
 import android.content.Context
 import androidx.startup.Initializer
-
+import com.example.platform.ui.windowmanager.embedding.SplitAttributesToggleMainActivity.Companion.PREFIX_FULLSCREEN_TOGGLE
+import com.example.platform.ui.windowmanager.embedding.SplitAttributesToggleMainActivity.Companion.PREFIX_PLACEHOLDER
+import com.example.platform.ui.windowmanager.embedding.SplitAttributesToggleMainActivity.Companion.TAG_CUSTOMIZED_SPLIT_ATTRIBUTES
+import com.example.platform.ui.windowmanager.embedding.SplitDeviceStateActivityBase.Companion.SUFFIX_AND_FULLSCREEN_IN_BOOK_MODE
+import com.example.platform.ui.windowmanager.embedding.SplitDeviceStateActivityBase.Companion.SUFFIX_AND_HORIZONTAL_LAYOUT_IN_TABLETOP
+import com.example.platform.ui.windowmanager.embedding.SplitDeviceStateActivityBase.Companion.SUFFIX_REVERSED
+import com.example.platform.ui.windowmanager.embedding.SplitDeviceStateActivityBase.Companion.TAG_SHOW_DIFFERENT_LAYOUT_WITH_SIZE
+import com.example.platform.ui.windowmanager.embedding.SplitDeviceStateActivityBase.Companion.TAG_SHOW_FULLSCREEN_IN_PORTRAIT
+import com.example.platform.ui.windowmanager.embedding.SplitDeviceStateActivityBase.Companion.TAG_SHOW_HORIZONTAL_LAYOUT_IN_TABLETOP
+import com.example.platform.ui.windowmanager.embedding.SplitDeviceStateActivityBase.Companion.TAG_SHOW_LAYOUT_FOLLOWING_HINGE_WHEN_SEPARATING
+import com.example.platform.ui.windowmanager.embedding.SplitDeviceStateActivityBase.Companion.TAG_USE_DEFAULT_SPLIT_ATTRIBUTES
 import androidx.window.embedding.RuleController
+import androidx.window.embedding.SplitAttributes
+import androidx.window.embedding.SplitAttributes.LayoutDirection.Companion.BOTTOM_TO_TOP
+import androidx.window.embedding.SplitAttributes.LayoutDirection.Companion.LEFT_TO_RIGHT
+import androidx.window.embedding.SplitAttributes.LayoutDirection.Companion.RIGHT_TO_LEFT
+import androidx.window.embedding.SplitAttributes.LayoutDirection.Companion.TOP_TO_BOTTOM
+import androidx.window.embedding.SplitAttributes.SplitType.Companion.SPLIT_TYPE_EQUAL
+import androidx.window.embedding.SplitAttributes.SplitType.Companion.SPLIT_TYPE_EXPAND
+import androidx.window.embedding.SplitAttributes.SplitType.Companion.SPLIT_TYPE_HINGE
+import androidx.window.embedding.SplitAttributesCalculatorParams
 import androidx.window.embedding.SplitController
 import androidx.window.embedding.SplitController.SplitSupportStatus.Companion.SPLIT_AVAILABLE
+import androidx.window.layout.FoldingFeature
+import androidx.window.layout.WindowLayoutInfo
+import androidx.window.layout.WindowMetrics
 import com.example.platform.ui.windowmanager.R
 
 /**
@@ -31,11 +53,202 @@ class ExampleWindowInitializer : Initializer<RuleController> {
     private val mDemoActivityEmbeddingController = DemoActivityEmbeddingController.getInstance()
 
     override fun create(context: Context): RuleController {
+        SplitController.getInstance(context).apply {
+            if (isSplitAttributesCalculatorSupported()) {
+                setSplitAttributesCalculator(::sampleSplitAttributesCalculator)
+            }
+        }
         return RuleController.getInstance(context).apply {
             if (SplitController.getInstance(context).splitSupportStatus == SPLIT_AVAILABLE) {
                 setRules(RuleController.parseRules(context, R.xml.main_split_config))
             }
         }
+    }
+
+    /**
+     * A sample callback set in [SplitController.setSplitAttributesCalculator] to demonstrate how to
+     * change the [SplitAttributes] with the current device and window state and
+     * [SplitAttributesCalculatorParams.splitRuleTag].
+     */
+    private fun sampleSplitAttributesCalculator(
+        params: SplitAttributesCalculatorParams
+    ): SplitAttributes {
+        val tag = params.splitRuleTag
+        // The SplitAttributes to occupy the whole task bounds
+        val expandContainersAttrs = SplitAttributes.Builder()
+            .setSplitType(SPLIT_TYPE_EXPAND)
+            .build()
+        if (tag?.startsWith(PREFIX_FULLSCREEN_TOGGLE) == true &&
+            mDemoActivityEmbeddingController.shouldExpandSecondaryContainer.get()
+        ) {
+            return expandContainersAttrs
+        }
+        val isPortrait = params.parentWindowMetrics.isPortrait()
+        val windowLayoutInfo = params.parentWindowLayoutInfo
+        val isTabletop = windowLayoutInfo.isTabletop()
+        val isBookMode = windowLayoutInfo.isBookMode()
+        val config = params.parentConfiguration
+        val shouldReversed = tag?.contains(SUFFIX_REVERSED) ?: false
+        // Make a copy of the default splitAttributes, but replace the animation background
+        // color to what is configured in the Demo app.
+        val defaultSplitAttributes = SplitAttributes.Builder()
+            .setLayoutDirection(params.defaultSplitAttributes.layoutDirection)
+            .setSplitType(params.defaultSplitAttributes.splitType)
+            .build()
+        when (tag
+            ?.removePrefix(PREFIX_FULLSCREEN_TOGGLE)
+            ?.removePrefix(PREFIX_PLACEHOLDER)
+            ?.removeSuffix(SUFFIX_REVERSED)
+        ) {
+            TAG_USE_DEFAULT_SPLIT_ATTRIBUTES, null -> {
+                return if (params.areDefaultConstraintsSatisfied) {
+                    defaultSplitAttributes
+                } else {
+                    expandContainersAttrs
+                }
+            }
+            TAG_SHOW_FULLSCREEN_IN_PORTRAIT -> {
+                if (isPortrait) {
+                    return expandContainersAttrs
+                }
+            }
+            TAG_SHOW_FULLSCREEN_IN_PORTRAIT + SUFFIX_AND_HORIZONTAL_LAYOUT_IN_TABLETOP -> {
+                if (isTabletop) {
+                    return SplitAttributes.Builder()
+                        .setSplitType(SPLIT_TYPE_HINGE)
+                        .setLayoutDirection(
+                            if (shouldReversed) {
+                                BOTTOM_TO_TOP
+                            } else {
+                                TOP_TO_BOTTOM
+                            }
+                        )
+                        .build()
+                } else if (isPortrait) {
+                    return expandContainersAttrs
+                }
+            }
+            TAG_SHOW_HORIZONTAL_LAYOUT_IN_TABLETOP -> {
+                if (isTabletop) {
+                    return SplitAttributes.Builder()
+                        .setSplitType(SPLIT_TYPE_HINGE)
+                        .setLayoutDirection(
+                            if (shouldReversed) {
+                                BOTTOM_TO_TOP
+                            } else {
+                                TOP_TO_BOTTOM
+                            }
+                        )
+                        .build()
+                }
+            }
+            TAG_SHOW_DIFFERENT_LAYOUT_WITH_SIZE -> {
+                return if (config.screenWidthDp < 600) {
+                    SplitAttributes.Builder()
+                        .setSplitType(SPLIT_TYPE_EQUAL)
+                        .setLayoutDirection(
+                            if (shouldReversed) {
+                                BOTTOM_TO_TOP
+                            } else {
+                                TOP_TO_BOTTOM
+                            }
+                        )
+                        .build()
+                } else {
+                    SplitAttributes.Builder()
+                        .setSplitType(SPLIT_TYPE_EQUAL)
+                        .setLayoutDirection(
+                            if (shouldReversed) {
+                                RIGHT_TO_LEFT
+                            } else {
+                                LEFT_TO_RIGHT
+                            }
+                        )
+                        .build()
+                }
+            }
+            TAG_SHOW_DIFFERENT_LAYOUT_WITH_SIZE + SUFFIX_AND_FULLSCREEN_IN_BOOK_MODE -> {
+                return if (isBookMode) {
+                    expandContainersAttrs
+                } else if (config.screenWidthDp < 600) {
+                    SplitAttributes.Builder()
+                        .setSplitType(SPLIT_TYPE_EQUAL)
+                        .setLayoutDirection(
+                            if (shouldReversed) {
+                                BOTTOM_TO_TOP
+                            } else {
+                                TOP_TO_BOTTOM
+                            }
+                        )
+                        .build()
+                } else {
+                    SplitAttributes.Builder()
+                        .setSplitType(SPLIT_TYPE_EQUAL)
+                        .setLayoutDirection(
+                            if (shouldReversed) {
+                                RIGHT_TO_LEFT
+                            } else {
+                                LEFT_TO_RIGHT
+                            }
+                        )
+                        .build()
+                }
+            }
+            TAG_SHOW_LAYOUT_FOLLOWING_HINGE_WHEN_SEPARATING -> {
+                val foldingState = windowLayoutInfo.getFoldingFeature()
+                if (foldingState != null) {
+                    return SplitAttributes.Builder()
+                        .setSplitType(
+                            if (foldingState.isSeparating) {
+                                SPLIT_TYPE_HINGE
+                            } else {
+                                SplitAttributes.SplitType.ratio(0.3f)
+                            }
+                        ).setLayoutDirection(
+                            if (
+                                foldingState.orientation
+                                    == FoldingFeature.Orientation.HORIZONTAL
+                            ) {
+                                if (shouldReversed) BOTTOM_TO_TOP else TOP_TO_BOTTOM
+                            } else {
+                                if (shouldReversed) RIGHT_TO_LEFT else LEFT_TO_RIGHT
+                            }
+                        )
+                        .build()
+                }
+            }
+            TAG_CUSTOMIZED_SPLIT_ATTRIBUTES -> {
+                return SplitAttributes.Builder()
+                    .setSplitType(mDemoActivityEmbeddingController.customizedSplitType)
+                    .setLayoutDirection(mDemoActivityEmbeddingController.customizedLayoutDirection)
+                    .build()
+            }
+        }
+        return defaultSplitAttributes
+    }
+
+    private fun WindowMetrics.isPortrait(): Boolean =
+        bounds.height() > bounds.width()
+
+    private fun WindowLayoutInfo.isTabletop(): Boolean {
+        val foldingFeature = getFoldingFeature()
+        return foldingFeature?.state == FoldingFeature.State.HALF_OPENED &&
+            foldingFeature.orientation == FoldingFeature.Orientation.HORIZONTAL
+    }
+
+    private fun WindowLayoutInfo.isBookMode(): Boolean {
+        val foldingFeature = getFoldingFeature()
+        return foldingFeature?.state == FoldingFeature.State.HALF_OPENED &&
+            foldingFeature.orientation == FoldingFeature.Orientation.VERTICAL
+    }
+
+    /**
+     * Returns the [FoldingFeature] if it is exactly the only [FoldingFeature] in
+     * [WindowLayoutInfo]. Otherwise, returns `null`.
+     */
+    private fun WindowLayoutInfo.getFoldingFeature(): FoldingFeature? {
+        val foldingFeatures = displayFeatures.filterIsInstance<FoldingFeature>()
+        return if (foldingFeatures.size == 1) foldingFeatures[0] else null
     }
 
     override fun dependencies(): List<Class<out Initializer<*>>> {
