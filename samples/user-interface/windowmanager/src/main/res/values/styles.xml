@@ -24,6 +24,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="FoldableMediaPlayer" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@null</item>
+    </style>
+
     <!-- Theme to show the expanded dialog Activity as transparent. -->
     <style name="ExpandedDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
         <item name="windowNoTitle">true</item>

@@ -101,4 +101,9 @@
     <string name="split_layout_attributes_demo_description">Demo of different parameters that can be used to split the layout</string>
     <string name="split_layout_with_state">Split Layout with State</string>
     <string name="split_layout_with_state_demo_description">Demo of a Split Layout that react to the device state</string>
+    <string name="media_player_activity">Media Player Activity</string>
+    <string name="media_player_activity_demo_description">Demo of an ExoPlayer instance in tabletop mode</string>
+    <!-- Big Buck Bunny video provided by the Blender Foundation.
+(c) copyright 2008, Blender Foundation / www.bigbuckbunny.org -->
+    <string name="media_url_mp4">https://storage.googleapis.com/exoplayer-test-media-0/BigBuckBunny_320x180.mp4</string>
 </resources>
