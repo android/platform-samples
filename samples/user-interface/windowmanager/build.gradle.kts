@@ -32,4 +32,7 @@ dependencies {
     implementation(libs.androidx.window.rxjava2)
     implementation(libs.rxjava2.android)
     implementation(libs.androidx.startup)
+    implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
 }

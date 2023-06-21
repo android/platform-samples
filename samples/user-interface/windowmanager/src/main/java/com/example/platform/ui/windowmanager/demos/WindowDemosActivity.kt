@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.platform.ui.windowmanager.DisplayFeaturesActivity
+import com.example.platform.ui.windowmanager.MediaPlayerActivity
 import com.example.platform.ui.windowmanager.R
 import com.example.platform.ui.windowmanager.SplitLayoutActivity
 import com.example.platform.ui.windowmanager.WindowMetricsActivity
@@ -68,6 +69,11 @@ class WindowDemosActivity : AppCompatActivity() {
                 buttonTitle = getString(R.string.split_layout_with_state),
                 description = getString(R.string.split_layout_with_state_demo_description),
                 clazz = SplitDeviceStateActivityA::class.java
+            ),
+            DemoItem(
+                buttonTitle = getString(R.string.media_player_activity),
+                description = getString(R.string.media_player_activity_demo_description),
+                clazz = MediaPlayerActivity::class.java
             ),
         )
         val recyclerView = findViewById<RecyclerView>(R.id.demo_recycler_view)
