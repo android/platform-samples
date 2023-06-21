@@ -16,21 +16,18 @@
 
 package com.example.platform.ui.windowmanager
 
-import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.view.WindowInsets
-import android.view.WindowInsetsController
-import android.view.WindowManager
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.trackselection.DefaultTrackSelector
 import androidx.window.layout.FoldingFeature
 import androidx.window.layout.WindowInfoTracker
 import androidx.window.layout.WindowLayoutInfo
@@ -38,7 +35,6 @@ import com.example.platform.ui.windowmanager.databinding.ActivityMediaPlayerBind
 import com.example.platform.ui.windowmanager.util.foldPosition
 import com.example.platform.ui.windowmanager.util.isTableTopMode
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 
 @UnstableApi class MediaPlayerActivity : AppCompatActivity() {
@@ -49,7 +45,6 @@ import kotlinx.coroutines.launch
 
     private lateinit var binding: ActivityMediaPlayerBinding
 
-    @ExperimentalCoroutinesApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -84,12 +79,7 @@ import kotlinx.coroutines.launch
 
     private fun initializePlayer() {
         if (player == null) {
-            val trackSelector = DefaultTrackSelector(this)
-            trackSelector.setParameters(
-                trackSelector.buildUponParameters().setMaxVideoSizeSd()
-            )
             player = ExoPlayer.Builder(this)
-                .setTrackSelector(trackSelector)
                 .build()
         }
         binding.playerView.player = player
@@ -113,22 +103,12 @@ import kotlinx.coroutines.launch
         player = null
     }
 
-    @Suppress("DEPRECATION")
     private fun hideSystemUI() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            window.insetsController?.let {
-                it.systemBarsBehavior = WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-                it.hide(WindowInsets.Type.systemBars())
-            }
-        } else {
-            window.decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_IMMERSIVE
-                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_FULLSCREEN
-                            or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                    )
-            window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowInsetsControllerCompat(window, window.decorView).let { controller ->
+            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller.hide(WindowInsetsCompat.Type.systemBars())
+            controller.hide(WindowInsetsCompat.Type.navigationBars())
         }
     }
 

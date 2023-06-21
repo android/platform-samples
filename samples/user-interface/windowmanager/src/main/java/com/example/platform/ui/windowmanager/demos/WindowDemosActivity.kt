@@ -18,6 +18,7 @@ package com.example.platform.ui.windowmanager.demos
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.platform.ui.windowmanager.DisplayFeaturesActivity
 import com.example.platform.ui.windowmanager.MediaPlayerActivity
@@ -34,7 +35,7 @@ import com.google.android.catalog.framework.annotations.Sample
     description = "Demonstrates how to use the Jetpack WindowManager library.",
     documentation = "https://developer.android.com/jetpack/androidx/releases/window",
 )
-class WindowDemosActivity : AppCompatActivity() {
+@UnstableApi class WindowDemosActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
