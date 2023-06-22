@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-plugins {
-    id("com.example.platform.sample")
+package com.example.platform.camera.common
+
+import android.hardware.camera2.CaptureResult
+import android.media.Image
+import java.io.Closeable
+
+/**
+ * Helper data class used to hold capture metadata with their associated image
+ */
+data class CombinedCaptureResult(
+    val image: Image,
+    val metadata: CaptureResult,
+    val orientation: Int,
+    val format: Int,
+) : Closeable {
+    override fun close() = image.close()
 }
-
-android {
-    namespace = "com.example.platform.camera"
-    viewBinding.isEnabled = true
-}
-
-dependencies {
-    // EXIF Interface
-    implementation(libs.androidx.exifinterface)
-
-    // ViewPager2
-    implementation(libs.androidx.viewpager2)
-}
-
