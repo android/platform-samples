@@ -49,7 +49,7 @@ import com.example.platform.base.PermissionBox
 @Composable
 fun BluetoothSampleBox(
     extraPermissions: Set<String> = emptySet(),
-    content: @Composable BoxScope.() -> Unit,
+    content: @Composable BoxScope.(BluetoothAdapter) -> Unit,
 ) {
     val context = LocalContext.current
     val packageManager = context.packageManager
@@ -96,7 +96,7 @@ fun BluetoothSampleBox(
             bluetoothAdapter == null || !hasBT -> MissingFeatureText(text = "No bluetooth available")
             !hasBLE -> MissingFeatureText(text = "No bluetooth low energy available")
             !isBTEnabled -> BluetoothDisabledScreen { isBTEnabled = true }
-            else -> content()
+            else -> content(bluetoothAdapter)
         }
     }
 }

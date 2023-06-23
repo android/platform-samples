@@ -86,12 +86,18 @@ fun FindDevicesSample() {
 @RequiresApi(Build.VERSION_CODES.M)
 @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
 @Composable
-private fun FindDevicesScreen(onConnect: (BluetoothDevice) -> Unit) {
+internal fun FindDevicesScreen(onConnect: (BluetoothDevice) -> Unit) {
+    val context = LocalContext.current
+    val adapter = checkNotNull(context.getSystemService<BluetoothManager>()?.adapter)
     var scanning by remember {
         mutableStateOf(true)
     }
     val devices = remember {
         mutableStateListOf<BluetoothDevice>()
+    }
+    val pairedDevices = remember {
+        // Get a list of previously paired devices
+        mutableStateListOf<BluetoothDevice>(*adapter.bondedDevices.toTypedArray())
     }
     val scanSettings: ScanSettings = ScanSettings.Builder()
         .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
@@ -129,7 +135,7 @@ private fun FindDevicesScreen(onConnect: (BluetoothDevice) -> Unit) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = "Discovered devices", style = MaterialTheme.typography.titleSmall)
+            Text(text = "Available devices", style = MaterialTheme.typography.titleSmall)
             if (scanning) {
                 CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
             } else {
@@ -156,6 +162,15 @@ private fun FindDevicesScreen(onConnect: (BluetoothDevice) -> Unit) {
             items(devices) { item ->
                 BluetoothDeviceItem(bluetoothDevice = item, onConnect = onConnect)
             }
+
+            if (pairedDevices.isNotEmpty()) {
+                item {
+                    Text(text = "Saved devices", style = MaterialTheme.typography.titleSmall)
+                }
+                items(pairedDevices) {
+                    BluetoothDeviceItem(bluetoothDevice = it, onConnect = onConnect)
+                }
+            }
         }
     }
 
@@ -175,8 +190,14 @@ private fun BluetoothDeviceItem(
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(bluetoothDevice.name ?: "N/A")
-
         Text(bluetoothDevice.address)
+        val state = when (bluetoothDevice.bondState) {
+            BluetoothDevice.BOND_BONDED -> "Paired"
+            BluetoothDevice.BOND_BONDING -> "Pairing"
+            else -> "None"
+        }
+        Text(text = state)
+        
     }
 }
 
