@@ -27,6 +27,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -62,7 +63,6 @@ import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import com.example.platform.base.PermissionBox
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.delay
 
@@ -75,38 +75,18 @@ import kotlinx.coroutines.delay
 )
 @Composable
 fun FindDevicesSample() {
-    val locationPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        Manifest.permission.ACCESS_FINE_LOCATION
-    } else {
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    }
-    val bluetoothPermissionSet = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        listOf(
-            Manifest.permission.BLUETOOTH_CONNECT,
-            Manifest.permission.BLUETOOTH_SCAN,
-            locationPermission,
-        )
-    } else {
-        listOf(
-            Manifest.permission.BLUETOOTH,
-            Manifest.permission.BLUETOOTH_ADMIN,
-            locationPermission,
-        )
-    }
-
-    PermissionBox(
-        permissions = bluetoothPermissionSet,
-        contentAlignment = Alignment.Center,
-    ) {
-        FindDevicesScreen()
+    BluetoothSampleBox {
+        FindDevicesScreen {
+            Log.d("FindDeviceSample", "Name: ${it.name} Address: ${it.address} Type: ${it.type}")
+        }
     }
 }
 
-@SuppressLint("InlinedApi")
+@SuppressLint("InlinedApi", "MissingPermission")
 @RequiresApi(Build.VERSION_CODES.M)
 @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
 @Composable
-private fun FindDevicesScreen() {
+private fun FindDevicesScreen(onConnect: (BluetoothDevice) -> Unit) {
     var scanning by remember {
         mutableStateOf(true)
     }
@@ -153,7 +133,12 @@ private fun FindDevicesScreen() {
             if (scanning) {
                 CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
             } else {
-                IconButton(onClick = { scanning = true }) {
+                IconButton(
+                    onClick = {
+                        devices.clear()
+                        scanning = true
+                    },
+                ) {
                     Icon(imageVector = Icons.Rounded.Refresh, contentDescription = null)
                 }
             }
@@ -169,7 +154,7 @@ private fun FindDevicesScreen() {
                 }
             }
             items(devices) { item ->
-                BluetoothDeviceItem(bluetoothDevice = item)
+                BluetoothDeviceItem(bluetoothDevice = item, onConnect = onConnect)
             }
         }
     }
@@ -178,11 +163,15 @@ private fun FindDevicesScreen() {
 
 @SuppressLint("MissingPermission")
 @Composable
-private fun BluetoothDeviceItem(bluetoothDevice: BluetoothDevice) {
+private fun BluetoothDeviceItem(
+    bluetoothDevice: BluetoothDevice,
+    onConnect: (BluetoothDevice) -> Unit,
+) {
     Row(
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onConnect(bluetoothDevice) },
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(bluetoothDevice.name ?: "N/A")
