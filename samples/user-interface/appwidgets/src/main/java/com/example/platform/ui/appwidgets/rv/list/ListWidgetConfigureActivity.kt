@@ -29,14 +29,28 @@ import com.example.platform.ui.appwidgets.databinding.ActivityWidgetConfigureBin
  */
 class ListWidgetConfigureActivity : ComponentActivity() {
 
-    var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
+    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     public override fun onCreate(icicle: Bundle?) {
         super.onCreate(icicle)
 
+        // Find the widget id from the intent.
+        appWidgetId = intent?.extras?.getInt(
+            AppWidgetManager.EXTRA_APPWIDGET_ID,
+            AppWidgetManager.INVALID_APPWIDGET_ID
+        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
+
+        // If this activity was started with an intent without an app widget ID, just finish.
+        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
+            finish()
+            return
+        }
+
         // Set the result to CANCELED.  This will cause the widget host to cancel
         // out of the widget placement if the user presses the back button.
-        setResult(RESULT_CANCELED)
+        // Make sure we pass back the original appWidgetId.
+        val resultData = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        setResult(RESULT_CANCELED, resultData)
 
         val binding = ActivityWidgetConfigureBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -48,18 +62,6 @@ class ListWidgetConfigureActivity : ComponentActivity() {
         binding.todoListContainer.setOnClickListener {
             onWidgetContainerClicked(R.layout.widget_todo_list)
         }
-
-        // Find the widget id from the intent.
-        appWidgetId = intent?.extras?.getInt(
-            AppWidgetManager.EXTRA_APPWIDGET_ID,
-            AppWidgetManager.INVALID_APPWIDGET_ID
-        ) ?: AppWidgetManager.INVALID_APPWIDGET_ID
-
-        // If this activity was started with an intent without an app widget ID, finish with an error.
-        if (appWidgetId == AppWidgetManager.INVALID_APPWIDGET_ID) {
-            finish()
-            return
-        }
     }
 
     private fun onWidgetContainerClicked(@LayoutRes widgetLayoutResId: Int) {
@@ -68,10 +70,9 @@ class ListWidgetConfigureActivity : ComponentActivity() {
         val appWidgetManager = AppWidgetManager.getInstance(this)
         ListAppWidget.updateAppWidget(this, appWidgetManager, appWidgetId)
 
-        // Make sure we pass back the original appWidgetId
-        val resultValue = Intent()
-        resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-        setResult(RESULT_OK, resultValue)
+        // Make sure we pass back the original appWidgetId.
+        val resultData = Intent().putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+        setResult(RESULT_OK, resultData)
         finish()
     }
 }
