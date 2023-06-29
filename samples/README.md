@@ -16,6 +16,8 @@ Shows how to connect to a GATT server hosted by the BLE device and perform simpl
 Center child views horizontally or vertically.
 - [Conversion suggestions](user-interface/text/src/main/java/com/example/platform/ui/text/ConversionSuggestions.kt):
 Demonstrates how to implement the incremental search feature for non-alphabet languages with the Conversion Suggestions API.
+- [Create a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/GATTServerSample.kt):
+Shows how to create a GATT server and communicate with the GATT client
 - [Data Access](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
 Demonstrates how to implement data access auditing for your app to identify 
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):

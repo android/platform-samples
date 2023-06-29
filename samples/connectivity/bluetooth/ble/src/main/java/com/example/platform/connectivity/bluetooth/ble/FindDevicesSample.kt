@@ -72,6 +72,7 @@ import kotlinx.coroutines.delay
     name = "Find devices sample",
     description = "This example will demonstrate how to scanning for Low Energy Devices",
     documentation = "https://developer.android.com/guide/topics/connectivity/bluetooth",
+    tags = ["bluetooth"],
 )
 @Composable
 fun FindDevicesSample() {

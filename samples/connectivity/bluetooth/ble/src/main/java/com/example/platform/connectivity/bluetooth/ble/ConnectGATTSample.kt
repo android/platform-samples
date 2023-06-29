@@ -21,14 +21,20 @@ import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCallback
+import android.bluetooth.BluetoothGattCharacteristic
+import android.bluetooth.BluetoothGattService
 import android.bluetooth.BluetoothProfile
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -37,6 +43,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -47,13 +54,18 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import com.google.android.catalog.framework.annotations.Sample
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlin.random.Random
 
+@OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.M)
 @Sample(
     name = "Connect to a GATT server",
     description = "Shows how to connect to a GATT server hosted by the BLE device and perform simple operations",
     documentation = "https://developer.android.com/guide/topics/connectivity/bluetooth/connect-gatt-server",
+    tags = ["bluetooth"],
 )
 @Composable
 fun ConnectGATTSample() {
@@ -62,14 +74,17 @@ fun ConnectGATTSample() {
     }
     // Check that BT permissions and that BT is available and enabled
     BluetoothSampleBox {
-        if (selectedDevice == null) {
-            // Scans for BT devices and handles clicks (see FindDeviceSample)
-            FindDevicesScreen {
-                selectedDevice = it
-            }
-        } else {
-            ConnectDeviceScreen(device = selectedDevice!!) {
-                selectedDevice = null
+        AnimatedContent(targetState = selectedDevice, label = "Selected device") { device ->
+            if (device == null) {
+                // Scans for BT devices and handles clicks (see FindDeviceSample)
+                FindDevicesScreen {
+                    selectedDevice = it
+                }
+            } else {
+                // Once a device is selected show the UI and try to connect device
+                ConnectDeviceScreen(device = device) {
+                    selectedDevice = null
+                }
             }
         }
     }
@@ -78,15 +93,31 @@ fun ConnectGATTSample() {
 @SuppressLint("MissingPermission")
 @Composable
 fun ConnectDeviceScreen(device: BluetoothDevice, onClose: () -> Unit) {
-    var state by remember {
-        mutableStateOf<DeviceState?>(null)
+    val scope = rememberCoroutineScope()
+
+    // Keeps track of the last connection state with the device
+    var state by remember(device) {
+        mutableStateOf<DeviceConnectionState?>(null)
     }
+    // Once the device services are discovered find the GATTServerSample service
+    val service by remember(state?.services) {
+        mutableStateOf(state?.services?.find { it.uuid == SERVICE_UUID })
+    }
+    // If the GATTServerSample service is found, get the characteristic
+    val characteristic by remember(service) {
+        mutableStateOf(service?.getCharacteristic(CHARACTERISTIC_UUID))
+    }
+
+    // This effect will handle the connection and notify when the state changes
     BLEConnectEffect(device = device) {
+        // update our state to recompose the UI
         state = it
     }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(rememberScrollState())
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
@@ -94,13 +125,72 @@ fun ConnectDeviceScreen(device: BluetoothDevice, onClose: () -> Unit) {
         Text(text = "Name: ${device.name} (${device.address})")
         Text(text = "Status: ${state?.connectionState?.toConnectionStateString()}")
         Text(text = "MTU: ${state?.mtu}")
+        Text(text = "Services: ${state?.services?.joinToString { it.uuid.toString() + " " + it.type }}")
+        Text(text = "Message sent: ${state?.messageSent}")
+        Button(
+            onClick = {
+                scope.launch(Dispatchers.IO) {
+                    // Example on how to request specific MTUs
+                    // Note that from Android 14 onwards the system will define a default MTU and
+                    // it will only be sent once to the peripheral device
+                    state?.gatt?.requestMtu(Random.nextInt(27, 190))
+                }
+            },
+        ) {
+            Text(text = "Request MTU")
+        }
+        Button(
+            enabled = state?.gatt != null,
+            onClick = {
+                scope.launch(Dispatchers.IO) {
+                    // Once we have the connection discover the peripheral services
+                    state?.gatt?.discoverServices()
+                }
+            },
+        ) {
+            Text(text = "Discover")
+        }
+        Button(
+            enabled = state?.gatt != null && characteristic != null,
+            onClick = {
+                scope.launch(Dispatchers.IO) {
+                    sendData(state?.gatt!!, characteristic!!)
+                }
+            },
+        ) {
+            Text(text = "Write to server")
+        }
         Button(onClick = onClose) {
             Text(text = "Close")
         }
     }
 }
 
-private fun Int.toConnectionStateString() = when (this) {
+/**
+ * Writes "hello world" to the server characteristic
+ */
+@SuppressLint("MissingPermission")
+private fun sendData(
+    gatt: BluetoothGatt,
+    characteristic: BluetoothGattCharacteristic,
+) {
+    val data = "Hello world!".toByteArray()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+        gatt.writeCharacteristic(
+            characteristic,
+            data,
+            BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT,
+        )
+    } else {
+        characteristic.writeType = BluetoothGattCharacteristic.WRITE_TYPE_DEFAULT
+        @Suppress("DEPRECATION")
+        characteristic.value = data
+        @Suppress("DEPRECATION")
+        gatt.writeCharacteristic(characteristic)
+    }
+}
+
+internal fun Int.toConnectionStateString() = when (this) {
     BluetoothProfile.STATE_CONNECTED -> "Connected"
     BluetoothProfile.STATE_CONNECTING -> "Connecting"
     BluetoothProfile.STATE_DISCONNECTED -> "Disconnected"
@@ -108,10 +198,12 @@ private fun Int.toConnectionStateString() = when (this) {
     else -> "N/A"
 }
 
-private data class DeviceState(
+private data class DeviceConnectionState(
     val gatt: BluetoothGatt?,
     val connectionState: Int,
     val mtu: Int,
+    val services: List<BluetoothGattService> = emptyList(),
+    val messageSent: Boolean = false,
 )
 
 @SuppressLint("InlinedApi", "MissingPermission")
@@ -120,18 +212,23 @@ private data class DeviceState(
 private fun BLEConnectEffect(
     device: BluetoothDevice,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    onStateChange: (DeviceState) -> Unit,
+    onStateChange: (DeviceConnectionState) -> Unit,
 ) {
     val context = LocalContext.current
     val currentOnStateChange by rememberUpdatedState(onStateChange)
+
+    // Keep the current GATT connection
     var gatt by remember(device) {
         mutableStateOf<BluetoothGatt?>(null)
     }
+    // Keep the current connection state
     var state by remember(gatt) {
-        mutableStateOf(DeviceState(gatt, -1, -1))
+        mutableStateOf(DeviceConnectionState(gatt, -1, -1))
     }
 
     DisposableEffect(lifecycleOwner, device) {
+        // This callback will notify us when things change in the GATT connection so we can update
+        // our state
         val callback = object : BluetoothGattCallback() {
             override fun onConnectionStateChange(
                 gatt: BluetoothGatt,
@@ -139,13 +236,29 @@ private fun BLEConnectEffect(
                 newState: Int,
             ) {
                 super.onConnectionStateChange(gatt, status, newState)
-                state = state.copy(connectionState = newState)
+                state = state.copy(gatt = gatt, connectionState = newState)
                 currentOnStateChange(state)
             }
 
-            override fun onMtuChanged(gatt: BluetoothGatt?, mtu: Int, status: Int) {
+            override fun onMtuChanged(gatt: BluetoothGatt, mtu: Int, status: Int) {
                 super.onMtuChanged(gatt, mtu, status)
-                state = state.copy(mtu = mtu)
+                state = state.copy(gatt = gatt, mtu = mtu)
+                currentOnStateChange(state)
+            }
+
+            override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+                super.onServicesDiscovered(gatt, status)
+                state = state.copy(services = gatt.services)
+                currentOnStateChange(state)
+            }
+
+            override fun onCharacteristicWrite(
+                gatt: BluetoothGatt?,
+                characteristic: BluetoothGattCharacteristic?,
+                status: Int,
+            ) {
+                super.onCharacteristicWrite(gatt, characteristic, status)
+                state = state.copy(messageSent = status == BluetoothGatt.GATT_SUCCESS)
                 currentOnStateChange(state)
             }
         }
