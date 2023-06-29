@@ -20,29 +20,51 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothManager
+import android.bluetooth.le.ScanCallback
+import android.bluetooth.le.ScanResult
+import android.bluetooth.le.ScanSettings
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.LifecycleOwner
 import com.example.platform.base.PermissionBox
 import com.google.android.catalog.framework.annotations.Sample
-import kotlinx.coroutines.launch
-import java.util.concurrent.TimeUnit
+import kotlinx.coroutines.delay
 
 @SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.M)
@@ -53,69 +75,102 @@ import java.util.concurrent.TimeUnit
 )
 @Composable
 fun FindDevicesSample() {
-    val context = LocalContext.current
-    val bluetoothManager = context.getSystemService<BluetoothManager>()
-
-    if (bluetoothManager == null || bluetoothManager.adapter == null) {
-        Text(text = "Sample not supported in this device. Missing the Bluetooth Manager")
+    val locationPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        Manifest.permission.ACCESS_FINE_LOCATION
     } else {
-        PermissionBox(
-            permissions = FindDeviceController.bluetoothPermissionSet,
-            contentAlignment = Alignment.Center,
-        ) {
-            ListOfDevicesWidget(FindDeviceController(bluetoothManager.adapter))
-        }
+        Manifest.permission.ACCESS_COARSE_LOCATION
+    }
+    val bluetoothPermissionSet = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        listOf(
+            Manifest.permission.BLUETOOTH_CONNECT,
+            Manifest.permission.BLUETOOTH_SCAN,
+            locationPermission,
+        )
+    } else {
+        listOf(
+            Manifest.permission.BLUETOOTH,
+            Manifest.permission.BLUETOOTH_ADMIN,
+            locationPermission,
+        )
+    }
+
+    PermissionBox(
+        permissions = bluetoothPermissionSet,
+        contentAlignment = Alignment.Center,
+    ) {
+        FindDevicesScreen()
     }
 }
 
 @SuppressLint("InlinedApi")
 @RequiresApi(Build.VERSION_CODES.M)
-@RequiresPermission(anyOf = [Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.BLUETOOTH_SCAN])
+@RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
 @Composable
-private fun ListOfDevicesWidget(findDeviceController: FindDeviceController) {
-    val isScanning by findDeviceController.isScanning.collectAsState()
-    val coroutineScope = rememberCoroutineScope()
+private fun FindDevicesScreen() {
+    var scanning by remember {
+        mutableStateOf(true)
+    }
+    val devices = remember {
+        mutableStateListOf<BluetoothDevice>()
+    }
+    val scanSettings: ScanSettings = ScanSettings.Builder()
+        .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
+        .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
+        .build()
 
-    Column(
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        Button(
-            onClick = {
-                if (isScanning) {
-                    findDeviceController.stopScan()
-                } else {
-                    coroutineScope.launch {
-                        findDeviceController.startScan(TimeUnit.SECONDS.toMillis(30))
-                    }
+    // This effect will start scanning for devices when the screen is visible
+    // If scanning is stop removing the effect will stop the scanning.
+    if (scanning) {
+        BluetoothScanEffect(
+            scanSettings = scanSettings,
+            onScanFailed = {
+                scanning = false
+                Log.w("FindDevicesSample", "Scan failed with error: $it")
+            },
+            onDeviceFound = { device ->
+                if (!devices.contains(device)) {
+                    devices.add(device)
                 }
             },
-        ) {
-            Text(
-                text = if (isScanning) {
-                    "Stop Scanning"
-                } else {
-                    "Start Scanning"
-                },
-            )
+        )
+        // Stop scanning after a while
+        LaunchedEffect(true) {
+            delay(15000)
+            scanning = false
         }
-        ListOfBLEDevices(findDeviceController)
     }
-}
 
-@RequiresApi(Build.VERSION_CODES.M)
-@Composable
-private fun ListOfBLEDevices(findDeviceController: FindDeviceController) {
-    val devices by findDeviceController.listOfDevices.collectAsState()
-
-    LazyColumn(Modifier.padding(16.dp)) {
-        if (devices.isEmpty()) {
-            item {
-                Text(text = "No devices found")
+    Column(Modifier.fillMaxSize()) {
+        Row(
+            Modifier
+                .fillMaxWidth()
+                .height(54.dp)
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(text = "Discovered devices", style = MaterialTheme.typography.titleSmall)
+            if (scanning) {
+                CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
+            } else {
+                IconButton(onClick = { scanning = true }) {
+                    Icon(imageVector = Icons.Rounded.Refresh, contentDescription = null)
+                }
             }
         }
-        items(devices) { item ->
-            BluetoothItem(bluetoothDevice = item)
+
+        LazyColumn(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            if (devices.isEmpty()) {
+                item {
+                    Text(text = "No devices found")
+                }
+            }
+            items(devices) { item ->
+                BluetoothDeviceItem(bluetoothDevice = item)
+            }
         }
     }
 
@@ -123,10 +178,67 @@ private fun ListOfBLEDevices(findDeviceController: FindDeviceController) {
 
 @SuppressLint("MissingPermission")
 @Composable
-private fun BluetoothItem(bluetoothDevice: BluetoothDevice) {
-    Text(
-        bluetoothDevice.name,
+private fun BluetoothDeviceItem(bluetoothDevice: BluetoothDevice) {
+    Row(
         modifier = Modifier
-            .padding(8.dp, 0.dp),
-    )
+            .padding(vertical = 8.dp)
+            .fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(bluetoothDevice.name ?: "N/A")
+
+        Text(bluetoothDevice.address)
+    }
+}
+
+@SuppressLint("InlinedApi")
+@RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
+@Composable
+private fun BluetoothScanEffect(
+    scanSettings: ScanSettings,
+    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
+    onScanFailed: (Int) -> Unit,
+    onDeviceFound: (device: BluetoothDevice) -> Unit,
+) {
+    val context = LocalContext.current
+    val adapter = context.getSystemService<BluetoothManager>()?.adapter
+
+    if (adapter == null) {
+        onScanFailed(ScanCallback.SCAN_FAILED_INTERNAL_ERROR)
+        return
+    }
+
+    val currentOnDeviceFound by rememberUpdatedState(onDeviceFound)
+
+    DisposableEffect(lifecycleOwner, scanSettings) {
+        val leScanCallback: ScanCallback = object : ScanCallback() {
+            override fun onScanResult(callbackType: Int, result: ScanResult) {
+                super.onScanResult(callbackType, result)
+                currentOnDeviceFound(result.device)
+            }
+
+            override fun onScanFailed(errorCode: Int) {
+                super.onScanFailed(errorCode)
+                onScanFailed(errorCode)
+            }
+        }
+
+        val observer = LifecycleEventObserver { _, event ->
+            // Start scanning once the app is in foreground and stop when in background
+            if (event == Lifecycle.Event.ON_START) {
+                adapter.bluetoothLeScanner.startScan(null, scanSettings, leScanCallback)
+            } else if (event == Lifecycle.Event.ON_STOP) {
+                adapter.bluetoothLeScanner.stopScan(leScanCallback)
+            }
+        }
+
+        // Add the observer to the lifecycle
+        lifecycleOwner.lifecycle.addObserver(observer)
+
+        // When the effect leaves the Composition, remove the observer and stop scanning
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(observer)
+            adapter.bluetoothLeScanner.stopScan(leScanCallback)
+        }
+    }
 }
