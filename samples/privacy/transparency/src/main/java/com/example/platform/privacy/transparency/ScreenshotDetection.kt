@@ -17,8 +17,11 @@
 package com.example.platform.privacy.transparency
 
 import android.app.Activity
-import android.content.ContextWrapper
 import android.os.Build
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,110 +30,77 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.LifecycleEventObserver
-import androidx.lifecycle.LifecycleOwner
+import androidx.fragment.app.Fragment
 import com.google.android.catalog.framework.annotations.Sample
 import java.text.DateFormat
 import java.util.Date
 
 @Sample(
     name = "Screenshot Detection",
-    description = "This sample shows how to detect that the user capture the screen in Android 14 onwards"
+    description = "This sample shows how to detect that the user capture the screen in Android 14 onwards",
 )
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-@Composable
-fun ScreenshotDetection() {
-    val stateList = remember {
-        mutableStateListOf<Long>()
-    }
-    ScreenCaptureEffect {
-        // Store the timestamps when a screenshot is detected.
+class ScreenshotDetectionSample : Fragment() {
+
+    // When modified the UI will recompose
+    private val stateList = mutableStateListOf<Long>()
+
+    // When registered this callback will be called by the system when it detects a screenshot
+    // It does not provide the bitmap or any further information. Only the signal that a screenshot
+    // was taken by the user.
+    private val screenCaptureCallback = Activity.ScreenCaptureCallback {
+        // Add the timestamp to the list
         stateList.add(System.currentTimeMillis())
     }
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        item {
-            Text(
-                text = "I can detect screenshots. Try it!",
-                style = MaterialTheme.typography.titleLarge
-            )
-        }
 
-        items(stateList) {
-            val date = DateFormat.getTimeInstance().format(Date(it))
-            Text(
-                text = "$date - Screenshot detected",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?,
+    ): View {
+        // Simple UI that displays the timestamp when a screenshot was detect while the app is
+        // in the foreground
+        return ComposeView(requireContext()).apply {
+            setContent {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    item {
+                        Text(
+                            text = "I can detect screenshots. Try it!",
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                    }
 
-/**
- * An effect for handling screen capture callbacks
- *
- * Calling this in your composable adds the given lambda to the [Activity.ScreenCaptureCallback]
- * from the current activity based on the [LocalLifecycleOwner] and the composition state.
- */
-@RequiresApi(34)
-@Composable
-fun ScreenCaptureEffect(
-    lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
-    onScreenCapture: () -> Unit,
-) {
-    val activity = findActivity()
-    val currentOnScreenCapture by rememberUpdatedState(newValue = onScreenCapture)
-
-    DisposableEffect(lifecycleOwner) {
-        // Notify the current function when a screenshot is detected
-        val screenCaptureCallback = Activity.ScreenCaptureCallback {
-            currentOnScreenCapture()
-        }
-
-        // Register the screen capture callback onStart and unregister it onStop
-        val observer = LifecycleEventObserver { _, event ->
-            if (event == Lifecycle.Event.ON_START) {
-                activity.registerScreenCaptureCallback(activity.mainExecutor, screenCaptureCallback)
-            } else if (event == Lifecycle.Event.ON_STOP) {
-                activity.unregisterScreenCaptureCallback(screenCaptureCallback)
+                    items(stateList) {
+                        val date = DateFormat.getTimeInstance().format(Date(it))
+                        Text(
+                            text = "$date - Screenshot detected",
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
+                }
             }
         }
-
-        // Add the observer to the lifecycle
-        lifecycleOwner.lifecycle.addObserver(observer)
-
-        // When the effect leaves the Composition, remove the observer and the callback
-        onDispose {
-            activity.unregisterScreenCaptureCallback(screenCaptureCallback)
-            lifecycleOwner.lifecycle.removeObserver(observer)
-        }
     }
-}
 
-/**
- * Utility method to find the current activity inside a composable function
- */
-@Composable
-private fun findActivity(): Activity {
-    var context = LocalContext.current
-    while (context is ContextWrapper) {
-        if (context is Activity) return context
-        context = context.baseContext
+    override fun onStart() {
+        super.onStart()
+        // The system will only notify the app while in the foreground. Thus we can just register
+        // onStart and unregister onStop
+        requireActivity().registerScreenCaptureCallback(
+            requireActivity().mainExecutor,
+            screenCaptureCallback,
+        )
     }
-    throw IllegalStateException("This composable is not part of any activity.")
+
+    override fun onStop() {
+        super.onStop()
+        requireActivity().unregisterScreenCaptureCallback(screenCaptureCallback)
+    }
 }
