@@ -75,7 +75,7 @@ import kotlinx.coroutines.delay
     tags = ["bluetooth"],
 )
 @Composable
-fun FindDevicesSample() {
+fun FindBLEDevicesSample() {
     BluetoothSampleBox {
         FindDevicesScreen {
             Log.d("FindDeviceSample", "Name: ${it.name} Address: ${it.address} Type: ${it.type}")
@@ -112,7 +112,7 @@ internal fun FindDevicesScreen(onConnect: (BluetoothDevice) -> Unit) {
             scanSettings = scanSettings,
             onScanFailed = {
                 scanning = false
-                Log.w("FindDevicesSample", "Scan failed with error: $it")
+                Log.w("FindBLEDevicesSample", "Scan failed with error: $it")
             },
             onDeviceFound = { device ->
                 if (!devices.contains(device)) {
