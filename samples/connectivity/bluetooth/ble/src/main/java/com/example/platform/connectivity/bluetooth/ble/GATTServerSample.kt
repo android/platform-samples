@@ -29,7 +29,6 @@ import android.bluetooth.le.AdvertiseCallback
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
 import android.os.Build
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -156,7 +155,9 @@ internal fun GATTServerScreen() {
     }
 }
 
+// Random UUID for our service known between the client and server to allow communication
 internal val SERVICE_UUID = UUID.fromString("9f42ba3a-75ea-4ca1-92d0-aef57f0479e6")
+// Same as the service but for the characteristic
 internal val CHARACTERISTIC_UUID = UUID.fromString("5aade5a7-14ea-43f7-a136-16cb92cddf35")
 
 @SuppressLint("MissingPermission")
@@ -173,6 +174,8 @@ private fun GATTServerEffect(
     val currentServerCallback by rememberUpdatedState(serverCallback)
     val currentAdvertiseCallback by rememberUpdatedState(advertiseCallback)
     val currentOnServerOpened by rememberUpdatedState(onServerOpened)
+
+    // Create our service with a characteristic for our GATT server
     val service = remember {
         BluetoothGattService(SERVICE_UUID, BluetoothGattService.SERVICE_TYPE_PRIMARY).also {
             it.addCharacteristic(
@@ -185,6 +188,7 @@ private fun GATTServerEffect(
         }
     }
 
+    // Keep track of the created server
     var gattServer by remember {
         mutableStateOf<BluetoothGattServer?>(null)
     }
@@ -214,9 +218,6 @@ private fun GATTServerEffect(
                     currentAdvertiseCallback,
                 )
             } else if (event == Lifecycle.Event.ON_STOP) {
-                if (gattServer == null) {
-                    Log.w("MPB", "GATT server was null")
-                }
                 bluetoothLeAdvertiser.stopAdvertising(advertiseCallback)
                 gattServer?.close()
             }
@@ -228,7 +229,6 @@ private fun GATTServerEffect(
         // When the effect leaves the Composition, remove the observer and close the connection
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
-            // close
             gattServer?.close()
             bluetoothLeAdvertiser.stopAdvertising(advertiseCallback)
         }

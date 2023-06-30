@@ -277,6 +277,9 @@ private fun BLEConnectEffect(
                     // Otherwise create a new GATT connection
                     gatt = device.connectGatt(context, false, callback)
                 }
+            } else if (event == Lifecycle.Event.ON_STOP) {
+                // Unless you have a reason to keep connected while in the bg you should disconnect
+                gatt?.disconnect()
             }
         }
 
