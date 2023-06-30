@@ -18,4 +18,4 @@ package com.example.platform.ui.appwidgets.glance.image
 
 import androidx.core.content.FileProvider
 
-class ImageFileProvider: FileProvider()
+class ImageFileProvider : FileProvider()

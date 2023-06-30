@@ -105,7 +105,6 @@ private fun PinUnavailableBanner() {
         modifier = Modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.error),
-        color = MaterialTheme.colorScheme.onError
     )
 }
 
