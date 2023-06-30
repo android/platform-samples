@@ -38,6 +38,7 @@ import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
+import androidx.glance.appwidget.provideContent
 import androidx.glance.background
 import androidx.glance.currentState
 import androidx.glance.layout.Alignment
@@ -81,8 +82,12 @@ class WeatherGlanceWidget : GlanceAppWidget() {
         setOf(thinMode, smallMode, mediumMode, largeMode)
     )
 
+    override suspend fun provideGlance(context: Context, id: GlanceId) {
+        provideContent { Content() }
+    }
+
     @Composable
-    override fun Content() {
+    fun Content() {
         // Get the stored stated based on our custom state definition.
         val weatherInfo = currentState<WeatherInfo>()
         // It will be one of the provided ones
