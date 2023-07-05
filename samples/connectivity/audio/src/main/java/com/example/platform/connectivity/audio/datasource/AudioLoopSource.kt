@@ -59,7 +59,7 @@ class AudioLoopSource {
             AudioFormat.ENCODING_PCM_16BIT,
         )
 
-        var audioSampler : AudioRecord? = null
+        var audioSampler: AudioRecord? = null
 
         //Audio track for audio playback
         private val audioTrack = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -98,7 +98,7 @@ class AudioLoopSource {
     @SuppressLint("MissingPermission")
     fun startAudioLoop(): Boolean {
 
-        if(audioSampler == null){
+        if (audioSampler == null) {
             audioSampler = AudioRecord(
                 MediaRecorder.AudioSource.VOICE_COMMUNICATION,
                 sampleRate,
@@ -143,7 +143,7 @@ class AudioLoopSource {
     fun stopAudioLoop() {
         job?.cancel("Stop Recording", null)
         isRecording.update { false }
-        if (audioSampler.state == AudioRecord.STATE_INITIALIZED) {
+        if (audioSampler?.state == AudioRecord.STATE_INITIALIZED) {
             audioSampler?.stop()
         }
         audioTrack.stop()

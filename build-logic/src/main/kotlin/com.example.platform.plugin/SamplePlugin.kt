@@ -44,6 +44,7 @@ class SamplePlugin : Plugin<Project> {
                 apply("org.jetbrains.kotlin.kapt")
                 apply("com.google.devtools.ksp")
                 apply("dagger.hilt.android.plugin")
+                apply("kotlin-parcelize")
                 apply<CommonConventionPlugin>()
             }
 
@@ -112,6 +113,8 @@ class SamplePlugin : Plugin<Project> {
                 "implementation"(libs.findLibrary("androidx.lifecycle.viewmodel.compose").get())
                 "implementation"(libs.findLibrary("compose.ui.ui").get())
                 "implementation"(libs.findLibrary("compose.material3").get())
+                "implementation"(libs.findLibrary("compose.material.iconsext").get())
+
 
                 "implementation"(libs.findLibrary("coil.compose").get())
                 "implementation"(libs.findLibrary("coil.video").get())

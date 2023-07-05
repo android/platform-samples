@@ -30,7 +30,7 @@ java {
 
 android {
     namespace = "com.example.platform.app"
-    compileSdk = 34
+    compileSdkPreview = "UpsideDownCake"
 
     defaultConfig {
         applicationId = "com.example.platform.app"

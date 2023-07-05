@@ -28,6 +28,9 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+
+        // Using SNAPSHOTS for Telecom SDK. This should be removed once telecom SDK is stable
+        maven { url = uri("https://androidx.dev/snapshots/builds/10465142/artifacts/repository") }
     }
 }
 

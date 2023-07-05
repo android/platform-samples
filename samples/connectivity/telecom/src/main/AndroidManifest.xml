@@ -17,24 +17,23 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application>
         <activity
-            android:name=".TelecomSample"
+            android:name=".TelecomCallSampleActivity"
             android:exported="true"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:launchMode="singleInstance"
+            android:turnScreenOn="true"
+            android:showWhenLocked="true"
+            android:showOnLockScreen="true">
         </activity>
 
 
         <receiver
-            android:name=".TelecomSample$NotificationReceiver"
+            android:name=".TelecomCallBroadcast"
             android:exported="false" />
 
     </application>
