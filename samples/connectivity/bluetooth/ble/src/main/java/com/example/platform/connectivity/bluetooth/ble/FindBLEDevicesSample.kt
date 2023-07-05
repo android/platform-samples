@@ -27,6 +27,7 @@ import android.os.Build
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -62,7 +63,6 @@ import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import com.example.platform.base.PermissionBox
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.delay
 
@@ -72,46 +72,33 @@ import kotlinx.coroutines.delay
     name = "Find devices sample",
     description = "This example will demonstrate how to scanning for Low Energy Devices",
     documentation = "https://developer.android.com/guide/topics/connectivity/bluetooth",
+    tags = ["bluetooth"],
 )
 @Composable
-fun FindDevicesSample() {
-    val locationPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-        Manifest.permission.ACCESS_FINE_LOCATION
-    } else {
-        Manifest.permission.ACCESS_COARSE_LOCATION
-    }
-    val bluetoothPermissionSet = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        listOf(
-            Manifest.permission.BLUETOOTH_CONNECT,
-            Manifest.permission.BLUETOOTH_SCAN,
-            locationPermission,
-        )
-    } else {
-        listOf(
-            Manifest.permission.BLUETOOTH,
-            Manifest.permission.BLUETOOTH_ADMIN,
-            locationPermission,
-        )
-    }
-
-    PermissionBox(
-        permissions = bluetoothPermissionSet,
-        contentAlignment = Alignment.Center,
-    ) {
-        FindDevicesScreen()
+fun FindBLEDevicesSample() {
+    BluetoothSampleBox {
+        FindDevicesScreen {
+            Log.d("FindDeviceSample", "Name: ${it.name} Address: ${it.address} Type: ${it.type}")
+        }
     }
 }
 
-@SuppressLint("InlinedApi")
+@SuppressLint("InlinedApi", "MissingPermission")
 @RequiresApi(Build.VERSION_CODES.M)
 @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
 @Composable
-private fun FindDevicesScreen() {
+internal fun FindDevicesScreen(onConnect: (BluetoothDevice) -> Unit) {
+    val context = LocalContext.current
+    val adapter = checkNotNull(context.getSystemService<BluetoothManager>()?.adapter)
     var scanning by remember {
         mutableStateOf(true)
     }
     val devices = remember {
         mutableStateListOf<BluetoothDevice>()
+    }
+    val pairedDevices = remember {
+        // Get a list of previously paired devices
+        mutableStateListOf<BluetoothDevice>(*adapter.bondedDevices.toTypedArray())
     }
     val scanSettings: ScanSettings = ScanSettings.Builder()
         .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
@@ -125,7 +112,7 @@ private fun FindDevicesScreen() {
             scanSettings = scanSettings,
             onScanFailed = {
                 scanning = false
-                Log.w("FindDevicesSample", "Scan failed with error: $it")
+                Log.w("FindBLEDevicesSample", "Scan failed with error: $it")
             },
             onDeviceFound = { device ->
                 if (!devices.contains(device)) {
@@ -149,11 +136,16 @@ private fun FindDevicesScreen() {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Text(text = "Discovered devices", style = MaterialTheme.typography.titleSmall)
+            Text(text = "Available devices", style = MaterialTheme.typography.titleSmall)
             if (scanning) {
                 CircularProgressIndicator(modifier = Modifier.size(24.dp), strokeWidth = 2.dp)
             } else {
-                IconButton(onClick = { scanning = true }) {
+                IconButton(
+                    onClick = {
+                        devices.clear()
+                        scanning = true
+                    },
+                ) {
                     Icon(imageVector = Icons.Rounded.Refresh, contentDescription = null)
                 }
             }
@@ -169,7 +161,16 @@ private fun FindDevicesScreen() {
                 }
             }
             items(devices) { item ->
-                BluetoothDeviceItem(bluetoothDevice = item)
+                BluetoothDeviceItem(bluetoothDevice = item, onConnect = onConnect)
+            }
+
+            if (pairedDevices.isNotEmpty()) {
+                item {
+                    Text(text = "Saved devices", style = MaterialTheme.typography.titleSmall)
+                }
+                items(pairedDevices) {
+                    BluetoothDeviceItem(bluetoothDevice = it, onConnect = onConnect)
+                }
             }
         }
     }
@@ -178,16 +179,26 @@ private fun FindDevicesScreen() {
 
 @SuppressLint("MissingPermission")
 @Composable
-private fun BluetoothDeviceItem(bluetoothDevice: BluetoothDevice) {
+private fun BluetoothDeviceItem(
+    bluetoothDevice: BluetoothDevice,
+    onConnect: (BluetoothDevice) -> Unit,
+) {
     Row(
         modifier = Modifier
             .padding(vertical = 8.dp)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .clickable { onConnect(bluetoothDevice) },
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
         Text(bluetoothDevice.name ?: "N/A")
-
         Text(bluetoothDevice.address)
+        val state = when (bluetoothDevice.bondState) {
+            BluetoothDevice.BOND_BONDED -> "Paired"
+            BluetoothDevice.BOND_BONDING -> "Pairing"
+            else -> "None"
+        }
+        Text(text = state)
+        
     }
 }
 

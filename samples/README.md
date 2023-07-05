@@ -12,17 +12,21 @@ This sample demonstrates how to capture and image and encode it into a JPEG
 Demonstrates displaying processed pixel data directly from the camera sensor 
 - [Color Contrast](accessibility/src/main/java/com/example/platform/accessibility/ColorContrast.kt):
 This sample demonstrates the importance of proper color contrast and how to 
+- [Connect to a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/ConnectGATTSample.kt):
+Shows how to connect to a GATT server hosted by the BLE device and perform simple operations
 - [ConstraintLayout - 1. Centering Views](user-interface/constraintlayout/src/main/java/com/example/platform/ui/constraintlayout/ConstraintLayout.kt):
 Center child views horizontally or vertically.
 - [Conversion suggestions](user-interface/text/src/main/java/com/example/platform/ui/text/ConversionSuggestions.kt):
 Demonstrates how to implement the incremental search feature for non-alphabet languages with the Conversion Suggestions API.
+- [Create a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/GATTServerSample.kt):
+Shows how to create a GATT server and communicate with the GATT client
 - [Data Access](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
 Demonstrates how to implement data access auditing for your app to identify 
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
 Demonstrates basic Drag and Drop functionality.
-- [Find devices sample](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/FindDevicesSample.kt):
+- [Find devices sample](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/FindBLEDevicesSample.kt):
 This example will demonstrate how to scanning for Low Energy Devices
 - [Haptics - 1. Vibration effects](user-interface/haptics/src/main/java/com/example/platform/ui/haptics/Haptics.kt):
 Shows various vibration effects.
