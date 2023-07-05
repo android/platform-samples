@@ -29,6 +29,11 @@ import com.example.platform.media.ultrahdr.R
 import com.example.platform.media.ultrahdr.databinding.ColorModeControlsBinding
 import java.util.function.Consumer
 
+/**
+ * This class creates a custom view that is able to change the Activity's Color Mode to HDR, which
+ * enable UltraHDR Viewing. The [setWindow] method must be called in order for the UltraHDR viewing
+ * to happen.
+ */
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class ColorModeControls : LinearLayout, WindowObserver {
     constructor(context: Context) : this(context, null)
@@ -74,10 +79,12 @@ class ColorModeControls : LinearLayout, WindowObserver {
             setColorMode(it.colorMode)
 
             binding.ultrahdrColorModeSrgb.setOnClickListener {
+                // Changed the activities color mode to SDR
                 setColorMode(ActivityInfo.COLOR_MODE_DEFAULT)
             }
-            
+
             binding.ultrahdrColorModeHdr.setOnClickListener {
+                // Changed the activities color mode to HDR
                 setColorMode(ActivityInfo.COLOR_MODE_HDR)
             }
         }

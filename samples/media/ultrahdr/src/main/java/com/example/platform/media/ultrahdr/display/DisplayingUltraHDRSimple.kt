@@ -24,15 +24,14 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.example.platform.media.ultrahdr.R
 import com.example.platform.media.ultrahdr.databinding.DisplayingUltrahdrSimpleBinding
 import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
-    name = "Media - Displaying UltraHDR (Simple)",
+    name = "Displaying UltraHDR",
     description = "This sample demonstrates displaying an UltraHDR image",
     documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-    tags = ["ultrahdr"],
+    tags = ["ultrahdr", "graphics"],
 )
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class DisplayingUltraHDRSimple : Fragment() {

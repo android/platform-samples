@@ -22,6 +22,8 @@ Demonstrates how to implement the incremental search feature for non-alphabet la
 Shows how to create a GATT server and communicate with the GATT client
 - [Data Access](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
 Demonstrates how to implement data access auditing for your app to identify 
+- [Displaying UltraHDR](media/ultrahdr/src/main/java/com/example/platform/media/ultrahdr/display/DisplayingUltraHDRSimple.kt):
+This sample demonstrates displaying an UltraHDR image
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
@@ -52,8 +54,6 @@ This Sample demonstrate best practices for Location Permission
 This Sample demonstrate how to get location updates
 - [Location - User Activity Recognition](location/src/main/java/com/example/platform/location/useractivityrecog/UserActivityRecognitionScreen.kt):
 This Sample demonstrate detection of user activity like walking, driving, etc.
-- [Media - Displaying UltraHDR (Simple)](media/ultrahdr/src/main/java/com/example/platform/media/ultrahdr/display/DisplayingUltraHDRSimple.kt):
-This sample demonstrates displaying an UltraHDR image
 - [MotionLayout - 01. Basic](user-interface/constraintlayout/src/main/java/com/example/platform/ui/constraintlayout/MotionLayout.kt):
 Basic motion example using referenced ConstraintLayout files
 - [Multiple Permissions](privacy/permissions/src/main/java/com/example/platform/privacy/permissions/MultiplePermissions.kt):
