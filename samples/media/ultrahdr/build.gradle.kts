@@ -26,6 +26,5 @@ android {
 }
 
 dependencies {
-    // Sub-sampled ImageView for extra large UltraHDR images
-    implementation(libs.androidx.subsamplingscaleimageview)
+    // Add samples specific dependencies
 }
