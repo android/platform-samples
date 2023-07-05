@@ -1,11 +1,11 @@
 ![Build](https://github.com/android/platform-samples/actions/workflows/build.yml/badge.svg)
 
-# Platform Samples
+# Android Platform Samples
 
-A collection of samples of different Android OS platform APIs.
+This repository contains a collection of samples that demonstrate the use of different Android OS platform APIs. The samples are organized into folders by topic, and each folder contains a README file that provides more information about the samples in that folder.
 
-> **Note:** the goal of these samples are to showcase certain functionality in isolation and they 
-> might use simplified code. The project uses the
+> **Note:** These samples are intended to showcase specific functionality in isolation, and they may use
+> simplified code. They are not intended to be used as production-ready code. The project uses the
 > [casa-android](https://github.com/google/casa-android) (intended only for demo projects).
 > For best practices follow our documentation and check
 > [Now In Android](https://github.com/android/nowinandroid)
@@ -22,7 +22,7 @@ Browse the samples inside each topic samples folder:
 - [User-interface](samples/user-interface)
 - More to come...
 
-You can find a list of all the available samples [here](samples/README.md).
+We are constantly adding new samples to this repository. You can find a list of all the available samples [here](samples/README.md).
 
 > 🚧 **Work-in-Progress:** we are working on brining more existing and new samples into this format.
 
