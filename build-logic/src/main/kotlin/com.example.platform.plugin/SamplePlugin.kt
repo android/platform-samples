@@ -26,8 +26,10 @@ import org.gradle.jvm.toolchain.JavaLanguageVersion
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.configure
 import org.gradle.kotlin.dsl.dependencies
+import org.gradle.kotlin.dsl.project
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+@Suppress("UnstableApiUsage")
 class SamplePlugin : Plugin<Project> {
     override fun apply(target: Project) {
         with(target) {
@@ -62,10 +64,11 @@ class SamplePlugin : Plugin<Project> {
 
             pluginManager.withPlugin("com.android.library") {
                 configure<LibraryExtension> {
-                    compileSdk = 33
+                    compileSdk = 34
                     defaultConfig {
                         minSdk = 21
-                        targetSdk = 33
+                        @Suppress("DEPRECATION")
+                        targetSdk = 34
                         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
                     }
 
@@ -79,12 +82,18 @@ class SamplePlugin : Plugin<Project> {
                     }
 
                     composeOptions {
-                        kotlinCompilerExtensionVersion = libs.findVersion("composeCompiler").get().toString()
+                        kotlinCompilerExtensionVersion =
+                            libs.findVersion("composeCompiler").get().toString()
                     }
                 }
             }
 
             dependencies {
+                // Do not add the shared module to itself
+                if (!project.displayName.contains("samples:base")) {
+                    "implementation"(project(":samples:base"))
+                }
+
                 "implementation"(platform(libs.findLibrary("compose.bom").get()))
                 "androidTestImplementation"(platform(libs.findLibrary("compose.bom").get()))
 
@@ -98,6 +107,8 @@ class SamplePlugin : Plugin<Project> {
                 "implementation"(libs.findLibrary("androidx.fragment").get())
                 "implementation"(libs.findLibrary("androidx.activity.compose").get())
                 "implementation"(libs.findLibrary("compose.foundation.foundation").get())
+                "implementation"(libs.findLibrary("compose.runtime.runtime").get())
+                "implementation"(libs.findLibrary("compose.runtime.livedata").get())
                 "implementation"(libs.findLibrary("androidx.lifecycle.viewmodel.compose").get())
                 "implementation"(libs.findLibrary("compose.ui.ui").get())
                 "implementation"(libs.findLibrary("compose.material3").get())

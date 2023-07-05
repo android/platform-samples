@@ -38,10 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import com.example.platform.location.permission.LocationPermissions
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import com.example.platform.base.PermissionBox
 import com.google.android.catalog.framework.annotations.Sample
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
@@ -52,37 +49,30 @@ import java.util.concurrent.TimeUnit
 
 
 @SuppressLint("MissingPermission")
-@OptIn(ExperimentalPermissionsApi::class)
 @Sample(
     name = "Location - Updates",
     description = "This Sample demonstrate how to get location updates",
-    documentation = "https://developer.android.com/training/location/request-updates"
+    documentation = "https://developer.android.com/training/location/request-updates",
 )
 @Composable
 fun LocationUpdatesScreen() {
-    val permissionsState = rememberMultiplePermissionsState(
-        permissions = listOf(
-            Manifest.permission.ACCESS_COARSE_LOCATION,
-            Manifest.permission.ACCESS_FINE_LOCATION
-        )
+    val permissions = listOf(
+        Manifest.permission.ACCESS_COARSE_LOCATION,
+        Manifest.permission.ACCESS_FINE_LOCATION,
     )
-
-    if (permissionsState.permissions.any { it.status.isGranted }) {
-        // Only use precise accuracy if both permissions are granted
-        LocationUpdatesContent(usePreciseLocation = permissionsState.allPermissionsGranted)
-    } else {
-        LocationPermissions(
-            text = "Location",
-            rationale = "In order to use this feature please grant access by accepting " +
-                    "either precise or approximate location permission." +
-                    "\n\nWould you like to continue?",
-            locationState = permissionsState
+    // Requires at least coarse permission
+    PermissionBox(
+        permissions = permissions,
+        requiredPermissions = listOf(permissions.first()),
+    ) {
+        LocationUpdatesContent(
+            usePreciseLocation = it.contains(Manifest.permission.ACCESS_FINE_LOCATION),
         )
     }
 }
 
 @RequiresPermission(
-    anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION]
+    anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION],
 )
 @Composable
 fun LocationUpdatesContent(usePreciseLocation: Boolean) {
@@ -124,19 +114,22 @@ fun LocationUpdatesContent(usePreciseLocation: Boolean) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(text = "Enable location updates")
                 Spacer(modifier = Modifier.padding(8.dp))
-                Switch(checked = locationRequest != null, onCheckedChange = { checked ->
-                    locationRequest = if (checked) {
-                        // Define the accuracy based on your needs and granted permissions
-                        val priority = if (usePreciseLocation) {
-                            Priority.PRIORITY_HIGH_ACCURACY
+                Switch(
+                    checked = locationRequest != null,
+                    onCheckedChange = { checked ->
+                        locationRequest = if (checked) {
+                            // Define the accuracy based on your needs and granted permissions
+                            val priority = if (usePreciseLocation) {
+                                Priority.PRIORITY_HIGH_ACCURACY
+                            } else {
+                                Priority.PRIORITY_BALANCED_POWER_ACCURACY
+                            }
+                            LocationRequest.Builder(priority, TimeUnit.SECONDS.toMillis(3)).build()
                         } else {
-                            Priority.PRIORITY_BALANCED_POWER_ACCURACY
+                            null
                         }
-                        LocationRequest.Builder(priority, TimeUnit.SECONDS.toMillis(3)).build()
-                    } else {
-                        null
-                    }
-                })
+                    },
+                )
             }
         }
         item {
@@ -150,7 +143,7 @@ fun LocationUpdatesContent(usePreciseLocation: Boolean) {
  * updates are added and removed whenever the composable enters or exists the composition.
  */
 @RequiresPermission(
-    anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION]
+    anyOf = [Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION],
 )
 @Composable
 fun LocationUpdatesEffect(
@@ -172,7 +165,7 @@ fun LocationUpdatesEffect(
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_START) {
                 locationClient.requestLocationUpdates(
-                    locationRequest, locationCallback, Looper.getMainLooper()
+                    locationRequest, locationCallback, Looper.getMainLooper(),
                 )
             } else if (event == Lifecycle.Event.ON_STOP) {
                 locationClient.removeLocationUpdates(locationCallback)

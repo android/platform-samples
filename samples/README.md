@@ -6,19 +6,27 @@ Showcases how to pin widget within the app. Check the launcher widget menu for a
 This sample will show you how get all audio sources and set an audio device. Covers Bluetooth, LEA, Wired and internal speakers
 - [Call Notification Sample](connectivity/callnotification/src/main/java/com/example/platform/connectivity/callnotification/CallNotificationSample.kt):
 Sample demonstrating how to make incoming call notifications and in call notifications
+- [Camera2 - Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2ImageCapture.kt):
+This sample demonstrates how to capture and image and encode it into a JPEG 
 - [Camera2 - Preview](camera/camera2/src/main/java/com/example/platform/camera/preview/Camera2Preview.kt):
 Demonstrates displaying processed pixel data directly from the camera sensor 
 - [Color Contrast](accessibility/src/main/java/com/example/platform/accessibility/ColorContrast.kt):
 This sample demonstrates the importance of proper color contrast and how to 
+- [Connect to a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/ConnectGATTSample.kt):
+Shows how to connect to a GATT server hosted by the BLE device and perform simple operations
 - [ConstraintLayout - 1. Centering Views](user-interface/constraintlayout/src/main/java/com/example/platform/ui/constraintlayout/ConstraintLayout.kt):
 Center child views horizontally or vertically.
 - [Conversion suggestions](user-interface/text/src/main/java/com/example/platform/ui/text/ConversionSuggestions.kt):
 Demonstrates how to implement the incremental search feature for non-alphabet languages with the Conversion Suggestions API.
+- [Create a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/GATTServerSample.kt):
+Shows how to create a GATT server and communicate with the GATT client
 - [Data Access](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
 Demonstrates how to implement data access auditing for your app to identify 
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
-- [Find devices sample](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/FindDevicesSample.kt):
+- [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
+Demonstrates basic Drag and Drop functionality.
+- [Find devices sample](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/FindBLEDevicesSample.kt):
 This example will demonstrate how to scanning for Low Energy Devices
 - [Haptics - 1. Vibration effects](user-interface/haptics/src/main/java/com/example/platform/ui/haptics/Haptics.kt):
 Shows various vibration effects.
@@ -60,6 +68,10 @@ This sample showcases how to request permission using Accompanist in Compose
 Basic usage of Picture-in-Picture mode showcasing a stopwatch
 - [Picture in Picture (PiP) - Video playback](user-interface/picture-in-picture/src/main/java/com/example/android/pip/PiPMovieActivity.kt):
 Basic usage of Picture-in-Picture mode showcasing video playback
+- [Quick Settings](user-interface/quicksettings/src/main/java/com/example/platform/ui/quicksettings/QuickSettings.kt):
+Add your custom tile to the Quick Settings.
+- [Screenshot Detection](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/ScreenshotDetection.kt):
+This sample shows how to detect that the user capture the screen in Android 14 onwards
 - [Single Permission](privacy/permissions/src/main/java/com/example/platform/privacy/permissions/SinglePermission.kt):
 Shows the recommended flow to request single runtime permissions
 - [Speakable Text](accessibility/src/main/java/com/example/platform/accessibility/SpeakableText.kt):
@@ -68,3 +80,7 @@ The sample demonstrates the importance of having proper labels for
 Example application showing incoming and outgoing calls using the telecom jetpack library
 - [TextSpan](user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.
+- [WindowInsetsAnimation](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/WindowInsetsAnimation.kt):
+Shows how to react to the on-screen keyboard (IME) changing visibility, and also controlling the IME's visibility.
+- [WindowManager](user-interface/windowmanager/src/main/java/com/example/platform/ui/windowmanager/demos/WindowDemosActivity.kt):
+Demonstrates how to use the Jetpack WindowManager library.

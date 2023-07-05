@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2020 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+       https://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<resources>
+    <string name="app_name">WindowSamples</string>
+    <string name="deviceState">Device state</string>
+    <string name="fold">Fold</string>
+    <string name="legend">Legend:</string>
+    <string name="content_title">Content title</string>
+    <string name="green_droid">Green droid</string>
+    <string name="display_features">Display features</string>
+    <string name="split_layout">Split layout</string>
+    <string name="presentation">Presentation</string>
+    <string name="start_presentation">Start presentation</string>
+    <string name="stop_presentation">Stop presentation</string>
+    <string name="closeToStartPresentationHint">Close the device to start Presentation on
+        the outside screen</string>
+    <string name="windowManagerDemos">WindowManager Demos</string>
+    <string name="hardware_config_select">Hardware configuration to use</string>
+    <string name="device_default">Device default</string>
+    <string name="short_dimension_fold">Fold in the middle of the window along short
+        dimension</string>
+    <string name="long_dimension_fold">Fold in the middle of the window along long
+        dimension</string>
+    <string name="test_activity">Test activity</string>
+    <string name="show_all_display_features_config_change_description">Show all display features of the device on the screen and handle config changes</string>
+    <string name="show_all_display_features_no_config_change_description">Show all display features of the device on the screen and do not handle config changes.  The activity is recreated instead on rotation or resize</string>
+    <string name="split_layout_demo_description">Demo of a layout that splits the content to sides of a fold or a hinge. If not present or minimal size requirements are not meant, it behave like a FrameLayout.</string>
+    <string name="presentation_demo_description">Demo of using Presentation API to show content on secondary display.</string>
+    <string name="window_metrics">Window metrics</string>
+    <string name="window_metrics_description">Demo of using WindowMetrics API with Activity handling rotations.</string>
+    <string name="current_split_attributes">Current SplitAttributes:</string>>
+    <string name="current_animation_background_color">Current Animation Background Color:</string>>
+    <string name="toast_split_not_support">Please enable PROPERTY_ACTIVITY_EMBEDDING_SPLITS_ENABLED and ensure device supports splits.</string>
+    <string name="latest_configuration_title">Latest Configuration</string>
+    <string name="application_display_listener_title">Application DisplayListener#onDisplayChanged</string>
+    <string name="activity_display_listener_title">Activity DisplayListener#onDisplayChanged</string>
+    <string name="application_configuration_title">Application#onConfigurationChanged</string>
+    <string name="activity_configuration_title">Activity#onConfigurationChanged</string>
+    <string name="display_feature_title">WindowInfoTracker</string>
+    <string name="timestamp_title">Timestamp:</string>
+    <string name="application_display_rotation_title">Application Display Rotation:</string>
+    <string name="activity_display_rotation_title">Activity Display Rotation:</string>
+    <string name="application_display_bounds_title">Application Display Bounds:</string>
+    <string name="activity_display_bounds_title">Activity Display Bounds:</string>
+    <string name="prev_application_display_rotation_title">Previous Application Display Rotation:</string>
+    <string name="prev_activity_display_rotation_title">Previous Activity Display Rotation:</string>
+    <string name="prev_application_display_bounds_title">Previous Application Display Bounds:</string>
+    <string name="prev_activity_display_bounds_title">Previous Activity Display Bounds:</string>
+    <string name="window_state_placeholder">N/A</string>
+    <string name="split_attributes_calculator_not_supported">SplitAttributesCalculator is not supported!</string>
+    <string name="finish_this_activity">Finish this Activity</string>
+    <string name="use_default_split_attributes">Use default split attributes</string>
+    <string name="use_folding_aware_split_attributes">Show fullscreen in portrait and horizontal split in tabletop</string>
+    <string name="use_customized_split_attributes">Use runtime changed split attributes</string>
+    <string name="choose_split_type">Choose the split type</string>
+    <string name="choose_layout_direction">Choose the layout direction</string>
+    <string name="show_placeholder_warning">Placeholder Activity may show (again) because "Use a placeholder for A is checked". Clear the check box to expand Activity A to fill the task by either clicking "FINISH SECONDARY ACTIVITIES".</string>
+    <string name="current_state">Current state</string>
+    <string name="window_layout">Window layout</string>
+    <string name="screens_are_separated">"Screens are separated"</string>
+    <string name="screens_are_not_separated">"Screen is not separated"</string>
+    <string name="screen_is_horizontal">"Hinge is horizontal"</string>
+    <string name="screen_is_vertical">"Hinge is vertical"</string>
+    <string name="occlusion_is_full">Full occlusion</string>
+    <string name="occlusion_is_none">No occlusion</string>
+    <string name="rxJava">RxJava</string>
+    <string name="rx_description">Demo of using RxJava to receive updates</string>
+    <string name="activity_embedding">Embedded Activity</string>
+    <string name="activity_embedding_description">Launch Activity Embedding Demo</string>
+    <string name="split_rules">Split Layout with Rules</string>
+    <string name="split_rules_demo_description">Demo of all the different rules that can be used when splitting layout</string>
+    <string name="choose_the_configuration_to_update_the_layout">Choose the configuration to update the layout:</string>
+    <string name="launch_a_and_b">Launch A and B</string>
+    <string name="split_a_with_b">Split A With B</string>
+    <string name="launch_a">Launch A</string>
+    <string name="use_a_placeholder_for_a">Use a placeholder for A</string>
+    <string name="placeholder_is_sticky">Placeholder is sticky</string>
+    <string name="toggle_fullscreen_mode">Toggle fullscreen mode</string>
+    <string name="also_show_horizontal_layout_in_tabletop_mode">Also show horizontal layout in tabletop mode</string>
+    <string name="show_fullscreen_in_portrait">Show fullscreen in portrait</string>
+    <string name="show_different_layout_with_size">Show different layout with size</string>
+    <string name="also_show_fullscreen_in_book_mode">Also show fullscreen in book mode</string>
+    <string name="show_layout_that_follows_the_hinge_when_it_is_separated_by_hinge">Show layout that follows the hinge when it is separated by hinge</string>
+    <string name="swap_the_position_of_primary_and_secondary_container">Swap the position of primary and secondary container</string>
+    <string name="launch_activity_to_side">Launch activity to side</string>
+    <string name="split_layout_with_attributes">Split Layout with Attributes</string>
+    <string name="split_layout_attributes_demo_description">Demo of different parameters that can be used to split the layout</string>
+    <string name="split_layout_with_state">Split Layout with State</string>
+    <string name="split_layout_with_state_demo_description">Demo of a Split Layout that react to the device state</string>
+    <string name="media_player_activity">Media Player Activity</string>
+    <string name="media_player_activity_demo_description">Demo of an ExoPlayer instance in tabletop mode</string>
+    <!-- Big Buck Bunny video provided by the Blender Foundation.
+(c) copyright 2008, Blender Foundation / www.bigbuckbunny.org -->
+    <string name="media_url_mp4">https://storage.googleapis.com/exoplayer-test-media-0/BigBuckBunny_320x180.mp4</string>
+</resources>

@@ -41,19 +41,19 @@ import kotlinx.coroutines.launch
 class AudioLoopSource {
 
     //Scope used for getting buffer from Audio recorder to audio track
-    val coroutineScope = CoroutineScope(Dispatchers.IO)
-    var job: Job? = null
+    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    private var job: Job? = null
     val isRecording = MutableStateFlow(false)
 
     companion object {
-        val sampleRate = 48000
-        val bufferSize = AudioRecord.getMinBufferSize(
+        private const val sampleRate = 48000
+
+        private val bufferSize = AudioRecord.getMinBufferSize(
             sampleRate,
             AudioFormat.CHANNEL_IN_MONO,
             AudioFormat.ENCODING_PCM_16BIT,
         )
-
-        val audioTrackBufferSize = AudioTrack.getMinBufferSize(
+        private val audioTrackBufferSize = AudioTrack.getMinBufferSize(
             sampleRate,
             AudioFormat.CHANNEL_OUT_MONO,
             AudioFormat.ENCODING_PCM_16BIT,
@@ -62,7 +62,7 @@ class AudioLoopSource {
         var audioSampler : AudioRecord? = null
 
         //Audio track for audio playback
-        private var audioTrack = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        private val audioTrack = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             AudioTrack.Builder()
                 .setAudioAttributes(
                     AudioAttributes.Builder()
@@ -143,7 +143,9 @@ class AudioLoopSource {
     fun stopAudioLoop() {
         job?.cancel("Stop Recording", null)
         isRecording.update { false }
-        audioSampler?.stop()
+        if (audioSampler.state == AudioRecord.STATE_INITIALIZED) {
+            audioSampler?.stop()
+        }
         audioTrack.stop()
     }
 

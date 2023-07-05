@@ -24,6 +24,10 @@ android {
 }
 
 dependencies {
-    // Add samples specific dependencies
+    // EXIF Interface
+    implementation(libs.androidx.exifinterface)
+
+    // ViewPager2
+    implementation(libs.androidx.viewpager2)
 }
 

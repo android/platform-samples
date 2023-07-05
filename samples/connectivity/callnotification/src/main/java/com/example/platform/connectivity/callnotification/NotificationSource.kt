@@ -46,6 +46,7 @@ class NotificationSource<T>(
 
         const val ChannelId = "1234"
         const val ChannelIntID = 1234
+
         const val ChannelOnGoingIntID = 1233
         const val ChannelOnGoingID = "1233"
         /*
@@ -99,6 +100,13 @@ class NotificationSource<T>(
             .setName("Jane Doe")
             .setImportant(true)
             .build()
+
+        /**
+         * Cancel notification and dismiss from sysUI
+         */
+        fun cancelNotification(context: Context) {
+            context.getSystemService<NotificationManager>()?.cancel(ChannelIntID)
+        }
     }
 
     private val notificationManager = context.getSystemService<NotificationManager>()!!
@@ -113,7 +121,12 @@ class NotificationSource<T>(
 
     init {
         val managerCompat = NotificationManagerCompat.from(context)
-        managerCompat.createNotificationChannels(listOf(notificationChannelIncoming(), notificationChannelOngoing))
+        managerCompat.createNotificationChannels(
+            listOf(
+                notificationChannelIncoming(),
+                notificationChannelOngoing,
+            ),
+        )
     }
 
     /**

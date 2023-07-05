@@ -21,6 +21,7 @@ import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -28,40 +29,26 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.permissions.ExperimentalPermissionsApi
-import com.google.accompanist.permissions.PermissionState
-import com.google.accompanist.permissions.isGranted
-import com.google.accompanist.permissions.rememberPermissionState
-import com.google.accompanist.permissions.shouldShowRationale
+import com.example.platform.base.PermissionBox
 import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
     name = "Call Notification Sample",
     description = "Sample demonstrating how to make incoming call notifications and in call notifications",
-    documentation = "https://developer.android.com/reference/android/app/Notification.CallStyle"
+    documentation = "https://developer.android.com/reference/android/app/Notification.CallStyle",
 )
 class CallNotificationSample : ComponentActivity() {
 
-    companion object {
-        lateinit var notificationSource: NotificationSource<NotificationReceiver>
-    }
+    private lateinit var notificationSource: NotificationSource<NotificationReceiver>
 
-
-    @OptIn(ExperimentalPermissionsApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -77,14 +64,12 @@ class CallNotificationSample : ComponentActivity() {
                     // We should be using make_own_call permissions but this requires
                     // implementation of the telecom API to work correctly.
                     // Please see telecom example for full implementation
-                    val callPermission = rememberPermissionState(
-                        Manifest.permission.POST_NOTIFICATIONS,
-                    )
-
-                    if (callPermission.status.isGranted) {
-                        EntryPoint(notificationSource)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        PermissionBox(permission = Manifest.permission.POST_NOTIFICATIONS) {
+                            EntryPoint(notificationSource)
+                        }
                     } else {
-                        PermissionWidget(callPermission)
+                        EntryPoint(notificationSource)
                     }
                 }
             }
@@ -92,7 +77,7 @@ class CallNotificationSample : ComponentActivity() {
     }
 
     class NotificationReceiver : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
+        override fun onReceive(context: Context, intent: Intent?) {
             intent?.let {
                 val notificationStateValue = it.getIntExtra(
                     NotificationSource.NOTIFICATION_ACTION,
@@ -105,7 +90,7 @@ class CallNotificationSample : ComponentActivity() {
                     else -> "Cancelled"
                 }
 
-                notificationSource.cancelNotification()
+                NotificationSource.cancelNotification(context)
 
                 //Using a toast message to keep example simple. We should be using a snackbar
                 //https://developer.android.com/jetpack/compose/layouts/material#snackbar
@@ -118,57 +103,7 @@ class CallNotificationSample : ComponentActivity() {
     override fun onDestroy() {
         super.onDestroy()
 
-        notificationSource.cancelNotification()
-    }
-}
-
-@OptIn(ExperimentalPermissionsApi::class)
-@Composable
-private fun PermissionWidget(permissionsState: PermissionState) {
-    var showRationale by remember(permissionsState) {
-        mutableStateOf(false)
-    }
-
-    if (showRationale) {
-        AlertDialog(
-            onDismissRequest = { showRationale = false },
-            title = {
-                Text(text = "")
-            },
-            text = {
-                Text(text = "")
-            },
-            confirmButton = {
-                TextButton(
-                    onClick = {
-                        permissionsState.launchPermissionRequest()
-                    },
-                ) {
-                    Text("Continue")
-                }
-            },
-            dismissButton = {
-                TextButton(
-                    onClick = {
-                        showRationale = false
-                    },
-                ) {
-                    Text("Dismiss")
-                }
-            },
-        )
-    }
-
-    Button(
-        onClick = {
-            if (permissionsState.status.shouldShowRationale) {
-                showRationale = true
-            } else {
-                permissionsState.launchPermissionRequest()
-            }
-        },
-    ) {
-        Text(text = "Grant Permission")
+        NotificationSource.cancelNotification(this)
     }
 }
 
