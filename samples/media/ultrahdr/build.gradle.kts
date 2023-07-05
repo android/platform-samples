@@ -22,8 +22,10 @@ plugins {
 
 android {
     namespace = "com.example.platform.media.ultrahdr"
+    viewBinding.isEnabled = true
 }
 
 dependencies {
-    // Add samples specific dependencies
+    // Sub-sampled ImageView for extra large UltraHDR images
+    implementation(libs.androidx.subsamplingscaleimageview)
 }

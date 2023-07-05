@@ -17,7 +17,7 @@ package com.example.platform.media.ultrahdr.display
 
 import android.os.Build
 import androidx.annotation.RequiresApi
-import androidx.compose.runtime.Composable
+import androidx.fragment.app.Fragment
 import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
@@ -25,9 +25,9 @@ import com.google.android.catalog.framework.annotations.Sample
     description = "This sample demonstrates displaying an UltraHDR image",
     documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
 )
-@Composable
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-fun DisplayingUltraHDR() {
-    // TODO: implement your sample. 
-    // You can also use Activity or Fragment, simply tag them with the @Sample annotation
+class DisplayingUltraHDR : Fragment() {
+    /**
+     *  Android ViewBinding.
+     */
 }
