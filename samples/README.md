@@ -52,7 +52,7 @@ This Sample demonstrate best practices for Location Permission
 This Sample demonstrate how to get location updates
 - [Location - User Activity Recognition](location/src/main/java/com/example/platform/location/useractivityrecog/UserActivityRecognitionScreen.kt):
 This Sample demonstrate detection of user activity like walking, driving, etc.
-- [Media - Displaying UltraHDR](media/ultrahdr/src/main/java/com/example/platform/media/ultrahdr/display/DisplayingUltraHDR.kt):
+- [Media - Displaying UltraHDR (Simple)](media/ultrahdr/src/main/java/com/example/platform/media/ultrahdr/display/DisplayingUltraHDRSimple.kt):
 This sample demonstrates displaying an UltraHDR image
 - [MotionLayout - 01. Basic](user-interface/constraintlayout/src/main/java/com/example/platform/ui/constraintlayout/MotionLayout.kt):
 Basic motion example using referenced ConstraintLayout files

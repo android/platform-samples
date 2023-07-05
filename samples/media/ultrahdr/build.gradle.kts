@@ -21,7 +21,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.platform.media.ultrahdr"
+    namespace = "com.example.platform.graphics.ultrahdr"
     viewBinding.isEnabled = true
 }
 
