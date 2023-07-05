@@ -47,7 +47,7 @@ fun AppWidgetBox(
     Box(
         modifier = appWidgetBackgroundModifier().then(modifier),
         contentAlignment = contentAlignment,
-        content = content
+        content = content,
     )
 }
 

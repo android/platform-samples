@@ -18,26 +18,21 @@ package com.example.platform.ui.appwidgets.glance.weather
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import kotlinx.serialization.Serializable
 
-@Serializable
+
 sealed interface WeatherInfo {
-    @Serializable
     object Loading : WeatherInfo
 
-    @Serializable
     data class Available(
         val placeName: String,
         val currentData: WeatherData,
         val hourlyForecast: List<WeatherData>,
-        val dailyForecast: List<WeatherData>
+        val dailyForecast: List<WeatherData>,
     ) : WeatherInfo
 
-    @Serializable
     data class Unavailable(val message: String) : WeatherInfo
 }
 
-@Serializable
 data class WeatherData(
     @DrawableRes val icon: Int,
     @StringRes val status: Int,

@@ -77,7 +77,7 @@ class ImageGlanceWidget : GlanceAppWidget() {
         fun getImageKey(size: DpSize) = getImageKey(size.width.value.toPx, size.height.value.toPx)
 
         fun getImageKey(width: Float, height: Float) = stringPreferencesKey(
-            "uri-$width-$height"
+            "uri-$width-$height",
         )
     }
 
@@ -105,7 +105,7 @@ class ImageGlanceWidget : GlanceAppWidget() {
                     Alignment.Center
                 } else {
                     Alignment.BottomEnd
-                }
+                },
             ) {
                 if (imagePath != null) {
                     Image(
@@ -114,7 +114,7 @@ class ImageGlanceWidget : GlanceAppWidget() {
                         contentScale = ContentScale.FillBounds,
                         modifier = GlanceModifier
                             .fillMaxSize()
-                            .clickable(actionRunCallback<RefreshAction>())
+                            .clickable(actionRunCallback<RefreshAction>()),
                     )
                     Text(
                         text = "Source: ${currentState(sourceKey)}",
@@ -123,7 +123,7 @@ class ImageGlanceWidget : GlanceAppWidget() {
                             fontSize = 12.sp,
                             fontStyle = FontStyle.Italic,
                             textAlign = TextAlign.End,
-                            textDecoration = TextDecoration.Underline
+                            textDecoration = TextDecoration.Underline,
                         ),
                         modifier = GlanceModifier
                             .fillMaxWidth()
@@ -133,10 +133,10 @@ class ImageGlanceWidget : GlanceAppWidget() {
                                 actionStartActivity(
                                     Intent(
                                         Intent.ACTION_VIEW,
-                                        Uri.parse(currentState(sourceUrlKey))
-                                    )
-                                )
-                            )
+                                        Uri.parse(currentState(sourceUrlKey)),
+                                    ),
+                                ),
+                            ),
                     )
                 } else {
                     CircularProgressIndicator()
