@@ -86,6 +86,11 @@ class DisplayingUltraHDR : Fragment() {
         }
     }
 
+    override fun onDetach() {
+        super.onDetach()
+        binding.displayingUltrahdrColorModeControls.detach()
+    }
+
     companion object {
         /**
          * Sample UltraHDR images paths

@@ -62,15 +62,18 @@ class ColorModeControls : LinearLayout, WindowObserver {
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         display?.run {
-            registerHdrSdrRatioChangedListener({ it.run() }, hdrSdrRatioListener)
+            registerHdrSdrRatioChangedListener(
+                { executable ->
+                    executable.run()
+                },
+                hdrSdrRatioListener,
+            )
         }
     }
 
     override fun onDetachedFromWindow() {
         super.onDetachedFromWindow()
-        display?.run {
-            display.unregisterHdrSdrRatioChangedListener(hdrSdrRatioListener)
-        }
+        detach()
     }
 
     override fun setWindow(window: Window?) {
@@ -122,6 +125,13 @@ class ColorModeControls : LinearLayout, WindowObserver {
     private fun setColorMode(newMode: Int) = window?.let {
         it.colorMode = newMode
         updateModeInfoDisplay()
+    }
+
+    fun detach() {
+        setColorMode(ActivityInfo.COLOR_MODE_DEFAULT)
+        display?.run {
+            unregisterHdrSdrRatioChangedListener(hdrSdrRatioListener)
+        }
     }
 
     companion object {

@@ -22,7 +22,7 @@ Demonstrates how to implement the incremental search feature for non-alphabet la
 Shows how to create a GATT server and communicate with the GATT client
 - [Data Access](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
 Demonstrates how to implement data access auditing for your app to identify 
-- [Displaying UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDRSimple.kt):
+- [Displaying UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDR.kt):
 This sample demonstrates displaying an UltraHDR image
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
