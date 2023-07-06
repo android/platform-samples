@@ -17,7 +17,6 @@ Browse the samples inside each topic samples folder:
 - [Connectivity](samples/connectivity)
 - [Graphics](samples/graphics)
 - [Location](samples/location)
-- [Media](samples/media)
 - [Privacy](samples/privacy)
 - [User-interface](samples/user-interface)
 - More to come...
