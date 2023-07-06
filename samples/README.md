@@ -22,7 +22,7 @@ Demonstrates how to implement the incremental search feature for non-alphabet la
 Shows how to create a GATT server and communicate with the GATT client
 - [Data Access](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
 Demonstrates how to implement data access auditing for your app to identify 
-- [Displaying UltraHDR](media/ultrahdr/src/main/java/com/example/platform/media/ultrahdr/display/DisplayingUltraHDRSimple.kt):
+- [Displaying UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDRSimple.kt):
 This sample demonstrates displaying an UltraHDR image
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
@@ -60,7 +60,7 @@ Basic motion example using referenced ConstraintLayout files
 Shows the recommended flow to request multiple RELATED runtime permissions
 - [Package Visibility](privacy/data/src/main/java/com/example/platform/privacy/data/PackageVisibility.kt):
 A sample that showcase how the package visibility queries affects the available packages
-- [PdfRenderer](graphics/src/main/java/com/example/platform/graphics/PdfRenderer.kt):
+- [PdfRenderer](graphics/pdf/src/main/java/com/example/platform/graphics/pdf/PdfRenderer.kt):
 Demonstrates how to use PdfRenderer to display PDF documents on the screen.
 - [Permissionless](privacy/permissions/src/main/java/com/example/platform/privacy/permissions/Permissionless.kt):
 This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs
