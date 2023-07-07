@@ -56,7 +56,7 @@ class CommonConventionPlugin : Plugin<Project> {
                     // Treat all Kotlin warnings as errors
                     allWarningsAsErrors = true
                     // Set JVM target to 11
-                    jvmTarget = "11"
+                    jvmTarget = "17"
                     // Allow use of @OptIn
                     freeCompilerArgs += "-opt-in=kotlin.RequiresOptIn"
                     // Enable default methods in interfaces
