@@ -20,6 +20,11 @@
     <string name="displaying_ultrahdr_option_title_canyon">Grand Canyon</string>
     <string name="displaying_ultrahdr_option_title_train_station">Train Station</string>
 
+    <!-- Visualizing An UltraHDR Gainmap String -->
+    <string name="visualizing_ultrahdr_gainmap_mode_title_jpeg">JPEG</string>
+    <string name="visualizing_ultrahdr_gainmap_mode_title_gainmap">Gainmap</string>
+    <string name="visualizing_ultrahdr_gainmap_mode_title_both">Both</string>
+
     <!-- ColorModeControls String -->
     <string name="color_mode_sdr">SDR</string>
     <string name="color_mode_hdr">HDR</string>
