@@ -50,7 +50,7 @@ class SamplePlugin : Plugin<Project> {
             pluginManager.withPlugin("java") {
                 extensions.configure<JavaPluginExtension> {
                     toolchain {
-                        it.languageVersion.set(JavaLanguageVersion.of(11))
+                        it.languageVersion.set(JavaLanguageVersion.of(17))
                     }
                 }
             }
