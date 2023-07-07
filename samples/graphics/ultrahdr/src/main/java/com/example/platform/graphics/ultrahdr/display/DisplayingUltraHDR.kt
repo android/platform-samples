@@ -24,7 +24,7 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import com.example.platform.graphics.ultrahdr.databinding.DisplayingUltrahdrSimpleBinding
+import com.example.platform.graphics.ultrahdr.databinding.DisplayingUltrahdrBinding
 import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
@@ -38,7 +38,7 @@ class DisplayingUltraHDR : Fragment() {
     /**
      *  Android ViewBinding.
      */
-    private var _binding: DisplayingUltrahdrSimpleBinding? = null
+    private var _binding: DisplayingUltrahdrBinding? = null
     private val binding get() = _binding!!
 
     /**
@@ -55,7 +55,7 @@ class DisplayingUltraHDR : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = DisplayingUltrahdrSimpleBinding.inflate(inflater, container, false)
+        _binding = DisplayingUltrahdrBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -65,13 +65,13 @@ class DisplayingUltraHDR : Fragment() {
         // The ColorModeControls Class contain the necessary function to change the activities
         // ColorMode to HDR, which allows and UltraHDRs images gain map to be used to enhance the
         // image.
-        binding.displayingUltrahdrColorModeControls.setWindow(requireActivity().window)
-        binding.displayingUltrahdrSamplesSelectionGroup.setOnCheckedChangeListener { group, i ->
+        binding.colorModeControls.setWindow(requireActivity().window)
+        binding.imageOptionsSelectionGroup.setOnCheckedChangeListener { group, i ->
             val selected = group.findViewById<RadioButton>(i)
             val index = group.indexOfChild(selected)
             updateDisplayedImage(index)
         }
-        binding.displayingUltrahdrLamps.isChecked = true
+        binding.optionLamps.isChecked = true
     }
 
     /**
@@ -79,16 +79,16 @@ class DisplayingUltraHDR : Fragment() {
      */
     private fun updateDisplayedImage(index: Int) {
         ultraHDRImages[index]?.let {
-            binding.displayingUltrahdrImageContainer.setImageResource(0)
+            binding.imageContainer.setImageResource(0)
             val stream = context?.assets?.open(it)
             val bitmap = BitmapFactory.decodeStream(stream)
-            binding.displayingUltrahdrImageContainer.setImageBitmap(bitmap)
+            binding.imageContainer.setImageBitmap(bitmap)
         }
     }
 
     override fun onDetach() {
         super.onDetach()
-        binding.displayingUltrahdrColorModeControls.detach()
+        binding.colorModeControls.detach()
     }
 
     companion object {

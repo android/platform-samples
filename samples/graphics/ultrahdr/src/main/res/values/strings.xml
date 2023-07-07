@@ -15,12 +15,14 @@
   -->
 
 <resources>
-    <string name="displaying_ultrahdr_simple_sample_lamps">Lamps</string>
-    <string name="displaying_ultrahdr_simple_sample_canyon">Grand Canyon</string>
-    <string name="displaying_ultrahdr_simple_sample_train_station">Train Station</string>
+    <!-- Displaying UltraHDR Strings -->
+    <string name="displaying_ultrahdr_option_title_lamps">Lamps</string>
+    <string name="displaying_ultrahdr_option_title_canyon">Grand Canyon</string>
+    <string name="displaying_ultrahdr_option_title_train_station">Train Station</string>
 
-    <string name="ultrahdr_color_mode_sdr">SDR</string>
-    <string name="ultrahdr_color_mode_hdr">HDR</string>
-    <string name="ultrahdr_color_mode_hdr_with_ratio">HDR | SDR/HDR Ratio = %f</string>
-    <string name="ultrahdr_color_mode_unknown">Unknown</string>
+    <!-- ColorModeControls String -->
+    <string name="color_mode_sdr">SDR</string>
+    <string name="color_mode_hdr">HDR</string>
+    <string name="color_mode_hdr_with_ratio">HDR | SDR/HDR Ratio = %f</string>
+    <string name="color_mode_unknown">Unknown</string>
 </resources>
