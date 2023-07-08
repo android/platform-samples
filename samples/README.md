@@ -10,6 +10,8 @@ Sample demonstrating how to make incoming call notifications and in call notific
 This sample demonstrates how to capture and image and encode it into a JPEG 
 - [Camera2 - Preview](camera/camera2/src/main/java/com/example/platform/camera/preview/Camera2Preview.kt):
 Demonstrates displaying processed pixel data directly from the camera sensor 
+- [Camera2 - UltraHDR Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2UltraHDRCapture.kt):
+This sample demonstrates how to capture a 10-bit compressed still image and 
 - [Color Contrast](accessibility/src/main/java/com/example/platform/accessibility/ColorContrast.kt):
 This sample demonstrates the importance of proper color contrast and how to 
 - [Connect to a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/ConnectGATTSample.kt):
