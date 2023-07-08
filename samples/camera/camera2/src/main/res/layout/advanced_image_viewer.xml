@@ -19,16 +19,11 @@
     android:background="@android:color/background_dark"
     android:orientation="vertical">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/fragment_image_viewer_viewpager2"
+    <ImageView
+        android:id="@+id/image_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <ImageButton
-        android:id="@+id/fragment_image_viewer_back"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="start"
-        android:src="@drawable/ic_back" />
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@null" />
 
 </FrameLayout>

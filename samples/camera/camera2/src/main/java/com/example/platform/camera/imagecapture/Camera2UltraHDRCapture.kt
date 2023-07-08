@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.example.platform.camera.imagecapture
 
 import android.Manifest
@@ -20,7 +21,14 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.ImageFormat
-import android.hardware.camera2.*
+import android.hardware.camera2.CameraCaptureSession
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraDevice
+import android.hardware.camera2.CameraManager
+import android.hardware.camera2.CaptureRequest
+import android.hardware.camera2.CaptureResult
+import android.hardware.camera2.TotalCaptureResult
+import android.hardware.camera2.params.DynamicRangeProfiles
 import android.hardware.camera2.params.OutputConfiguration
 import android.hardware.camera2.params.SessionConfiguration
 import android.media.Image
@@ -30,15 +38,28 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.HandlerThread
 import android.util.Log
-import android.view.*
+import android.view.LayoutInflater
+import android.view.SurfaceHolder
+import android.view.View
+import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
+import androidx.core.os.bundleOf
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
-import com.example.platform.camera.common.*
-import com.example.platform.camera.databinding.FragmentCamera2ImageCaptureBinding
+import com.example.platform.camera.R
+import com.example.platform.camera.common.AdvancedImageViewer
+import com.example.platform.camera.common.CombinedCaptureResult
+import com.example.platform.camera.common.DirectExecutor
+import com.example.platform.camera.common.OrientationLiveData
+import com.example.platform.camera.common.SIZE_720P
+import com.example.platform.camera.common.computeExifOrientation
+import com.example.platform.camera.common.getPreviewOutputSize
+import com.example.platform.camera.databinding.Camera2UltrahdrCaptureBinding
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -47,7 +68,8 @@ import java.io.File
 import java.io.FileOutputStream
 import java.io.IOException
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.TimeoutException
 import kotlin.coroutines.resume
@@ -55,16 +77,18 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @Sample(
-    name = "Camera2 - Image Capture",
-    description = "This sample demonstrates how to capture and image and encode it into a JPEG "
-            + "container. Includes torch (flash) support is available.",
-    documentation = "https://developer.android.com/training/camera2/capture-sessions-requests",
+    name = "Camera2 - UltraHDR Image Capture",
+    description = "This sample demonstrates how to capture a 10-bit compressed still image and " +
+            "store it using the new UltraHDR image format",
+    documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
+    tags = ["UltraHDR"],
 )
-class Camera2ImageCapture : Fragment() {
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+class Camera2UltraHDRCapture : Fragment() {
     /**
      *  Android ViewBinding.
      */
-    private var _binding: FragmentCamera2ImageCaptureBinding? = null
+    private var _binding: Camera2UltrahdrCaptureBinding? = null
     private val binding get() = _binding!!
 
     /**
@@ -136,14 +160,14 @@ class Camera2ImageCapture : Fragment() {
     private val animationTask: Runnable by lazy {
         Runnable {
             // Flash white animation
-            binding.fragmentCamera2ImageCaptureOverlay.background =
+            binding.imageCaptureOverlay.background =
                 Color.argb(150, 255, 255, 255).toDrawable()
 
             // Wait for ANIMATION_FAST_MILLIS
-            binding.fragmentCamera2ImageCaptureOverlay.postDelayed(
+            binding.imageCaptureOverlay.postDelayed(
                 {
                     // Remove white flash animation
-                    binding.fragmentCamera2ImageCaptureOverlay.background = null
+                    binding.imageCaptureOverlay.background = null
                 },
                 ANIMATION_FAST_MILLIS,
             )
@@ -160,7 +184,7 @@ class Camera2ImageCapture : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentCamera2ImageCaptureBinding.inflate(inflater, container, false)
+        _binding = Camera2UltrahdrCaptureBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -208,39 +232,37 @@ class Camera2ImageCapture : Fragment() {
     }
 
     private fun showActionMessage(message: String, action: () -> Unit) {
-        binding.fragmentCamera2ImageCapturePermissionButton.visibility = View.VISIBLE
-        binding.fragmentCamera2ImageCapturePermissionButton.text = message
-        binding.fragmentCamera2ImageCapturePermissionButton.setOnClickListener {
+        binding.capturePermissionButton.visibility = View.VISIBLE
+        binding.capturePermissionButton.text = message
+        binding.capturePermissionButton.setOnClickListener {
             action()
         }
     }
 
     private fun showImage(imageLocation: String) {
-        binding.fragmentCamera2ImageCaptureButton.visibility = View.GONE
-        binding.fragmentCamera2PostCaptureBackButton.visibility = View.VISIBLE
-        binding.fragmentCamera2ImageCaptureImageView.setContent {
-            SimpleImageViewer(location = imageLocation)
-        }
-    }
+        binding.captureButton.visibility = View.GONE
+        binding.backButton.visibility = View.VISIBLE
 
-    private fun returnToImageCapture() {
-        binding.fragmentCamera2ImageCaptureButton.visibility = View.VISIBLE
-        binding.fragmentCamera2PostCaptureBackButton.visibility = View.GONE
-        binding.fragmentCamera2ImageCaptureImageView.setContent {  }
+        val bundle = bundleOf(AdvancedImageViewer.ARG_KEY_LOCATION to imageLocation)
+        val imageViewer = AdvancedImageViewer().apply { arguments = bundle }
+
+        requireActivity().supportFragmentManager.commit {
+            setReorderingAllowed(true)
+            add(R.id.advanced_image_viewer, imageViewer)
+        }
+
+        binding.backButton.setOnClickListener {
+            binding.captureButton.visibility = View.VISIBLE
+            binding.backButton.visibility = View.GONE
+            requireActivity().supportFragmentManager.commit {
+                setReorderingAllowed(true)
+                remove(imageViewer)
+            }
+        }
     }
 
     private fun setUpCamera() {
-        binding.fragmentCamera2ImageCaptureButton.setOnApplyWindowInsetsListener { v, insets ->
-            v.translationX = (-insets.systemWindowInsetRight).toFloat()
-            v.translationY = (-insets.systemWindowInsetBottom).toFloat()
-            insets.consumeSystemWindowInsets()
-        }
-
-        binding.fragmentCamera2PostCaptureBackButton.setOnClickListener {
-            returnToImageCapture()
-        }
-
-        binding.fragmentCamera2ImageCaptureViewfinder.holder.addCallback(
+        binding.viewfinder.holder.addCallback(
             object : SurfaceHolder.Callback {
                 override fun surfaceDestroyed(holder: SurfaceHolder) = Unit
 
@@ -254,19 +276,19 @@ class Camera2ImageCapture : Fragment() {
                 override fun surfaceCreated(holder: SurfaceHolder) {
                     // Selects appropriate preview size and configures view finder
                     val previewSize = getPreviewOutputSize(
-                        binding.fragmentCamera2ImageCaptureViewfinder.display,
+                        binding.viewfinder.display,
                         characteristics,
                         SurfaceHolder::class.java,
                     )
 
                     Log.d(
                         TAG,
-                        "Preview size: ${binding.fragmentCamera2ImageCaptureViewfinder.width} " +
-                                "x " + "${binding.fragmentCamera2ImageCaptureViewfinder.height}",
+                        "Preview size: ${binding.viewfinder.width} " +
+                                "x " + "${binding.viewfinder.height}",
                     )
 
                     Log.d(TAG, "Selected Preview Size: $previewSize")
-                    binding.fragmentCamera2ImageCaptureViewfinder.setAspectRatio(
+                    binding.viewfinder.setAspectRatio(
                         previewSize?.width ?: SIZE_720P.size.width,
                         previewSize?.height ?: SIZE_720P.size.height,
                     )
@@ -284,18 +306,19 @@ class Camera2ImageCapture : Fragment() {
 
     private fun setUpImageReader() {
         // Initialize an image reader which will be used to capture still photos
+        val pixelFormat = ImageFormat.JPEG_R
         val configMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
         configMap?.let { config ->
-            config.getOutputSizes(ImageFormat.JPEG).maxByOrNull { it.height * it.width }
+            config.getOutputSizes(pixelFormat).maxByOrNull { it.height * it.width }
                 ?.let { size ->
                     imageReader = ImageReader.newInstance(
-                        size.width, size.height, ImageFormat.JPEG, IMAGE_BUFFER_SIZE,
+                        size.width, size.height, pixelFormat, IMAGE_BUFFER_SIZE,
                     )
                 }
         }
 
         // Listen to the capture button
-        binding.fragmentCamera2ImageCaptureButton.setOnClickListener {
+        binding.captureButton.setOnClickListener {
             // Disable click listener to prevent multiple requests simultaneously in flight
             it.isEnabled = false
 
@@ -331,13 +354,40 @@ class Camera2ImageCapture : Fragment() {
     }
 
     /**
+     * In order to capture and UltraHDR image, the camera device need to be capable of:
+     *
+     * - 10-bit dynamic range capture
+     * - Encoding the JPEG/R format (UltraHDR)
+     *
+     * This function will check for both to determine device support.
+     */
+    private fun canCaptureUltraHDR(c: CameraCharacteristics): Boolean {
+        // Query the available capabilities and output formats.
+        val abilities = c.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
+        val formats = c.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)?.outputFormats
+
+        val isTenBit =
+            abilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_DYNAMIC_RANGE_TEN_BIT)
+                ?: false
+        val canEncodeUltraHDR = formats?.contains(ImageFormat.JPEG_R) ?: false
+
+        return isTenBit && canEncodeUltraHDR
+    }
+
+    /**
      * Begin all camera operations in a coroutine in the main thread. This function:
+     * - Checks if JPEG/R (UltraHDR) is supported as and outputformat by the device.
      * - Opens the camera
      * - Configures the camera session
      * - Starts the preview by dispatching a repeating capture request
      */
     private fun initializeCamera() = lifecycleScope.launch(Dispatchers.Main) {
-        binding.fragmentCamera2ImageCapturePermissionButton.visibility = View.GONE
+        if (!canCaptureUltraHDR(characteristics)) {
+            showActionMessage("UltraHDR Capture is not supported by this device...") {}
+            return@launch
+        }
+
+        binding.capturePermissionButton.visibility = View.GONE
         try {
             // Open the selected camera
             camera = openCamera(cameraManager, cameraIds.first(), cameraHandler)
@@ -345,19 +395,23 @@ class Camera2ImageCapture : Fragment() {
             // Set up the image reader
             setUpImageReader()
 
+            // Create a preview configuration that will use HLG10
+            val previewConfiguration = OutputConfiguration(binding.viewfinder.holder.surface)
+            previewConfiguration.dynamicRangeProfile = DynamicRangeProfiles.HLG10
+
             // Creates list of Surfaces where the camera will output frames
             val targets = listOf(
-                binding.fragmentCamera2ImageCaptureViewfinder.holder.surface,
-                imageReader.surface,
+                previewConfiguration,
+                OutputConfiguration(imageReader.surface),
             )
 
             // Start a capture session using our open camera and list of Surfaces where frames will
             // go.
-            session = createCaptureSession(camera, targets, cameraHandler)
+            session = createCaptureSession(camera, targets)
 
             val captureRequest = camera.createCaptureRequest(
                 CameraDevice.TEMPLATE_PREVIEW,
-            ).apply { addTarget(binding.fragmentCamera2ImageCaptureViewfinder.holder.surface) }
+            ).apply { addTarget(binding.viewfinder.holder.surface) }
 
             // This will keep sending the capture request as frequently as possible until the
             // session is torn down or session.stopRepeating() is called
@@ -415,8 +469,7 @@ class Camera2ImageCapture : Fragment() {
      */
     private suspend fun createCaptureSession(
         device: CameraDevice,
-        targets: List<Surface>,
-        handler: Handler? = null,
+        targets: List<OutputConfiguration>,
     ): CameraCaptureSession = suspendCoroutine { cont ->
         // First, create a CameraCaptureSession.StateCallback object for the onConfigured &
         // onConfigureFailed callbacks.
@@ -431,27 +484,14 @@ class Camera2ImageCapture : Fragment() {
 
         // Create a capture session using the predefined targets; this also involves defining the
         // session state callback to be notified of when the session is ready
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-            val configs = targets.map {
-                val config = OutputConfiguration(it)
-                config
-            }
+        val sessionConfiguration = SessionConfiguration(
+            SessionConfiguration.SESSION_REGULAR,
+            targets,
+            DirectExecutor(),
+            callback,
+        )
 
-            val sessionConfiguration = SessionConfiguration(
-                SessionConfiguration.SESSION_REGULAR,
-                configs,
-                DirectExecutor(),
-                callback,
-            )
-
-            device.createCaptureSession(sessionConfiguration)
-        } else {
-            device.createCaptureSession(
-                targets,
-                callback,
-                handler,
-            )
-        }
+        device.createCaptureSession(sessionConfiguration)
     }
 
     /**
@@ -484,7 +524,7 @@ class Camera2ImageCapture : Fragment() {
                     frameNumber: Long,
                 ) {
                     super.onCaptureStarted(session, request, timestamp, frameNumber)
-                    binding.fragmentCamera2ImageCaptureViewfinder.post(animationTask)
+                    binding.viewfinder.post(animationTask)
                 }
 
                 override fun onCaptureCompleted(
@@ -555,41 +595,15 @@ class Camera2ImageCapture : Fragment() {
      * Helper function used to save a [CombinedCaptureResult] into a [File]
      */
     private suspend fun saveResult(result: CombinedCaptureResult): File = suspendCoroutine { cont ->
-        when (result.format) {
-
-            // When the format is JPEG or DEPTH JPEG we can simply save the bytes as-is
-            ImageFormat.JPEG, ImageFormat.DEPTH_JPEG -> {
-                val buffer = result.image.planes[0].buffer
-                val bytes = ByteArray(buffer.remaining()).apply { buffer.get(this) }
-                try {
-                    val output = createFile(requireContext(), "jpg")
-                    FileOutputStream(output).use { it.write(bytes) }
-                    cont.resume(output)
-                } catch (exc: IOException) {
-                    Log.e(TAG, "Unable to write JPEG image to file", exc)
-                    cont.resumeWithException(exc)
-                }
-            }
-
-            // When the format is RAW we use the DngCreator utility library
-            ImageFormat.RAW_SENSOR -> {
-                val dngCreator = DngCreator(characteristics, result.metadata)
-                try {
-                    val output = createFile(requireContext(), "dng")
-                    FileOutputStream(output).use { dngCreator.writeImage(it, result.image) }
-                    cont.resume(output)
-                } catch (exc: IOException) {
-                    Log.e(TAG, "Unable to write DNG image to file", exc)
-                    cont.resumeWithException(exc)
-                }
-            }
-
-            // No other formats are supported by this sample
-            else -> {
-                val exc = RuntimeException("Unknown image format: ${result.image.format}")
-                Log.e(TAG, exc.message, exc)
-                cont.resumeWithException(exc)
-            }
+        val buffer = result.image.planes[0].buffer
+        val bytes = ByteArray(buffer.remaining()).apply { buffer.get(this) }
+        try {
+            val output = createFile(requireContext())
+            FileOutputStream(output).use { it.write(bytes) }
+            cont.resume(output)
+        } catch (exc: IOException) {
+            Log.e(TAG, "Unable to write JPEG image to file", exc)
+            cont.resumeWithException(exc)
         }
     }
 
@@ -635,9 +649,9 @@ class Camera2ImageCapture : Fragment() {
          *
          * @return [File] created.
          */
-        private fun createFile(context: Context, extension: String): File {
+        private fun createFile(context: Context): File {
             val sdf = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS", Locale.US)
-            return File(context.filesDir, "IMG_${sdf.format(Date())}.$extension")
+            return File(context.filesDir, "IMG_${sdf.format(Date())}.jpg")
         }
     }
 }
