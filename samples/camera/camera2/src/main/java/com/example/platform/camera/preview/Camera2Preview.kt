@@ -43,7 +43,7 @@ import com.example.platform.camera.common.DirectExecutor
 import com.example.platform.camera.common.OrientationLiveData
 import com.example.platform.camera.common.SIZE_720P
 import com.example.platform.camera.common.getPreviewOutputSize
-import com.example.platform.camera.databinding.FragmentCamera2PreviewBinding
+import com.example.platform.camera.databinding.Camera2PreviewBinding
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -53,16 +53,17 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @Sample(
-    name = "Camera2 - Preview",
+    name = "Camera Preview",
     description = "Demonstrates displaying processed pixel data directly from the camera sensor "
-            + "to the screen.",
-    documentation = "https://developer.android.com/training/camera2"
+            + "to the screen using Camera2.",
+    documentation = "https://developer.android.com/training/camera2",
+    tags = ["Camera2"],
 )
 class Camera2Preview : Fragment() {
     /**
      *  Android ViewBinding.
      */
-    private var _binding: FragmentCamera2PreviewBinding? = null
+    private var _binding: Camera2PreviewBinding? = null
     private val binding get() = _binding!!
 
     /**
@@ -124,7 +125,7 @@ class Camera2Preview : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentCamera2PreviewBinding.inflate(inflater, container, false)
+        _binding = Camera2PreviewBinding.inflate(inflater, container, false)
         return binding.root
     }
 

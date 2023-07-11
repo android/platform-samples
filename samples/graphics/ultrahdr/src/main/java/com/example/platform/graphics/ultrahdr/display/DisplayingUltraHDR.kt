@@ -24,14 +24,17 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.platform.graphics.ultrahdr.databinding.DisplayingUltrahdrBinding
 import com.google.android.catalog.framework.annotations.Sample
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @Sample(
     name = "Displaying UltraHDR",
-    description = "This sample demonstrates displaying an UltraHDR image",
+    description = "This sample demonstrates displaying an UltraHDR image.",
     documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-    tags = ["ultrahdr"],
+    tags = ["UltraHDR"],
 )
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class DisplayingUltraHDR : Fragment() {
@@ -77,9 +80,8 @@ class DisplayingUltraHDR : Fragment() {
     /**
      * Updated the currently displayed UltraHDR image.
      */
-    private fun updateDisplayedImage(index: Int) {
+    private fun updateDisplayedImage(index: Int) = lifecycleScope.launch(Dispatchers.IO) {
         ultraHDRImages[index]?.let {
-            binding.imageContainer.setImageResource(0)
             val stream = context?.assets?.open(it)
             val bitmap = BitmapFactory.decodeStream(stream)
             binding.imageContainer.setImageBitmap(bitmap)

@@ -47,11 +47,11 @@
             android:text="@string/visualizing_ultrahdr_gainmap_mode_title_gainmap" />
 
         <RadioButton
-            android:id="@+id/mode_both"
+            android:id="@+id/mode_ultrahdr"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="@string/visualizing_ultrahdr_gainmap_mode_title_both" />
+            android:text="@string/visualizing_ultrahdr_gainmap_mode_title_ultrahdr" />
     </RadioGroup>
 
     <ImageView

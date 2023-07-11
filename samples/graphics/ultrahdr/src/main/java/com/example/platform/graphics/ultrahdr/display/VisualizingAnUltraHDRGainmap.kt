@@ -30,15 +30,21 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.platform.graphics.ultrahdr.R
 import com.example.platform.graphics.ultrahdr.databinding.VisualizingAnUltrahdrGainmapBinding
 import com.google.android.catalog.framework.annotations.Sample
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 
 @Sample(
     name = "Visualizing an UltraHDR Gainmap",
     description = "This sample demonstrates visualizing the underlying gainmap of an UltraHDR " +
             "image, which reveals which parts of the image are enhanced by the gainmap.",
     documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-    tags = ["ultrahdr"],
+    tags = ["UltraHDR"],
 )
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 
@@ -88,17 +94,24 @@ class VisualizingAnUltraHDRGainmap : Fragment() {
      * Updated the currently displayed image. This allows users to visualize the SDR image alone,
      * the gainmap as well as the result of the both of them displayed together.
      */
-    private fun updateDisplayedImage(type: Type) {
-        // Clear previous bitmap source.
-        val imageview = binding.imageContainer
-        imageview.setImageResource(0)
-
+    private fun updateDisplayedImage(type: Type) = lifecycleScope.launch(Dispatchers.Main) {
         // Decode ultra hdr image into bitmap data.
-        val stream = context?.assets?.open(ULTRA_HDR_IMAGE_FOUNTAIN)
-        val imageBitmap = BitmapFactory.decodeStream(stream)
+        val imageBitmap = getBitmapFromFile()
+
+        // Update radio group selection options based on whether or not the image has gainmap
+        // contents or not.
+        if (!imageBitmap.hasGainmap()) {
+            binding.modeGainmap.text =
+                resources.getText(R.string.visualizing_ultrahdr_gainmap_mode_title_no_gainmap)
+            binding.modeGainmap.isEnabled = false
+
+            binding.modeUltrahdr.text =
+                resources.getText(R.string.visualizing_ultrahdr_gainmap_mode_title_no_ultrahdr)
+            binding.modeUltrahdr.isEnabled = false
+        }
 
         // Based on the type, setting the appropriate bitmap.
-        imageview.setImageBitmap(
+        binding.imageContainer.setImageBitmap(
             when (type) {
                 // Intentionally drop the gainmap in order to display 8-bit jpeg sdr image. This
                 // demonstrates that even if the activity is in HDR mode, SDR images will
@@ -107,7 +120,7 @@ class VisualizingAnUltraHDRGainmap : Fragment() {
 
                 // Create a visual version of the gainmap where you will be able to see exactly
                 // which parts of the UltraHDR image are being enhanced by the gainmap.
-                Type.GAINMAP -> visualizeGainmap(imageBitmap.gainmap!!)
+                Type.GAINMAP -> visualizeGainmap(imageBitmap)
 
                 // Do nothing.
                 Type.COMBINED -> imageBitmap
@@ -119,28 +132,44 @@ class VisualizingAnUltraHDRGainmap : Fragment() {
      * Creates a monochrome representation of the [Gainmap] of an UltraHDR image and returns it as
      * a [Bitmap].
      */
-    private fun visualizeGainmap(gainmap: Gainmap): Bitmap {
-        val contents = gainmap.gainmapContents
-        if (contents.config != Bitmap.Config.ALPHA_8) return contents
+    private suspend fun visualizeGainmap(bitmap: Bitmap): Bitmap = withContext(Dispatchers.IO) {
+        bitmap.gainmap?.let {
+            val contents = it.gainmapContents
+            if (contents.config != Bitmap.Config.ALPHA_8) return@withContext contents
 
-        val visual = Bitmap.createBitmap(
-            contents.width, contents.height,
-            Bitmap.Config.ARGB_8888,
-        )
+            val visual = Bitmap.createBitmap(
+                contents.width, contents.height,
+                Bitmap.Config.ARGB_8888,
+            )
 
-        val canvas = Canvas(visual)
-        val paint = Paint()
-        paint.colorFilter = ColorMatrixColorFilter(
-            floatArrayOf(
-                0f, 0f, 0f, 1f, 0f,
-                0f, 0f, 0f, 1f, 0f,
-                0f, 0f, 0f, 1f, 0f,
-                0f, 0f, 0f, 0f, 255f,
-            ),
+            val canvas = Canvas(visual)
+            val paint = Paint()
+            paint.colorFilter = ColorMatrixColorFilter(
+                floatArrayOf(
+                    0f, 0f, 0f, 1f, 0f,
+                    0f, 0f, 0f, 1f, 0f,
+                    0f, 0f, 0f, 1f, 0f,
+                    0f, 0f, 0f, 0f, 255f,
+                ),
+            )
+            canvas.drawBitmap(contents, 0f, 0f, paint)
+            canvas.setBitmap(null)
+            return@withContext visual
+        }
+        return@withContext bitmap
+    }
+
+    /**
+     * Utility function to retrieve the bitmap representation of the file based on the location.
+     */
+    private suspend fun getBitmapFromFile(): Bitmap = withContext(Dispatchers.IO) {
+        val location = arguments?.getString(ARG_KEY_LOCATION) ?: ""
+        BitmapFactory.decodeStream(
+            when (location.isNotBlank()) {
+                true -> File(location).inputStream()
+                false -> context?.assets?.open(ULTRA_HDR_IMAGE_FOUNTAIN)
+            },
         )
-        canvas.drawBitmap(contents, 0f, 0f, paint)
-        canvas.setBitmap(null)
-        return visual
     }
 
     override fun onDetach() {
@@ -150,8 +179,14 @@ class VisualizingAnUltraHDRGainmap : Fragment() {
 
     companion object {
         /**
-         * Sample UltraHDR image path
+         * Default UltraHDR image path
          */
-        private const val ULTRA_HDR_IMAGE_FOUNTAIN = "gainmaps/fountain_night.jpg"
+        private const val ULTRA_HDR_IMAGE_FOUNTAIN = "gainmaps/office.jpg"
+
+        /**
+         * Location argument for if this fragment is pass with a bundle that contains the location
+         * of an UltraHDR image.
+         */
+        const val ARG_KEY_LOCATION = "location"
     }
 }
