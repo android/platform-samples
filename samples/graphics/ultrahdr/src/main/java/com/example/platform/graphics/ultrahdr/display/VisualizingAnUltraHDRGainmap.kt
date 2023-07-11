@@ -95,10 +95,6 @@ class VisualizingAnUltraHDRGainmap : Fragment() {
      * the gainmap as well as the result of the both of them displayed together.
      */
     private fun updateDisplayedImage(type: Type) = lifecycleScope.launch(Dispatchers.Main) {
-        // Clear previous bitmap source.
-        val imageview = binding.imageContainer
-        imageview.setImageResource(0)
-
         // Decode ultra hdr image into bitmap data.
         val imageBitmap = getBitmapFromFile()
 
@@ -115,7 +111,7 @@ class VisualizingAnUltraHDRGainmap : Fragment() {
         }
 
         // Based on the type, setting the appropriate bitmap.
-        imageview.setImageBitmap(
+        binding.imageContainer.setImageBitmap(
             when (type) {
                 // Intentionally drop the gainmap in order to display 8-bit jpeg sdr image. This
                 // demonstrates that even if the activity is in HDR mode, SDR images will
@@ -185,7 +181,7 @@ class VisualizingAnUltraHDRGainmap : Fragment() {
         /**
          * Default UltraHDR image path
          */
-        private const val ULTRA_HDR_IMAGE_FOUNTAIN = "gainmaps/fountain_night.jpg"
+        private const val ULTRA_HDR_IMAGE_FOUNTAIN = "gainmaps/office.jpg"
 
         /**
          * Location argument for if this fragment is pass with a bundle that contains the location
