@@ -62,12 +62,14 @@ class ColorModeControls : LinearLayout, WindowObserver {
     override fun onAttachedToWindow() {
         super.onAttachedToWindow()
         display?.run {
-            registerHdrSdrRatioChangedListener(
-                { executable ->
-                    executable.run()
-                },
-                hdrSdrRatioListener,
-            )
+            if (isHdrSdrRatioAvailable) {
+                registerHdrSdrRatioChangedListener(
+                    { executable ->
+                        executable.run()
+                    },
+                    hdrSdrRatioListener,
+                )
+            }
         }
     }
 
@@ -97,9 +99,9 @@ class ColorModeControls : LinearLayout, WindowObserver {
         window?.let {
             // The current hdr/sdr ratio expressed as the ratio of
             // targetHdrPeakBrightnessInNits / targetSdrWhitePointInNits.
-            val sdrHdrRatio = when (display.isHdrSdrRatioAvailable) {
+            val sdrHdrRatio = when (display?.isHdrSdrRatioAvailable) {
                 true -> display.hdrSdrRatio
-                false -> 1.0f
+                else -> 1.0f
             }
 
             binding.ultrahdrColorModeCurrentMode.run {

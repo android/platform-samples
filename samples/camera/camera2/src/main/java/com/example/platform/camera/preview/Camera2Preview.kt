@@ -53,10 +53,11 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @Sample(
-    name = "Camera2 - Preview",
+    name = "Camera Preview",
     description = "Demonstrates displaying processed pixel data directly from the camera sensor "
-            + "to the screen.",
-    documentation = "https://developer.android.com/training/camera2"
+            + "to the screen using Camera2.",
+    documentation = "https://developer.android.com/training/camera2",
+    tags = ["Camera2"],
 )
 class Camera2Preview : Fragment() {
     /**

@@ -48,19 +48,19 @@
         android:scaleType="fitCenter" />
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/advanced_image_viewer"
+        android:id="@+id/image_viewer"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <ImageButton
+    <Button
         android:id="@+id/back_button"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_gravity="top|start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
         android:layout_margin="16dp"
-        android:background="@drawable/ic_back"
         android:contentDescription="@null"
         android:scaleType="fitCenter"
+        android:text="@string/return_to_camera"
         android:visibility="gone" />
 
 </FrameLayout>

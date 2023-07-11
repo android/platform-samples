@@ -29,9 +29,9 @@ import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
     name = "Displaying UltraHDR",
-    description = "This sample demonstrates displaying an UltraHDR image",
+    description = "This sample demonstrates displaying an UltraHDR image.",
     documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-    tags = ["ultrahdr"],
+    tags = ["UltraHDR"],
 )
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class DisplayingUltraHDR : Fragment() {

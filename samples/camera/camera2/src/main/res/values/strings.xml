@@ -15,5 +15,6 @@
   -->
 <resources>
     <string name="capture">Capture</string>
+    <string name="return_to_camera">Return to Camera</string>
 </resources>
 

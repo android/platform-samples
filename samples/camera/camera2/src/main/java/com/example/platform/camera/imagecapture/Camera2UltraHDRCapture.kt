@@ -40,6 +40,7 @@ import android.os.HandlerThread
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.SurfaceHolder
+import android.view.SurfaceView
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
@@ -52,7 +53,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
 import com.example.platform.camera.R
-import com.example.platform.camera.common.AdvancedImageViewer
 import com.example.platform.camera.common.CombinedCaptureResult
 import com.example.platform.camera.common.DirectExecutor
 import com.example.platform.camera.common.OrientationLiveData
@@ -60,6 +60,7 @@ import com.example.platform.camera.common.SIZE_720P
 import com.example.platform.camera.common.computeExifOrientation
 import com.example.platform.camera.common.getPreviewOutputSize
 import com.example.platform.camera.databinding.Camera2UltrahdrCaptureBinding
+import com.example.platform.graphics.ultrahdr.display.VisualizingAnUltraHDRGainmap
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -77,11 +78,11 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @Sample(
-    name = "Camera2 - UltraHDR Image Capture",
+    name = "UltraHDR Image Capture",
     description = "This sample demonstrates how to capture a 10-bit compressed still image and " +
-            "store it using the new UltraHDR image format",
+            "store it using the new UltraHDR image format using Camera2.",
     documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-    tags = ["UltraHDR"],
+    tags = ["UltraHDR", "Camera2"],
 )
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class Camera2UltraHDRCapture : Fragment() {
@@ -242,26 +243,30 @@ class Camera2UltraHDRCapture : Fragment() {
     private fun showImage(imageLocation: String) {
         binding.captureButton.visibility = View.GONE
         binding.backButton.visibility = View.VISIBLE
+        binding.viewfinder.visibility = View.INVISIBLE
 
-        val bundle = bundleOf(AdvancedImageViewer.ARG_KEY_LOCATION to imageLocation)
-        val imageViewer = AdvancedImageViewer().apply { arguments = bundle }
+        val bundle = bundleOf(VisualizingAnUltraHDRGainmap.ARG_KEY_LOCATION to imageLocation)
+        val imageViewer = VisualizingAnUltraHDRGainmap().apply { arguments = bundle }
 
         requireActivity().supportFragmentManager.commit {
             setReorderingAllowed(true)
-            add(R.id.advanced_image_viewer, imageViewer)
+            add(R.id.image_viewer, imageViewer)
         }
 
         binding.backButton.setOnClickListener {
             binding.captureButton.visibility = View.VISIBLE
+            binding.viewfinder.visibility = View.VISIBLE
             binding.backButton.visibility = View.GONE
             requireActivity().supportFragmentManager.commit {
-                setReorderingAllowed(true)
                 remove(imageViewer)
             }
         }
     }
 
     private fun setUpCamera() {
+        // Prevents SurfaceView from being destroyed when there is a visibility change. This must
+        // be called before setting SurfaceHolder.Callback
+        binding.viewfinder.setSurfaceLifecycle(SurfaceView.SURFACE_LIFECYCLE_FOLLOWS_ATTACHMENT)
         binding.viewfinder.holder.addCallback(
             object : SurfaceHolder.Callback {
                 override fun surfaceDestroyed(holder: SurfaceHolder) = Unit
@@ -327,19 +332,13 @@ class Camera2UltraHDRCapture : Fragment() {
                 takePhoto().use { result ->
                     Log.d(TAG, "Result received: $result")
 
-                    // Save the result to disk
+                    // Save the result to disk, update EXIF metadata with orientation info
                     val output = saveResult(result)
                     Log.d(TAG, "Image saved: ${output.absolutePath}")
-
-                    // If the result is a JPEG file, update EXIF metadata with orientation info
-                    if (output.extension == "jpg") {
-                        val exif = ExifInterface(output.absolutePath)
-                        exif.setAttribute(
-                            ExifInterface.TAG_ORIENTATION, result.orientation.toString(),
-                        )
-                        exif.saveAttributes()
-                        Log.d(TAG, "EXIF metadata saved: ${output.absolutePath}")
-                    }
+                    val exif = ExifInterface(output.absolutePath)
+                    exif.setAttribute(ExifInterface.TAG_ORIENTATION, result.orientation.toString())
+                    exif.saveAttributes()
+                    Log.d(TAG, "EXIF metadata saved: ${output.absolutePath}")
 
                     // Display the photo taken to user
                     lifecycleScope.launch(Dispatchers.Main) {
@@ -376,14 +375,14 @@ class Camera2UltraHDRCapture : Fragment() {
 
     /**
      * Begin all camera operations in a coroutine in the main thread. This function:
-     * - Checks if JPEG/R (UltraHDR) is supported as and outputformat by the device.
+     * - Checks if JPEG/R (UltraHDR) is supported as and output format by the device.
      * - Opens the camera
      * - Configures the camera session
      * - Starts the preview by dispatching a repeating capture request
      */
     private fun initializeCamera() = lifecycleScope.launch(Dispatchers.Main) {
         if (!canCaptureUltraHDR(characteristics)) {
-            showActionMessage("UltraHDR Capture is not supported by this device...") {}
+            showActionMessage("UltraHDR Capture is not supported by this device") {}
             return@launch
         }
 

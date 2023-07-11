@@ -6,12 +6,8 @@ Showcases how to pin widget within the app. Check the launcher widget menu for a
 This sample will show you how get all audio sources and set an audio device. Covers Bluetooth, LEA, Wired and internal speakers
 - [Call Notification Sample](connectivity/callnotification/src/main/java/com/example/platform/connectivity/callnotification/CallNotificationSample.kt):
 Sample demonstrating how to make incoming call notifications and in call notifications
-- [Camera2 - Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2ImageCapture.kt):
-This sample demonstrates how to capture and image and encode it into a JPEG 
-- [Camera2 - Preview](camera/camera2/src/main/java/com/example/platform/camera/preview/Camera2Preview.kt):
+- [Camera Preview](camera/camera2/src/main/java/com/example/platform/camera/preview/Camera2Preview.kt):
 Demonstrates displaying processed pixel data directly from the camera sensor 
-- [Camera2 - UltraHDR Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2UltraHDRCapture.kt):
-This sample demonstrates how to capture a 10-bit compressed still image and 
 - [Color Contrast](accessibility/src/main/java/com/example/platform/accessibility/ColorContrast.kt):
 This sample demonstrates the importance of proper color contrast and how to 
 - [Connect to a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/ConnectGATTSample.kt):
@@ -25,7 +21,7 @@ Shows how to create a GATT server and communicate with the GATT client
 - [Data Access](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
 Demonstrates how to implement data access auditing for your app to identify 
 - [Displaying UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDR.kt):
-This sample demonstrates displaying an UltraHDR image
+This sample demonstrates displaying an UltraHDR image.
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
@@ -36,6 +32,8 @@ This example will demonstrate how to scanning for Low Energy Devices
 Shows various vibration effects.
 - [Hyphenation](user-interface/text/src/main/java/com/example/platform/ui/text/Hyphenation.kt):
 Demonstrates different options for the `android:hyphenationFrequency` attribute
+- [Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2ImageCapture.kt):
+This sample demonstrates how to capture and image using Camera2 and encode it 
 - [Immersive mode](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/ImmersiveMode.kt):
 Immersive mode enables your app to display full-screen by hiding system bars.
 - [LineBreak](user-interface/text/src/main/java/com/example/platform/ui/text/LineBreak.kt):
@@ -82,6 +80,8 @@ Shows the recommended flow to request single runtime permissions
 The sample demonstrates the importance of having proper labels for
 - [TextSpan](user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.
+- [UltraHDR Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2UltraHDRCapture.kt):
+This sample demonstrates how to capture a 10-bit compressed still image and 
 - [Visualizing an UltraHDR Gainmap](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/VisualizingAnUltraHDRGainmap.kt):
 This sample demonstrates visualizing the underlying gainmap of an UltraHDR 
 - [WindowInsetsAnimation](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/WindowInsetsAnimation.kt):
