@@ -15,6 +15,10 @@
   -->
 <resources>
     <string name="capture">Capture</string>
-    <string name="return_to_camera">Return to Camera</string>
+
+    <!-- UltraHDR Image Capture Strings -->
+    <string name="ultrahdr_image_capture_return_to_camera">Return to Camera</string>
+    <string name="ultrahdr_image_capture_not_supported">UltraHDR Capture via Camera2 API is not supported on this device.</string>
+
 </resources>
 

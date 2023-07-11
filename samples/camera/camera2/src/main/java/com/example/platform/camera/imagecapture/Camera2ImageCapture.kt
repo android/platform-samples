@@ -38,7 +38,7 @@ import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.platform.camera.common.*
-import com.example.platform.camera.databinding.FragmentCamera2ImageCaptureBinding
+import com.example.platform.camera.databinding.Camera2ImageCaptureBinding
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -65,7 +65,7 @@ class Camera2ImageCapture : Fragment() {
     /**
      *  Android ViewBinding.
      */
-    private var _binding: FragmentCamera2ImageCaptureBinding? = null
+    private var _binding: Camera2ImageCaptureBinding? = null
     private val binding get() = _binding!!
 
     /**
@@ -161,7 +161,7 @@ class Camera2ImageCapture : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentCamera2ImageCaptureBinding.inflate(inflater, container, false)
+        _binding = Camera2ImageCaptureBinding.inflate(inflater, container, false)
         return binding.root
     }
 

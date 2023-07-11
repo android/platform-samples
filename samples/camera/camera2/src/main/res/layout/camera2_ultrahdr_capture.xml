@@ -60,7 +60,7 @@
         android:layout_margin="16dp"
         android:contentDescription="@null"
         android:scaleType="fitCenter"
-        android:text="@string/return_to_camera"
+        android:text="@string/ultrahdr_image_capture_return_to_camera"
         android:visibility="gone" />
 
 </FrameLayout>

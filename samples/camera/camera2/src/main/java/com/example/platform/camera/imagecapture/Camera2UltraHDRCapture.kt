@@ -382,7 +382,7 @@ class Camera2UltraHDRCapture : Fragment() {
      */
     private fun initializeCamera() = lifecycleScope.launch(Dispatchers.Main) {
         if (!canCaptureUltraHDR(characteristics)) {
-            showActionMessage("UltraHDR Capture is not supported by this device") {}
+            showActionMessage(resources.getString(R.string.ultrahdr_image_capture_not_supported)) {}
             return@launch
         }
 
