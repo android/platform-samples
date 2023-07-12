@@ -36,6 +36,7 @@ import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
+import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.background
 import androidx.glance.currentState
@@ -57,8 +58,14 @@ import com.example.platform.ui.appwidgets.glance.appWidgetBackgroundCornerRadius
  */
 class ListGlanceWidget : GlanceAppWidget() {
 
+    override suspend fun provideGlance(context: Context, id: GlanceId) {
+        provideContent {
+            Content()
+        }
+    }
+
     @Composable
-    override fun Content() {
+    fun Content() {
         GlanceTheme {
             Column(
                 modifier = GlanceModifier
@@ -66,7 +73,7 @@ class ListGlanceWidget : GlanceAppWidget() {
                     .padding(16.dp)
                     .appWidgetBackground()
                     .background(GlanceTheme.colors.background)
-                    .appWidgetBackgroundCornerRadius()
+                    .appWidgetBackgroundCornerRadius(),
             ) {
                 Text(
                     text = LocalContext.current.getString(R.string.glance_todo_list),
@@ -76,7 +83,7 @@ class ListGlanceWidget : GlanceAppWidget() {
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
-                        color = GlanceTheme.colors.primary
+                        color = GlanceTheme.colors.primary,
                     ),
                 )
                 CountChecked()
@@ -100,7 +107,7 @@ private fun CheckBoxItem(id: Int) {
         onCheckedChange = actionRunCallback<CheckboxClickAction>(
             actionParametersOf(
                 toggledStringIdKey to id.toString(),
-            )
+            ),
         ),
         modifier = GlanceModifier.padding(12.dp),
         style = TextStyle(color = GlanceTheme.colors.textColorPrimary),
@@ -118,8 +125,8 @@ private fun CountChecked() {
         text = "$checkedCount checkboxes checked",
         modifier = GlanceModifier.padding(start = 8.dp),
         style = TextStyle(
-            color = GlanceTheme.colors.textColorSecondary
-        )
+            color = GlanceTheme.colors.textColorSecondary,
+        ),
     )
 }
 
@@ -135,7 +142,7 @@ private val groceryStringIds = listOf(
     R.string.grocery_list_potatoes,
     R.string.grocery_list_broccoli,
     R.string.grocery_list_salmon,
-    R.string.grocery_list_yogurt
+    R.string.grocery_list_yogurt,
 )
 
 class CheckboxClickAction : ActionCallback {

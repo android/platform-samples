@@ -41,6 +41,7 @@ import androidx.glance.appwidget.action.ToggleableStateKey
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.lazy.LazyColumn
+import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.background
 import androidx.glance.currentState
@@ -65,9 +66,15 @@ import com.example.platform.ui.appwidgets.rv.list.ListWidgetConfigureActivity
  */
 class ButtonsGlanceWidget : GlanceAppWidget() {
 
+    override suspend fun provideGlance(context: Context, id: GlanceId) {
+        provideContent {
+            Content()
+        }
+    }
+
     @SuppressLint("RemoteViewLayout")
     @Composable
-    override fun Content() {
+    fun Content() {
         GlanceTheme {
             Column(
                 modifier = GlanceModifier
@@ -75,7 +82,7 @@ class ButtonsGlanceWidget : GlanceAppWidget() {
                     .padding(16.dp)
                     .appWidgetBackground()
                     .background(GlanceTheme.colors.background)
-                    .appWidgetBackgroundCornerRadius()
+                    .appWidgetBackgroundCornerRadius(),
             ) {
                 Text(
                     text = LocalContext.current.getString(R.string.buttons_title),
@@ -85,7 +92,7 @@ class ButtonsGlanceWidget : GlanceAppWidget() {
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 18.sp,
-                        color = GlanceTheme.colors.primary
+                        color = GlanceTheme.colors.primary,
                     ),
                 )
                 LazyColumn {
@@ -93,7 +100,7 @@ class ButtonsGlanceWidget : GlanceAppWidget() {
                         Button(
                             text = "Button",
                             modifier = GlanceModifier.fillMaxWidth(),
-                            onClick = actionStartActivity<ListWidgetConfigureActivity>()
+                            onClick = actionStartActivity<ListWidgetConfigureActivity>(),
                         )
                     }
                     item {
@@ -101,8 +108,8 @@ class ButtonsGlanceWidget : GlanceAppWidget() {
                             text = "Checkbox",
                             checked = currentState(key = CheckboxKey) ?: false,
                             onCheckedChange = actionRunCallback<CompoundButtonAction>(
-                                actionParametersOf(SelectedKey to CheckboxKey.name)
-                            )
+                                actionParametersOf(SelectedKey to CheckboxKey.name),
+                            ),
                         )
                     }
                     item {
@@ -110,8 +117,8 @@ class ButtonsGlanceWidget : GlanceAppWidget() {
                             text = "Switch",
                             checked = currentState(key = SwitchKey) ?: false,
                             onCheckedChange = actionRunCallback<CompoundButtonAction>(
-                                actionParametersOf(SelectedKey to SwitchKey.name)
-                            )
+                                actionParametersOf(SelectedKey to SwitchKey.name),
+                            ),
                         )
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -121,15 +128,15 @@ class ButtonsGlanceWidget : GlanceAppWidget() {
                             AndroidRemoteViews(
                                 remoteViews = RemoteViews(
                                     LocalContext.current.packageName,
-                                    R.layout.item_radio_buttons
+                                    R.layout.item_radio_buttons,
                                 ).apply {
                                     // This code will check the item_radio_button2 in the
                                     // item_radio_group RadioGroup
                                     setRadioGroupChecked(
                                         R.id.item_radio_group,
-                                        R.id.item_radio_button2
+                                        R.id.item_radio_button2,
                                     )
-                                }
+                                },
                             )
                         }
                     }

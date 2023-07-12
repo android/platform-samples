@@ -46,6 +46,7 @@ import androidx.glance.appwidget.action.ActionCallback
 import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.action.actionStartActivity
 import androidx.glance.appwidget.appWidgetBackground
+import androidx.glance.appwidget.provideContent
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.background
 import androidx.glance.currentState
@@ -76,14 +77,20 @@ class ImageGlanceWidget : GlanceAppWidget() {
         fun getImageKey(size: DpSize) = getImageKey(size.width.value.toPx, size.height.value.toPx)
 
         fun getImageKey(width: Float, height: Float) = stringPreferencesKey(
-            "uri-$width-$height"
+            "uri-$width-$height",
         )
     }
 
     override val sizeMode: SizeMode = SizeMode.Exact
 
+    override suspend fun provideGlance(context: Context, id: GlanceId) {
+        provideContent {
+            Content()
+        }
+    }
+
     @Composable
-    override fun Content() {
+    fun Content() {
         val context = LocalContext.current
         val size = LocalSize.current
         val imagePath = currentState(getImageKey(size))
@@ -98,7 +105,7 @@ class ImageGlanceWidget : GlanceAppWidget() {
                     Alignment.Center
                 } else {
                     Alignment.BottomEnd
-                }
+                },
             ) {
                 if (imagePath != null) {
                     Image(
@@ -107,7 +114,7 @@ class ImageGlanceWidget : GlanceAppWidget() {
                         contentScale = ContentScale.FillBounds,
                         modifier = GlanceModifier
                             .fillMaxSize()
-                            .clickable(actionRunCallback<RefreshAction>())
+                            .clickable(actionRunCallback<RefreshAction>()),
                     )
                     Text(
                         text = "Source: ${currentState(sourceKey)}",
@@ -116,7 +123,7 @@ class ImageGlanceWidget : GlanceAppWidget() {
                             fontSize = 12.sp,
                             fontStyle = FontStyle.Italic,
                             textAlign = TextAlign.End,
-                            textDecoration = TextDecoration.Underline
+                            textDecoration = TextDecoration.Underline,
                         ),
                         modifier = GlanceModifier
                             .fillMaxWidth()
@@ -126,10 +133,10 @@ class ImageGlanceWidget : GlanceAppWidget() {
                                 actionStartActivity(
                                     Intent(
                                         Intent.ACTION_VIEW,
-                                        Uri.parse(currentState(sourceUrlKey))
-                                    )
-                                )
-                            )
+                                        Uri.parse(currentState(sourceUrlKey)),
+                                    ),
+                                ),
+                            ),
                     )
                 } else {
                     CircularProgressIndicator()

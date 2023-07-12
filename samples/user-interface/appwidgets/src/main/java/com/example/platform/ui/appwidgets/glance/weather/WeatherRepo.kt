@@ -20,38 +20,68 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import com.example.platform.ui.appwidgets.R
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import java.time.Instant
 import java.time.ZoneId
+import java.time.format.DateTimeFormatterBuilder
 import kotlin.random.Random
 
 @RequiresApi(Build.VERSION_CODES.O)
 object WeatherRepo {
 
+    private const val TIMEOUT = 10L
+
+    private var _currentWeather = MutableStateFlow<WeatherInfo>(WeatherInfo.Loading)
+    val currentWeather: StateFlow<WeatherInfo> get() = _currentWeather
+
+    private var lastRun: Instant = Instant.EPOCH
+    private val mutex = Mutex()
+
     /**
      * Request the WeatherInfo of a given location
      */
-    suspend fun getWeatherInfo(delay: Long = Random.nextInt(1, 3) * 1000L): WeatherInfo {
+    suspend fun updateWeatherInfo(delay: Long = Random.nextInt(1, 3) * 1000L) {
+        //Because multiple widgets may request a weather update at once,
+        //we will put a simple timeout check here.
+        mutex.withLock(lastRun) {
+            if (lastRun.plusSeconds(TIMEOUT).isAfter(Instant.now())) {
+                //30 seconds have not elapsed since last run.
+                return
+            } else {
+                lastRun = Instant.now()
+            }
+        }
+
         // Simulate network loading
+        _currentWeather.value = WeatherInfo.Loading
+
         if (delay > 0) {
             delay(delay)
         }
-        return WeatherInfo.Available(
-            placeName = "Tokyo",
-            currentData = getRandomWeatherData(Instant.now()),
-            hourlyForecast = (1..4).map {
-                getRandomWeatherData(Instant.now().plusSeconds(it * 3600L))
-            },
-            dailyForecast = (1..4).map {
-                getRandomWeatherData(Instant.now().plusSeconds(it * 86400L))
-            }
-        )
+
+        _currentWeather.value =
+            WeatherInfo.Available(
+                placeName = "Tokyo",
+                currentData = getRandomWeatherData(Instant.now()),
+                hourlyForecast = (1..4).map {
+                    getRandomWeatherData(Instant.now().plusSeconds(it * 3600L))
+                },
+                dailyForecast = (1..4).map {
+                    getRandomWeatherData(Instant.now().plusSeconds(it * 86400L))
+                },
+            )
     }
 
     /**
      * Fake the weather data
      */
     private fun getRandomWeatherData(instant: Instant): WeatherData {
+        val hourFormatter = DateTimeFormatterBuilder().appendPattern("h a").toFormatter()
         val dateTime = instant.atZone(ZoneId.systemDefault())
+
         return WeatherData(
             icon = R.drawable.ic_partly_cloudy,
             status = R.string.mostly_cloudy,
@@ -59,8 +89,7 @@ object WeatherRepo {
             maxTemp = Random.nextInt(5, 35),
             minTemp = Random.nextInt(5, 35),
             day = dateTime.dayOfWeek.name,
-            hour = "${dateTime.hour % 12}:${if (dateTime.hour >= 12) "pm" else "am"}",
+            hour = dateTime.format(hourFormatter),
         )
     }
 }
-
