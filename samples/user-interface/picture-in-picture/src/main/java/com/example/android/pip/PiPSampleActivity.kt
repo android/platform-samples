@@ -35,6 +35,8 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -112,7 +114,12 @@ class PiPSampleActivity : AppCompatActivity() {
         }
 
         // Handle events from the action icons on the picture-in-picture mode.
-        registerReceiver(broadcastReceiver, IntentFilter(ACTION_STOPWATCH_CONTROL))
+        ActivityCompat.registerReceiver(
+            this,
+            broadcastReceiver,
+            IntentFilter(ACTION_STOPWATCH_CONTROL),
+            ContextCompat.RECEIVER_NOT_EXPORTED
+        )
     }
 
     // This is called when the activity gets into or out of the picture-in-picture mode.
