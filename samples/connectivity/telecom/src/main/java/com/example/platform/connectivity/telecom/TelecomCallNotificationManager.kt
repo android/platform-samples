@@ -21,6 +21,8 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
+import android.media.AudioAttributes
+import android.media.AudioManager
 import android.media.RingtoneManager
 import android.os.Build
 import android.telecom.DisconnectCause
@@ -45,7 +47,8 @@ class TelecomCallNotificationManager(private val context: Context) {
     internal companion object {
         const val TELECOM_NOTIFICATION_ID = 200
         const val TELECOM_NOTIFICATION_ACTION = "telecom_action"
-        const val TELECOM_NOTIFICATION_CHANNEL_ID = "telecom_channel"
+        const val TELECOM_NOTIFICATION_INCOMING_CHANNEL_ID = "telecom_incoming_channel"
+        const val TELECOM_NOTIFICATION_ONGOING_CHANNEL_ID = "telecom_ongoing_channel"
 
         private val ringToneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_RINGTONE)
     }
@@ -58,7 +61,7 @@ class TelecomCallNotificationManager(private val context: Context) {
      */
     fun updateCallNotification(call: TelecomCall) {
         // If notifications are not granted, skip it.
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU &&
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
             PermissionChecker.checkSelfPermission(
                 context,
                 Manifest.permission.POST_NOTIFICATIONS,
@@ -68,7 +71,7 @@ class TelecomCallNotificationManager(private val context: Context) {
         }
 
         // Ensure that the channel is created
-        createNotificationChannel()
+        createNotificationChannels()
 
         // Update or dismiss notification
         when (call) {
@@ -97,7 +100,8 @@ class TelecomCallNotificationManager(private val context: Context) {
         )
 
         // Define the call style based on the call state and set the right actions
-        val callStyle = if (call.isIncoming() && !call.isActive) {
+        val isIncoming = call.isIncoming() && !call.isActive
+        val callStyle = if (isIncoming) {
             NotificationCompat.CallStyle.forIncomingCall(
                 caller,
                 getPendingIntent(
@@ -117,17 +121,18 @@ class TelecomCallNotificationManager(private val context: Context) {
                 ),
             )
         }
+        val channelId = if (isIncoming) {
+            TELECOM_NOTIFICATION_INCOMING_CHANNEL_ID
+        } else {
+            TELECOM_NOTIFICATION_ONGOING_CHANNEL_ID
+        }
 
-        val builder = NotificationCompat.Builder(context, TELECOM_NOTIFICATION_CHANNEL_ID)
+        val builder = NotificationCompat.Builder(context, channelId)
             .setContentIntent(contentIntent)
             .setFullScreenIntent(contentIntent, true)
             .setSmallIcon(R.drawable.ic_round_call_24)
             .setOngoing(true)
             .setStyle(callStyle)
-
-        if (call.isIncoming()) {
-            builder.setSound(ringToneUri)
-        }
 
         // TODO figure out why custom actions are not working
         if (call.isOnHold) {
@@ -165,13 +170,29 @@ class TelecomCallNotificationManager(private val context: Context) {
         )
     }
 
-    private fun createNotificationChannel() {
-        val name = "Telecom Channel"
-        val descriptionText = "Handles the notifications when receiving or doing a call"
-        val channel = NotificationChannelCompat.Builder(
-            TELECOM_NOTIFICATION_CHANNEL_ID,
+    private fun createNotificationChannels() {
+        val incomingChannel = NotificationChannelCompat.Builder(
+            TELECOM_NOTIFICATION_INCOMING_CHANNEL_ID,
             NotificationManagerCompat.IMPORTANCE_HIGH,
-        ).setName(name).setDescription(descriptionText).build()
-        notificationManager.createNotificationChannel(channel)
+        ).setName("Incoming calls")
+            .setDescription("Handles the notifications when receiving a call")
+            .setVibrationEnabled(true).setSound(
+                ringToneUri,
+                AudioAttributes.Builder().setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                    .setLegacyStreamType(AudioManager.STREAM_RING)
+                    .setUsage(AudioAttributes.USAGE_NOTIFICATION_RINGTONE).build(),
+            ).build()
+
+        val ongoingChannel = NotificationChannelCompat.Builder(
+            TELECOM_NOTIFICATION_ONGOING_CHANNEL_ID,
+            NotificationManagerCompat.IMPORTANCE_DEFAULT,
+        ).setName("Ongoing calls").setDescription("Displays the ongoing call notifications").build()
+
+        notificationManager.createNotificationChannelsCompat(
+            listOf(
+                incomingChannel,
+                ongoingChannel,
+            ),
+        )
     }
 }
