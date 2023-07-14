@@ -27,7 +27,6 @@ import android.provider.MediaStore
 import android.provider.MediaStore.Images
 import android.text.format.Formatter
 import androidx.annotation.RequiresPermission
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
@@ -37,11 +36,9 @@ import androidx.compose.material3.Divider
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -78,49 +75,54 @@ fun MediaStoreQueryScreen() {
 @Composable
 fun MediaStoreQueryContent() {
     val context = LocalContext.current
-    var files by remember { mutableStateOf(emptyList<FileEntry>()) }
+    val files by loadImages(context.contentResolver)
 
-    LaunchedEffect(Unit) {
-        files = getImages(context.contentResolver)
-    }
-
-    Column(Modifier.fillMaxSize()) {
-        LazyColumn(Modifier.weight(1f)) {
-            item {
-                ListItem(
-                    headlineContent = {
-                        if (files.isNotEmpty()) {
-                            Text("${files.size} images found")
-                        }
-                    },
-                )
-                Divider()
-            }
-            items(files) { file ->
-                ListItem(
-                    leadingContent = {
-                        AsyncImage(
-                            model = file.uri,
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .size(64.dp)
-                                .aspectRatio(1f),
-                        )
-                    },
-                    headlineContent = {
-                        Text(file.name, maxLines = 1, overflow = TextOverflow.Ellipsis)
-                    },
-                    supportingContent = { Text(file.mimeType) },
-                    trailingContent = { Text(Formatter.formatShortFileSize(context, file.size)) },
-                )
-                Divider()
-            }
+    LazyColumn(Modifier.fillMaxSize()) {
+        item {
+            ListItem(
+                headlineContent = {
+                    if (files.isNotEmpty()) {
+                        Text("${files.size} images found")
+                    }
+                },
+            )
+            Divider()
+        }
+        items(files) { file ->
+            ListItem(
+                leadingContent = {
+                    AsyncImage(
+                        model = file.uri,
+                        contentDescription = null,
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(64.dp)
+                            .aspectRatio(1f),
+                    )
+                },
+                headlineContent = {
+                    Text(file.name, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                },
+                supportingContent = { Text(file.mimeType) },
+                trailingContent = { Text(Formatter.formatShortFileSize(context, file.size)) },
+            )
+            Divider()
         }
     }
 }
 
-suspend fun getImages(contentResolver: ContentResolver): List<FileEntry> {
+@Composable
+fun loadImages(
+    contentResolver: ContentResolver,
+): State<List<FileEntry>> = produceState(initialValue = emptyList()) {
+    value = getImages(contentResolver)
+}
+
+/**
+ * Query [MediaStore] through [ContentResolver] to get all images sorted by added date by targeting
+ * the [Images] collection
+ */
+private suspend fun getImages(contentResolver: ContentResolver): List<FileEntry> {
     return withContext(Dispatchers.IO) {
         val projection = arrayOf(
             Images.Media._ID,
@@ -140,11 +142,11 @@ suspend fun getImages(contentResolver: ContentResolver): List<FileEntry> {
         val images = mutableListOf<FileEntry>()
 
         contentResolver.query(
-            collectionUri,
-            projection,
-            null,
-            null,
-            "${Images.Media.DATE_ADDED} DESC",
+            collectionUri, // queried collection
+            projection, // list of columns we want to fetch
+            null, // filtering parameters (in this case none)
+            null, // filtering values (in this case none)
+            "${Images.Media.DATE_ADDED} DESC", // sorting order
         )?.use { cursor ->
             val idColumn = cursor.getColumnIndexOrThrow(Images.Media._ID)
             val displayNameColumn = cursor.getColumnIndexOrThrow(Images.Media.DISPLAY_NAME)
@@ -159,8 +161,7 @@ suspend fun getImages(contentResolver: ContentResolver): List<FileEntry> {
                 val mimeType = cursor.getString(mimeTypeColumn)
                 val dateAdded = cursor.getLong(dateAddedColumn)
 
-                val image = FileEntry(uri, name, size, mimeType, dateAdded)
-                images.add(image)
+                images.add(FileEntry(uri, name, size, mimeType, dateAdded))
             }
         }
 
