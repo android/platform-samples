@@ -38,7 +38,7 @@ import com.google.android.catalog.framework.annotations.Sample
 @Sample(
     name = "Telecom Call Sample",
     description = "A sample showcasing how to handle calls with the Jetpack Telecom API",
-    documentation = "https://developer.android.com/guide/topics/connectivity/telecom"
+    documentation = "https://developer.android.com/guide/topics/connectivity/telecom",
 )
 @RequiresApi(Build.VERSION_CODES.O)
 class TelecomCallSampleActivity : ComponentActivity() {
@@ -58,16 +58,19 @@ class TelecomCallSampleActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
                 ) {
+                    // To record the audio for the call
+                    val permissions = mutableListOf(Manifest.permission.RECORD_AUDIO)
+
                     // We should be using make_own_call permissions but this requires
                     // implementation of the telecom API to work correctly.
                     // Please see telecom example for full implementation
-                    val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        listOf(
-                            Manifest.permission.RECORD_AUDIO,
-                            Manifest.permission.MANAGE_OWN_CALLS,
-                        )
-                    } else {
-                        listOf(Manifest.permission.RECORD_AUDIO)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                        permissions.add(Manifest.permission.MANAGE_OWN_CALLS)
+                    }
+
+                    // To show call notifications we need permissions since Android 13
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        permissions.add(Manifest.permission.POST_NOTIFICATIONS)
                     }
 
                     PermissionBox(permissions = permissions) {

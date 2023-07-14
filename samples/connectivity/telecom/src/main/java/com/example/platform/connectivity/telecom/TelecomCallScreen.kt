@@ -108,7 +108,7 @@ internal fun TelecomCallScreen(repository: TelecomCallRepository) {
                     scope.launch(Dispatchers.IO) {
                         repository.registerCall(
                             displayName = "Alice",
-                            address = Uri.parse(""),
+                            address = Uri.parse("tel:12345"),
                             isIncoming = true,
                         )
                     }
@@ -117,7 +117,7 @@ internal fun TelecomCallScreen(repository: TelecomCallRepository) {
                     scope.launch(Dispatchers.IO) {
                         repository.registerCall(
                             displayName = "Bob",
-                            address = Uri.parse(""),
+                            address = Uri.parse("tel:54321"),
                             isIncoming = false,
                         )
 
