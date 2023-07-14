@@ -20,7 +20,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresApi
 import com.example.platform.connectivity.telecom.model.TelecomCall
 import com.example.platform.connectivity.telecom.model.TelecomCallAction
@@ -33,7 +32,6 @@ import com.example.platform.connectivity.telecom.model.TelecomCallRepository
 class TelecomCallBroadcast : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
-        Log.d("MPB", "onReceive: ${intent.extras}")
         // Get the action or skip if none
         val action = intent.getTelecomCallAction() ?: return
         val repo = TelecomCallRepository.instance ?: TelecomCallRepository.create(context)
@@ -45,6 +43,9 @@ class TelecomCallBroadcast : BroadcastReceiver() {
         }
     }
 
+    /**
+     * Get the [TelecomCallAction] parcelable object from the intent bundle.
+     */
     private fun Intent.getTelecomCallAction() =
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             getParcelableExtra(

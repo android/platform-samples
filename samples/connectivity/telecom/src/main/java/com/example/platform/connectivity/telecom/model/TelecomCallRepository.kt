@@ -40,6 +40,13 @@ import kotlinx.coroutines.flow.consumeAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
+/**
+ * The central repository that keeps track of the current call and allows to register new calls.
+ *
+ * This class contains the main logic to integrate with Telecom SDK.
+ *
+ * @see registerCall
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 class TelecomCallRepository(
     private val applicationScope: CoroutineScope,
@@ -209,7 +216,7 @@ class TelecomCallRepository(
                     is TelecomCallAction.TransferCall -> {
                         val call = _currentCall.value as? TelecomCall.Registered
                         val endpoints = call?.availableCallEndpoints?.firstOrNull {
-                            it.identifier == action.id
+                            it.identifier == action.endpointId
                         }
                         requestEndpointChange(
                             endpoint = endpoints ?: return@collect,
@@ -231,7 +238,7 @@ class TelecomCallRepository(
                         }
                     }
 
-                    is TelecomCallAction.Mute -> {
+                    is TelecomCallAction.ToggleMute -> {
                         // We cannot programmatically mute the telecom stack. Instead we just update
                         // the state of the call and this will start/stop audio capturing.
                         updateCurrentCall {

@@ -17,6 +17,7 @@
 package com.example.platform.connectivity.telecom
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -24,6 +25,7 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.telecom.DisconnectCause
 import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
@@ -32,6 +34,12 @@ import androidx.core.content.PermissionChecker
 import com.example.platform.connectivity.telecom.model.TelecomCall
 import com.example.platform.connectivity.telecom.model.TelecomCallAction
 
+/**
+ * Handles call status changes and updates the notification accordingly. For more guidance around
+ * notifications check https://developer.android.com/develop/ui/views/notifications
+ *
+ * @see updateCallNotification
+ */
 @RequiresApi(Build.VERSION_CODES.O)
 class TelecomCallNotificationManager(private val context: Context) {
     internal companion object {
@@ -45,6 +53,9 @@ class TelecomCallNotificationManager(private val context: Context) {
     private val notificationManager: NotificationManagerCompat =
         NotificationManagerCompat.from(context)
 
+    /**
+     * Updates, creates or dismisses a CallStyle notification based on the given [TelecomCall]
+     */
     fun updateCallNotification(call: TelecomCall) {
         // If notifications are not granted, skip it.
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU &&
@@ -59,24 +70,30 @@ class TelecomCallNotificationManager(private val context: Context) {
         // Ensure that the channel is created
         createNotificationChannel()
 
-        // Update notification
+        // Update or dismiss notification
         when (call) {
             TelecomCall.None, is TelecomCall.Unregistered -> cancelNotification()
             is TelecomCall.Registered -> updateNotification(call)
         }
     }
 
+    @SuppressLint("InlinedApi")
+    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
     private fun updateNotification(call: TelecomCall.Registered) {
+        // To display the caller information
         val caller = Person.Builder()
             .setName(call.callAttributes.displayName)
             .setUri(call.callAttributes.address.toString())
             .setImportant(true)
             .build()
+
+        // Defines the full screen notification activity or the activity to launch once the user taps
+        // on the notification
         val contentIntent = PendingIntent.getActivity(
-            context,
-            0,
-            Intent(context, TelecomCallSampleActivity::class.java),
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+            /* context = */ context,
+            /* requestCode = */ 0,
+            /* intent = */ Intent(context, TelecomCallSampleActivity::class.java),
+            /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
 
         // Define the call style based on the call state and set the right actions
@@ -102,7 +119,6 @@ class TelecomCallNotificationManager(private val context: Context) {
         }
 
         val builder = NotificationCompat.Builder(context, TELECOM_NOTIFICATION_CHANNEL_ID)
-            .setContentText("test")
             .setContentIntent(contentIntent)
             .setFullScreenIntent(contentIntent, true)
             .setSmallIcon(R.drawable.ic_round_call_24)
@@ -123,7 +139,6 @@ class TelecomCallNotificationManager(private val context: Context) {
             )
         }
 
-        @Suppress("MissingPermission")
         notificationManager.notify(TELECOM_NOTIFICATION_ID, builder.build())
     }
 
@@ -131,6 +146,10 @@ class TelecomCallNotificationManager(private val context: Context) {
         notificationManager.cancel(TELECOM_NOTIFICATION_ID)
     }
 
+    /**
+     * Creates a PendingIntent for the given [TelecomCallAction]. Since the actions are parcelable
+     * we can directly pass them as extra parameters in the bundle.
+     */
     private fun getPendingIntent(action: TelecomCallAction): PendingIntent {
         val callIntent = Intent(context, TelecomCallBroadcast::class.java)
         callIntent.putExtra(

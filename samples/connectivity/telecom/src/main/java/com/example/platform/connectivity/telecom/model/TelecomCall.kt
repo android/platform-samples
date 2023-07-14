@@ -22,8 +22,20 @@ import androidx.core.telecom.CallAttributesCompat
 import androidx.core.telecom.CallEndpointCompat
 import kotlinx.coroutines.channels.Channel
 
+/**
+ * Custom representation of a call state.
+ */
 sealed class TelecomCall {
+
+    /**
+     * There is no current or past calls in the stack
+     */
     object None : TelecomCall()
+
+    /**
+     * Represents a registered call with the telecom stack with the values provided by the
+     * Telecom SDK
+     */
     data class Registered(
         val id: ParcelUuid,
         val callAttributes: CallAttributesCompat,
@@ -35,16 +47,22 @@ sealed class TelecomCall {
         internal val actionSource: Channel<TelecomCallAction>,
     ) : TelecomCall() {
 
+        /**
+         * @return true if it's an incoming registered call, false otherwise
+         */
         fun isIncoming() = callAttributes.direction == CallAttributesCompat.DIRECTION_INCOMING
 
         /**
          * Sends an action to the call session. It will be processed if it's still registered.
+         *
+         * @return true if the action was sent, false otherwise
          */
-        fun processAction(action: TelecomCallAction) {
-            actionSource.trySend(action)
-        }
+        fun processAction(action: TelecomCallAction) = actionSource.trySend(action).isSuccess
     }
 
+    /**
+     * Represent a previously registered call that was disconnected
+     */
     data class Unregistered(
         val id: ParcelUuid,
         val callAttributes: CallAttributesCompat,

@@ -16,9 +16,9 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
     <uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
 
     <application>
@@ -30,7 +30,6 @@
             android:showWhenLocked="true"
             android:showOnLockScreen="true">
         </activity>
-
 
         <receiver
             android:name=".TelecomCallBroadcast"
