@@ -2,6 +2,7 @@
 
 The samples in this directory showcases various Storage API usages
 - [MediaStore Query](src/main/java/com/example/platform/storage/mediastore/MediaStoreQuery.kt)
+- [Selected Photos Access](src/main/java/com/example/platform/storage/mediastore/SelectedPhotosAccess.kt)
 
 > **Important:** All samples run independent of each other.
 
