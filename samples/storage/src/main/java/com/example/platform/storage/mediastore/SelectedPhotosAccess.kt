@@ -125,6 +125,16 @@ fun SelectedPhotosAccessScreen() {
                                 Text("Both")
                             }
                         }
+                    } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
+                        TextButton(
+                            onClick = {
+                                requestPermissions.launch(
+                                    arrayOf(READ_MEDIA_IMAGES, READ_MEDIA_VIDEO),
+                                )
+                            },
+                        ) {
+                            Text("Request full gallery access")
+                        }
                     } else {
                         TextButton(
                             onClick = {
