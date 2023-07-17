@@ -69,8 +69,11 @@ fun SelectedPhotosAccessScreen() {
         val eventObserver = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_RESUME) {
                 value = getStorageAccess(context)
-                coroutineScope.launch {
-                    files = getVisualMedia(context.contentResolver)
+
+                if (value != StorageAccess.Denied) {
+                    coroutineScope.launch {
+                        files = getVisualMedia(context.contentResolver)
+                    }
                 }
             }
         }
