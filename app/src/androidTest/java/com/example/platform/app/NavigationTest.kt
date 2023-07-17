@@ -73,12 +73,16 @@ class NavigationTest {
             activity.catalogSamples.forEach {
                 // Skip disabled samples
                 if (Build.VERSION.SDK_INT >= it.minSDK) {
-                    scrollNode.performScrollToKey(it.route)
-                    onNode(hasText(it.name) and hasText(it.description)).performClick()
+                    try {
+                        scrollNode.performScrollToKey(it.route)
+                        onNode(hasText(it.name) and hasText(it.description)).performClick()
 
-                    // Go back
-                    Espresso.pressBack()
-                    platformLabel.assertIsDisplayed()
+                        // Go back
+                        Espresso.pressBack()
+                        platformLabel.assertIsDisplayed()
+                    } catch (e: Exception) {
+                        throw Exception("Test failed in sample ${it.name}", e)
+                    }
                 }
             }
         }
