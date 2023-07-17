@@ -103,7 +103,7 @@ fun SelectedPhotosAccessScreen() {
                 if (storageAccess == StorageAccess.Full) {
                     Text("Access to gallery fully granted")
                 } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                         Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                             TextButton(
                                 onClick = { requestPermissions.launch(arrayOf(READ_MEDIA_IMAGES)) },
@@ -133,7 +133,7 @@ fun SelectedPhotosAccessScreen() {
                                 )
                             },
                         ) {
-                            Text("Request full gallery access")
+                            Text("Request full library access")
                         }
                     } else {
                         TextButton(
