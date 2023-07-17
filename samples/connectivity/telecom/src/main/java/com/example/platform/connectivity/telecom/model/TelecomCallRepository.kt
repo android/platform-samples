@@ -128,71 +128,78 @@ class TelecomCallRepository(
                 // Fake incoming call delay
                 delay(2000)
             }
-            // Register the call and handle actions in the scope
-            callsManager.addCall(attributes) {
-                // Register the callback to be notified about other call actions
-                // from other services or devices
-                // TODO this should eventually be moved inside the addCall method b/290562928
-                setCallback(
-                    object : CallControlCallback {
-                        override suspend fun onAnswer(callType: Int): Boolean {
-                            TODO("Not yet implemented")
+            try {
+                // Register the call and handle actions in the scope
+                callsManager.addCall(attributes) {
+                    // Register the callback to be notified about other call actions
+                    // from other services or devices
+                    // TODO this should eventually be moved inside the addCall method b/290562928
+                    setCallback(
+                        object : CallControlCallback {
+                            override suspend fun onAnswer(callType: Int): Boolean {
+                                TODO("Not yet implemented")
+                            }
+
+                            override suspend fun onDisconnect(disconnectCause: DisconnectCause): Boolean {
+                                TODO("Not yet implemented")
+                            }
+
+                            override suspend fun onSetActive(): Boolean {
+                                TODO("Not yet implemented")
+                            }
+
+                            override suspend fun onSetInactive(): Boolean {
+                                TODO("Not yet implemented")
+                            }
+                        },
+                    )
+
+                    launch {
+                        processCallStatus()
+                    }
+
+                    launch {
+                        processCallActions(actionSource.consumeAsFlow())
+                    }
+
+                    // TODO Use the state value once b/290538853 is fixed
+                    _currentCall.value = TelecomCall.Registered(
+                        id = getCallId(),
+                        isActive = false,
+                        isOnHold = false,
+                        callAttributes = attributes,
+                        isMuted = false,
+                        currentCallEndpoint = null,
+                        availableCallEndpoints = emptyList(),
+                        actionSource = actionSource,
+                    )
+
+                    launch {
+                        currentCallEndpoint.collect {
+                            updateCurrentCall {
+                                copy(currentCallEndpoint = it)
+                            }
                         }
-
-                        override suspend fun onDisconnect(disconnectCause: DisconnectCause): Boolean {
-                            TODO("Not yet implemented")
+                    }
+                    launch {
+                        availableEndpoints.collect {
+                            updateCurrentCall {
+                                copy(availableCallEndpoints = it)
+                            }
                         }
-
-                        override suspend fun onSetActive(): Boolean {
-                            TODO("Not yet implemented")
-                        }
-
-                        override suspend fun onSetInactive(): Boolean {
-                            TODO("Not yet implemented")
-                        }
-                    },
-                )
-
-                launch {
-                    processCallStatus()
-                }
-
-                launch {
-                    processCallActions(actionSource.consumeAsFlow())
-                }
-
-                // TODO Use the state value once b/290538853 is fixed
-                _currentCall.value = TelecomCall.Registered(
-                    id = getCallId(),
-                    isActive = false,
-                    isOnHold = false,
-                    callAttributes = attributes,
-                    isMuted = false,
-                    currentCallEndpoint = null,
-                    availableCallEndpoints = emptyList(),
-                    actionSource = actionSource,
-                )
-
-                launch {
-                    currentCallEndpoint.collect {
-                        updateCurrentCall {
-                            copy(currentCallEndpoint = it)
+                    }
+                    launch {
+                        isMuted.collect {
+                            updateCurrentCall {
+                                copy(isMuted = it)
+                            }
                         }
                     }
                 }
-                launch {
-                    availableEndpoints.collect {
-                        updateCurrentCall {
-                            copy(availableCallEndpoints = it)
-                        }
-                    }
-                }
-                launch {
-                    isMuted.collect {
-                        updateCurrentCall {
-                            copy(isMuted = it)
-                        }
-                    }
+            } finally {
+                Log.d("MPB", "Exit scope")
+                _currentCall.update {
+                    TelecomCall.None
                 }
             }
         }
@@ -202,57 +209,48 @@ class TelecomCallRepository(
      * Collect the action source to handle client actions inside the call scope
      */
     private suspend fun CallControlScope.processCallActions(actionSource: Flow<TelecomCallAction>) {
-        try {
-            actionSource.collect { action ->
-                when (action) {
-                    is TelecomCallAction.Answer -> doAnswer()
+        actionSource.collect { action ->
+            when (action) {
+                is TelecomCallAction.Answer -> doAnswer()
 
-                    is TelecomCallAction.Disconnect -> {
-                        doDisconnect(action)
+                is TelecomCallAction.Disconnect -> {
+                    doDisconnect(action)
+                }
+
+                is TelecomCallAction.SwitchAudioType -> doSwitchEndpoint(action)
+
+                is TelecomCallAction.TransferCall -> {
+                    val call = _currentCall.value as? TelecomCall.Registered
+                    val endpoints = call?.availableCallEndpoints?.firstOrNull {
+                        it.identifier == action.endpointId
                     }
+                    requestEndpointChange(
+                        endpoint = endpoints ?: return@collect,
+                    )
+                }
 
-                    is TelecomCallAction.SwitchAudioType -> doSwitchEndpoint(action)
-
-                    is TelecomCallAction.TransferCall -> {
-                        val call = _currentCall.value as? TelecomCall.Registered
-                        val endpoints = call?.availableCallEndpoints?.firstOrNull {
-                            it.identifier == action.endpointId
-                        }
-                        requestEndpointChange(
-                            endpoint = endpoints ?: return@collect,
-                        )
-                    }
-
-                    TelecomCallAction.Hold -> if (setInactive()) {
-                        updateCurrentCall {
-                            copy(isOnHold = true)
-                        }
-                    }
-
-                    TelecomCallAction.Activate -> if (setActive()) {
-                        updateCurrentCall {
-                            copy(
-                                isActive = true,
-                                isOnHold = false,
-                            )
-                        }
-                    }
-
-                    is TelecomCallAction.ToggleMute -> {
-                        // We cannot programmatically mute the telecom stack. Instead we just update
-                        // the state of the call and this will start/stop audio capturing.
-                        updateCurrentCall {
-                            copy(isMuted = !isMuted)
-                        }
+                TelecomCallAction.Hold -> if (setInactive()) {
+                    updateCurrentCall {
+                        copy(isOnHold = true)
                     }
                 }
-            }
-        } finally {
-            // TODO this finally block should be when calling addCall once it implements
-            //   the CoroutineContext
-            Log.d("MPB", "Exit scope")
-            _currentCall.update {
-                TelecomCall.None
+
+                TelecomCallAction.Activate -> if (setActive()) {
+                    updateCurrentCall {
+                        copy(
+                            isActive = true,
+                            isOnHold = false,
+                        )
+                    }
+                }
+
+                is TelecomCallAction.ToggleMute -> {
+                    // We cannot programmatically mute the telecom stack. Instead we just update
+                    // the state of the call and this will start/stop audio capturing.
+                    updateCurrentCall {
+                        copy(isMuted = !isMuted)
+                    }
+                }
             }
         }
     }
