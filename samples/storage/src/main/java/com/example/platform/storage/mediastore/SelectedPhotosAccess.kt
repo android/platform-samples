@@ -101,9 +101,9 @@ fun SelectedPhotosAccessScreen() {
             },
             supportingContent = {
                 if (storageAccess == StorageAccess.Full) {
-                    Text("Access to library fully granted")
+                    Text("Access to gallery fully granted")
                 } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                         Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                             TextButton(
                                 onClick = { requestPermissions.launch(arrayOf(READ_MEDIA_IMAGES)) },
@@ -125,23 +125,13 @@ fun SelectedPhotosAccessScreen() {
                                 Text("Both")
                             }
                         }
-                    } else if (Build.VERSION.SDK_INT == Build.VERSION_CODES.TIRAMISU) {
-                        TextButton(
-                            onClick = {
-                                requestPermissions.launch(
-                                    arrayOf(READ_MEDIA_IMAGES, READ_MEDIA_VIDEO),
-                                )
-                            },
-                        ) {
-                            Text("Request full library access")
-                        }
                     } else {
                         TextButton(
                             onClick = {
                                 requestPermissions.launch(arrayOf(READ_EXTERNAL_STORAGE))
                             },
                         ) {
-                            Text("Request full library access")
+                            Text("Request full gallery access")
                         }
                     }
                 }
