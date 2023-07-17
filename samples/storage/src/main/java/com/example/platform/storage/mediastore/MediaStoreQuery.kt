@@ -112,7 +112,7 @@ fun MediaStoreQueryContent() {
 }
 
 @Composable
-fun loadImages(
+private fun loadImages(
     contentResolver: ContentResolver,
 ): State<List<FileEntry>> = produceState(initialValue = emptyList()) {
     value = getImages(contentResolver)
@@ -124,6 +124,7 @@ fun loadImages(
  */
 private suspend fun getImages(contentResolver: ContentResolver): List<FileEntry> {
     return withContext(Dispatchers.IO) {
+        // List of columns we want to fetch
         val projection = arrayOf(
             Images.Media._ID,
             Images.Media.DISPLAY_NAME,
@@ -142,11 +143,11 @@ private suspend fun getImages(contentResolver: ContentResolver): List<FileEntry>
         val images = mutableListOf<FileEntry>()
 
         contentResolver.query(
-            collectionUri, // queried collection
-            projection, // list of columns we want to fetch
-            null, // filtering parameters (in this case none)
-            null, // filtering values (in this case none)
-            "${Images.Media.DATE_ADDED} DESC", // sorting order
+            collectionUri, // Queried collection
+            projection, // List of columns we want to fetch
+            null, // Filtering parameters (in this case none)
+            null, // Filtering values (in this case none)
+            "${Images.Media.DATE_ADDED} DESC", // Sorting order (recent -> older files)
         )?.use { cursor ->
             val idColumn = cursor.getColumnIndexOrThrow(Images.Media._ID)
             val displayNameColumn = cursor.getColumnIndexOrThrow(Images.Media.DISPLAY_NAME)
