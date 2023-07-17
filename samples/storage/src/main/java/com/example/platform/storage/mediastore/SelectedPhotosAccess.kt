@@ -103,22 +103,62 @@ fun SelectedPhotosAccessScreen() {
                 if (storageAccess == StorageAccess.Full) {
                     Text("Access to gallery fully granted")
                 } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
                         Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
                             TextButton(
-                                onClick = { requestPermissions.launch(arrayOf(READ_MEDIA_IMAGES)) },
+                                onClick = {
+                                    requestPermissions.launch(
+                                        arrayOf(
+                                            READ_MEDIA_IMAGES,
+                                            READ_MEDIA_VISUAL_USER_SELECTED
+                                        )
+                                    )
+                                },
                             ) {
                                 Text("Images")
                             }
                             TextButton(
-                                onClick = { requestPermissions.launch(arrayOf(READ_MEDIA_VIDEO)) },
+                                onClick = {
+                                    requestPermissions.launch(
+                                        arrayOf(
+                                            READ_MEDIA_VIDEO,
+                                            READ_MEDIA_VISUAL_USER_SELECTED
+                                        )
+                                    )
+                                },
                             ) {
                                 Text("Videos")
                             }
                             TextButton(
                                 onClick = {
                                     requestPermissions.launch(
-                                        arrayOf(READ_MEDIA_IMAGES, READ_MEDIA_VIDEO),
+                                        arrayOf(
+                                            READ_MEDIA_IMAGES,
+                                            READ_MEDIA_VIDEO,
+                                            READ_MEDIA_VISUAL_USER_SELECTED
+                                        )
+                                    )
+                                },
+                            ) {
+                                Text("Both")
+                            }
+                        }
+                    } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        Row(horizontalArrangement = Arrangement.spacedBy(5.dp)) {
+                            TextButton(
+                                onClick = { requestPermissions.launch(arrayOf(READ_MEDIA_IMAGES)) }
+                            ) {
+                                Text("Images")
+                            }
+                            TextButton(
+                                onClick = { requestPermissions.launch(arrayOf(READ_MEDIA_VIDEO)) }
+                            ) {
+                                Text("Videos")
+                            }
+                            TextButton(
+                                onClick = {
+                                    requestPermissions.launch(
+                                        arrayOf(READ_MEDIA_IMAGES, READ_MEDIA_VIDEO)
                                     )
                                 },
                             ) {
