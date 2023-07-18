@@ -18,6 +18,7 @@
 
 plugins {
     id("com.example.platform.sample")
+    alias(libs.plugins.kotlin.android)
 }
 
 android {

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.platform.connectivity.telecom
+package com.example.platform.connectivity.telecom.call
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -37,9 +37,12 @@ class TelecomCallBroadcast : BroadcastReceiver() {
         val repo = TelecomCallRepository.instance ?: TelecomCallRepository.create(context)
         val call = repo.currentCall.value
 
-        // If the call is still registered perform action
         if (call is TelecomCall.Registered) {
+            // If the call is still registered perform action
             call.processAction(action)
+        } else {
+            // Otherwise probably something went wrong and the notification is wrong.
+            TelecomCallNotificationManager(context).updateCallNotification(call)
         }
     }
 

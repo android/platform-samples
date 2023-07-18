@@ -14,18 +14,18 @@
  * limitations under the License.
  */
 
-package com.example.platform.connectivity.telecom
+package com.example.platform.connectivity.telecom.call
 
-import android.net.Uri
+import android.Manifest
 import android.os.Build
 import android.telecom.DisconnectCause
-import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -47,36 +47,37 @@ import androidx.compose.material.icons.rounded.PhonePaused
 import androidx.compose.material.icons.rounded.VolumeUp
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.telecom.CallEndpointCompat
 import com.example.platform.connectivity.telecom.model.TelecomCall
 import com.example.platform.connectivity.telecom.model.TelecomCallAction
 import com.example.platform.connectivity.telecom.model.TelecomCallRepository
-import kotlinx.coroutines.Dispatchers
+import com.google.accompanist.permissions.ExperimentalPermissionsApi
+import com.google.accompanist.permissions.isGranted
+import com.google.accompanist.permissions.rememberPermissionState
+import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 /**
  * This composable observes the current state of the call and updates the UI based on its attributes
@@ -85,52 +86,30 @@ import kotlinx.coroutines.launch
  */
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-internal fun TelecomCallScreen(repository: TelecomCallRepository) {
-    val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-
+internal fun TelecomCallScreen(repository: TelecomCallRepository, onCallFinished: () -> Unit) {
     // Collect the current call state and update UI
     val call by repository.currentCall.collectAsState()
 
-    // If call goes unregistered inform user
+    // If doing an outgoing call, fake the other end picks it up (this is only for this sample).
+    (call as? TelecomCall.Registered)?.run {
+        if (!isIncoming() && !isActive) {
+            LaunchedEffect(Unit) {
+                delay(2000)
+                processAction(TelecomCallAction.Activate)
+            }
+        }
+    }
+
     if (call is TelecomCall.Unregistered) {
         LaunchedEffect(Unit) {
-            Toast.makeText(context, "Call disconnected", Toast.LENGTH_SHORT).show()
+            onCallFinished()
         }
     }
 
     when (val newCall = call) {
         is TelecomCall.Unregistered, TelecomCall.None -> {
-            // Show calling menu when there is no active call
-            NoCallScreen(
-                incomingCall = {
-                    Toast.makeText(context, "Incoming call in 2 seconds", Toast.LENGTH_SHORT).show()
-                    scope.launch(Dispatchers.IO) {
-                        repository.registerCall(
-                            displayName = "Alice",
-                            address = Uri.parse("tel:12345"),
-                            isIncoming = true,
-                        )
-                    }
-                },
-                outgoingCall = {
-                    scope.launch(Dispatchers.IO) {
-                        repository.registerCall(
-                            displayName = "Bob",
-                            address = Uri.parse("tel:54321"),
-                            isIncoming = false,
-                        )
-
-                        // Faking that the other end is not picking it
-                        delay(2000)
-
-                        // The other end answered, activate the call
-                        (repository.currentCall.value as? TelecomCall.Registered)?.processAction(
-                            TelecomCallAction.Activate,
-                        )
-                    }
-                },
-            )
+            // Show call ended when there is no active call
+            NoCallScreen()
         }
 
         is TelecomCall.Registered -> {
@@ -152,21 +131,14 @@ internal fun TelecomCallScreen(repository: TelecomCallRepository) {
 }
 
 @Composable
-private fun NoCallScreen(incomingCall: () -> Unit, outgoingCall: () -> Unit) {
-    Column(
+private fun NoCallScreen() {
+    Box(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
+        contentAlignment = Alignment.Center,
     ) {
-        Text(text = "No active call", style = MaterialTheme.typography.titleLarge)
-        Button(onClick = incomingCall) {
-            Text(text = "Receive fake call")
-        }
-        Button(onClick = outgoingCall) {
-            Text(text = "Make fake call")
-        }
+        Text(text = "Call ended", style = MaterialTheme.typography.titleLarge)
     }
 }
 
@@ -342,6 +314,7 @@ private fun CallInfoCard(name: String, info: String, isActive: Boolean) {
 /**
  * Displays the call controls based on the current call attributes
  */
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun CallControls(
     isActive: Boolean,
@@ -353,22 +326,45 @@ private fun CallControls(
     onTransferCall: () -> Unit,
 ) {
     val isLocalCall = endpointType != CallEndpointCompat.TYPE_STREAMING
+    val micPermission = rememberPermissionState(permission = Manifest.permission.RECORD_AUDIO)
+    var showRational by remember(micPermission.status) {
+        mutableStateOf(false)
+    }
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        IconToggleButton(
-            checked = isMuted,
-            onCheckedChange = {
-                onCallAction(TelecomCallAction.ToggleMute(it))
-            },
-        ) {
-            if (isMuted) {
-                Icon(imageVector = Icons.Rounded.MicOff, contentDescription = "Mic on")
-            } else {
-                Icon(imageVector = Icons.Rounded.Mic, contentDescription = "Mic off")
+        if (micPermission.status.isGranted) {
+            IconToggleButton(
+                checked = isMuted,
+                onCheckedChange = {
+                    onCallAction(TelecomCallAction.ToggleMute(it))
+                },
+            ) {
+                if (isMuted) {
+                    Icon(imageVector = Icons.Rounded.MicOff, contentDescription = "Mic on")
+                } else {
+                    Icon(imageVector = Icons.Rounded.Mic, contentDescription = "Mic off")
+                }
+            }
+        } else {
+            IconButton(
+                onClick = {
+                    if (micPermission.status.shouldShowRationale) {
+                        showRational = true
+                    } else {
+                        micPermission.launchPermissionRequest()
+                    }
+                },
+            ) {
+                Icon(
+                    imageVector = Icons.Rounded.MicOff,
+                    contentDescription = "Missing mic permission",
+                    tint = MaterialTheme.colorScheme.error,
+                )
             }
         }
         IconToggleButton(
@@ -453,6 +449,18 @@ private fun CallControls(
             }
         }
     }
+
+    // Show a rational dialog if user didn't accepted the permissions
+    if (showRational) {
+        RationalMicDialog(
+            onResult = { request ->
+                if (request) {
+                    micPermission.launchPermissionRequest()
+                }
+                showRational = false
+            },
+        )
+    }
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
@@ -493,4 +501,27 @@ private fun TransferCallDialog(
             }
         }
     }
+}
+
+@Composable
+private fun RationalMicDialog(onResult: (Boolean) -> Unit) {
+    AlertDialog(
+        onDismissRequest = { onResult(false) },
+        confirmButton = {
+            TextButton(onClick = { onResult(true) }) {
+                Text(text = "Continue")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = { onResult(false) }) {
+                Text(text = "Cancel")
+            }
+        },
+        title = {
+            Text(text = "Mic permission required")
+        },
+        text = {
+            Text(text = "In order to speak in a call we need mic permission. Please press continue and grant the permission in the next dialog.")
+        },
+    )
 }

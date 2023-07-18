@@ -76,7 +76,7 @@ This sample shows how to detect that the user capture the screen in Android 14 o
 Shows the recommended flow to request single runtime permissions
 - [Speakable Text](accessibility/src/main/java/com/example/platform/accessibility/SpeakableText.kt):
 The sample demonstrates the importance of having proper labels for
-- [Telecom Call Sample](connectivity/telecom/src/main/java/com/example/platform/connectivity/telecom/TelecomCallSampleActivity.kt):
+- [Telecom Call Sample](connectivity/telecom/src/main/java/com/example/platform/connectivity/telecom/TelecomCallSample.kt):
 A sample showcasing how to handle calls with the Jetpack Telecom API
 - [TextSpan](user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.

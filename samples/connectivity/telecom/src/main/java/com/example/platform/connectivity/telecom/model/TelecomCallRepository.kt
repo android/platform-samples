@@ -27,12 +27,7 @@ import androidx.core.telecom.CallControlCallback
 import androidx.core.telecom.CallControlScope
 import androidx.core.telecom.CallEndpointCompat
 import androidx.core.telecom.CallsManager
-import com.example.platform.connectivity.audio.datasource.AudioLoopSource
-import com.example.platform.connectivity.telecom.TelecomCallNotificationManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -48,12 +43,7 @@ import kotlinx.coroutines.launch
  * @see registerCall
  */
 @RequiresApi(Build.VERSION_CODES.O)
-class TelecomCallRepository(
-    private val applicationScope: CoroutineScope,
-    private val callsManager: CallsManager,
-    private val audioLoopSource: AudioLoopSource,
-    private val notificationManager: TelecomCallNotificationManager,
-) {
+class TelecomCallRepository(private val callsManager: CallsManager) {
 
     companion object {
         var instance: TelecomCallRepository? = null
@@ -79,10 +69,7 @@ class TelecomCallRepository(
             }
 
             return TelecomCallRepository(
-                applicationScope = CoroutineScope(SupervisorJob()),
                 callsManager = callsManager,
-                audioLoopSource = AudioLoopSource(),
-                notificationManager = TelecomCallNotificationManager(context),
             ).also {
                 instance = it
             }
@@ -97,7 +84,7 @@ class TelecomCallRepository(
      * Register a new call with the provided attributes.
      * Use the [currentCall] StateFlow to receive status updates and process call related actions.
      */
-    fun registerCall(displayName: String, address: Uri, isIncoming: Boolean) {
+    suspend fun registerCall(displayName: String, address: Uri, isIncoming: Boolean) {
         // For simplicity we don't support multiple calls
         check(_currentCall.value !is TelecomCall.Registered) {
             "There cannot be more than one call at the same time."
@@ -121,85 +108,74 @@ class TelecomCallRepository(
         // Creates a channel to send actions to the call scope.
         val actionSource = Channel<TelecomCallAction>()
 
-        // We launch the call in our application scope so it keeps registered while the app is alive
-        // or until the user explicitly disconnects it.
-        applicationScope.launch {
-            if (isIncoming) {
-                // Fake incoming call delay
-                delay(2000)
-            }
-            try {
-                // Register the call and handle actions in the scope
-                callsManager.addCall(attributes) {
-                    // Register the callback to be notified about other call actions
-                    // from other services or devices
-                    // TODO this should eventually be moved inside the addCall method b/290562928
-                    setCallback(
-                        object : CallControlCallback {
-                            override suspend fun onAnswer(callType: Int): Boolean {
-                                TODO("Not yet implemented")
-                            }
-
-                            override suspend fun onDisconnect(disconnectCause: DisconnectCause): Boolean {
-                                TODO("Not yet implemented")
-                            }
-
-                            override suspend fun onSetActive(): Boolean {
-                                TODO("Not yet implemented")
-                            }
-
-                            override suspend fun onSetInactive(): Boolean {
-                                TODO("Not yet implemented")
-                            }
-                        },
-                    )
-
-                    launch {
-                        processCallStatus()
+        // Register the call and handle actions in the scope
+        callsManager.addCall(attributes) {
+            // TODO this should eventually be moved inside the addCall method b/290562928
+            setCallback(
+                // Register the callback to be notified about other call actions
+                // from other services or devices
+                object : CallControlCallback {
+                    override suspend fun onAnswer(callType: Int): Boolean {
+                        TODO("Not yet implemented")
                     }
 
-                    launch {
-                        processCallActions(actionSource.consumeAsFlow())
+                    override suspend fun onDisconnect(disconnectCause: DisconnectCause): Boolean {
+                        TODO("Not yet implemented")
                     }
 
-                    // TODO Use the state value once b/290538853 is fixed
-                    _currentCall.value = TelecomCall.Registered(
-                        id = getCallId(),
-                        isActive = false,
-                        isOnHold = false,
-                        callAttributes = attributes,
-                        isMuted = false,
-                        currentCallEndpoint = null,
-                        availableCallEndpoints = emptyList(),
-                        actionSource = actionSource,
-                    )
+                    override suspend fun onSetActive(): Boolean {
+                        TODO("Not yet implemented")
+                    }
 
-                    launch {
-                        currentCallEndpoint.collect {
-                            updateCurrentCall {
-                                copy(currentCallEndpoint = it)
-                            }
-                        }
+                    override suspend fun onSetInactive(): Boolean {
+                        TODO("Not yet implemented")
                     }
-                    launch {
-                        availableEndpoints.collect {
-                            updateCurrentCall {
-                                copy(availableCallEndpoints = it)
-                            }
-                        }
-                    }
-                    launch {
-                        isMuted.collect {
-                            updateCurrentCall {
-                                copy(isMuted = it)
-                            }
-                        }
+                },
+            )
+
+            // Consume the actions to interact with the call inside the scope
+            launch {
+                try {
+                    processCallActions(actionSource.consumeAsFlow())
+                } finally {
+                    // TODO this should wrap addCall once b/291604411 is fixed
+                    _currentCall.update {
+                        TelecomCall.None
                     }
                 }
-            } finally {
-                Log.d("MPB", "Exit scope")
-                _currentCall.update {
-                    TelecomCall.None
+            }
+
+            // Update the state to registered with default values while waiting for Telecom updates
+            _currentCall.value = TelecomCall.Registered(
+                id = getCallId(),
+                isActive = false,
+                isOnHold = false,
+                callAttributes = attributes,
+                isMuted = false,
+                currentCallEndpoint = null,
+                availableCallEndpoints = emptyList(),
+                actionSource = actionSource,
+            )
+
+            launch {
+                currentCallEndpoint.collect {
+                    updateCurrentCall {
+                        copy(currentCallEndpoint = it)
+                    }
+                }
+            }
+            launch {
+                availableEndpoints.collect {
+                    updateCurrentCall {
+                        copy(availableCallEndpoints = it)
+                    }
+                }
+            }
+            launch {
+                isMuted.collect {
+                    updateCurrentCall {
+                        copy(isMuted = it)
+                    }
                 }
             }
         }
@@ -211,13 +187,17 @@ class TelecomCallRepository(
     private suspend fun CallControlScope.processCallActions(actionSource: Flow<TelecomCallAction>) {
         actionSource.collect { action ->
             when (action) {
-                is TelecomCallAction.Answer -> doAnswer()
+                is TelecomCallAction.Answer -> {
+                    doAnswer()
+                }
 
                 is TelecomCallAction.Disconnect -> {
                     doDisconnect(action)
                 }
 
-                is TelecomCallAction.SwitchAudioType -> doSwitchEndpoint(action)
+                is TelecomCallAction.SwitchAudioType -> {
+                    doSwitchEndpoint(action)
+                }
 
                 is TelecomCallAction.TransferCall -> {
                     val call = _currentCall.value as? TelecomCall.Registered
@@ -229,18 +209,22 @@ class TelecomCallRepository(
                     )
                 }
 
-                TelecomCallAction.Hold -> if (setInactive()) {
-                    updateCurrentCall {
-                        copy(isOnHold = true)
+                TelecomCallAction.Hold -> {
+                    if (setInactive()) {
+                        updateCurrentCall {
+                            copy(isOnHold = true)
+                        }
                     }
                 }
 
-                TelecomCallAction.Activate -> if (setActive()) {
-                    updateCurrentCall {
-                        copy(
-                            isActive = true,
-                            isOnHold = false,
-                        )
+                TelecomCallAction.Activate -> {
+                    if (setActive()) {
+                        updateCurrentCall {
+                            copy(
+                                isActive = true,
+                                isOnHold = false,
+                            )
+                        }
                     }
                 }
 
@@ -249,31 +233,6 @@ class TelecomCallRepository(
                     // the state of the call and this will start/stop audio capturing.
                     updateCurrentCall {
                         copy(isMuted = !isMuted)
-                    }
-                }
-            }
-        }
-    }
-
-    /**
-     * Collects changes in the call status to coordinate call related actors like showing the
-     * notification for the call, start/stop audio...
-     */
-    private suspend fun processCallStatus() {
-        _currentCall.collect { call ->
-            Log.d("MPB", "Call status changed: $call")
-            notificationManager.updateCallNotification(call)
-
-            when (call) {
-                TelecomCall.None, is TelecomCall.Unregistered -> {
-                    audioLoopSource.stopAudioLoop()
-                }
-
-                is TelecomCall.Registered -> {
-                    if (call.isActive && !call.isOnHold && !call.isMuted) {
-                        audioLoopSource.startAudioLoop()
-                    } else {
-                        audioLoopSource.stopAudioLoop()
                     }
                 }
             }

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.example.platform.connectivity.telecom
+package com.example.platform.connectivity.telecom.call
 
-import android.Manifest
 import android.app.KeyguardManager
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.WindowManager
@@ -28,28 +28,29 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.content.getSystemService
-import com.example.platform.base.PermissionBox
 import com.example.platform.connectivity.telecom.model.TelecomCallRepository
-import com.google.android.catalog.framework.annotations.Sample
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 
-@Sample(
-    name = "Telecom Call Sample",
-    description = "A sample showcasing how to handle calls with the Jetpack Telecom API",
-    documentation = "https://developer.android.com/guide/topics/connectivity/telecom",
-)
+/**
+ * This activity is used to launch the incoming or ongoing call. It uses special flags to be able
+ * to be launched in the lockscreen and as a full-screen notification.
+ */
 @RequiresApi(Build.VERSION_CODES.O)
-class TelecomCallSampleActivity : ComponentActivity() {
+class TelecomCallActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupCallActivity()
-
         // The repo contains all the call logic and communication with the Telecom SDK.
         val repository =
             TelecomCallRepository.instance ?: TelecomCallRepository.create(applicationContext)
+
+        // Set the right flags for a call type activity.
+        setupCallActivity()
 
         setContent {
             MaterialTheme {
@@ -58,27 +59,29 @@ class TelecomCallSampleActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
                 ) {
-                    // To record the audio for the call
-                    val permissions = mutableListOf(Manifest.permission.RECORD_AUDIO)
+                    val scope = rememberCoroutineScope()
 
-                    // We should be using make_own_call permissions but this requires
-                    // implementation of the telecom API to work correctly.
-                    // Please see telecom example for full implementation
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                        permissions.add(Manifest.permission.MANAGE_OWN_CALLS)
-                    }
-
-                    // To show call notifications we need permissions since Android 13
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                        permissions.add(Manifest.permission.POST_NOTIFICATIONS)
-                    }
-
-                    PermissionBox(permissions = permissions) {
-                        TelecomCallScreen(repository)
+                    // Show the in-call screen
+                    TelecomCallScreen(repository) {
+                        // If we receive that the called finished, finish the activity
+                        scope.launch {
+                            delay(1500)
+                            finish()
+                        }
                     }
                 }
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Force the service to update in case something change like Mic permissions.
+        startService(
+            Intent(this, TelecomCallService::class.java).apply {
+                action = TelecomCallService.ACTION_UPDATE_CALL
+            },
+        )
     }
 
     /**

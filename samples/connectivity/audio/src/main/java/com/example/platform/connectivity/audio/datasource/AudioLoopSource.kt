@@ -25,6 +25,7 @@ import android.media.AudioRecord
 import android.media.AudioTrack
 import android.media.MediaRecorder
 import android.os.Build
+import android.util.Log
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -97,6 +98,7 @@ class AudioLoopSource {
      */
     @SuppressLint("MissingPermission")
     fun startAudioLoop(): Boolean {
+        Log.d("MPB", "startAudioLoop")
 
         if (audioSampler == null) {
             audioSampler = AudioRecord(
@@ -141,6 +143,7 @@ class AudioLoopSource {
      * Stops current job and releases microphone and audio devices
      */
     fun stopAudioLoop() {
+        Log.d("MPB", "stopAudioLoop")
         job?.cancel("Stop Recording", null)
         isRecording.update { false }
         if (audioSampler?.state == AudioRecord.STATE_INITIALIZED) {

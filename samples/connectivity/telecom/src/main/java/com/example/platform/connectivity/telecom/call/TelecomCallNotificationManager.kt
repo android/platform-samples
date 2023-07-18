@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.example.platform.connectivity.telecom
+package com.example.platform.connectivity.telecom.call
 
 import android.Manifest
-import android.annotation.SuppressLint
+import android.app.Notification
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
@@ -27,12 +27,12 @@ import android.media.RingtoneManager
 import android.os.Build
 import android.telecom.DisconnectCause
 import androidx.annotation.RequiresApi
-import androidx.annotation.RequiresPermission
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.Person
 import androidx.core.content.PermissionChecker
+import com.example.platform.connectivity.telecom.R
 import com.example.platform.connectivity.telecom.model.TelecomCall
 import com.example.platform.connectivity.telecom.model.TelecomCallAction
 
@@ -44,6 +44,7 @@ import com.example.platform.connectivity.telecom.model.TelecomCallAction
  */
 @RequiresApi(Build.VERSION_CODES.O)
 class TelecomCallNotificationManager(private val context: Context) {
+
     internal companion object {
         const val TELECOM_NOTIFICATION_ID = 200
         const val TELECOM_NOTIFICATION_ACTION = "telecom_action"
@@ -75,14 +76,18 @@ class TelecomCallNotificationManager(private val context: Context) {
 
         // Update or dismiss notification
         when (call) {
-            TelecomCall.None, is TelecomCall.Unregistered -> cancelNotification()
-            is TelecomCall.Registered -> updateNotification(call)
+            TelecomCall.None, is TelecomCall.Unregistered -> {
+                notificationManager.cancel(TELECOM_NOTIFICATION_ID)
+            }
+
+            is TelecomCall.Registered -> {
+                val notification = createNotification(call)
+                notificationManager.notify(TELECOM_NOTIFICATION_ID, notification)
+            }
         }
     }
 
-    @SuppressLint("InlinedApi")
-    @RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-    private fun updateNotification(call: TelecomCall.Registered) {
+    private fun createNotification(call: TelecomCall.Registered): Notification {
         // To display the caller information
         val caller = Person.Builder()
             .setName(call.callAttributes.displayName)
@@ -95,7 +100,7 @@ class TelecomCallNotificationManager(private val context: Context) {
         val contentIntent = PendingIntent.getActivity(
             /* context = */ context,
             /* requestCode = */ 0,
-            /* intent = */ Intent(context, TelecomCallSampleActivity::class.java),
+            /* intent = */ Intent(context, TelecomCallActivity::class.java),
             /* flags = */ PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
         )
 
@@ -143,12 +148,7 @@ class TelecomCallNotificationManager(private val context: Context) {
                 ),
             )
         }
-
-        notificationManager.notify(TELECOM_NOTIFICATION_ID, builder.build())
-    }
-
-    private fun cancelNotification() {
-        notificationManager.cancel(TELECOM_NOTIFICATION_ID)
+        return builder.build()
     }
 
     /**
