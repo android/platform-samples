@@ -121,6 +121,7 @@ private fun AudioSampleScreen(viewModel: AudioDeviceViewModel) {
 }
 
 
+@RequiresApi(Build.VERSION_CODES.S)
 @Composable
 private fun AvailableDevicesList(
     audioDeviceWidgetUiState: AudioDeviceViewModel.AudioDeviceListUiState,

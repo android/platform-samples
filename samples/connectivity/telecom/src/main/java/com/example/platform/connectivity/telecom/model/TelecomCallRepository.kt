@@ -113,22 +113,42 @@ class TelecomCallRepository(private val callsManager: CallsManager) {
             // TODO this should eventually be moved inside the addCall method b/290562928
             setCallback(
                 // Register the callback to be notified about other call actions
-                // from other services or devices
+                // from other services or devices (e.g Auto, watch)
+                // In our case we will update the call status based on the callback action and
+                // return true to let the Telecom SDK continue the action.
                 object : CallControlCallback {
                     override suspend fun onAnswer(callType: Int): Boolean {
-                        TODO("Not yet implemented")
+                        updateCurrentCall {
+                            copy(isActive = true, isOnHold = false)
+                        }
+                        return true
                     }
 
                     override suspend fun onDisconnect(disconnectCause: DisconnectCause): Boolean {
-                        TODO("Not yet implemented")
+                        updateCurrentCall {
+                            TelecomCall.Unregistered(id, callAttributes, disconnectCause)
+                        }
+                        return true
                     }
 
                     override suspend fun onSetActive(): Boolean {
-                        TODO("Not yet implemented")
+                        updateCurrentCall {
+                            copy(
+                                isActive = true,
+                                isOnHold = false,
+                            )
+                        }
+                        return true
                     }
 
                     override suspend fun onSetInactive(): Boolean {
-                        TODO("Not yet implemented")
+                        updateCurrentCall {
+                            copy(
+                                isActive = false,
+                                isOnHold = true,
+                            )
+                        }
+                        return true
                     }
                 },
             )
@@ -139,13 +159,7 @@ class TelecomCallRepository(private val callsManager: CallsManager) {
                     processCallActions(actionSource.consumeAsFlow())
                 } finally {
                     // TODO this should wrap addCall once b/291604411 is fixed
-                    updateCurrentCall {
-                        TelecomCall.Unregistered(
-                            id = id,
-                            callAttributes = callAttributes,
-                            disconnectCause = DisconnectCause(DisconnectCause.CANCELED),
-                        )
-                    }
+                    _currentCall.value = TelecomCall.None
                 }
             }
 

@@ -102,12 +102,7 @@ class TelecomCallService : Service() {
         when (intent.action) {
             ACTION_INCOMING_CALL -> registerCall(intent = intent, incoming = true)
             ACTION_OUTGOING_CALL -> registerCall(intent = intent, incoming = false)
-            ACTION_UPDATE_CALL -> {
-                val call = telecomRepository.currentCall.value
-                if (call is TelecomCall.Registered) {
-                    updateServiceState(call)
-                }
-            }
+            ACTION_UPDATE_CALL -> updateServiceState(telecomRepository.currentCall.value)
 
             else -> throw IllegalArgumentException("Unknown action")
         }
@@ -157,7 +152,10 @@ class TelecomCallService : Service() {
         notificationManager.updateCallNotification(call)
 
         when (call) {
-            is TelecomCall.None -> audioLoopSource.stopAudioLoop()
+            is TelecomCall.None -> {
+                // Stop any call tasks, in this demo we stop the audio loop
+                audioLoopSource.stopAudioLoop()
+            }
 
             is TelecomCall.Registered -> {
                 // Update the call state.
@@ -170,7 +168,7 @@ class TelecomCallService : Service() {
             }
 
             is TelecomCall.Unregistered -> {
-                // Stop the service and clean resources
+                // Stop service and clean resources
                 stopSelf()
             }
         }
