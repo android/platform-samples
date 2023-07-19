@@ -31,7 +31,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.dropWhile
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
@@ -76,9 +75,6 @@ class TelecomCallService : Service() {
 
         // Observe call status updates once the call is registered and update the service
         telecomRepository.currentCall
-            .dropWhile {
-                it is TelecomCall.None
-            }
             .onEach { call ->
                 updateServiceState(call)
             }
@@ -140,17 +136,23 @@ class TelecomCallService : Service() {
         // Update the call notification
         notificationManager.updateCallNotification(call)
 
-        if (call is TelecomCall.Registered) {
-            // Update the call audio.
-            // For this sample it means start/stop the audio loop
-            if (call.isActive && !call.isOnHold && !call.isMuted && hasMicPermission()) {
-                audioLoopSource.startAudioLoop()
-            } else {
-                audioLoopSource.stopAudioLoop()
+        when (call) {
+            is TelecomCall.None -> audioLoopSource.stopAudioLoop()
+
+            is TelecomCall.Registered -> {
+                // Update the call audio.
+                // For this sample it means start/stop the audio loop
+                if (call.isActive && !call.isOnHold && !call.isMuted && hasMicPermission()) {
+                    audioLoopSource.startAudioLoop()
+                } else {
+                    audioLoopSource.stopAudioLoop()
+                }
             }
-        } else {
-            // Stop the service and clean resources
-            stopSelf()
+
+            is TelecomCall.Unregistered -> {
+                // Stop the service and clean resources
+                stopSelf()
+            }
         }
     }
 

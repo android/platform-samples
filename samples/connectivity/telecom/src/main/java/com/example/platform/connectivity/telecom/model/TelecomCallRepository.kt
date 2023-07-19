@@ -139,8 +139,12 @@ class TelecomCallRepository(private val callsManager: CallsManager) {
                     processCallActions(actionSource.consumeAsFlow())
                 } finally {
                     // TODO this should wrap addCall once b/291604411 is fixed
-                    _currentCall.update {
-                        TelecomCall.None
+                    updateCurrentCall {
+                        TelecomCall.Unregistered(
+                            id = id,
+                            callAttributes = callAttributes,
+                            disconnectCause = DisconnectCause(DisconnectCause.CANCELED),
+                        )
                     }
                 }
             }
