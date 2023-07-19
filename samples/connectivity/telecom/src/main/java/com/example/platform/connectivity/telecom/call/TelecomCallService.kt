@@ -101,7 +101,12 @@ class TelecomCallService : Service() {
         when (intent.action) {
             ACTION_INCOMING_CALL -> registerCall(intent = intent, incoming = true)
             ACTION_OUTGOING_CALL -> registerCall(intent = intent, incoming = false)
-            ACTION_UPDATE_CALL -> updateServiceState(telecomRepository.currentCall.value)
+            ACTION_UPDATE_CALL -> {
+                val call = telecomRepository.currentCall.value
+                if (call is TelecomCall.Registered) {
+                    updateServiceState(call)
+                }
+            }
 
             else -> throw IllegalArgumentException("Unknown action")
         }
