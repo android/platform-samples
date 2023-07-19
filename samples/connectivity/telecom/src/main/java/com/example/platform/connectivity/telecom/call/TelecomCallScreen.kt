@@ -89,25 +89,13 @@ import kotlinx.coroutines.delay
 internal fun TelecomCallScreen(repository: TelecomCallRepository, onCallFinished: () -> Unit) {
     // Collect the current call state and update UI
     val call by repository.currentCall.collectAsState()
-
-    // If doing an outgoing call, fake the other end picks it up (this is only for this sample).
-    (call as? TelecomCall.Registered)?.run {
-        if (!isIncoming() && !isActive) {
-            LaunchedEffect(Unit) {
-                delay(2000)
-                processAction(TelecomCallAction.Activate)
-            }
-        }
-    }
-
-    if (call is TelecomCall.Unregistered) {
-        LaunchedEffect(Unit) {
-            onCallFinished()
-        }
-    }
-
     when (val newCall = call) {
         is TelecomCall.Unregistered, TelecomCall.None -> {
+            // If there is no call invoke finish after a small delay
+            LaunchedEffect(Unit) {
+                delay(1500)
+                onCallFinished()
+            }
             // Show call ended when there is no active call
             NoCallScreen()
         }

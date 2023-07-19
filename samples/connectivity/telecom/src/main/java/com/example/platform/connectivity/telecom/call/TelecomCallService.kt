@@ -26,6 +26,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.content.PermissionChecker
 import com.example.platform.connectivity.audio.datasource.AudioLoopSource
 import com.example.platform.connectivity.telecom.model.TelecomCall
+import com.example.platform.connectivity.telecom.model.TelecomCallAction
 import com.example.platform.connectivity.telecom.model.TelecomCallRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -133,10 +134,24 @@ class TelecomCallService : Service() {
                 // fake a delay for the incoming call for demo purposes
                 delay(2000)
             }
+
+            // Register the call with the Telecom stack
             telecomRepository.registerCall(name, uri, incoming)
+
+            if (!incoming) {
+                // If doing an outgoing call, fake the other end picks it up for demo purposes.
+                delay(2000)
+                (telecomRepository.currentCall.value as? TelecomCall.Registered)?.processAction(
+                    TelecomCallAction.Activate,
+                )
+            }
         }
     }
 
+    /**
+     * Update our calling service based on the call state. Here is where you would update the
+     * connection socket, the notification, etc...
+     */
     private fun updateServiceState(call: TelecomCall) {
         // Update the call notification
         notificationManager.updateCallNotification(call)
@@ -145,7 +160,7 @@ class TelecomCallService : Service() {
             is TelecomCall.None -> audioLoopSource.stopAudioLoop()
 
             is TelecomCall.Registered -> {
-                // Update the call audio.
+                // Update the call state.
                 // For this sample it means start/stop the audio loop
                 if (call.isActive && !call.isOnHold && !call.isMuted && hasMicPermission()) {
                     audioLoopSource.startAudioLoop()

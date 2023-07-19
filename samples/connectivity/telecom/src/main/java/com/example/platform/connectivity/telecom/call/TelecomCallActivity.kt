@@ -28,12 +28,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.core.content.getSystemService
 import com.example.platform.connectivity.telecom.model.TelecomCallRepository
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 
 /**
@@ -59,15 +56,10 @@ class TelecomCallActivity : ComponentActivity() {
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.background),
                 ) {
-                    val scope = rememberCoroutineScope()
-
                     // Show the in-call screen
                     TelecomCallScreen(repository) {
                         // If we receive that the called finished, finish the activity
-                        scope.launch {
-                            delay(1500)
-                            finishAndRemoveTask()
-                        }
+                        finishAndRemoveTask()
                     }
                 }
             }
