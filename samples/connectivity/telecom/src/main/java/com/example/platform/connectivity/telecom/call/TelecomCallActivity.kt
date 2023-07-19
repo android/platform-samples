@@ -66,7 +66,7 @@ class TelecomCallActivity : ComponentActivity() {
                         // If we receive that the called finished, finish the activity
                         scope.launch {
                             delay(1500)
-                            finish()
+                            finishAndRemoveTask()
                         }
                     }
                 }
