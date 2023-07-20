@@ -68,6 +68,8 @@ Demonstrates how to use PdfRenderer to display PDF documents on the screen.
 This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs
 - [Permissions using Compose](privacy/permissions/src/main/java/com/example/platform/privacy/permissions/ComposePermissions.kt):
 This sample showcases how to request permission using Accompanist in Compose
+- [PhotoPicker](storage/src/main/java/com/example/platform/storage/photopicker/PhotoPicker.kt):
+Select images/videos in a privacy-friendly way using the photo picker
 - [Picture in Picture (PiP) - Stopwatch](user-interface/picture-in-picture/src/main/java/com/example/android/pip/PiPSampleActivity.kt):
 Basic usage of Picture-in-Picture mode showcasing a stopwatch
 - [Picture in Picture (PiP) - Video playback](user-interface/picture-in-picture/src/main/java/com/example/android/pip/PiPMovieActivity.kt):
