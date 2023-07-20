@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 
-
+@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     id("com.example.platform.sample")
     alias(libs.plugins.kotlin.android)
@@ -28,5 +28,4 @@ android {
 dependencies {
     implementation("androidx.core:core-telecom:1.0.0-SNAPSHOT")
     implementation(project(mapOf("path" to ":samples:connectivity:audio")))
-    implementation(project(mapOf("path" to ":samples:connectivity:callnotification")))
 }
