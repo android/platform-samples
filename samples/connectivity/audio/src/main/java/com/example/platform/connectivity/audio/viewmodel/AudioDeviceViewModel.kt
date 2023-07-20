@@ -16,13 +16,18 @@
 
 package com.example.platform.connectivity.audio.viewmodel
 
+import android.Manifest
 import android.media.AudioDeviceInfo
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresPermission
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.platform.connectivity.audio.datasource.AudioLoopSource
 import com.example.platform.connectivity.audio.datasource.PlatformAudioSource
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -40,8 +45,12 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.S)
 class AudioDeviceViewModel(private val platformAudioSource: PlatformAudioSource) : ViewModel() {
 
-    private val audioLoopSource = AudioLoopSource()
-    val isRecording: StateFlow<Boolean> = audioLoopSource.isRecording.asStateFlow()
+    private val recordingState = MutableStateFlow<Job?>(null)
+    private val preferredDevice = Channel<AudioDeviceInfo>()
+
+    val isRecording: StateFlow<Boolean> = recordingState.map {
+        it?.isActive == true
+    }.stateIn(viewModelScope, SharingStarted.Lazily, false)
 
     /**
      * Get active audio device and pass to UI
@@ -105,7 +114,7 @@ class AudioDeviceViewModel(private val platformAudioSource: PlatformAudioSource)
             if (!success) {
                 _errorUiState.update { "Error Connecting to Device" }
             } else {
-                audioLoopSource.setPreferredDevice(audioDeviceInfo)
+                preferredDevice.trySend(audioDeviceInfo)
             }
         }
     }
@@ -114,19 +123,25 @@ class AudioDeviceViewModel(private val platformAudioSource: PlatformAudioSource)
         _errorUiState.update { null }
     }
 
+    @RequiresPermission(Manifest.permission.RECORD_AUDIO)
     fun onToggleAudioRecording() {
-        if (!audioLoopSource.isRecording.value) {
-            if (!audioLoopSource.startAudioLoop()) {
-                _errorUiState.update { "Error Starting Recording" }
+        if (recordingState.value?.isActive != true) {
+            recordingState.value = viewModelScope.launch {
+                try {
+                    AudioLoopSource.openAudioLoop()
+                } catch (e: Exception) {
+                    if (e !is CancellationException) {
+                        _errorUiState.update { "Error While Recording" }
+                    }
+                } finally {
+                    recordingState.value?.cancel()
+                    recordingState.value = null
+                }
             }
         } else {
-            audioLoopSource.stopAudioLoop()
+            recordingState.value?.cancel()
+            recordingState.value = null
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        audioLoopSource.stopAudioLoop()
     }
 
     sealed interface AudioDeviceListUiState {

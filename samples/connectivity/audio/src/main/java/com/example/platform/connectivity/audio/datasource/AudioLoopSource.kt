@@ -16,7 +16,7 @@
 
 package com.example.platform.connectivity.audio.datasource
 
-import android.annotation.SuppressLint
+import android.Manifest
 import android.media.AudioAttributes
 import android.media.AudioDeviceInfo
 import android.media.AudioFormat
@@ -25,44 +25,42 @@ import android.media.AudioRecord
 import android.media.AudioTrack
 import android.media.MediaRecorder
 import android.os.Build
-import kotlinx.coroutines.CoroutineScope
+import androidx.annotation.RequiresPermission
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Audio Looping, uses AudioRecord and Audio track to loop audio from microphone back to output device
  * Used for testing microphones and speakers
  */
-class AudioLoopSource {
+object AudioLoopSource {
 
-    // Scope used for getting buffer from Audio recorder to audio track
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private var job: Job? = null
-    val isRecording = MutableStateFlow(false)
+    private const val SAMPLE_RATE = 48000
 
-    companion object {
-        private const val sampleRate = 48000
-
-        private val bufferSize = AudioRecord.getMinBufferSize(
-            sampleRate,
+    /**
+     * Opens the mic and loops it back to the selected active audio device. When the scope is closed
+     * the mic and audio will be closed
+     *
+     * @throws IllegalStateException if AudioRecord couldn't be initialized
+     */
+    @RequiresPermission(Manifest.permission.RECORD_AUDIO)
+    suspend fun openAudioLoop(preferredDevice: Flow<AudioDeviceInfo> = emptyFlow()) {
+        // Init the recorder and audio
+        val bufferSize = AudioRecord.getMinBufferSize(
+            SAMPLE_RATE,
             AudioFormat.CHANNEL_IN_MONO,
             AudioFormat.ENCODING_PCM_16BIT,
         )
-        private val audioTrackBufferSize = AudioTrack.getMinBufferSize(
-            sampleRate,
+        val audioTrackBufferSize = AudioTrack.getMinBufferSize(
+            SAMPLE_RATE,
             AudioFormat.CHANNEL_OUT_MONO,
             AudioFormat.ENCODING_PCM_16BIT,
         )
-
-        var audioSampler: AudioRecord? = null
-
-        //Audio track for audio playback
-        private val audioTrack = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        val audioTrack = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             AudioTrack.Builder()
                 .setAudioAttributes(
                     AudioAttributes.Builder()
@@ -73,90 +71,65 @@ class AudioLoopSource {
                 .setAudioFormat(
                     AudioFormat.Builder()
                         .setEncoding(AudioFormat.ENCODING_PCM_16BIT)
-                        .setSampleRate(sampleRate)
+                        .setSampleRate(SAMPLE_RATE)
                         .setChannelMask(AudioFormat.CHANNEL_OUT_MONO)
                         .build(),
                 )
                 .setBufferSizeInBytes(audioTrackBufferSize)
                 .build()
         } else {
+            @Suppress("DEPRECATION")
             AudioTrack(
                 AudioManager.STREAM_VOICE_CALL,
-                sampleRate,
+                SAMPLE_RATE,
                 AudioFormat.CHANNEL_OUT_MONO,
                 AudioFormat.ENCODING_PCM_16BIT,
                 audioTrackBufferSize,
                 AudioTrack.MODE_STREAM,
             )
         }
+        val audioSampler = AudioRecord(
+            MediaRecorder.AudioSource.VOICE_COMMUNICATION,
+            SAMPLE_RATE,
+            AudioFormat.CHANNEL_IN_MONO,
+            AudioFormat.ENCODING_PCM_16BIT,
+            bufferSize,
+        )
+        audioTrack.playbackRate = SAMPLE_RATE
 
-    }
+        try {
+            // Launch in a new context the loop
+            withContext(Dispatchers.IO) {
+                // Collect changes of preferred device to loop the audio
+                launch {
+                    preferredDevice.collect { device ->
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            audioTrack.preferredDevice = device
+                            audioSampler.preferredDevice = device
+                        } else {
+                            //Not required AudioManger will deal with routing in the PlatformAudioSource class
+                        }
+                    }
+                }
 
-    /**
-     * Gets buffer from Audio Recorder and loops back to the audio track
-     */
-    @SuppressLint("MissingPermission")
-    fun startAudioLoop(): Boolean {
-        if (audioSampler == null) {
-            audioSampler = AudioRecord(
-                MediaRecorder.AudioSource.VOICE_COMMUNICATION,
-                sampleRate,
-                AudioFormat.CHANNEL_IN_MONO,
-                AudioFormat.ENCODING_PCM_16BIT,
-                bufferSize,
-            )
-        }
+                check(audioSampler.state == AudioRecord.STATE_INITIALIZED) {
+                    "Audio recorder was not properly initialized"
+                }
+                audioSampler.startRecording()
 
-        if (audioSampler?.recordingState == AudioRecord.RECORDSTATE_RECORDING) {
-            return false
-        }
+                val audioData = ByteArray(bufferSize)
+                audioTrack.play()
 
-        audioTrack.playbackRate = sampleRate
-
-        job = coroutineScope.launch {
-            if (audioSampler?.state == AudioRecord.STATE_INITIALIZED) {
-                audioSampler?.startRecording()
-            }
-
-            val data = ByteArray(bufferSize)
-            audioTrack.play()
-
-            isRecording.update { true }
-
-            while (isActive) {
-
-                val bytesRead = audioSampler!!.read(data, 0, bufferSize)
-
-                if (bytesRead > 0) {
-                    audioTrack.write(data, 0, bytesRead)
+                while (isActive) {
+                    val bytesRead = audioSampler.read(audioData, 0, bufferSize)
+                    if (bytesRead > 0) {
+                        audioTrack.write(audioData, 0, bytesRead)
+                    }
                 }
             }
-        }
-
-        return true
-    }
-
-    /**
-     * Stops current job and releases microphone and audio devices
-     */
-    fun stopAudioLoop() {
-        job?.cancel("Stop Recording", null)
-        isRecording.update { false }
-        if (audioSampler?.state == AudioRecord.STATE_INITIALIZED) {
-            audioSampler?.stop()
-        }
-        audioTrack.stop()
-    }
-
-    /**
-     * Set the audio device to record and playback with
-     */
-    fun setPreferredDevice(audioDeviceInfo: AudioDeviceInfo) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            audioTrack.preferredDevice = audioDeviceInfo
-            audioSampler?.preferredDevice = audioDeviceInfo
-        } else {
-            //Not required AudioManger will deal with routing in the PlatformAudioSource class
+        } finally {
+            audioTrack.stop()
+            audioSampler.stop()
         }
     }
 }

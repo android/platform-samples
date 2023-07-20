@@ -17,6 +17,7 @@
 package com.example.platform.connectivity.telecom.call
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Intent
 import android.net.Uri
@@ -29,6 +30,7 @@ import com.example.platform.connectivity.telecom.model.TelecomCall
 import com.example.platform.connectivity.telecom.model.TelecomCallAction
 import com.example.platform.connectivity.telecom.model.TelecomCallRepository
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -65,8 +67,8 @@ class TelecomCallService : Service() {
     private lateinit var notificationManager: TelecomCallNotificationManager
     private lateinit var telecomRepository: TelecomCallRepository
 
-    private val audioLoopSource = AudioLoopSource()
     private val scope: CoroutineScope = CoroutineScope(SupervisorJob())
+    private var audioJob: Job? = null
 
     override fun onCreate() {
         super.onCreate()
@@ -90,7 +92,6 @@ class TelecomCallService : Service() {
         super.onDestroy()
         // Remove notification and clean resources
         scope.cancel()
-        audioLoopSource.stopAudioLoop()
         notificationManager.updateCallNotification(TelecomCall.None)
     }
 
@@ -147,6 +148,7 @@ class TelecomCallService : Service() {
      * Update our calling service based on the call state. Here is where you would update the
      * connection socket, the notification, etc...
      */
+    @SuppressLint("MissingPermission")
     private fun updateServiceState(call: TelecomCall) {
         // Update the call notification
         notificationManager.updateCallNotification(call)
@@ -154,16 +156,20 @@ class TelecomCallService : Service() {
         when (call) {
             is TelecomCall.None -> {
                 // Stop any call tasks, in this demo we stop the audio loop
-                audioLoopSource.stopAudioLoop()
+                audioJob?.cancel()
             }
 
             is TelecomCall.Registered -> {
                 // Update the call state.
                 // For this sample it means start/stop the audio loop
                 if (call.isActive && !call.isOnHold && !call.isMuted && hasMicPermission()) {
-                    audioLoopSource.startAudioLoop()
+                    if (audioJob == null || audioJob?.isActive == false) {
+                        audioJob = scope.launch {
+                            AudioLoopSource.openAudioLoop()
+                        }
+                    }
                 } else {
-                    audioLoopSource.stopAudioLoop()
+                    audioJob?.cancel()
                 }
             }
 

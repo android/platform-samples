@@ -20,8 +20,10 @@ import android.Manifest
 import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.os.Build
+import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.annotation.RequiresPermission
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -49,6 +51,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.platform.base.PermissionBox
 import com.example.platform.connectivity.audio.datasource.PlatformAudioSource
 import com.example.platform.connectivity.audio.viewmodel.AudioDeviceUI
@@ -63,16 +68,22 @@ import com.google.android.catalog.framework.annotations.Sample
     documentation = "https://developer.android.com/guide/topics/media-apps/media-apps-overview",
 )
 @RequiresApi(Build.VERSION_CODES.S)
+@RequiresPermission(Manifest.permission.RECORD_AUDIO)
 @Composable
 fun AudioSample() {
     val context = LocalContext.current
     val audioManager = context.getSystemService<AudioManager>()!!
-    val viewModel = AudioDeviceViewModel(PlatformAudioSource(audioManager))
+    val viewModel: AudioDeviceViewModel = viewModel(factory = object: ViewModelProvider.Factory {
+        override fun <T : ViewModel> create(modelClass: Class<T>): T {
+            return modelClass.cast(AudioDeviceViewModel(PlatformAudioSource(audioManager))) as T
+        }
+    })
     PermissionBox(permission = Manifest.permission.RECORD_AUDIO) {
         AudioSampleScreen(viewModel)
     }
 }
 
+@RequiresPermission(Manifest.permission.RECORD_AUDIO)
 @RequiresApi(Build.VERSION_CODES.S)
 @Composable
 private fun AudioSampleScreen(viewModel: AudioDeviceViewModel) {
@@ -81,6 +92,8 @@ private fun AudioSampleScreen(viewModel: AudioDeviceViewModel) {
     val uiStateActiveDevice by viewModel.activeDeviceUiState.collectAsState()
     val uiStateErrorMessage by viewModel.errorUiState.collectAsState()
     val uiStateRecording by viewModel.isRecording.collectAsState()
+
+    Log.d("MPB", "AudioSampleScreen: $uiStateRecording")
 
     if (uiStateErrorMessage != null) {
         LaunchedEffect(uiStateErrorMessage) {
