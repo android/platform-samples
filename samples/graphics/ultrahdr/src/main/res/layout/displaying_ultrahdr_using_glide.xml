@@ -14,6 +14,7 @@
   ~ limitations under the License.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical">
@@ -23,34 +24,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <RadioGroup
-        android:id="@+id/image_options_selection_group"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/ultrahdr_color_mode_current_mode_padding"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="@dimen/ultrahdr_color_mode_current_mode_padding">
 
-        <RadioButton
-            android:id="@+id/option_lamps"
+        <Button
+            android:id="@+id/option_sdr_image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ultrahdr_color_mode_current_mode_padding"
+            android:layout_marginEnd="@dimen/ultrahdr_color_mode_current_mode_padding"
             android:layout_weight="1"
-            android:text="@string/displaying_ultrahdr_option_title_lamps" />
+            android:text="@string/visualizing_ultrahdr_gainmap_mode_title_jpeg"
+            tools:ignore="ButtonStyle" />
 
-        <RadioButton
-            android:id="@+id/option_canyon"
+        <Button
+            android:id="@+id/option_ultrahdr_image"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ultrahdr_color_mode_current_mode_padding"
+            android:layout_marginEnd="@dimen/ultrahdr_color_mode_current_mode_padding"
             android:layout_weight="1"
-            android:text="@string/displaying_ultrahdr_option_title_canyon" />
+            android:text="@string/visualizing_ultrahdr_gainmap_mode_title_ultrahdr"
+            tools:ignore="ButtonStyle" />
 
-        <RadioButton
-            android:id="@+id/option_train_station"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/displaying_ultrahdr_option_title_train_station" />
-    </RadioGroup>
+    </LinearLayout>
+
 
     <ImageView
         android:id="@+id/image_container"

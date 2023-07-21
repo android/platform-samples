@@ -15,41 +15,32 @@
  */
 package com.example.platform.graphics.ultrahdr.display
 
+import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
-import android.os.Binder
-import android.os.Build
-import android.os.Build.VERSION
+import android.net.Uri
 import android.os.Build.VERSION_CODES
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RadioButton
-import androidx.annotation.Nullable
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.lifecycleScope
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.target.CustomViewTarget
-import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import com.example.platform.graphics.ultrahdr.databinding.DisplayingUltrahdrUsingGlideBinding
 import com.google.android.catalog.framework.annotations.Sample
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
 
 @Sample(
-    name = "Displaying UltraHDR Using Glide",
-    description = "This sample demonstrates displaying an UltraHDR image using the Glide image" +
-            " loading library",
+    name = "Displaying UltraHDR (Glide)",
+    description = "This sample demonstrates using the Glide image loading library to detect the" +
+            " presence of a gainmap to enable HDR mode when displaying an image using this library.",
     documentation = "https://github.com/bumptech/glide",
     tags = ["UltraHDR"],
 )
-@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+@RequiresApi(VERSION_CODES.UPSIDE_DOWN_CAKE)
 class DisplayingUltraHDRUsingGlide : Fragment() {
     /**
      *  Android ViewBinding.
@@ -58,41 +49,26 @@ class DisplayingUltraHDRUsingGlide : Fragment() {
     private val binding get() = _binding!!
 
     /**
-     * List for UltraHDR Images
+     * Using [Glide]s [CustomTarget] class, we can access the given [Bitmap] to check for the
+     * presence of a gainmap, indicating that we should enable the HDR color mode.
+     *
+     * The same could be done with [CustomViewTarget] as well.
      */
-    private val ultraHDRImages = mapOf(
-        0 to ULTRA_HDR_IMAGE_LAMPS,
-        1 to ULTRA_HDR_IMAGE_CANYON,
-        2 to ULTRA_HDR_IMAGE_TRAIN_STATION,
-    )
+    private val target: CustomTarget<Bitmap> = object : CustomTarget<Bitmap>() {
+        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+            binding.imageContainer.setImageBitmap(resource)
 
-    private val imageViewTarget: Target<Bitmap>
-
-
-    // Delete deprecated maybeEnableHdrOrWideGamut call after b/275438519 is
-    // launched.
-    private val photoViewTarget: Target<Bitmap> =
-        object : CustomViewTarget<ImageView?, Bitmap?>(this) {
-            override fun onResourceReady(
-                resource: Bitmap, @Nullable transition: Transition<in Bitmap?>?,
-            ) {
-                onStaticDrawableReady(BitmapDrawable(resources, resource))
-                if (colorSpaceFlags.get().useEnumForColorState()) {
-                    if (displayModel != null && VERSION.SDK_INT >= VERSION_CODES.O) {
-                        displayModel.setColorInfo(ColorInfo.Companion.fromBitmap(resource))
-                    }
-                } else {
-                    // Let the screen color mode mixin know about the image being displayed so it can decide
-                    // whether or not to turn on wide gamut mode.
-                    Binder.get(context, ScreenColorModeMixin::class.java)
-                        .maybeEnableHdrOrWideGamut(resource)
-                }
+            // Set color mode of the activity to the correct color mode.
+            requireActivity().window.colorMode = when (resource.hasGainmap()) {
+                true -> ActivityInfo.COLOR_MODE_HDR
+                else -> ActivityInfo.COLOR_MODE_DEFAULT
             }
-
-            override fun onLoadFailed(drawable: Drawable?) {}
-
-            override fun onResourceCleared(@Nullable placeholder: Drawable?) {}
         }
+
+        override fun onLoadCleared(placeholder: Drawable?) {
+            // clear resources if need be.
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -105,42 +81,37 @@ class DisplayingUltraHDRUsingGlide : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        // The ColorModeControls Class contain the necessary function to change the activities
-        // ColorMode to HDR, which allows and UltraHDRs images gain map to be used to enhance the
-        // image.
         binding.colorModeControls.setWindow(requireActivity().window)
-        binding.imageOptionsSelectionGroup.setOnCheckedChangeListener { group, i ->
-            val selected = group.findViewById<RadioButton>(i)
-            val index = group.indexOfChild(selected)
-            updateDisplayedImage(index)
-        }
-        binding.optionLamps.isChecked = true
+
+        // Disable color mode controls to demonstrate glide enabling hdr mode when a gainmap is
+        // is detected.
+        binding.colorModeControls.binding.ultrahdrColorModeSdr.isEnabled = false
+        binding.colorModeControls.binding.ultrahdrColorModeHdr.isEnabled = false
+
+        binding.optionUltrahdrImage.setOnClickListener { loadImageWithGlide(ULTRA_HDR_IMAGE) }
+        binding.optionSdrImage.setOnClickListener { loadImageWithGlide(NON_ULTRAHDR_IMAGE) }
+        binding.optionSdrImage.performClick()
     }
 
     /**
-     * Updated the currently displayed UltraHDR image.
+     * Load an image using [Glide].
      */
-    private fun updateDisplayedImage(index: Int) = lifecycleScope.launch(Dispatchers.IO) {
-        ultraHDRImages[index]?.let {
-            val stream = context?.assets?.open(it)
-            val bitmap = BitmapFactory.decodeStream(stream)
-            binding.imageContainer.setImageBitmap(bitmap)
-        }
-    }
+    private fun loadImageWithGlide(path: String) =
+        Glide.with(this)
+            .asBitmap()
+            .load(Uri.parse(path))
+            .into(target)
 
     override fun onDetach() {
         super.onDetach()
         binding.colorModeControls.detach()
     }
 
-
     companion object {
         /**
          * Sample UltraHDR images paths
          */
-        private const val ULTRA_HDR_IMAGE_LAMPS = "gainmaps/lamps.jpg"
-        private const val ULTRA_HDR_IMAGE_CANYON = "gainmaps/grand_canyon.jpg"
-        private const val ULTRA_HDR_IMAGE_TRAIN_STATION = "gainmaps/train_station_night.jpg"
+        private const val NON_ULTRAHDR_IMAGE = "file:///android_asset/sdr/night_highrise.jpg"
+        private const val ULTRA_HDR_IMAGE = "file:///android_asset/gainmaps/night_highrise.jpg"
     }
 }
