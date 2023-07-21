@@ -43,7 +43,7 @@ class ColorModeControls : LinearLayout, WindowObserver {
      *  Android ViewBinding.
      */
     private var _binding: ColorModeControlsBinding? = null
-    private val binding get() = _binding!!
+    val binding get() = _binding!!
 
     /**
      * Reference to [Window]. This should come from the currently active activity.

@@ -22,6 +22,8 @@ Shows how to create a GATT server and communicate with the GATT client
 Demonstrates how to implement data access auditing for your app to identify 
 - [Displaying UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDR.kt):
 This sample demonstrates displaying an UltraHDR image.
+- [Displaying UltraHDR (Glide)](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDRUsingGlide.kt):
+This sample demonstrates using the Glide image loading library to detect the
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
