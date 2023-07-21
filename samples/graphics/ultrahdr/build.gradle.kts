@@ -26,5 +26,9 @@ android {
 }
 
 dependencies {
-    // Add samples specific dependencies
+    // Glide image loading library
+    implementation(libs.glide)
+
+    // Fresco image loading library
+    implementation(libs.fresco)
 }
