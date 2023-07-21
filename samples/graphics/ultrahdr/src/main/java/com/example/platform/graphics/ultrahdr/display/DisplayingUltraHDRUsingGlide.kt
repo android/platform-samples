@@ -82,15 +82,15 @@ class DisplayingUltraHDRUsingGlide : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.colorModeControls.setWindow(requireActivity().window)
+        loadImageWithGlide(SDR_IMAGE)
 
         // Disable color mode controls to demonstrate glide enabling hdr mode when a gainmap is
         // is detected.
         binding.colorModeControls.binding.ultrahdrColorModeSdr.isEnabled = false
         binding.colorModeControls.binding.ultrahdrColorModeHdr.isEnabled = false
 
-        binding.optionUltrahdrImage.setOnClickListener { loadImageWithGlide(ULTRA_HDR_IMAGE) }
-        binding.optionSdrImage.setOnClickListener { loadImageWithGlide(NON_ULTRAHDR_IMAGE) }
-        binding.optionSdrImage.performClick()
+        binding.optionSdrImage.setOnClickListener { loadImageWithGlide(SDR_IMAGE) }
+        binding.optionUltrahdrImage.setOnClickListener { loadImageWithGlide(ULTRAHDR_IMAGE) }
     }
 
     /**
@@ -111,7 +111,7 @@ class DisplayingUltraHDRUsingGlide : Fragment() {
         /**
          * Sample UltraHDR images paths
          */
-        private const val NON_ULTRAHDR_IMAGE = "file:///android_asset/sdr/night_highrise.jpg"
-        private const val ULTRA_HDR_IMAGE = "file:///android_asset/gainmaps/night_highrise.jpg"
+        private const val SDR_IMAGE = "file:///android_asset/sdr/night_highrise.jpg"
+        private const val ULTRAHDR_IMAGE = "file:///android_asset/gainmaps/night_highrise.jpg"
     }
 }
