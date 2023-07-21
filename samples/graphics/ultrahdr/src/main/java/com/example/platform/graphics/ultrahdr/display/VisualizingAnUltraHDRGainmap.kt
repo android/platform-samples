@@ -181,7 +181,7 @@ class VisualizingAnUltraHDRGainmap : Fragment() {
         /**
          * Default UltraHDR image path
          */
-        private const val ULTRA_HDR_IMAGE_FOUNTAIN = "gainmaps/night_highrise.jpg"
+        private const val ULTRA_HDR_IMAGE_FOUNTAIN = "gainmaps/office.jpg"
 
         /**
          * Location argument for if this fragment is pass with a bundle that contains the location
