@@ -29,6 +29,7 @@ import android.bluetooth.le.AdvertiseCallback
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
 import android.os.Build
+import android.os.ParcelUuid
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -156,7 +157,7 @@ internal fun GATTServerScreen() {
 }
 
 // Random UUID for our service known between the client and server to allow communication
-internal val SERVICE_UUID = UUID.fromString("9f42ba3a-75ea-4ca1-92d0-aef57f0479e6")
+internal val SERVICE_UUID = UUID.fromString("CDB7950D-73F1-4D4D-8E47-C090502DBD63")
 // Same as the service but for the characteristic
 internal val CHARACTERISTIC_UUID = UUID.fromString("5aade5a7-14ea-43f7-a136-16cb92cddf35")
 
@@ -203,13 +204,13 @@ private fun GATTServerEffect(
 
                 val settings = AdvertiseSettings.Builder()
                     .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_BALANCED)
+                    .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
                     .setConnectable(true)
                     .setTimeout(0)
-                    .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_LOW)
                     .build()
 
                 val data = AdvertiseData.Builder()
-                    .setIncludeDeviceName(true)
+                    .addServiceUuid(ParcelUuid(SERVICE_UUID))
                     .build()
 
                 bluetoothLeAdvertiser.startAdvertising(
@@ -229,8 +230,8 @@ private fun GATTServerEffect(
         // When the effect leaves the Composition, remove the observer and close the connection
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
-            gattServer?.close()
             bluetoothLeAdvertiser.stopAdvertising(advertiseCallback)
+            gattServer?.close()
         }
     }
 }

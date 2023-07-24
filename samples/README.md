@@ -74,6 +74,8 @@ Basic usage of Picture-in-Picture mode showcasing a stopwatch
 Basic usage of Picture-in-Picture mode showcasing video playback
 - [Quick Settings](user-interface/quicksettings/src/main/java/com/example/platform/ui/quicksettings/QuickSettings.kt):
 Add your custom tile to the Quick Settings.
+- [Scan with BLE Intent](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/BLEScanIntentSample.kt):
+This samples shows how to use the BLE intent to scan for devices
 - [Screenshot Detection](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/ScreenshotDetection.kt):
 This sample shows how to detect that the user capture the screen in Android 14 onwards
 - [Selected Photos Access](storage/src/main/java/com/example/platform/storage/mediastore/SelectedPhotosAccess.kt):
