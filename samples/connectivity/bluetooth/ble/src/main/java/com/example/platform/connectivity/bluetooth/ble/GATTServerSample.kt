@@ -244,10 +244,10 @@ private fun GATTServerEffect(
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
             bluetoothLeAdvertiser.stopAdvertising(advertiseCallback)
-            gattServer?.close()
             manager.getConnectedDevices(BluetoothProfile.GATT_SERVER)?.forEach {
                 gattServer?.cancelConnection(it)
             }
+            gattServer?.close()
         }
     }
 }
