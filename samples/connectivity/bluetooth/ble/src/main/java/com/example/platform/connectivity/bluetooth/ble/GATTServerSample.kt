@@ -18,6 +18,7 @@ package com.example.platform.connectivity.bluetooth.ble
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothGatt
 import android.bluetooth.BluetoothGattCharacteristic
@@ -25,6 +26,7 @@ import android.bluetooth.BluetoothGattServer
 import android.bluetooth.BluetoothGattServerCallback
 import android.bluetooth.BluetoothGattService
 import android.bluetooth.BluetoothManager
+import android.bluetooth.BluetoothProfile
 import android.bluetooth.le.AdvertiseCallback
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
@@ -35,6 +37,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -71,7 +74,7 @@ fun GATTServerSample() {
     }
     BluetoothSampleBox(extraPermissions = extraPermissions) { adapter ->
         if (adapter.isMultipleAdvertisementSupported) {
-            GATTServerScreen()
+            GATTServerScreen(adapter)
         } else {
             Text(text = "Devices does not support multi-advertisement")
         }
@@ -80,86 +83,96 @@ fun GATTServerSample() {
 
 @SuppressLint("MissingPermission")
 @Composable
-internal fun GATTServerScreen() {
+internal fun GATTServerScreen(adapter: BluetoothAdapter) {
+    var enableServer by remember {
+        mutableStateOf(true)
+    }
     // We will update the logs whenever something change in the server
-    var logs by remember {
-        mutableStateOf("Starting server")
+    var logs by remember(enableServer) {
+        mutableStateOf("Server enabled: $enableServer\n(${adapter.name} - ${adapter.address})")
     }
     // Keeps the instance of the created GATT server
-    var server by remember {
+    var server by remember(enableServer) {
         mutableStateOf<BluetoothGattServer?>(null)
     }
 
-    // This effect will handle the creation of the server using the provided callbacks
-    GATTServerEffect(
-        serverCallback = object : BluetoothGattServerCallback() {
+    if (enableServer) {
+        // This effect will handle the creation of the server using the provided callbacks
+        GATTServerEffect(
+            serverCallback = object : BluetoothGattServerCallback() {
 
-            override fun onConnectionStateChange(
-                device: BluetoothDevice,
-                status: Int,
-                newState: Int,
-            ) {
-                logs += "\nConnection state change: ${newState.toConnectionStateString()}. New device: ${device.name} ${device.address}"
-                // You should keep a list of connected device to manage them
-            }
-
-            override fun onCharacteristicWriteRequest(
-                device: BluetoothDevice,
-                requestId: Int,
-                characteristic: BluetoothGattCharacteristic,
-                preparedWrite: Boolean,
-                responseNeeded: Boolean,
-                offset: Int,
-                value: ByteArray,
-            ) {
-                logs += "\nCharacteristic Write request: $requestId\nData: ${String(value)} (offset $offset)"
-                // Here you should apply the write of the characteristic and notify connected
-                // devices that it changed
-
-                // If response is needed reply to the device that the write was successful
-                if (responseNeeded) {
-                    server?.sendResponse(
-                        device,
-                        requestId,
-                        BluetoothGatt.GATT_SUCCESS,
-                        0,
-                        null,
-                    )
+                override fun onConnectionStateChange(
+                    device: BluetoothDevice,
+                    status: Int,
+                    newState: Int,
+                ) {
+                    logs += "\nConnection state change: ${newState.toConnectionStateString()}. New device: ${device.name} ${device.address}"
+                    // You should keep a list of connected device to manage them
                 }
-            }
 
-            override fun onMtuChanged(device: BluetoothDevice?, mtu: Int) {
-                logs += "\nMTU change request: $mtu"
-            }
-        },
-        advertiseCallback = object : AdvertiseCallback() {
-            override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
-                logs += "\nStarted advertising"
-            }
+                override fun onCharacteristicWriteRequest(
+                    device: BluetoothDevice,
+                    requestId: Int,
+                    characteristic: BluetoothGattCharacteristic,
+                    preparedWrite: Boolean,
+                    responseNeeded: Boolean,
+                    offset: Int,
+                    value: ByteArray,
+                ) {
+                    logs += "\nCharacteristic Write request: $requestId\nData: ${String(value)} (offset $offset)"
+                    // Here you should apply the write of the characteristic and notify connected
+                    // devices that it changed
 
-            override fun onStartFailure(errorCode: Int) {
-                logs += "\nFailed to start advertising: $errorCode"
-            }
-        },
-        onServerOpened = {
-            logs += "\nGATT server opened"
-            server = it
-        },
-    )
+                    // If response is needed reply to the device that the write was successful
+                    if (responseNeeded) {
+                        server?.sendResponse(
+                            device,
+                            requestId,
+                            BluetoothGatt.GATT_SUCCESS,
+                            0,
+                            null,
+                        )
+                    }
+                }
+
+                override fun onMtuChanged(device: BluetoothDevice?, mtu: Int) {
+                    logs += "\nMTU change request: $mtu"
+                }
+            },
+            advertiseCallback = object : AdvertiseCallback() {
+                override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
+                    logs += "\nStarted advertising"
+                }
+
+                override fun onStartFailure(errorCode: Int) {
+                    logs += "\nFailed to start advertising: $errorCode"
+                }
+            },
+            onServerOpened = {
+                logs += "\nGATT server opened"
+                server = it
+            },
+        )
+    }
+
     Column(
         Modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
             .padding(16.dp),
     ) {
+        Button(onClick = { enableServer = !enableServer }) {
+            Text(text = if (enableServer) "Stop Server" else "Start Server")
+        }
         Text(text = logs)
     }
 }
 
 // Random UUID for our service known between the client and server to allow communication
-internal val SERVICE_UUID = UUID.fromString("CDB7950D-73F1-4D4D-8E47-C090502DBD63")
+val SERVICE_UUID: UUID = UUID.fromString("CDB7950D-73F1-4D4D-8E47-C090502DBD63")
+
 // Same as the service but for the characteristic
-internal val CHARACTERISTIC_UUID = UUID.fromString("5aade5a7-14ea-43f7-a136-16cb92cddf35")
+val CHARACTERISTIC_UUID: UUID = UUID.fromString("5aade5a7-14ea-43f7-a136-16cb92cddf35")
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -232,6 +245,9 @@ private fun GATTServerEffect(
             lifecycleOwner.lifecycle.removeObserver(observer)
             bluetoothLeAdvertiser.stopAdvertising(advertiseCallback)
             gattServer?.close()
+            manager.getConnectedDevices(BluetoothProfile.GATT_SERVER)?.forEach {
+                gattServer?.cancelConnection(it)
+            }
         }
     }
 }
