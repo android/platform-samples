@@ -34,15 +34,11 @@ import android.view.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toDrawable
-import androidx.core.os.bundleOf
 import androidx.exifinterface.media.ExifInterface
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.add
-import androidx.fragment.app.commit
 import androidx.lifecycle.lifecycleScope
-import com.example.platform.camera.R
 import com.example.platform.camera.common.*
-import com.example.platform.camera.databinding.FragmentCamera2ImageCaptureBinding
+import com.example.platform.camera.databinding.Camera2ImageCaptureBinding
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -59,16 +55,17 @@ import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
 @Sample(
-    name = "Camera2 - Image Capture",
-    description = "This sample demonstrates how to capture and image and encode it into a JPEG "
-            + "container. Includes torch (flash) support is available.",
+    name = "Image Capture",
+    description = "This sample demonstrates how to capture and image using Camera2 and encode it " +
+            "into a JPEG container.",
     documentation = "https://developer.android.com/training/camera2/capture-sessions-requests",
+    tags = ["Camera2"]
 )
 class Camera2ImageCapture : Fragment() {
     /**
      *  Android ViewBinding.
      */
-    private var _binding: FragmentCamera2ImageCaptureBinding? = null
+    private var _binding: Camera2ImageCaptureBinding? = null
     private val binding get() = _binding!!
 
     /**
@@ -164,7 +161,7 @@ class Camera2ImageCapture : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentCamera2ImageCaptureBinding.inflate(inflater, container, false)
+        _binding = Camera2ImageCaptureBinding.inflate(inflater, container, false)
         return binding.root
     }
 

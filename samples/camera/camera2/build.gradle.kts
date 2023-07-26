@@ -29,5 +29,8 @@ dependencies {
 
     // ViewPager2
     implementation(libs.androidx.viewpager2)
+
+    // Link to UltraHDR Graphics Samples
+    implementation(project(mapOf("path" to ":samples:graphics:ultrahdr")))
 }
 

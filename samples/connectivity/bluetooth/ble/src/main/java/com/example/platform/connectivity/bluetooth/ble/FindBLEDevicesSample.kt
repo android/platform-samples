@@ -24,6 +24,7 @@ import android.bluetooth.le.ScanCallback
 import android.bluetooth.le.ScanResult
 import android.bluetooth.le.ScanSettings
 import android.os.Build
+import android.os.ParcelUuid
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
@@ -58,6 +59,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
@@ -100,6 +103,9 @@ internal fun FindDevicesScreen(onConnect: (BluetoothDevice) -> Unit) {
         // Get a list of previously paired devices
         mutableStateListOf<BluetoothDevice>(*adapter.bondedDevices.toTypedArray())
     }
+    val sampleServerDevices = remember {
+        mutableStateListOf<BluetoothDevice>()
+    }
     val scanSettings: ScanSettings = ScanSettings.Builder()
         .setCallbackType(ScanSettings.CALLBACK_TYPE_ALL_MATCHES)
         .setScanMode(ScanSettings.SCAN_MODE_BALANCED)
@@ -114,9 +120,17 @@ internal fun FindDevicesScreen(onConnect: (BluetoothDevice) -> Unit) {
                 scanning = false
                 Log.w("FindBLEDevicesSample", "Scan failed with error: $it")
             },
-            onDeviceFound = { device ->
-                if (!devices.contains(device)) {
-                    devices.add(device)
+            onDeviceFound = { scanResult ->
+                if (!devices.contains(scanResult.device)) {
+                    devices.add(scanResult.device)
+                }
+
+                // If we find our GATT server sample let's highlight it
+                val serviceUuids = scanResult.scanRecord?.serviceUuids.orEmpty()
+                if (serviceUuids.contains(ParcelUuid(SERVICE_UUID))) {
+                    if (!sampleServerDevices.contains(scanResult.device)) {
+                        sampleServerDevices.add(scanResult.device)
+                    }
                 }
             },
         )
@@ -161,7 +175,11 @@ internal fun FindDevicesScreen(onConnect: (BluetoothDevice) -> Unit) {
                 }
             }
             items(devices) { item ->
-                BluetoothDeviceItem(bluetoothDevice = item, onConnect = onConnect)
+                BluetoothDeviceItem(
+                    bluetoothDevice = item,
+                    isSampleServer = sampleServerDevices.contains(item),
+                    onConnect = onConnect,
+                )
             }
 
             if (pairedDevices.isNotEmpty()) {
@@ -169,7 +187,10 @@ internal fun FindDevicesScreen(onConnect: (BluetoothDevice) -> Unit) {
                     Text(text = "Saved devices", style = MaterialTheme.typography.titleSmall)
                 }
                 items(pairedDevices) {
-                    BluetoothDeviceItem(bluetoothDevice = it, onConnect = onConnect)
+                    BluetoothDeviceItem(
+                        bluetoothDevice = it,
+                        onConnect = onConnect,
+                    )
                 }
             }
         }
@@ -179,8 +200,9 @@ internal fun FindDevicesScreen(onConnect: (BluetoothDevice) -> Unit) {
 
 @SuppressLint("MissingPermission")
 @Composable
-private fun BluetoothDeviceItem(
+internal fun BluetoothDeviceItem(
     bluetoothDevice: BluetoothDevice,
+    isSampleServer: Boolean = false,
     onConnect: (BluetoothDevice) -> Unit,
 ) {
     Row(
@@ -190,7 +212,18 @@ private fun BluetoothDeviceItem(
             .clickable { onConnect(bluetoothDevice) },
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text(bluetoothDevice.name ?: "N/A")
+        Text(
+            if (isSampleServer) {
+                "GATT Sample server"
+            } else {
+                bluetoothDevice.name ?: "N/A"
+            },
+            style = if (isSampleServer) {
+                TextStyle(fontWeight = FontWeight.Bold)
+            } else {
+                TextStyle(fontWeight = FontWeight.Normal)
+            },
+        )
         Text(bluetoothDevice.address)
         val state = when (bluetoothDevice.bondState) {
             BluetoothDevice.BOND_BONDED -> "Paired"
@@ -198,7 +231,7 @@ private fun BluetoothDeviceItem(
             else -> "None"
         }
         Text(text = state)
-        
+
     }
 }
 
@@ -209,7 +242,7 @@ private fun BluetoothScanEffect(
     scanSettings: ScanSettings,
     lifecycleOwner: LifecycleOwner = LocalLifecycleOwner.current,
     onScanFailed: (Int) -> Unit,
-    onDeviceFound: (device: BluetoothDevice) -> Unit,
+    onDeviceFound: (device: ScanResult) -> Unit,
 ) {
     val context = LocalContext.current
     val adapter = context.getSystemService<BluetoothManager>()?.adapter
@@ -225,7 +258,7 @@ private fun BluetoothScanEffect(
         val leScanCallback: ScanCallback = object : ScanCallback() {
             override fun onScanResult(callbackType: Int, result: ScanResult) {
                 super.onScanResult(callbackType, result)
-                currentOnDeviceFound(result.device)
+                currentOnDeviceFound(result)
             }
 
             override fun onScanFailed(errorCode: Int) {

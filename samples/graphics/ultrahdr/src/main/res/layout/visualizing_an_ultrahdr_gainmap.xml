@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (C) 2023 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~      http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.example.platform.graphics.ultrahdr.common.ColorModeControls
+        android:id="@+id/color_mode_controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RadioGroup
+        android:id="@+id/mode_selection_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:layout_marginTop="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:layout_marginEnd="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/mode_jpeg"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/visualizing_ultrahdr_gainmap_mode_title_jpeg" />
+
+        <RadioButton
+            android:id="@+id/mode_gainmap"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/visualizing_ultrahdr_gainmap_mode_title_gainmap" />
+
+        <RadioButton
+            android:id="@+id/mode_ultrahdr"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/visualizing_ultrahdr_gainmap_mode_title_ultrahdr" />
+    </RadioGroup>
+
+    <ImageView
+        android:id="@+id/image_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@null" />
+
+</LinearLayout>
