@@ -25,6 +25,7 @@ import android.bluetooth.BluetoothGattCharacteristic
 import android.bluetooth.BluetoothGattService
 import android.bluetooth.BluetoothProfile
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.compose.animation.AnimatedContent
@@ -207,7 +208,11 @@ private data class DeviceConnectionState(
     val mtu: Int,
     val services: List<BluetoothGattService> = emptyList(),
     val messageSent: Boolean = false,
-)
+) {
+    companion object {
+        val None = DeviceConnectionState(null, -1, -1)
+    }
+}
 
 @SuppressLint("InlinedApi")
 @RequiresPermission(
@@ -222,13 +227,9 @@ private fun BLEConnectEffect(
     val context = LocalContext.current
     val currentOnStateChange by rememberUpdatedState(onStateChange)
 
-    // Keep the current GATT connection
-    var gatt by remember(device) {
-        mutableStateOf<BluetoothGatt?>(null)
-    }
     // Keep the current connection state
-    var state by remember(gatt) {
-        mutableStateOf(DeviceConnectionState(gatt, -1, -1))
+    var state by remember {
+        mutableStateOf(DeviceConnectionState.None)
     }
 
     DisposableEffect(lifecycleOwner, device) {
@@ -243,6 +244,15 @@ private fun BLEConnectEffect(
                 super.onConnectionStateChange(gatt, status, newState)
                 state = state.copy(gatt = gatt, connectionState = newState)
                 currentOnStateChange(state)
+
+                if (status != BluetoothGatt.GATT_SUCCESS) {
+                    // Here you should handle the error returned in status based on the constants
+                    // https://developer.android.com/reference/android/bluetooth/BluetoothGatt#summary
+                    // For example for GATT_INSUFFICIENT_ENCRYPTION or
+                    // GATT_INSUFFICIENT_AUTHENTICATION you should create a bond.
+                    // https://developer.android.com/reference/android/bluetooth/BluetoothDevice#createBond()
+                    Log.e("BLEConnectEffect", "An error happened: $status")
+                }
             }
 
             override fun onMtuChanged(gatt: BluetoothGatt, mtu: Int, status: Int) {
@@ -270,16 +280,16 @@ private fun BLEConnectEffect(
 
         val observer = LifecycleEventObserver { _, event ->
             if (event == Lifecycle.Event.ON_START) {
-                if (gatt != null) {
+                if (state.gatt != null) {
                     // If we previously had a GATT connection let's reestablish it
-                    gatt!!.connect()
+                    state.gatt?.connect()
                 } else {
                     // Otherwise create a new GATT connection
-                    gatt = device.connectGatt(context, false, callback)
+                    state = state.copy(gatt = device.connectGatt(context, false, callback))
                 }
             } else if (event == Lifecycle.Event.ON_STOP) {
                 // Unless you have a reason to keep connected while in the bg you should disconnect
-                gatt?.disconnect()
+                state.gatt?.disconnect()
             }
         }
 
@@ -289,7 +299,8 @@ private fun BLEConnectEffect(
         // When the effect leaves the Composition, remove the observer and close the connection
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
-            gatt?.close()
+            state.gatt?.close()
+            state = DeviceConnectionState.None
         }
     }
 }
