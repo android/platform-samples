@@ -135,6 +135,25 @@ internal fun GATTServerScreen(adapter: BluetoothAdapter) {
                     }
                 }
 
+                override fun onCharacteristicReadRequest(
+                    device: BluetoothDevice?,
+                    requestId: Int,
+                    offset: Int,
+                    characteristic: BluetoothGattCharacteristic?,
+                ) {
+                    super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
+                    logs += "\nCharacteristic Read request: $requestId (offset $offset)"
+                    val data = logs.toByteArray()
+                    val response = data.copyOfRange(offset, data.size)
+                    server?.sendResponse(
+                        device,
+                        requestId,
+                        BluetoothGatt.GATT_SUCCESS,
+                        offset,
+                        response,
+                    )
+                }
+
                 override fun onMtuChanged(device: BluetoothDevice?, mtu: Int) {
                     logs += "\nMTU change request: $mtu"
                 }
@@ -195,8 +214,8 @@ private fun GATTServerEffect(
             it.addCharacteristic(
                 BluetoothGattCharacteristic(
                     CHARACTERISTIC_UUID,
-                    BluetoothGattCharacteristic.PROPERTY_WRITE,
-                    BluetoothGattCharacteristic.PERMISSION_WRITE,
+                    BluetoothGattCharacteristic.PROPERTY_WRITE or BluetoothGattCharacteristic.PROPERTY_READ,
+                    BluetoothGattCharacteristic.PERMISSION_WRITE or BluetoothGattCharacteristic.PERMISSION_READ,
                 ),
             )
         }
