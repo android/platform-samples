@@ -136,32 +136,32 @@ internal fun GATTServerScreen(adapter: BluetoothAdapter) {
                 }
 
                 override fun onCharacteristicReadRequest(
-                device: BluetoothDevice?,
-                requestId: Int,
-                offset: Int,
-                characteristic: BluetoothGattCharacteristic?,
-            ) {
-                super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
-                logs += "\nCharacteristic Read request: $requestId (offset $offset)"
-                val data = logs.toByteArray()
-                val response = data.copyOfRange(offset, data.size)
-                server?.sendResponse(
-                    device,
-                    requestId,
-                    BluetoothGatt.GATT_SUCCESS,
-                    offset,
-                    response,
-                )
-            }
+                    device: BluetoothDevice?,
+                    requestId: Int,
+                    offset: Int,
+                    characteristic: BluetoothGattCharacteristic?,
+                ) {
+                    super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
+                    logs += "\nCharacteristic Read request: $requestId (offset $offset)"
+                    val data = logs.toByteArray()
+                    val response = data.copyOfRange(offset, data.size)
+                    server?.sendResponse(
+                        device,
+                        requestId,
+                        BluetoothGatt.GATT_SUCCESS,
+                        offset,
+                        response,
+                    )
+                }
 
-            override fun onMtuChanged(device: BluetoothDevice?, mtu: Int) {
-                logs += "\nMTU change request: $mtu"
-            }
-        },
-        advertiseCallback = object : AdvertiseCallback() {
-            override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
-                logs += "\nStarted advertising"
-            }
+                override fun onMtuChanged(device: BluetoothDevice?, mtu: Int) {
+                    logs += "\nMTU change request: $mtu"
+                }
+            },
+            advertiseCallback = object : AdvertiseCallback() {
+                override fun onStartSuccess(settingsInEffect: AdvertiseSettings?) {
+                    logs += "\nStarted advertising"
+                }
 
                 override fun onStartFailure(errorCode: Int) {
                     logs += "\nFailed to start advertising: $errorCode"
@@ -189,6 +189,7 @@ internal fun GATTServerScreen(adapter: BluetoothAdapter) {
 
 // Random UUID for our service known between the client and server to allow communication
 val SERVICE_UUID: UUID = UUID.fromString("CDB7950D-73F1-4D4D-8E47-C090502DBD63")
+
 // Same as the service but for the characteristic
 val CHARACTERISTIC_UUID: UUID = UUID.fromString("5aade5a7-14ea-43f7-a136-16cb92cddf35")
 
@@ -213,7 +214,7 @@ private fun GATTServerEffect(
             it.addCharacteristic(
                 BluetoothGattCharacteristic(
                     CHARACTERISTIC_UUID,
-                BluetoothGattCharacteristic.PROPERTY_WRITE or BluetoothGattCharacteristic.PROPERTY_READ,
+                    BluetoothGattCharacteristic.PROPERTY_WRITE or BluetoothGattCharacteristic.PROPERTY_READ,
                     BluetoothGattCharacteristic.PERMISSION_WRITE or BluetoothGattCharacteristic.PERMISSION_READ,
                 ),
             )
