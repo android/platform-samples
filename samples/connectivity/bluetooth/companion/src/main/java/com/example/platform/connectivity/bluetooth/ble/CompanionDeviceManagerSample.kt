@@ -87,7 +87,7 @@ fun CompanionDeviceManagerSample() {
         Text(text = "No Companion device manager found. The device does not support it.")
     } else {
         if (selectedDevice == null) {
-            CDMScreen(deviceManager) {
+            DevicesScreen(deviceManager) {
                 selectedDevice = it.device ?: adapter.getRemoteDevice(it.name)
             }
         } else {
@@ -100,23 +100,16 @@ fun CompanionDeviceManagerSample() {
     }
 }
 
-data class AssociatedDevice(
-    val id: Int,
-    val address: String,
-    val name: String,
-    val device: BluetoothDevice?,
-)
-
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
-private fun CDMScreen(
+private fun DevicesScreen(
     deviceManager: CompanionDeviceManager,
-    onConnect: (AssociatedDevice) -> Unit,
+    onConnect: (AssociatedDeviceCompat) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     var associatedDevices by remember {
         // If we already associated the device no need to do it again.
-        mutableStateOf(getAssociatedDevices(deviceManager))
+        mutableStateOf(deviceManager.getAssociatedDevices())
     }
     Column(modifier = Modifier.fillMaxSize()) {
         ScanForDevicesMenu(deviceManager) {
@@ -133,7 +126,7 @@ private fun CDMScreen(
                         @Suppress("DEPRECATION")
                         deviceManager.disassociate(it.address)
                     }
-                    associatedDevices = getAssociatedDevices(deviceManager)
+                    associatedDevices = deviceManager.getAssociatedDevices()
                 }
             },
         )
@@ -144,7 +137,7 @@ private fun CDMScreen(
 @Composable
 private fun ScanForDevicesMenu(
     deviceManager: CompanionDeviceManager,
-    onDeviceAssociated: (AssociatedDevice) -> Unit,
+    onDeviceAssociated: (AssociatedDeviceCompat) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
     var errorMessage by remember {
@@ -217,9 +210,9 @@ private fun ScanForDevicesMenu(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun AssociatedDevicesList(
-    associatedDevices: List<AssociatedDevice>,
-    onConnect: (AssociatedDevice) -> Unit,
-    onDisassociate: (AssociatedDevice) -> Unit,
+    associatedDevices: List<AssociatedDeviceCompat>,
+    onConnect: (AssociatedDeviceCompat) -> Unit,
+    onDisassociate: (AssociatedDeviceCompat) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier
@@ -278,28 +271,8 @@ private fun AssociatedDevicesList(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-private fun getAssociatedDevices(deviceManager: CompanionDeviceManager): List<AssociatedDevice> {
-    val associatedDevice = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        deviceManager.myAssociations.map { it.toAssociatedDevice() }
-    } else {
-        // Before Android 34 we can only get the MAC. We could use the BT adapter to find the
-        // device, but to use CDM we only need the MAC.
-        @Suppress("DEPRECATION")
-        deviceManager.associations.map {
-            AssociatedDevice(
-                id = -1,
-                address = it,
-                name = "",
-                device = null,
-            )
-        }
-    }
-    return associatedDevice
-}
-
-@RequiresApi(Build.VERSION_CODES.O)
-private fun Intent.getAssociationResult(): AssociatedDevice? {
-    var result: AssociatedDevice? = null
+private fun Intent.getAssociationResult(): AssociatedDeviceCompat? {
+    var result: AssociatedDeviceCompat? = null
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
         result = getParcelableExtra(
             CompanionDeviceManager.EXTRA_ASSOCIATION,
@@ -313,7 +286,7 @@ private fun Intent.getAssociationResult(): AssociatedDevice? {
         @Suppress("DEPRECATION")
         val scanResult = getParcelableExtra<ScanResult>(CompanionDeviceManager.EXTRA_DEVICE)
         if (scanResult != null) {
-            result = AssociatedDevice(
+            result = AssociatedDeviceCompat(
                 id = scanResult.advertisingSid,
                 address = scanResult.device.address ?: "N/A",
                 name = scanResult.scanRecord?.deviceName ?: "N/A",
@@ -324,20 +297,8 @@ private fun Intent.getAssociationResult(): AssociatedDevice? {
     return result
 }
 
-@RequiresApi(Build.VERSION_CODES.TIRAMISU)
-private fun AssociationInfo.toAssociatedDevice() = AssociatedDevice(
-    id = id,
-    address = deviceMacAddress?.toString() ?: "N/A",
-    name = displayName?.ifBlank { "N/A" }?.toString() ?: "N/A",
-    device = if (Build.VERSION.SDK_INT >= 34) {
-        associatedDevice?.bleDevice?.device
-    } else {
-        null
-    },
-)
-
 @RequiresApi(Build.VERSION_CODES.O)
-suspend fun requestDeviceAssociation(deviceManager: CompanionDeviceManager): IntentSender {
+private suspend fun requestDeviceAssociation(deviceManager: CompanionDeviceManager): IntentSender {
     // Match only Bluetooth devices whose service UUID matches this pattern.
     // For this demo we will match our GATTServerSample
     val scanFilter = ScanFilter.Builder().setServiceUuid(ParcelUuid(SERVICE_UUID)).build()
