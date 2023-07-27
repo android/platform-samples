@@ -34,14 +34,20 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -51,6 +57,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
@@ -100,7 +107,6 @@ data class AssociatedDevice(
     val device: BluetoothDevice?,
 )
 
-@OptIn(ExperimentalAnimationApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 private fun CDMScreen(
@@ -108,11 +114,40 @@ private fun CDMScreen(
     onConnect: (AssociatedDevice) -> Unit,
 ) {
     val scope = rememberCoroutineScope()
-    var associatedDevice by remember {
+    var associatedDevices by remember {
         // If we already associated the device no need to do it again.
-        mutableStateOf(getAssociatedDevice(deviceManager))
+        mutableStateOf(getAssociatedDevices(deviceManager))
     }
-    var errorMessage by remember(associatedDevice) {
+    Column(modifier = Modifier.fillMaxSize()) {
+        ScanForDevicesMenu(deviceManager) {
+            associatedDevices = associatedDevices + it
+        }
+        AssociatedDevicesList(
+            associatedDevices = associatedDevices,
+            onConnect = onConnect,
+            onDisassociate = {
+                scope.launch {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        deviceManager.disassociate(it.id)
+                    } else {
+                        @Suppress("DEPRECATION")
+                        deviceManager.disassociate(it.address)
+                    }
+                    associatedDevices = getAssociatedDevices(deviceManager)
+                }
+            },
+        )
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+private fun ScanForDevicesMenu(
+    deviceManager: CompanionDeviceManager,
+    onDeviceAssociated: (AssociatedDevice) -> Unit,
+) {
+    val scope = rememberCoroutineScope()
+    var errorMessage by remember {
         mutableStateOf("")
     }
     val launcher = rememberLauncherForActivityResult(
@@ -120,7 +155,9 @@ private fun CDMScreen(
     ) {
         when (it.resultCode) {
             CompanionDeviceManager.RESULT_OK -> {
-                associatedDevice = it.data?.getAssociationResult()
+                it.data?.getAssociationResult()?.run {
+                    onDeviceAssociated(this)
+                }
             }
 
             CompanionDeviceManager.RESULT_CANCELED -> {
@@ -144,53 +181,95 @@ private fun CDMScreen(
             }
         }
     }
-    Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        AnimatedContent(targetState = associatedDevice, label = "") { target ->
-            if (target != null) {
-                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                    Text(text = "ID: ${target.id}")
-                    Text(text = "MAC: ${target.address}")
-                    Text(text = "Name: ${target.name}")
-                    Button(
-                        onClick = {
-                            onConnect(target)
-                        },
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        Row {
+            Text(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                text = "Find & associate another device running the GATTServerSample",
+            )
+            Button(
+                modifier = Modifier.weight(0.3f),
+                onClick = {
+                    scope.launch {
+                        val intentSender = requestDeviceAssociation(deviceManager)
+                        launcher.launch(IntentSenderRequest.Builder(intentSender).build())
+                    }
+                },
+            ) {
+                Text(text = "Start")
+            }
+        }
+        if (errorMessage.isNotBlank()) {
+            Text(text = errorMessage, color = MaterialTheme.colorScheme.error)
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun AssociatedDevicesList(
+    associatedDevices: List<AssociatedDevice>,
+    onConnect: (AssociatedDevice) -> Unit,
+    onDisassociate: (AssociatedDevice) -> Unit,
+) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+    ) {
+        stickyHeader {
+            Text(
+                text = "Associated Devices:",
+                modifier = Modifier.padding(vertical = 8.dp),
+                style = MaterialTheme.typography.titleMedium,
+            )
+        }
+        items(associatedDevices) { device ->
+            Row(
+                Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                ) {
+                    Text(text = "ID: ${device.id}")
+                    Text(text = "MAC: ${device.address}")
+                    Text(text = "Name: ${device.name}")
+                }
+                Column(
+                    Modifier
+                        .fillMaxWidth()
+                        .weight(0.6f),
+                    horizontalAlignment = Alignment.End,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    OutlinedButton(
+                        onClick = { onConnect(device) },
+                        modifier = Modifier.fillMaxWidth(),
                     ) {
                         Text(text = "Connect")
                     }
-                    Button(
-                        onClick = {
-                            scope.launch {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                                    deviceManager.disassociate(target.id)
-                                } else {
-                                    @Suppress("DEPRECATION")
-                                    deviceManager.disassociate(target.address)
-                                }
-                                associatedDevice = null
-                            }
-                        },
+                    OutlinedButton(
+                        modifier = Modifier.fillMaxWidth(),
+                        onClick = { onDisassociate(device) },
+                        border = ButtonDefaults.outlinedButtonBorder.copy(
+                            brush = SolidColor(MaterialTheme.colorScheme.error),
+                        ),
                     ) {
-                        Text(text = "Disassociate")
-                    }
-                }
-            } else {
-                Column(
-                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Button(
-                        onClick = {
-                            scope.launch {
-                                val intentSender = requestDeviceAssociation(deviceManager)
-                                launcher.launch(IntentSenderRequest.Builder(intentSender).build())
-                            }
-                        },
-                    ) {
-                        Text(text = "Find & Associate device")
-                    }
-                    if (errorMessage.isNotBlank()) {
-                        Text(text = errorMessage, color = MaterialTheme.colorScheme.error)
+                        Text(text = "Disassociate", color = MaterialTheme.colorScheme.error)
                     }
                 }
             }
@@ -199,17 +278,17 @@ private fun CDMScreen(
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-private fun getAssociatedDevice(deviceManager: CompanionDeviceManager): AssociatedDevice? {
+private fun getAssociatedDevices(deviceManager: CompanionDeviceManager): List<AssociatedDevice> {
     val associatedDevice = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-        deviceManager.myAssociations.lastOrNull()?.toAssociatedDevice()
+        deviceManager.myAssociations.map { it.toAssociatedDevice() }
     } else {
         // Before Android 34 we can only get the MAC. We could use the BT adapter to find the
         // device, but to use CDM we only need the MAC.
         @Suppress("DEPRECATION")
-        deviceManager.associations.lastOrNull()?.run {
+        deviceManager.associations.map {
             AssociatedDevice(
                 id = -1,
-                address = this,
+                address = it,
                 name = "",
                 device = null,
             )
