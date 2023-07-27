@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.platform.connectivity.bluetooth.ble
+package com.example.platform.connectivity.bluetooth.cdm
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -62,6 +62,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.example.platform.base.PermissionBox
+import com.example.platform.connectivity.bluetooth.ble.ConnectDeviceScreen
+import com.example.platform.connectivity.bluetooth.ble.SERVICE_UUID
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch

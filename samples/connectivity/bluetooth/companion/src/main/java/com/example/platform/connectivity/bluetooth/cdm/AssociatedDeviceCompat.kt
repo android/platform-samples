@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.platform.connectivity.bluetooth.ble
+package com.example.platform.connectivity.bluetooth.cdm
 
 import android.bluetooth.BluetoothDevice
 import android.companion.AssociationInfo
