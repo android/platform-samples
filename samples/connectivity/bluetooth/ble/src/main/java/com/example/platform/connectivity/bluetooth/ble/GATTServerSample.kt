@@ -29,6 +29,7 @@ import android.bluetooth.le.AdvertiseCallback
 import android.bluetooth.le.AdvertiseData
 import android.bluetooth.le.AdvertiseSettings
 import android.os.Build
+import android.os.ParcelUuid
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -156,9 +157,9 @@ internal fun GATTServerScreen() {
 }
 
 // Random UUID for our service known between the client and server to allow communication
-val SERVICE_UUID = UUID.fromString("9f42ba3a-75ea-4ca1-92d0-aef57f0479e6")
+val SERVICE_UUID: UUID = UUID.fromString("00002222-0000-1000-8000-00805f9b34fb")
 // Same as the service but for the characteristic
-internal val CHARACTERISTIC_UUID = UUID.fromString("5aade5a7-14ea-43f7-a136-16cb92cddf35")
+internal val CHARACTERISTIC_UUID = UUID.fromString("00001111-0000-1000-8000-00805f9b34fb")
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -210,6 +211,7 @@ private fun GATTServerEffect(
 
                 val data = AdvertiseData.Builder()
                     .setIncludeDeviceName(true)
+                    .addServiceUuid(ParcelUuid(SERVICE_UUID))
                     .build()
 
                 bluetoothLeAdvertiser.startAdvertising(
