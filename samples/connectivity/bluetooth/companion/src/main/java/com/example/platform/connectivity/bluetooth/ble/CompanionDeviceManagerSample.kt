@@ -248,7 +248,7 @@ private fun Intent.getAssociationResult(): AssociatedDevice? {
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 private fun AssociationInfo.toAssociatedDevice() = AssociatedDevice(
     id = id,
-    address = deviceMacAddress?.toOuiString() ?: "N/A",
+    address = deviceMacAddress?.toString() ?: "N/A",
     name = displayName?.ifBlank { "N/A" }?.toString() ?: "N/A",
     device = if (Build.VERSION.SDK_INT >= 34) {
         associatedDevice?.bleDevice?.device
