@@ -91,9 +91,7 @@ fun ConnectGATTSample() {
 }
 
 @SuppressLint("InlinedApi")
-@RequiresPermission(
-    allOf = [Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN],
-)
+@RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
 @Composable
 fun ConnectDeviceScreen(device: BluetoothDevice, onClose: () -> Unit) {
     val scope = rememberCoroutineScope()
@@ -222,9 +220,7 @@ private data class DeviceConnectionState(
 )
 
 @SuppressLint("InlinedApi")
-@RequiresPermission(
-    allOf = [Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN],
-)
+@RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
 @Composable
 private fun BLEConnectEffect(
     device: BluetoothDevice,

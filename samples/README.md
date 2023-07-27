@@ -22,6 +22,8 @@ Shows how to create a GATT server and communicate with the GATT client
 Demonstrates how to implement data access auditing for your app to identify 
 - [Displaying UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDR.kt):
 This sample demonstrates displaying an UltraHDR image.
+- [Displaying UltraHDR (Glide)](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDRUsingGlide.kt):
+This sample demonstrates using the Glide image loading library to detect the
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
@@ -54,6 +56,8 @@ This Sample demonstrate best practices for Location Permission
 This Sample demonstrate how to get location updates
 - [Location - User Activity Recognition](location/src/main/java/com/example/platform/location/useractivityrecog/UserActivityRecognitionScreen.kt):
 This Sample demonstrate detection of user activity like walking, driving, etc.
+- [MediaStore - Query](storage/src/main/java/com/example/platform/storage/mediastore/MediaStoreQuery.kt):
+Query files indexed by MediaStore
 - [MotionLayout - 01. Basic](user-interface/constraintlayout/src/main/java/com/example/platform/ui/constraintlayout/MotionLayout.kt):
 Basic motion example using referenced ConstraintLayout files
 - [Multiple Permissions](privacy/permissions/src/main/java/com/example/platform/privacy/permissions/MultiplePermissions.kt):
@@ -66,14 +70,20 @@ Demonstrates how to use PdfRenderer to display PDF documents on the screen.
 This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs
 - [Permissions using Compose](privacy/permissions/src/main/java/com/example/platform/privacy/permissions/ComposePermissions.kt):
 This sample showcases how to request permission using Accompanist in Compose
+- [PhotoPicker](storage/src/main/java/com/example/platform/storage/photopicker/PhotoPicker.kt):
+Select images/videos in a privacy-friendly way using the photo picker
 - [Picture in Picture (PiP) - Stopwatch](user-interface/picture-in-picture/src/main/java/com/example/android/pip/PiPSampleActivity.kt):
 Basic usage of Picture-in-Picture mode showcasing a stopwatch
 - [Picture in Picture (PiP) - Video playback](user-interface/picture-in-picture/src/main/java/com/example/android/pip/PiPMovieActivity.kt):
 Basic usage of Picture-in-Picture mode showcasing video playback
 - [Quick Settings](user-interface/quicksettings/src/main/java/com/example/platform/ui/quicksettings/QuickSettings.kt):
 Add your custom tile to the Quick Settings.
+- [Scan with BLE Intent](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/BLEScanIntentSample.kt):
+This samples shows how to use the BLE intent to scan for devices
 - [Screenshot Detection](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/ScreenshotDetection.kt):
 This sample shows how to detect that the user capture the screen in Android 14 onwards
+- [Selected Photos Access](storage/src/main/java/com/example/platform/storage/mediastore/SelectedPhotosAccess.kt):
+Check and request storage permissions
 - [Single Permission](privacy/permissions/src/main/java/com/example/platform/privacy/permissions/SinglePermission.kt):
 Shows the recommended flow to request single runtime permissions
 - [Speakable Text](accessibility/src/main/java/com/example/platform/accessibility/SpeakableText.kt):

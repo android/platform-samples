@@ -21,11 +21,9 @@ plugins {
 }
 
 android {
-    namespace = "com.example.platform.graphics.ultrahdr"
-    viewBinding.isEnabled = true
+    namespace = "com.example.platform.storage"
 }
 
 dependencies {
-    // Glide
-    implementation(libs.glide)
+    // Add samples specific dependencies
 }
