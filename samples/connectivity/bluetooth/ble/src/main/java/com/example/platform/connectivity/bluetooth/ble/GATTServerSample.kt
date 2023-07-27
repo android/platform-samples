@@ -156,7 +156,7 @@ internal fun GATTServerScreen() {
 }
 
 // Random UUID for our service known between the client and server to allow communication
-internal val SERVICE_UUID = UUID.fromString("9f42ba3a-75ea-4ca1-92d0-aef57f0479e6")
+val SERVICE_UUID = UUID.fromString("9f42ba3a-75ea-4ca1-92d0-aef57f0479e6")
 // Same as the service but for the characteristic
 internal val CHARACTERISTIC_UUID = UUID.fromString("5aade5a7-14ea-43f7-a136-16cb92cddf35")
 
