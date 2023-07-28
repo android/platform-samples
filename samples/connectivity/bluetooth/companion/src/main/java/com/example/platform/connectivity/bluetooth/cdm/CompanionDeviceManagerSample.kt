@@ -50,6 +50,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -89,8 +90,8 @@ fun CompanionDeviceManagerSample() {
         Text(text = "No Companion device manager found. The device does not support it.")
     } else {
         if (selectedDevice == null) {
-            DevicesScreen(deviceManager) {
-                selectedDevice = it.device ?: adapter.getRemoteDevice(it.name)
+            DevicesScreen(deviceManager) { device ->
+                selectedDevice = (device.device ?: adapter.getRemoteDevice(device.address))
             }
         } else {
             PermissionBox(permission = Manifest.permission.BLUETOOTH_CONNECT) {
@@ -113,6 +114,15 @@ private fun DevicesScreen(
         // If we already associated the device no need to do it again.
         mutableStateOf(deviceManager.getAssociatedDevices())
     }
+
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        LaunchedEffect(associatedDevices) {
+            associatedDevices.forEach {
+                deviceManager.startObservingDevicePresence(it.address)
+            }
+        }
+    }
+
     Column(modifier = Modifier.fillMaxSize()) {
         ScanForDevicesMenu(deviceManager) {
             associatedDevices = associatedDevices + it

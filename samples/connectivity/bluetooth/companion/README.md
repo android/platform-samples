@@ -1,6 +1,23 @@
 # Companion Device Manager Sample
 
-// TODO
+This sample showcases the use of the
+[Companion Device Manager](https://developer.android.com/reference/android/companion/CompanionDeviceManager#startSystemDataTransfer(int,%20java.util.concurrent.Executor,%20android.os.OutcomeReceiver%3Cjava.lang.Void,android.companion.CompanionException%3E))
+(CDM) to find and associate devices. 
+
+## How to use the sample:
+
+1. Use two devices running the sample
+2. In one device start the [GATTServerSample](../ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/GATTServerSample.kt)
+3. In the other open the [CompanionDeviceManagerSample](/src/main/java/com/example/platform/connectivity/bluetooth/cdm/CompanionDeviceManagerSample.kt))
+4. Click start button in the CDM sample
+
+It should directly find the server and a system request will appear. Once accepted both devices will
+be associated. You can then connect (see [ConnectGATTSample](../ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/ConnectGATTSample.kt)
+and receive (see [CompanionDeviceSampleService](/src/main/java/com/example/platform/connectivity/bluetooth/cdm/CompanionDeviceSampleService.kt))
+appear and disappear events (if running A12+).
+
+> Note: You can associate multiple devices. When the server closes and opens again a new mac address
+> will be used, thus you need to associate them again.
 
 ## License
 

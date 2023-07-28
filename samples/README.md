@@ -10,7 +10,7 @@ Sample demonstrating how to make incoming call notifications and in call notific
 Demonstrates displaying processed pixel data directly from the camera sensor 
 - [Color Contrast](accessibility/src/main/java/com/example/platform/accessibility/ColorContrast.kt):
 This sample demonstrates the importance of proper color contrast and how to 
-- [Companion Device Manager Sample](connectivity/bluetooth/companion/src/main/java/com/example/platform/connectivity/bluetooth/ble/CompanionDeviceManagerSample.kt):
+- [Companion Device Manager Sample](connectivity/bluetooth/companion/src/main/java/com/example/platform/connectivity/bluetooth/cdm/CompanionDeviceManagerSample.kt):
 This samples shows how to use the CDM to pair and connect with BLE devices
 - [Connect to a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/ConnectGATTSample.kt):
 Shows how to connect to a GATT server hosted by the BLE device and perform simple operations

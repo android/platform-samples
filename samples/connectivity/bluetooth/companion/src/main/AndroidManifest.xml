@@ -17,9 +17,27 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Define that the app uses CDM -->
-    <uses-feature android:name="android.software.companion_device_setup"/>
+    <uses-feature android:name="android.software.companion_device_setup" />
 
     <!-- Only needed to connect to the device once associated -->
     <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+
+    <!-- Needed if we want to be notified when an associated device is in range -->
+    <uses-permission android:name="android.permission.REQUEST_OBSERVE_COMPANION_DEVICE_PRESENCE" />
+
+    <!-- Not required by CDM but we use it for notifying when device is in range -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <application>
+
+        <service
+            android:name="com.example.platform.connectivity.bluetooth.cdm.CompanionDeviceSampleService"
+            android:exported="true"
+            android:permission="android.permission.BIND_COMPANION_DEVICE_SERVICE">
+            <intent-filter>
+                <action android:name="android.companion.CompanionDeviceService" />
+            </intent-filter>
+        </service>
+    </application>
 
 </manifest>
