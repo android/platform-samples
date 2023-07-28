@@ -138,6 +138,9 @@ private fun DevicesScreen(
                         @Suppress("DEPRECATION")
                         deviceManager.disassociate(it.address)
                     }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        deviceManager.stopObservingDevicePresence(it.address)
+                    }
                     associatedDevices = deviceManager.getAssociatedDevices()
                 }
             },
