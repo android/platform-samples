@@ -189,6 +189,7 @@ internal fun GATTServerScreen(adapter: BluetoothAdapter) {
 
 // Random UUID for our service known between the client and server to allow communication
 val SERVICE_UUID: UUID = UUID.fromString("00002222-0000-1000-8000-00805f9b34fb")
+
 // Same as the service but for the characteristic
 val CHARACTERISTIC_UUID: UUID = UUID.fromString("00001111-0000-1000-8000-00805f9b34fb")
 
@@ -263,10 +264,10 @@ private fun GATTServerEffect(
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
             bluetoothLeAdvertiser.stopAdvertising(advertiseCallback)
-            gattServer?.close()
             manager.getConnectedDevices(BluetoothProfile.GATT_SERVER)?.forEach {
                 gattServer?.cancelConnection(it)
             }
+            gattServer?.close()
         }
     }
 }
