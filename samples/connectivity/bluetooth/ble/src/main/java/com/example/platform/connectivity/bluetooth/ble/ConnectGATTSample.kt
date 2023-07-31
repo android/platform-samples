@@ -133,6 +133,9 @@ fun ConnectDeviceScreen(device: BluetoothDevice, onClose: () -> Unit) {
         Button(
             onClick = {
                 scope.launch(Dispatchers.IO) {
+                    if (state?.connectionState == BluetoothProfile.STATE_DISCONNECTED) {
+                        state?.gatt?.connect()
+                    }
                     // Example on how to request specific MTUs
                     // Note that from Android 14 onwards the system will define a default MTU and
                     // it will only be sent once to the peripheral device

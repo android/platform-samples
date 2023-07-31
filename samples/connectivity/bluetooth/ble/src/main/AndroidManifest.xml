@@ -42,7 +42,14 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
+    <!-- Needed for the GATT sample to run a FGS -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_CONNECTED_DEVICE" />
+
     <application>
+
+        <service
+            android:name=".GATTServerSampleService"
+            android:foregroundServiceType="connectedDevice" />
 
         <receiver
             android:name=".BLEScanReceiver"
