@@ -120,6 +120,8 @@ class SamplePlugin : Plugin<Project> {
 
                 "implementation"(libs.findLibrary("compose.ui.tooling.preview").get())
                 "debugImplementation"(libs.findLibrary("compose.ui.tooling").get())
+
+                "androidTestImplementation"(libs.findLibrary("androidx.test.runner").get())
             }
         }
     }
