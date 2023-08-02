@@ -65,7 +65,7 @@ class ImageWorker(
                         .putFloat("width", size.width.value.toPx)
                         .putFloat("height", size.height.value.toPx)
                         .putBoolean("force", force)
-                        .build()
+                        .build(),
                 )
             }
             val workPolicy = if (force) {
@@ -77,7 +77,7 @@ class ImageWorker(
             manager.enqueueUniqueWork(
                 uniqueWorkName + size.width + size.height,
                 workPolicy,
-                requestBuilder.build()
+                requestBuilder.build(),
             )
 
             // Temporary workaround to avoid WM provider to disable itself and trigger an
@@ -87,7 +87,7 @@ class ImageWorker(
                 ExistingWorkPolicy.KEEP,
                 OneTimeWorkRequestBuilder<ImageWorker>().apply {
                     setInitialDelay(365, TimeUnit.DAYS)
-                }.build()
+                }.build(),
             )
         }
 
@@ -163,7 +163,7 @@ class ImageWorker(
             val contentUri = getUriForFile(
                 context,
                 "${applicationContext.packageName}.provider",
-                imageFile
+                imageFile,
             )
 
             // Find the current launcher everytime to ensure it has read permissions
@@ -171,13 +171,13 @@ class ImageWorker(
             val resolveInfo = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
                 context.packageManager.resolveActivity(
                     intent,
-                    PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong())
+                    PackageManager.ResolveInfoFlags.of(PackageManager.MATCH_DEFAULT_ONLY.toLong()),
                 )
             } else {
                 @Suppress("DEPRECATION")
                 context.packageManager.resolveActivity(
                     intent,
-                    PackageManager.MATCH_DEFAULT_ONLY
+                    PackageManager.MATCH_DEFAULT_ONLY,
                 )
             }
             val launcherName = resolveInfo?.activityInfo?.packageName
@@ -185,7 +185,7 @@ class ImageWorker(
                 context.grantUriPermission(
                     launcherName,
                     contentUri,
-                    FLAG_GRANT_READ_URI_PERMISSION or FLAG_GRANT_PERSISTABLE_URI_PERMISSION
+                    FLAG_GRANT_READ_URI_PERMISSION or FLAG_GRANT_PERSISTABLE_URI_PERMISSION,
                 )
             }
 

@@ -57,7 +57,7 @@ internal fun AssociationInfo.toAssociatedDevice() = AssociatedDeviceCompat(
     id = id,
     address = deviceMacAddress?.toString() ?: "N/A",
     name = displayName?.ifBlank { "N/A" }?.toString() ?: "N/A",
-    device = if (Build.VERSION.SDK_INT >= 34) {
+    device = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
         associatedDevice?.bleDevice?.device
     } else {
         null
