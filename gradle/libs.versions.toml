@@ -18,7 +18,7 @@ accompanist = "0.28.0"
 androidx-datastore = "1.0.0"
 androidx-navigation = "2.6.0"
 androidx-window = "1.1.0"
-androidGradlePlugin = "7.4.2"
+agp = "8.1.0"
 casa = "0.4.3"
 coil = "2.3.0"
 ksp = "1.8.21-1.0.11"
@@ -26,9 +26,9 @@ compose-bom = "2023.06.01"
 composeCompiler = "1.4.7"
 hilt = "2.44.2"
 kotlin = "1.8.21"
-kotlin-serialization = "1.5.0"
+kotlin-serialization = "1.5.1"
 ktlint = "0.48.1"
-coroutines = "1.6.4"
+coroutines = "1.7.1"
 play-services-location = "21.0.1"
 junit4 = "4.13.2"
 androidxEspresso = "3.5.1"
@@ -43,7 +43,7 @@ media3 = "1.0.2"
 [libraries]
 
 # Core dependencies
-android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
+android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 
 androidx-activity = "androidx.activity:activity:1.7.2"
 androidx-core = "androidx.core:core-ktx:1.10.1"
@@ -139,9 +139,9 @@ mdc = "com.google.android.material:material:1.9.0"
 affectedmoduledetector = { id = "com.dropbox.affectedmoduledetector", version = "0.2.0" }
 versionCatalogUpdate = { id = "nl.littlerobots.version-catalog-update", version = "0.7.0" }
 benManesVersions = { id = "com.github.ben-manes.versions", version = "0.44.0" }
-android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
-android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }
-android-test = { id = "com.android.test", version.ref = "androidGradlePlugin" }
+android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+android-test = { id = "com.android.test", version.ref = "agp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
