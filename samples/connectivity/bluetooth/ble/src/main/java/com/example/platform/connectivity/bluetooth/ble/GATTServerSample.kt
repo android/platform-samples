@@ -188,10 +188,10 @@ internal fun GATTServerScreen(adapter: BluetoothAdapter) {
 }
 
 // Random UUID for our service known between the client and server to allow communication
-val SERVICE_UUID: UUID = UUID.fromString("CDB7950D-73F1-4D4D-8E47-C090502DBD63")
+val SERVICE_UUID: UUID = UUID.fromString("00002222-0000-1000-8000-00805f9b34fb")
 
 // Same as the service but for the characteristic
-val CHARACTERISTIC_UUID: UUID = UUID.fromString("5aade5a7-14ea-43f7-a136-16cb92cddf35")
+val CHARACTERISTIC_UUID: UUID = UUID.fromString("00001111-0000-1000-8000-00805f9b34fb")
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -242,6 +242,7 @@ private fun GATTServerEffect(
                     .build()
 
                 val data = AdvertiseData.Builder()
+                    .setIncludeDeviceName(true)
                     .addServiceUuid(ParcelUuid(SERVICE_UUID))
                     .build()
 
@@ -263,10 +264,10 @@ private fun GATTServerEffect(
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
             bluetoothLeAdvertiser.stopAdvertising(advertiseCallback)
-            gattServer?.close()
             manager.getConnectedDevices(BluetoothProfile.GATT_SERVER)?.forEach {
                 gattServer?.cancelConnection(it)
             }
+            gattServer?.close()
         }
     }
 }
