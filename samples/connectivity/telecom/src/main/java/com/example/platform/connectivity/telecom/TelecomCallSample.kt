@@ -31,6 +31,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -86,6 +87,16 @@ private fun TelecomCallOptions() {
     val call by repository.currentCall.collectAsState()
     val hasOngoingCall = call is TelecomCall.Registered
 
+    if (hasOngoingCall) {
+        LaunchedEffect(Unit) {
+            context.startActivity(
+                Intent(context, TelecomCallActivity::class.java).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                },
+            )
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -119,11 +130,6 @@ private fun TelecomCallOptions() {
                     action = TelecomCallService.ACTION_OUTGOING_CALL,
                     name = "Bob",
                     uri = Uri.parse("tel:54321"),
-                )
-                context.startActivity(
-                    Intent(context, TelecomCallActivity::class.java).apply {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK
-                    },
                 )
             },
         ) {

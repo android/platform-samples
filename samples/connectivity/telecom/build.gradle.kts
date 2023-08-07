@@ -28,4 +28,16 @@ android {
 dependencies {
     implementation("androidx.core:core-telecom:1.0.0-SNAPSHOT")
     implementation(project(mapOf("path" to ":samples:connectivity:audio")))
+
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.androidx.navigation.testing)
+    androidTestImplementation(libs.compose.ui.test.manifest)
+    debugImplementation(libs.compose.ui.test.manifest)
+    androidTestImplementation(libs.compose.ui.test.junit4)
+    androidTestImplementation(libs.androidx.test.core)
+    androidTestImplementation(libs.androidx.test.espresso.core)
+    androidTestImplementation(libs.androidx.test.rules)
+    androidTestImplementation(libs.androidx.test.runner)
+    androidTestImplementation(libs.hilt.testing)
+    androidTestImplementation(libs.junit4)
 }

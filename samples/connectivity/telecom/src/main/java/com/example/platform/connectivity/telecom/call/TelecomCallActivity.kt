@@ -20,6 +20,7 @@ import android.app.KeyguardManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -60,6 +61,7 @@ class TelecomCallActivity : ComponentActivity() {
                     TelecomCallScreen(repository) {
                         // If we receive that the called finished, finish the activity
                         finishAndRemoveTask()
+                        Log.d("TelecomCallActivity", "Call finished. Finishing activity")
                     }
                 }
             }

@@ -231,7 +231,7 @@ private fun OngoingCallActions(
         ) {
             Icon(
                 imageVector = Icons.Rounded.Call,
-                contentDescription = null,
+                contentDescription = "Disconnect call",
                 modifier = Modifier.rotate(90f),
             )
         }
