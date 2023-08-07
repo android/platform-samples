@@ -38,7 +38,7 @@ androidxTestExtTruth = "1.5.0"
 androidxTestRules = "1.5.0"
 androidxTestRunner = "1.5.2"
 androidxUiAutomator = "2.2.0"
-media3 = "1.0.2"
+media3 = "1.1.0"
 
 [libraries]
 
