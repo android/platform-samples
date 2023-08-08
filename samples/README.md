@@ -12,6 +12,8 @@ Demonstrates displaying processed pixel data directly from the camera sensor
 This sample demonstrates the importance of proper color contrast and how to 
 - [Companion Device Manager Sample](connectivity/bluetooth/companion/src/main/java/com/example/platform/connectivity/bluetooth/cdm/CompanionDeviceManagerSample.kt):
 This samples shows how to use the CDM to pair and connect with BLE devices
+- [Companion Device Manager Sample](connectivity/bluetooth/companion/src/main/java/com/example/platform/connectivity/bluetooth/ble/CompanionDeviceManagerSample.kt):
+This samples shows how to use the CDM to pair and connect with BLE devices
 - [Connect to a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/ConnectGATTSample.kt):
 Shows how to connect to a GATT server hosted by the BLE device and perform simple operations
 - [ConstraintLayout - 1. Centering Views](user-interface/constraintlayout/src/main/java/com/example/platform/ui/constraintlayout/ConstraintLayout.kt):
@@ -90,6 +92,8 @@ Check and request storage permissions
 Shows the recommended flow to request single runtime permissions
 - [Speakable Text](accessibility/src/main/java/com/example/platform/accessibility/SpeakableText.kt):
 The sample demonstrates the importance of having proper labels for
+- [Telecom Call Sample](connectivity/telecom/src/main/java/com/example/platform/connectivity/telecom/TelecomCallSample.kt):
+A sample showcasing how to handle calls with the Jetpack Telecom API
 - [TextSpan](user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.
 - [UltraHDR Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2UltraHDRCapture.kt):
