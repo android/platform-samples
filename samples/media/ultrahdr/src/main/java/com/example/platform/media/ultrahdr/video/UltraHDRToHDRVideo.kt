@@ -29,6 +29,7 @@ import android.media.MediaCodec
 import android.media.MediaCodecInfo
 import android.media.MediaCodecList
 import android.media.MediaFormat
+import android.media.MediaMuxer
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -42,8 +43,8 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.platform.media.ultrahdr.databinding.UltrahdrToHdrVideoBinding
 import com.google.android.catalog.framework.annotations.Sample
-import java.nio.ByteBuffer
 import java.util.UUID
+
 
 @Sample(
     name = "UltraHDR to HDR Video",
@@ -70,6 +71,11 @@ class UltraHDRToHDRVideo : Fragment() {
      */
     private var isImageReleased = true
     private var isFrameProcessed = true
+
+    /**
+     * [MediaMuxer] used to save the frame from [MediaCodec] to the disk
+     */
+    private lateinit var muxer: MediaMuxer
 
     /**
      * [MediaCodec] encoder that will be used to encode the the HDR 10-bit video.
@@ -108,6 +114,10 @@ class UltraHDRToHDRVideo : Fragment() {
         ) {
             val outputBuffer = codec.getOutputBuffer(index)
             val bufferFormat = codec.getOutputFormat(index)
+
+            // Insert frame into muxer
+            muxer.writeSampleData(0, outputBuffer!!, info)
+
             codec.releaseOutputBuffer(index, false)
             isFrameProcessed = true
         }
@@ -137,7 +147,8 @@ class UltraHDRToHDRVideo : Fragment() {
 
         // Check that hw acceleration is supported
         if (!isHardwareAccelerationSupported()) return
-        if (!setUpEncoder()) return
+        if (!setUpMediaCodec()) return
+        if (!setUpMediaMuxer()) return
         if (!setUpImageWriter()) return
 
         binding.colorModeControls.setWindow(requireActivity().window)
@@ -175,11 +186,26 @@ class UltraHDRToHDRVideo : Fragment() {
     )
 
     /**
-     * Sets up the MediaCodec to produce a 10-bit HDR video. The devices encoder must support
+     * Sets up the muxer to save the frames received by [MediaCodec] to an .mp4 container for
+     * device playback.
+     */
+    private fun setUpMediaMuxer(): Boolean {
+        // Create path to cache directory.
+        val path = requireActivity().cacheDir.path + '/' + UUID.randomUUID().toString() + ".mp4"
+
+        // Initialize Media muxer.
+        muxer = MediaMuxer(path, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
+        muxer.addTrack(encoder.outputFormat)
+        muxer.start()
+        return true
+    }
+
+    /**
+     * Sets up the encoder to produce a 10-bit HDR video. The devices encoder must support
      * [MediaCodecInfo.CodecProfileLevel.HEVCProfileMain10]. We will check for that first before
      * proceeding with initialization of the [MediaCodec]
      */
-    private fun setUpEncoder(): Boolean {
+    private fun setUpMediaCodec(): Boolean {
         // Create the HDR MediaFormat that will be used to create our HDR encoder
         val format = createHdrMediaFormat()
 
@@ -275,6 +301,11 @@ class UltraHDRToHDRVideo : Fragment() {
                 frameCount++
             }
         }
+
+        muxer.stop()
+        muxer.release()
+        encoder.stop()
+        encoder.release()
     }
 
     private fun renderImageFrameWithHardware(
