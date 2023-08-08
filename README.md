@@ -60,8 +60,8 @@ this repository. When doing so, make sure to specify which sample you are referr
 Please contribute! We will gladly review any pull requests.
 Make sure to read the [Contributing](CONTRIBUTING.md) page first though.
 
-> Note: make sure to run `./gradlew --init-script gradle/init.gradle.kts spotlessApply` before 
-> summitting PRs.
+> Note: make sure to run `./gradlew --init-script gradle/spotless-init.gradle.kts spotlessApply` before 
+> submitting PRs.
 
 ## License
 
