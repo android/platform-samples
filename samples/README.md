@@ -10,7 +10,7 @@ Sample demonstrating how to make incoming call notifications and in call notific
 Demonstrates displaying processed pixel data directly from the camera sensor 
 - [Color Contrast](accessibility/src/main/java/com/example/platform/accessibility/ColorContrast.kt):
 This sample demonstrates the importance of proper color contrast and how to 
-- [Companion Device Manager Sample](connectivity/bluetooth/companion/src/main/java/com/example/platform/connectivity/bluetooth/ble/CompanionDeviceManagerSample.kt):
+- [Companion Device Manager Sample](connectivity/bluetooth/companion/src/main/java/com/example/platform/connectivity/bluetooth/cdm/CompanionDeviceManagerSample.kt):
 This samples shows how to use the CDM to pair and connect with BLE devices
 - [Connect to a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/ConnectGATTSample.kt):
 Shows how to connect to a GATT server hosted by the BLE device and perform simple operations
@@ -24,6 +24,8 @@ Shows how to create a GATT server and communicate with the GATT client
 Demonstrates how to implement data access auditing for your app to identify 
 - [Displaying UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDR.kt):
 This sample demonstrates displaying an UltraHDR image.
+- [Displaying UltraHDR (Glide)](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDRUsingGlide.kt):
+This sample demonstrates using the Glide image loading library to detect the
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
@@ -70,6 +72,8 @@ Demonstrates how to use PdfRenderer to display PDF documents on the screen.
 This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs
 - [Permissions using Compose](privacy/permissions/src/main/java/com/example/platform/privacy/permissions/ComposePermissions.kt):
 This sample showcases how to request permission using Accompanist in Compose
+- [PhotoPicker](storage/src/main/java/com/example/platform/storage/photopicker/PhotoPicker.kt):
+Select images/videos in a privacy-friendly way using the photo picker
 - [Picture in Picture (PiP) - Stopwatch](user-interface/picture-in-picture/src/main/java/com/example/android/pip/PiPSampleActivity.kt):
 Basic usage of Picture-in-Picture mode showcasing a stopwatch
 - [Picture in Picture (PiP) - Video playback](user-interface/picture-in-picture/src/main/java/com/example/android/pip/PiPMovieActivity.kt):
@@ -86,8 +90,6 @@ Check and request storage permissions
 Shows the recommended flow to request single runtime permissions
 - [Speakable Text](accessibility/src/main/java/com/example/platform/accessibility/SpeakableText.kt):
 The sample demonstrates the importance of having proper labels for
-- [Telecom Call Sample](connectivity/telecom/src/main/java/com/example/platform/connectivity/telecom/TelecomCallSample.kt):
-A sample showcasing how to handle calls with the Jetpack Telecom API
 - [TextSpan](user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.
 - [UltraHDR Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2UltraHDRCapture.kt):

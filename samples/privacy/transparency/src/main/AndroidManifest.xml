@@ -22,15 +22,4 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 
     <uses-permission android:name="android.permission.DETECT_SCREEN_CAPTURE" />
-
-    <application>
-
-        <!-- Register file provider to create shareable URIs -->
-        <provider
-            android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-        </provider>
-    </application>
 </manifest>

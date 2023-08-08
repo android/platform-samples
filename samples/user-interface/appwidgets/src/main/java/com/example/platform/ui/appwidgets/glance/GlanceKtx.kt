@@ -23,6 +23,7 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import androidx.glance.GlanceModifier
+import androidx.glance.GlanceTheme
 import androidx.glance.LocalContext
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.cornerRadius
@@ -47,7 +48,7 @@ fun AppWidgetBox(
     Box(
         modifier = appWidgetBackgroundModifier().then(modifier),
         contentAlignment = contentAlignment,
-        content = content
+        content = content,
     )
 }
 

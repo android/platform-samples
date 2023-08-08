@@ -135,6 +135,25 @@ internal fun GATTServerScreen(adapter: BluetoothAdapter) {
                     }
                 }
 
+                override fun onCharacteristicReadRequest(
+                    device: BluetoothDevice?,
+                    requestId: Int,
+                    offset: Int,
+                    characteristic: BluetoothGattCharacteristic?,
+                ) {
+                    super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
+                    logs += "\nCharacteristic Read request: $requestId (offset $offset)"
+                    val data = logs.toByteArray()
+                    val response = data.copyOfRange(offset, data.size)
+                    server?.sendResponse(
+                        device,
+                        requestId,
+                        BluetoothGatt.GATT_SUCCESS,
+                        offset,
+                        response,
+                    )
+                }
+
                 override fun onMtuChanged(device: BluetoothDevice?, mtu: Int) {
                     logs += "\nMTU change request: $mtu"
                 }
@@ -169,10 +188,10 @@ internal fun GATTServerScreen(adapter: BluetoothAdapter) {
 }
 
 // Random UUID for our service known between the client and server to allow communication
-val SERVICE_UUID: UUID = UUID.fromString("CDB7950D-73F1-4D4D-8E47-C090502DBD63")
+val SERVICE_UUID: UUID = UUID.fromString("00002222-0000-1000-8000-00805f9b34fb")
 
 // Same as the service but for the characteristic
-val CHARACTERISTIC_UUID: UUID = UUID.fromString("5aade5a7-14ea-43f7-a136-16cb92cddf35")
+val CHARACTERISTIC_UUID: UUID = UUID.fromString("00001111-0000-1000-8000-00805f9b34fb")
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -195,8 +214,8 @@ private fun GATTServerEffect(
             it.addCharacteristic(
                 BluetoothGattCharacteristic(
                     CHARACTERISTIC_UUID,
-                    BluetoothGattCharacteristic.PROPERTY_WRITE,
-                    BluetoothGattCharacteristic.PERMISSION_WRITE,
+                    BluetoothGattCharacteristic.PROPERTY_WRITE or BluetoothGattCharacteristic.PROPERTY_READ,
+                    BluetoothGattCharacteristic.PERMISSION_WRITE or BluetoothGattCharacteristic.PERMISSION_READ,
                 ),
             )
         }
@@ -223,6 +242,7 @@ private fun GATTServerEffect(
                     .build()
 
                 val data = AdvertiseData.Builder()
+                    .setIncludeDeviceName(true)
                     .addServiceUuid(ParcelUuid(SERVICE_UUID))
                     .build()
 

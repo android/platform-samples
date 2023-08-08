@@ -26,5 +26,6 @@ android {
 }
 
 dependencies {
-    // Add samples specific dependencies
+    // Glide
+    implementation(libs.glide)
 }
