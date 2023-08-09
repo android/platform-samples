@@ -20,6 +20,7 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ColorSpace
 import android.graphics.HardwareBufferRenderer
+import android.graphics.HardwareBufferRenderer.RenderResult
 import android.graphics.RenderNode
 import android.hardware.DataSpace
 import android.hardware.HardwareBuffer
@@ -43,6 +44,7 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.platform.media.ultrahdr.databinding.UltrahdrToHdrVideoBinding
 import com.google.android.catalog.framework.annotations.Sample
+import java.nio.ByteBuffer
 import java.util.UUID
 
 
@@ -65,17 +67,15 @@ class UltraHDRToHDRVideo : Fragment() {
      * HDR color space (in this sample, HLG) to then be encoded by the [MediaCodec]
      */
     private lateinit var imageWriter: ImageWriter
-
-    /**
-     *
-     */
-    private var isImageReleased = true
     private var isFrameProcessed = true
 
     /**
      * [MediaMuxer] used to save the frame from [MediaCodec] to the disk
      */
     private lateinit var muxer: MediaMuxer
+    private var muxerTrackId = -1
+
+    private val frameList = mutableListOf<Pair<MediaCodec.BufferInfo, ByteBuffer>>()
 
     /**
      * [MediaCodec] encoder that will be used to encode the the HDR 10-bit video.
@@ -99,6 +99,7 @@ class UltraHDRToHDRVideo : Fragment() {
      * with image data to be encoded by the encoder.
      */
     private lateinit var encoderSurface: Surface
+    private var encoderFrameProcessed = true
 
     /**
      *
@@ -112,14 +113,25 @@ class UltraHDRToHDRVideo : Fragment() {
             index: Int,
             info: MediaCodec.BufferInfo,
         ) {
-            val outputBuffer = codec.getOutputBuffer(index)
-            val bufferFormat = codec.getOutputFormat(index)
+            if ((info.flags and MediaCodec.BUFFER_FLAG_END_OF_STREAM) != 0) {
+                Log.i(TAG, "signalEndOfInputStream() Called, initiate cleanup")
 
-            // Insert frame into muxer
-            muxer.writeSampleData(0, outputBuffer!!, info)
+                // Stop the muxer
+                muxer.stop()
+                encoder.release()
+                return
+            }
 
+            encoderFrameProcessed = false
+            val buffer = codec.getOutputBuffer(index)
+            val format = codec.getOutputFormat(index)
+
+            if (muxerTrackId == -1) setUpMediaMuxer(format)
+
+            muxer.writeSampleData(muxerTrackId, buffer!!, info)
             codec.releaseOutputBuffer(index, false)
-            isFrameProcessed = true
+
+            encoderFrameProcessed = true
         }
 
         override fun onError(codec: MediaCodec, e: MediaCodec.CodecException) {
@@ -148,7 +160,6 @@ class UltraHDRToHDRVideo : Fragment() {
         // Check that hw acceleration is supported
         if (!isHardwareAccelerationSupported()) return
         if (!setUpMediaCodec()) return
-        if (!setUpMediaMuxer()) return
         if (!setUpImageWriter()) return
 
         binding.colorModeControls.setWindow(requireActivity().window)
@@ -189,13 +200,13 @@ class UltraHDRToHDRVideo : Fragment() {
      * Sets up the muxer to save the frames received by [MediaCodec] to an .mp4 container for
      * device playback.
      */
-    private fun setUpMediaMuxer(): Boolean {
+    private fun setUpMediaMuxer(mediaFormat: MediaFormat): Boolean {
         // Create path to cache directory.
         val path = requireActivity().cacheDir.path + '/' + UUID.randomUUID().toString() + ".mp4"
 
         // Initialize Media muxer.
         muxer = MediaMuxer(path, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
-        muxer.addTrack(encoder.outputFormat)
+        muxerTrackId = muxer.addTrack(mediaFormat)
         muxer.start()
         return true
     }
@@ -224,7 +235,7 @@ class UltraHDRToHDRVideo : Fragment() {
         encoderHandler = Handler(encoderThread.looper)
 
         // Initialize & configure mediaCodec.
-        encoder = MediaCodec.createByCodecName(encoderName)
+        encoder = MediaCodec.createEncoderByType(FORMAT_MIMETYPE)
         encoder.setCallback(encoderCallback, encoderHandler)
         encoder.configure(format, null, null, MediaCodec.CONFIGURE_FLAG_ENCODE)
         encoderSurface = encoder.createInputSurface()
@@ -256,20 +267,10 @@ class UltraHDRToHDRVideo : Fragment() {
     private fun setUpImageWriter(): Boolean {
         // Initialize imageWriter.
         imageWriter =
-            ImageWriter.Builder(encoderSurface)
-                .setHardwareBufferFormat(HardwareBuffer.RGBA_1010102)
+            ImageWriter.Builder(encoderSurface).setHardwareBufferFormat(HardwareBuffer.RGBA_1010102)
                 .setDataSpace(DataSpace.DATASPACE_BT2020_HLG)
-                .setUsage(HardwareBuffer.USAGE_GPU_COLOR_OUTPUT and HardwareBuffer.USAGE_VIDEO_ENCODE)
-                .build()
-                .apply {
-                    setOnImageReleasedListener(
-                        {
-                            Log.d(TAG, "setOnImageReleasedListener() Called")
-                            isImageReleased = true
-                        },
-                        encoderHandler,
-                    )
-                }
+                .setUsage(HardwareBuffer.USAGE_GPU_COLOR_OUTPUT or HardwareBuffer.USAGE_GPU_SAMPLED_IMAGE)
+                .setMaxImages(5).build()
         return true
     }
 
@@ -285,53 +286,46 @@ class UltraHDRToHDRVideo : Fragment() {
 
             var frameCount = 0
             while (frameCount < FORMAT_FRAME_RATE) {
-                if (!isImageReleased || !isFrameProcessed) continue
-                isImageReleased = false
-                isFrameProcessed = false
-
-                // Get a reference to an Image from the ImageWriter.
-                // Assure Image sync fence is completed before attempting to write to it's buffer.
-                val hwImage = imageWriter.dequeueInputImage()
-                hwImage.fence.awaitForever()
+                if (!encoderFrameProcessed) continue
+                encoderFrameProcessed = false
 
                 // Initiate A GPU color space conversion using the UltraHDR image
-                renderImageFrameWithHardware(bitmap, hwImage, colorSpace)
+                renderImageFrameWithHardware(bitmap, colorSpace)
 
                 // Increase frame count.
                 frameCount++
             }
         }
 
-        muxer.stop()
-        muxer.release()
-        encoder.stop()
-        encoder.release()
+        encoder.signalEndOfInputStream()
     }
 
     private fun renderImageFrameWithHardware(
         bitmap: Bitmap,
-        image: Image,
         dest: ColorSpace,
     ) {
-        val content = RenderNode("node")
-        content.setPosition(0, 0, image.width, image.height)
+        // Get a reference to an Image from the ImageWriter.
+        val image = imageWriter.dequeueInputImage()
+        if (image.hardwareBuffer == null) throw Exception()
 
+        // Create a HardwareBufferRenderer. This renderer will use the GPU to draw the image
         val renderer = HardwareBufferRenderer(image.hardwareBuffer!!)
-        renderer.setContentRoot(content)
 
+        val content = RenderNode("ultrahdr-to-video")
+        content.setPosition(0, 0, image.width, image.height)
         val canvas = content.beginRecording()
         canvas.drawBitmap(bitmap, .0f, .0f, null)
         content.endRecording()
 
+        renderer.setContentRoot(content)
         renderer.obtainRenderRequest()
             .setColorSpace(dest)
             .draw(
-                { executor -> executor.run() },
-                {
-                    image.fence = it.fence
-                    imageWriter.queueInputImage(image)
-                },
-            )
+                { exe -> exe.run() },
+            ) { result: RenderResult ->
+                result.fence.awaitForever()
+                imageWriter.queueInputImage(image)
+            }
     }
 
     override fun onDetach() {
@@ -357,15 +351,15 @@ class UltraHDRToHDRVideo : Fragment() {
         // HEVC/H.265 Main 10 Profile.
         private const val FORMAT_PROFILE = MediaCodecInfo.CodecProfileLevel.HEVCProfileMain10
 
-        // 9 MBPS.
-        private const val FORMAT_BITRATE = 9000000
+        // 25 MBPS.
+        private const val FORMAT_BITRATE = 25 * 1000000
 
         // 30 Frames Per Second.
         private const val FORMAT_FRAME_RATE = 30
 
         // Number of partial frames that occur between full frames in the video stream. Set to 0 to
         // assure all frames are full-frames.
-        private const val FORMAT_I_FRAME_INTERVAL = 0
+        private const val FORMAT_I_FRAME_INTERVAL = 1
 
         // ITU-R Recommendation BT.2020 color primaries.
         private const val FORMAT_COLOR_STANDARD = MediaFormat.COLOR_STANDARD_BT2020
@@ -377,10 +371,10 @@ class UltraHDRToHDRVideo : Fragment() {
         private const val FORMAT_COLOR_TRANSFER = MediaFormat.COLOR_TRANSFER_HLG
 
         // Video width
-        private const val FORMAT_WIDTH = 1920
+        private const val FORMAT_WIDTH = 3840
 
         // Video height
-        private const val FORMAT_HEIGHT = 1080
+        private const val FORMAT_HEIGHT = 2160
 
         /**
          * Sample UltraHDR images paths
