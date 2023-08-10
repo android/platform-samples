@@ -48,7 +48,7 @@
     <application>
 
         <service
-            android:name=".GATTServerSampleService"
+            android:name=".server.GATTServerSampleService"
             android:foregroundServiceType="connectedDevice" />
 
         <receiver

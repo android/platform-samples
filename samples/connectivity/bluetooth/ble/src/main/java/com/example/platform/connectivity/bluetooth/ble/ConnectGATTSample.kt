@@ -54,6 +54,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import com.example.platform.connectivity.bluetooth.ble.server.GATTServerSampleService.Companion.CHARACTERISTIC_UUID
+import com.example.platform.connectivity.bluetooth.ble.server.GATTServerSampleService.Companion.SERVICE_UUID
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
