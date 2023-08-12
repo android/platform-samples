@@ -13,33 +13,19 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
-
-    <com.example.platform.graphics.ultrahdr.common.ColorModeControls
-        android:id="@+id/color_mode_controls"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <Button
         android:id="@+id/covert_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|center_horizontal"
+        android:layout_gravity="center"
         android:layout_margin="16dp"
         android:contentDescription="@null"
         android:scaleType="fitCenter"
         android:text="@string/ultrahdr_to_hdr_video_button_covert" />
 
-
-    <ImageView
-        android:id="@+id/image_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:contentDescription="@null" />
-
-
-</LinearLayout>
+</FrameLayout>

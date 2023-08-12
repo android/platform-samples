@@ -25,12 +25,12 @@ android {
 }
 
 dependencies {
-    // Media3 Ui
-    implementation(libs.androidx.media3.ui)
+    // Media3 Common
+    implementation(libs.androidx.media3.common)
 
     // Media3 ExoPlayer
     implementation(libs.androidx.media3.exoplayer)
 
-    // Link to UltraHDR Graphics Samples
-    implementation(project(mapOf("path" to ":samples:graphics:ultrahdr")))
+    // Media3 Ui
+    implementation(libs.androidx.media3.ui)
 }
