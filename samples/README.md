@@ -2,14 +2,14 @@
 
 - [App Widgets](user-interface/appwidgets/src/main/java/com/example/platform/ui/appwidgets/AppWidgets.kt):
 Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples
-- [Audio Manager](connectivity/audio/src/main/java/com/example/platform/connectivity/audio/AudioSample.kt):
-This sample will show you how get all audio sources and set an audio device. Covers Bluetooth, LEA, Wired and internal speakers
 - [Call Notification Sample](connectivity/callnotification/src/main/java/com/example/platform/connectivity/callnotification/CallNotificationSample.kt):
 Sample demonstrating how to make incoming call notifications and in call notifications
 - [Camera Preview](camera/camera2/src/main/java/com/example/platform/camera/preview/Camera2Preview.kt):
 Demonstrates displaying processed pixel data directly from the camera sensor 
 - [Color Contrast](accessibility/src/main/java/com/example/platform/accessibility/ColorContrast.kt):
 This sample demonstrates the importance of proper color contrast and how to 
+- [Communication Audio Manager Sample](connectivity/audio/src/main/java/com/example/platform/connectivity/audio/AudioCommsSample.kt):
+This sample shows how to use audio manager to for Communication application that self-manage the call.
 - [Companion Device Manager Sample](connectivity/bluetooth/companion/src/main/java/com/example/platform/connectivity/bluetooth/cdm/CompanionDeviceManagerSample.kt):
 This samples shows how to use the CDM to pair and connect with BLE devices
 - [Connect to a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/ConnectGATTSample.kt):
