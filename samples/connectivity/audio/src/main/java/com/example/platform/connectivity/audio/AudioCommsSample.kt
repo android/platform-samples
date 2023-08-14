@@ -64,6 +64,7 @@ import kotlinx.coroutines.launch
 @RequiresPermission(Manifest.permission.RECORD_AUDIO)
 @Composable
 fun AudioCommsSample() {
+    // The record permission is only needed for looping the audio not for the AudioManager
     PermissionBox(permission = Manifest.permission.RECORD_AUDIO) {
         AudioCommsScreen()
     }
@@ -102,22 +103,10 @@ private fun AudioCommsScreen() {
             .padding(vertical = 16.dp),
     ) {
         stickyHeader {
-            Column(
-                Modifier
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primaryContainer),
-            ) {
-                Text(text = "Active device:", modifier = Modifier.padding(8.dp))
-                AnimatedContent(targetState = state.activeDevice, label = "Active device") {
-                    if (it == null) {
-                        Text(text = "None")
-                    } else {
-                        AudioDeviceItem(it) {
-                            scope.launch {
-                                state.clearSelectedDevice()
-                            }
-                        }
-                    }
+            ActiveDeviceItem(state.activeDevice) {
+                scope.launch {
+                    // On click switch back to default device
+                    state.clearSelectedDevice()
                 }
             }
         }
@@ -139,12 +128,35 @@ private fun AudioCommsScreen() {
             AudioDeviceItem(deviceInfo = it, isLoading = isLoading) {
                 isLoading = true
                 scope.launch(Dispatchers.IO) {
+                    // On item selected, switch and wait to the new device
                     audioIssue = if (state.selectDevice(it)) {
                         ""
                     } else {
                         "Error while selecting device"
                     }
                     isLoading = false
+                }
+            }
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.P)
+@Composable
+@OptIn(ExperimentalAnimationApi::class)
+private fun ActiveDeviceItem(device: AudioDeviceInfo?, onClick: () -> Unit) {
+    Column(
+        Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.primaryContainer),
+    ) {
+        Text(text = "Active device:", modifier = Modifier.padding(8.dp))
+        AnimatedContent(targetState = device, label = "Active device") {
+            if (it == null) {
+                Text(text = "None")
+            } else {
+                AudioDeviceItem(it) {
+                    onClick()
                 }
             }
         }
