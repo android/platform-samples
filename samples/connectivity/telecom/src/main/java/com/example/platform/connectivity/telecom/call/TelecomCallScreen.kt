@@ -37,16 +37,20 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.BluetoothAudio
-import androidx.compose.material.icons.rounded.BluetoothDisabled
 import androidx.compose.material.icons.rounded.Call
+import androidx.compose.material.icons.rounded.Headphones
 import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.MicOff
 import androidx.compose.material.icons.rounded.Person
+import androidx.compose.material.icons.rounded.Phone
 import androidx.compose.material.icons.rounded.PhoneForwarded
 import androidx.compose.material.icons.rounded.PhonePaused
-import androidx.compose.material.icons.rounded.VolumeUp
+import androidx.compose.material.icons.rounded.SendToMobile
+import androidx.compose.material.icons.rounded.SpeakerPhone
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.AlertDialogDefaults
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -68,8 +72,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.core.telecom.CallEndpointCompat
+import androidx.core.telecom.CallEndpointCompat.Companion.TYPE_BLUETOOTH
+import androidx.core.telecom.CallEndpointCompat.Companion.TYPE_SPEAKER
+import androidx.core.telecom.CallEndpointCompat.Companion.TYPE_STREAMING
+import androidx.core.telecom.CallEndpointCompat.Companion.TYPE_WIRED_HEADSET
 import com.example.platform.connectivity.telecom.model.TelecomCall
 import com.example.platform.connectivity.telecom.model.TelecomCallAction
 import com.example.platform.connectivity.telecom.model.TelecomCallRepository
@@ -213,7 +222,7 @@ private fun OngoingCallActions(
             isOnHold = isOnHold,
             isMuted = isMuted,
             endpointType = currentEndpoint?.type ?: CallEndpointCompat.TYPE_UNKNOWN,
-            availableTypes = endpoints.map { it.type },
+            availableTypes = endpoints,
             onCallAction = onCallAction,
             onTransferCall = onTransferCall,
         )
@@ -302,6 +311,7 @@ private fun CallInfoCard(name: String, info: String, isActive: Boolean) {
 /**
  * Displays the call controls based on the current call attributes
  */
+@RequiresApi(Build.VERSION_CODES.O)
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 private fun CallControls(
@@ -309,13 +319,17 @@ private fun CallControls(
     isOnHold: Boolean,
     isMuted: Boolean,
     endpointType: @CallEndpointCompat.Companion.EndpointType Int,
-    availableTypes: List<@CallEndpointCompat.Companion.EndpointType Int>,
+    availableTypes: List<CallEndpointCompat>,
     onCallAction: (TelecomCallAction) -> Unit,
     onTransferCall: () -> Unit,
 ) {
     val isLocalCall = endpointType != CallEndpointCompat.TYPE_STREAMING
     val micPermission = rememberPermissionState(permission = Manifest.permission.RECORD_AUDIO)
     var showRational by remember(micPermission.status) {
+        mutableStateOf(false)
+    }
+
+    var showEndPoints by remember {
         mutableStateOf(false)
     }
 
@@ -355,46 +369,24 @@ private fun CallControls(
                 )
             }
         }
-        IconToggleButton(
-            checked = endpointType == CallEndpointCompat.TYPE_SPEAKER,
-            enabled = isLocalCall,
-            onCheckedChange = { selected ->
-                val type = if (selected) {
-                    CallEndpointCompat.TYPE_SPEAKER
-                } else {
-                    // Switch to either wired headset or earpiece
-                    availableTypes.firstOrNull { it == CallEndpointCompat.TYPE_WIRED_HEADSET }
-                        ?: CallEndpointCompat.TYPE_EARPIECE
-                }
-                onCallAction(TelecomCallAction.SwitchAudioType(type))
-            },
-        ) {
-            Icon(imageVector = Icons.Rounded.VolumeUp, contentDescription = "Toggle speaker")
-        }
-        if (availableTypes.contains(CallEndpointCompat.TYPE_BLUETOOTH)) {
-            IconToggleButton(
-                checked = endpointType == CallEndpointCompat.TYPE_BLUETOOTH,
-                enabled = isLocalCall,
-                onCheckedChange = { selected ->
-                    val type = if (selected) {
-                        CallEndpointCompat.TYPE_BLUETOOTH
-                    } else {
-                        // Switch to the default endpoint (as defined in TelecomCallRepo)
-                        availableTypes.firstOrNull { it == CallEndpointCompat.TYPE_WIRED_HEADSET }
-                            ?: CallEndpointCompat.TYPE_EARPIECE
-                    }
-                    onCallAction(TelecomCallAction.SwitchAudioType(type))
-                },
+        Box {
+            IconButton(onClick = { showEndPoints = !showEndPoints }) {
+                Icon(
+                    EndPointVectorIcon(endpointType),
+                    contentDescription = "Localized description",
+                )
+            }
+            DropdownMenu(
+                expanded = showEndPoints,
+                onDismissRequest = { showEndPoints = false },
             ) {
-                if (endpointType == CallEndpointCompat.TYPE_BLUETOOTH) {
-                    Icon(
-                        imageVector = Icons.Rounded.BluetoothAudio,
-                        contentDescription = "Disable bluetooth",
-                    )
-                } else {
-                    Icon(
-                        imageVector = Icons.Rounded.BluetoothDisabled,
-                        contentDescription = "Enable bluetooth",
+                availableTypes.forEach{ it ->
+                    CallEndPointItem(
+                        endPoint = it,
+                        onDeviceSelected =  {
+                            onCallAction(TelecomCallAction.SwitchAudioEndpoint(it.identifier))
+                            showEndPoints = false
+                                            },
                     )
                 }
             }
@@ -416,26 +408,6 @@ private fun CallControls(
                 contentDescription = "Pause or resume call",
             )
         }
-
-        if (availableTypes.contains(CallEndpointCompat.TYPE_STREAMING)) {
-            IconToggleButton(
-                enabled = isActive,
-                checked = !isLocalCall,
-                onCheckedChange = {
-                    if (it) {
-                        onTransferCall()
-                    } else {
-                        // Switch back to the default audio type
-                        onCallAction(TelecomCallAction.SwitchAudioType(CallEndpointCompat.TYPE_UNKNOWN))
-                    }
-                },
-            ) {
-                Icon(
-                    imageVector = Icons.Rounded.PhoneForwarded,
-                    contentDescription = "Transfer call",
-                )
-            }
-        }
     }
 
     // Show a rational dialog if user didn't accepted the permissions
@@ -448,6 +420,34 @@ private fun CallControls(
                 showRational = false
             },
         )
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+private fun CallEndPointItem(
+    endPoint: CallEndpointCompat,
+    onDeviceSelected: (CallEndpointCompat) -> Unit,
+) {
+    DropdownMenuItem(
+        text = { Text(text = endPoint.name.toString()) },
+        onClick = { onDeviceSelected(endPoint) },
+        leadingIcon = {
+            Icon(
+                EndPointVectorIcon(endPoint.type),
+                contentDescription = null,
+            )
+        }
+    )
+}
+@Composable
+private fun EndPointVectorIcon(type: @CallEndpointCompat.Companion.EndpointType Int): ImageVector{
+   return when(type){
+        TYPE_BLUETOOTH ->  Icons.Rounded.BluetoothAudio
+        TYPE_SPEAKER ->  Icons.Rounded.SpeakerPhone
+        TYPE_STREAMING ->  Icons.Rounded.SendToMobile
+        TYPE_WIRED_HEADSET ->  Icons.Rounded.Headphones
+        else -> Icons.Rounded.Phone
     }
 }
 

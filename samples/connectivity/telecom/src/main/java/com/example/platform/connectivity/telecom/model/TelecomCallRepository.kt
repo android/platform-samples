@@ -213,7 +213,7 @@ class TelecomCallRepository(private val callsManager: CallsManager) {
                     doDisconnect(action)
                 }
 
-                is TelecomCallAction.SwitchAudioType -> {
+                is TelecomCallAction.SwitchAudioEndpoint -> {
                     doSwitchEndpoint(action)
                 }
 
@@ -271,19 +271,12 @@ class TelecomCallRepository(private val callsManager: CallsManager) {
         }
     }
 
-    private suspend fun CallControlScope.doSwitchEndpoint(action: TelecomCallAction.SwitchAudioType) {
+    private suspend fun CallControlScope.doSwitchEndpoint(action: TelecomCallAction.SwitchAudioEndpoint) {
         // TODO once availableCallEndpoints is a state flow we can just get the value
         val endpoints = (_currentCall.value as TelecomCall.Registered).availableCallEndpoints
 
         // Switch to the given endpoint or fallback to the best possible one.
-        val newEndpoint = endpoints.firstOrNull { it.type == action.type }
-            ?: endpoints.firstOrNull {
-                it.type == CallEndpointCompat.TYPE_BLUETOOTH
-            } ?: endpoints.firstOrNull {
-                it.type == CallEndpointCompat.TYPE_WIRED_HEADSET
-            } ?: endpoints.firstOrNull {
-                it.type == CallEndpointCompat.TYPE_EARPIECE
-            } ?: endpoints.firstOrNull()
+        val newEndpoint = endpoints.firstOrNull { it.identifier == action.endpointId }
 
         if (newEndpoint != null) {
             requestEndpointChange(newEndpoint).also {
