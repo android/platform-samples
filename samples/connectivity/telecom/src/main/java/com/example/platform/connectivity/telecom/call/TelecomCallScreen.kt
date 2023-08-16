@@ -20,10 +20,8 @@ import android.Manifest
 import android.os.Build
 import android.telecom.DisconnectCause
 import androidx.annotation.RequiresApi
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -31,11 +29,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentWidth
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.ArrowDropDown
+import androidx.compose.material.icons.rounded.ArrowDropUp
 import androidx.compose.material.icons.rounded.BluetoothAudio
 import androidx.compose.material.icons.rounded.Call
 import androidx.compose.material.icons.rounded.Headphones
@@ -43,22 +39,17 @@ import androidx.compose.material.icons.rounded.Mic
 import androidx.compose.material.icons.rounded.MicOff
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material.icons.rounded.Phone
-import androidx.compose.material.icons.rounded.PhoneForwarded
 import androidx.compose.material.icons.rounded.PhonePaused
 import androidx.compose.material.icons.rounded.SendToMobile
 import androidx.compose.material.icons.rounded.SpeakerPhone
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.AlertDialogDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -152,12 +143,6 @@ private fun CallScreen(
     endpoints: List<CallEndpointCompat>,
     onCallAction: (TelecomCallAction) -> Unit,
 ) {
-    var showTransferEndpoints by remember {
-        mutableStateOf(false)
-    }
-    val transferEndpoints = remember(endpoints) {
-        endpoints.filter { it.type == CallEndpointCompat.TYPE_STREAMING }
-    }
     Column(
         Modifier
             .fillMaxSize(),
@@ -175,25 +160,8 @@ private fun CallScreen(
                 currentEndpoint = currentEndpoint,
                 endpoints = endpoints,
                 onCallAction = onCallAction,
-                onTransferCall = {
-                    showTransferEndpoints = true
-                },
             )
         }
-    }
-
-    // Show a picker when selecting to transfer a call
-    AnimatedVisibility(visible = showTransferEndpoints) {
-        TransferCallDialog(
-            transferEndpoints = transferEndpoints,
-            onDismissRequest = {
-                showTransferEndpoints = false
-            },
-            onCallAction = {
-                showTransferEndpoints = false
-                onCallAction(it)
-            },
-        )
     }
 }
 
@@ -206,7 +174,6 @@ private fun OngoingCallActions(
     currentEndpoint: CallEndpointCompat?,
     endpoints: List<CallEndpointCompat>,
     onCallAction: (TelecomCallAction) -> Unit,
-    onTransferCall: () -> Unit,
 ) {
     Column(
         Modifier
@@ -224,7 +191,6 @@ private fun OngoingCallActions(
             endpointType = currentEndpoint?.type ?: CallEndpointCompat.TYPE_UNKNOWN,
             availableTypes = endpoints,
             onCallAction = onCallAction,
-            onTransferCall = onTransferCall,
         )
         FloatingActionButton(
             onClick = {
@@ -321,9 +287,7 @@ private fun CallControls(
     endpointType: @CallEndpointCompat.Companion.EndpointType Int,
     availableTypes: List<CallEndpointCompat>,
     onCallAction: (TelecomCallAction) -> Unit,
-    onTransferCall: () -> Unit,
 ) {
-    val isLocalCall = endpointType != CallEndpointCompat.TYPE_STREAMING
     val micPermission = rememberPermissionState(permission = Manifest.permission.RECORD_AUDIO)
     var showRational by remember(micPermission.status) {
         mutableStateOf(false)
@@ -372,21 +336,30 @@ private fun CallControls(
         Box {
             IconButton(onClick = { showEndPoints = !showEndPoints }) {
                 Icon(
-                    EndPointVectorIcon(endpointType),
+                    getEndpointIcon(endpointType),
                     contentDescription = "Localized description",
+                )
+                Icon(
+                    if (showEndPoints) {
+                        Icons.Rounded.ArrowDropUp
+                    } else {
+                        Icons.Rounded.ArrowDropDown
+                    },
+                    contentDescription = "Localized description",
+                    modifier = Modifier.align(Alignment.TopEnd),
                 )
             }
             DropdownMenu(
                 expanded = showEndPoints,
                 onDismissRequest = { showEndPoints = false },
             ) {
-                availableTypes.forEach{ it ->
+                availableTypes.forEach { it ->
                     CallEndPointItem(
                         endPoint = it,
-                        onDeviceSelected =  {
+                        onDeviceSelected = {
                             onCallAction(TelecomCallAction.SwitchAudioEndpoint(it.identifier))
                             showEndPoints = false
-                                            },
+                        },
                     )
                 }
             }
@@ -434,60 +407,20 @@ private fun CallEndPointItem(
         onClick = { onDeviceSelected(endPoint) },
         leadingIcon = {
             Icon(
-                EndPointVectorIcon(endPoint.type),
+                getEndpointIcon(endPoint.type),
                 contentDescription = null,
             )
-        }
+        },
     )
 }
-@Composable
-private fun EndPointVectorIcon(type: @CallEndpointCompat.Companion.EndpointType Int): ImageVector{
-   return when(type){
-        TYPE_BLUETOOTH ->  Icons.Rounded.BluetoothAudio
-        TYPE_SPEAKER ->  Icons.Rounded.SpeakerPhone
-        TYPE_STREAMING ->  Icons.Rounded.SendToMobile
-        TYPE_WIRED_HEADSET ->  Icons.Rounded.Headphones
-        else -> Icons.Rounded.Phone
-    }
-}
 
-@RequiresApi(Build.VERSION_CODES.O)
-@Composable
-@OptIn(ExperimentalMaterial3Api::class)
-private fun TransferCallDialog(
-    transferEndpoints: List<CallEndpointCompat>,
-    onDismissRequest: () -> Unit,
-    onCallAction: (TelecomCallAction) -> Unit,
-) {
-    AlertDialog(onDismissRequest = onDismissRequest) {
-        Surface(
-            modifier = Modifier
-                .wrapContentWidth()
-                .wrapContentHeight(),
-            shape = MaterialTheme.shapes.large,
-            tonalElevation = AlertDialogDefaults.TonalElevation,
-        ) {
-            Column(Modifier.padding(16.dp)) {
-                Text(text = "Where to transfer the call?")
-                LazyColumn {
-                    items(transferEndpoints) {
-                        Text(
-                            text = it.name.toString(),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    onCallAction(TelecomCallAction.TransferCall(it.identifier))
-                                },
-                        )
-                    }
-                }
-                Row(horizontalArrangement = Arrangement.End) {
-                    OutlinedButton(onClick = onDismissRequest) {
-                        Text(text = "Dismiss")
-                    }
-                }
-            }
-        }
+private fun getEndpointIcon(type: @CallEndpointCompat.Companion.EndpointType Int): ImageVector {
+    return when (type) {
+        TYPE_BLUETOOTH -> Icons.Rounded.BluetoothAudio
+        TYPE_SPEAKER -> Icons.Rounded.SpeakerPhone
+        TYPE_STREAMING -> Icons.Rounded.SendToMobile
+        TYPE_WIRED_HEADSET -> Icons.Rounded.Headphones
+        else -> Icons.Rounded.Phone
     }
 }
 
