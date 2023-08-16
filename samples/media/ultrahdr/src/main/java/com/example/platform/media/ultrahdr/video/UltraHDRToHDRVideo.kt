@@ -20,7 +20,6 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ColorSpace
 import android.graphics.HardwareBufferRenderer
-import android.graphics.HardwareBufferRenderer.RenderResult
 import android.graphics.RenderNode
 import android.hardware.DataSpace
 import android.hardware.HardwareBuffer
@@ -45,6 +44,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
@@ -52,16 +52,13 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.platform.media.ultrahdr.databinding.UltrahdrToHdrVideoBinding
 import com.google.android.catalog.framework.annotations.Sample
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
-import java.time.Duration
 import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
-
 
 @Sample(
     name = "UltraHDR to HDR Video",
@@ -163,9 +160,13 @@ class UltraHDRToHDRVideo : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Check that hw acceleration is supported
-        if (!isHardwareAccelerationSupported()) return
-        if (!setUpMediaCodec()) return
+        // Check that hw acceleration is supported.
+        if (!isHardwareAccelerationSupported())
+            return displayErrorDuringSetup("HW acceleration is not supported by this device.")
+
+        // Assure MediaCodec set up is completed.
+        if (!setUpMediaCodec())
+            return displayErrorDuringSetup("No capable encoder was found.")
 
         // Setup Image Reader.
         setUpImageWriter()
@@ -182,20 +183,29 @@ class UltraHDRToHDRVideo : Fragment() {
             binding.covertButton.isEnabled = false
 
             // Perform conversion task on the IO Dispatcher
-            CoroutineScope(Dispatchers.IO).launch {
-                val threadName = Thread.currentThread().name
-                Log.i(TAG, "Starting Conversion to Video on $threadName")
+            lifecycleScope.launch(Dispatchers.IO) {
+                Log.i(TAG, "Starting Conversion to Video")
                 doImageToVideoConversion()
             }
         }
     }
 
     /**
+     *
+     */
+    private fun displayErrorDuringSetup(message: String) {
+        Log.e(TAG, message)
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+        binding.covertButton.isEnabled = false
+        binding.covertButton.text = message
+    }
+
+    /**
      * Checks that the device can support hardware accelerated rendering using the GPU to draw
      * UltraHDR images into [Image] [HardwareBuffer].
      */
-    private fun isHardwareAccelerationSupported(): Boolean {
-        val isHardwareSupported = HardwareBuffer.isSupported(
+    private fun isHardwareAccelerationSupported(): Boolean =
+        HardwareBuffer.isSupported(
             FORMAT_WIDTH,                // Buffer width.
             FORMAT_HEIGHT,               // Buffer height.
             HARDWARE_BUFFER_COLOR,       // 10 bits red, 10 bits green, 10 bits blue, 2 bits alpha.
@@ -203,20 +213,6 @@ class UltraHDRToHDRVideo : Fragment() {
             HARDWARE_BUFFER_USAGES,      // Required hw usage capabilities
         )
 
-        return when (isHardwareSupported) {
-            true -> true
-            false -> {
-                val message = "Hardware acceleration parameters are not supported by this device." +
-                        "Terminating setup."
-                Log.e(TAG, message)
-                Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-
-                binding.covertButton.isEnabled = false
-                binding.covertButton.text = message
-                return false
-            }
-        }
-    }
 
     /**
      * Sets up the [ImageWriter] to create a hardware accelerated [Image] object that contain a
@@ -238,7 +234,7 @@ class UltraHDRToHDRVideo : Fragment() {
         imageWriterHandler = Handler(imageWriterThread.looper)
         imageWriter.setOnImageReleasedListener(
             { updateActiveImageBuffers(decrement = true) },
-            imageWriterHandler,
+            Handler.createAsync(imageWriterThread.looper),
         )
     }
 
@@ -257,12 +253,7 @@ class UltraHDRToHDRVideo : Fragment() {
         // device as not every device will have the ability to encode 10-bit HDR.
         val codecList = MediaCodecList(MediaCodecList.ALL_CODECS)
         val encoderName = codecList.findEncoderForFormat(format)
-        if (encoderName.isNullOrBlank()) {
-            val message = "No capable encoder was found. Terminating setup."
-            Log.e(TAG, message)
-            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-            return false
-        }
+        if (encoderName.isNullOrBlank()) return false
 
         // Start the MediaCodec encoder thread.
         encoderThread.start()
@@ -345,7 +336,7 @@ class UltraHDRToHDRVideo : Fragment() {
     /**
      * Handles the [MediaCodec.BUFFER_FLAG_END_OF_STREAM] case.
      *
-     * We use this time to clean up the encoders and writers and initlize playback of the
+     * We use this time to clean up the encoders and writers and initialize playback of the
      * generated file.
      */
     private fun handleEndOfStream() {
@@ -358,7 +349,7 @@ class UltraHDRToHDRVideo : Fragment() {
 
         // Initialize ExoPlayer to playback video
         Log.i(TAG, "Initiate playback using ExoPlayer.")
-        CoroutineScope(Dispatchers.Main).launch { playbackUsingExoPlayer() }
+        lifecycleScope.launch { playbackUsingExoPlayer() }
     }
 
     private fun handleFrame(codec: MediaCodec, index: Int, info: MediaCodec.BufferInfo) =
@@ -453,7 +444,8 @@ class UltraHDRToHDRVideo : Fragment() {
                 )
 
                 // await until HardwareBufferRenderer.RenderResult fence is set on the image.
-                while (!image.fence.isValid) { /* await */ }
+                while (!image.fence.isValid) { /* await */
+                }
                 image.fence.awaitForever()
                 imageWriter.queueInputImage(image)
 
@@ -512,7 +504,7 @@ class UltraHDRToHDRVideo : Fragment() {
         Log.i(TAG, status)
 
         // Update UI
-        CoroutineScope(Dispatchers.Main).launch { binding.statusFramesProcessed.text = status }
+        lifecycleScope.launch { binding.statusFramesProcessed.text = status }
     }
 
     /**
@@ -530,7 +522,7 @@ class UltraHDRToHDRVideo : Fragment() {
         val status = "Active Image Buffers: $activeImageBuffers"
 
         // Update UI
-        CoroutineScope(Dispatchers.Main).launch { binding.activeImageBuffers.text = status }
+        lifecycleScope.launch { binding.activeImageBuffers.text = status }
     }
 
     /**
