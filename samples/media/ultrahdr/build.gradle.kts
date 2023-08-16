@@ -33,4 +33,10 @@ dependencies {
 
     // Media3 Ui
     implementation(libs.androidx.media3.ui)
+
+    // Glide
+    implementation(libs.glide)
+
+    // Link to UltraHDR Graphics Samples
+    implementation(project(mapOf("path" to ":samples:graphics:ultrahdr")))
 }

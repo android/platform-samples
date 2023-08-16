@@ -16,5 +16,7 @@
 
 <resources>
     <!-- UltraHDR to HDR Video String -->
-    <string name="ultrahdr_to_hdr_video_button_covert">Convert To Video</string>
+    <string name="ultrahdr_to_hdr_video_button_covert">Convert To 10-HDR Video</string>
+    <string name="ultrahdr_to_hdr_video_frames_processed">Frames Processed:</string>
+    <string name="ultrahdr_to_hdr_video_active_image_buffers">Active Image Buffers:</string>
 </resources>
