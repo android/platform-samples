@@ -57,7 +57,7 @@ import kotlinx.coroutines.launch
 @Sample(
     name = "Communication Audio Manager Sample",
     description = "This sample shows how to use audio manager to for Communication application that self-manage the call.",
-    documentation = "https://developer.android.com/guide/topics/media-apps/media-apps-overview",
+    documentation = "https://developer.android.com/guide/topics/connectivity/ble-audio/audio-manager",
     tags = ["audio"],
 )
 @RequiresApi(Build.VERSION_CODES.S)
