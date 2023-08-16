@@ -50,6 +50,7 @@ import com.google.android.catalog.framework.annotations.Sample
     name = "Telecom Call Sample",
     description = "A sample showcasing how to handle calls with the Jetpack Telecom API",
     documentation = "https://developer.android.com/guide/topics/connectivity/telecom",
+    tags = ["telecom"]
 )
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
