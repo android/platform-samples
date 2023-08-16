@@ -25,7 +25,7 @@ import android.os.Build
 import android.os.IBinder
 import androidx.annotation.RequiresApi
 import androidx.core.content.PermissionChecker
-import com.example.platform.connectivity.audio.datasource.AudioLoopSource
+import com.example.platform.connectivity.audio.AudioLoopSource
 import com.example.platform.connectivity.telecom.model.TelecomCall
 import com.example.platform.connectivity.telecom.model.TelecomCallAction
 import com.example.platform.connectivity.telecom.model.TelecomCallRepository
