@@ -1,8 +1,12 @@
-# Audio samples
+# Connectivity Audio samples
 
-This module includes Audio Samples around Android Platform
+This module includes Audio Samples related to connectivity:
 
-- [Audio Manager](src/main/java/com/example/platform/connectivity/audio/AudioSample.kt)
+- [Communication Audio Manager Sample](src/main/java/com/example/platform/connectivity/audio/AudioCommsSample.kt):
+Shows how to use the audio manager to manage the communication device. For example during a VoIP call.
+- [AudioLoopSource](src/main/java/com/example/platform/connectivity/audio/AudioLoopSource.kt):
+Simple utility class that showcases how to use AudioTrack and AudioRecord to loop audio from the
+input source to the output source.
 
 For more check out the documentation at
 https://developer.android.com/guide/topics/media
@@ -24,4 +28,3 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 ```
-

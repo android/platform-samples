@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.platform.connectivity.audio.datasource
+package com.example.platform.connectivity.audio
 
 import android.Manifest
 import android.media.AudioAttributes
@@ -42,8 +42,8 @@ object AudioLoopSource {
     private const val SAMPLE_RATE = 48000
 
     /**
-     * Opens the mic and loops it back to the selected active audio device. When the scope is closed
-     * the mic and audio will be closed
+     * Opens the active mic and loops it back to the selected active audio device.
+     * When the scope is closed the mic and audio will be closed
      *
      * @throws IllegalStateException if AudioRecord couldn't be initialized
      */
