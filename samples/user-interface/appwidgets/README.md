@@ -68,7 +68,7 @@ title="screenshot showing run configuration in Android Studio for widgets" />
 - Channel #glance at KotlinLang
   Slack [(request to join)](https://surveys.jetbrains.com/s3/kotlin-slack-sign-up).
 
-If you've found an error in this sample, please file an issue at https://github.com/android/user-interface.
+If you've found an error in this sample, please file an issue at https://github.com/android/platform-samples.
 
 For API-related issues, please file any bugs using the following links:
 

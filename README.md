@@ -19,7 +19,7 @@ Browse the samples inside each topic samples folder:
 - [Location](samples/location)
 - [Privacy](samples/privacy)
 - [Storage](samples/storage)
-- [User-interface](samples/user-interface)
+- [platform-samples](samples/platform-samples)
 - More to come...
 
 We are constantly adding new samples to this repository. You can find a list of all the available samples [here](samples/README.md).
