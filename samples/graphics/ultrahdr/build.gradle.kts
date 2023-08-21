@@ -28,4 +28,8 @@ android {
 dependencies {
     // Glide
     implementation(libs.glide)
+
+    // Fresco
+    implementation(libs.fresco)
+    implementation(libs.fresco.nativeimagetranscoder)
 }
