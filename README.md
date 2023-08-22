@@ -13,7 +13,7 @@ This repository contains a collection of samples that demonstrate the use of dif
 Browse the samples inside each topic samples folder:
 
 - [Accessibility](https://github.com/android/platform-samples/tree/main/samples/accessibility)
-- [Camera](https://github.com/android/platform-samples/samples/tree/main/camera)
+- [Camera](https://github.com/android/platform-samples/samples/tree/main/samples/camera)
 - [Connectivity](https://github.com/android/platform-samples/tree/main/samples/connectivity)
 - [Graphics](https://github.com/android/platform-samples/tree/main/samples/graphics)
 - [Location](https://github.com/android/platform-samples/tree/main/samples/location)
