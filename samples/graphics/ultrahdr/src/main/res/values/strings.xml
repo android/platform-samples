@@ -27,9 +27,18 @@
     <string name="visualizing_ultrahdr_gainmap_mode_title_ultrahdr">UltraHDR</string>
     <string name="visualizing_ultrahdr_gainmap_mode_title_no_ultrahdr">Not UltraHDR</string>
 
+    <!-- Editing UltraHDR Strings -->
+    <string name="displaying_ultrahdr_option_title_crop">Crop</string>
+    <string name="displaying_ultrahdr_option_title_rotate">Rotate</string>
+    <string name="displaying_ultrahdr_option_title_scale">Scale</string>
+    <string name="displaying_edited_ultrahdr">Edit UltraHDR Image</string>
+    <string name="displaying_edited_gainmap">Edit Gainmap</string>
+
+
     <!-- ColorModeControls Strings -->
     <string name="color_mode_sdr">SDR</string>
     <string name="color_mode_hdr">HDR</string>
     <string name="color_mode_hdr_with_ratio">HDR | SDR/HDR Ratio = %f</string>
     <string name="color_mode_unknown">Unknown</string>
+
 </resources>
