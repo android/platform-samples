@@ -77,8 +77,10 @@ class EditingUltraHDR : Fragment() {
 
     private fun initializedImagesOrGainmap() {
         displayOriginalUltraHDRImage()
-        //Set default editing for type image
+
+        //Set default editing for type image and operation rotate
         var editingType: Int = ULTRA_HDR_DISPLAY_EDITED_IMAGE
+        var editOperation = ULTRA_HDR_IMAGE_ROTATE
 
         //Select which type to edit : Image or Gainmap (for visualization purposes only)
         binding.imageOptionVisualization.setOnCheckedChangeListener { group, i ->
@@ -89,11 +91,16 @@ class EditingUltraHDR : Fragment() {
         //Select the edit operation : crop, rotate, scale
         binding.imageOptionsEditingGroup.setOnCheckedChangeListener { group, i ->
             val selected = group.findViewById<RadioButton>(i)
-            val editOperation = group.indexOfChild(selected)
+            editOperation = group.indexOfChild(selected)
             editSelectedUltraHDRImage(editOperation, editingType)
         }
-    }
 
+        //Initialize refresh button
+        binding.refreshUltrahdrEditedImage.setOnClickListener {
+            editSelectedUltraHDRImage(editOperation,editingType)
+        }
+
+    }
     /**
      * Updated the currently displayed UltraHDR ORIGINAL image.
      */
@@ -109,6 +116,7 @@ class EditingUltraHDR : Fragment() {
      */
     private fun editSelectedUltraHDRImage(editOperation: Int, editingType: Int) =
         lifecycleScope.launch(Dispatchers.IO) {
+            //Performing edit operations on a background thread
 
             val stream = context?.assets?.open(ULTRA_HDR_IMAGE_TRAIN_STATION)
             val bitmap = BitmapFactory.decodeStream(stream)
@@ -125,15 +133,17 @@ class EditingUltraHDR : Fragment() {
                 ULTRA_HDR_IMAGE_SCALE -> editedBitmap = bitmap.scale()
             }
 
-            //Display edited image or gainmap
-            when (editingType) {
-                ULTRA_HDR_DISPLAY_EDITED_IMAGE -> binding.imageContainer.setImageBitmap(editedBitmap)
-                ULTRA_HDR_DISPLAY_EDITED_GAINMAP -> binding.imageContainer.setImageBitmap(
-                    visualizeEditedGainmap(editedBitmap),
-                )
-            }
-            //Release memory
-            bitmap.recycle()
+            //Display edited image or gainmap, run on main thread to update the UI
+            withContext(Dispatchers.Main) {
+                when (editingType) {
+                    ULTRA_HDR_DISPLAY_EDITED_IMAGE -> binding.imageContainer.setImageBitmap(editedBitmap)
+                    ULTRA_HDR_DISPLAY_EDITED_GAINMAP -> binding.imageContainer.setImageBitmap(
+                        visualizeEditedGainmap(editedBitmap),
+                    )
+                }
+                //Release memory
+                bitmap.recycle()
+          }
         }
 
     private fun Bitmap.rotate(): Bitmap {

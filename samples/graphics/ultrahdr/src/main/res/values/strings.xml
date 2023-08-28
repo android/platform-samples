@@ -41,4 +41,6 @@
     <string name="color_mode_hdr_with_ratio">HDR | SDR/HDR Ratio = %f</string>
     <string name="color_mode_unknown">Unknown</string>
 
+    <string name="refresh_ultrahdr_edited_image">Refresh</string>
+
 </resources>

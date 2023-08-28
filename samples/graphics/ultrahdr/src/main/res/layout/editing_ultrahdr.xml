@@ -16,12 +16,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <com.example.platform.graphics.ultrahdr.common.ColorModeControls
         android:id="@+id/color_mode_controls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/refresh_ultrahdr_edited_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:layout_marginEnd="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:text="@string/refresh_ultrahdr_edited_image"
+        />
 
     <RadioGroup
         android:id="@+id/image_option_visualization"
