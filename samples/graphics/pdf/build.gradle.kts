@@ -26,4 +26,7 @@ android {
 
 dependencies {
     // Add samples specific dependencies
+    implementation(libs.compose.bom)
+    implementation(libs.compose.runtime.runtime)
+    implementation(libs.compose.ui.ui)
 }
