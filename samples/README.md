@@ -92,6 +92,8 @@ Check and request storage permissions
 Shows the recommended flow to request single runtime permissions
 - [Speakable Text](accessibility/src/main/java/com/example/platform/accessibility/SpeakableText.kt):
 The sample demonstrates the importance of having proper labels for
+- [Testing Palette API](graphics/pallete/src/main/java/com/example/platform/graphics/pallete/PalleteSampleScreen.kt):
+This sample demonstrates using an Palette API.
 - [TextSpan](user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.
 - [UltraHDR Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2UltraHDRCapture.kt):

@@ -17,7 +17,7 @@
 package com.example.platform.graphics.pallete
 
 import android.graphics.Bitmap
-import android.support.v7.graphics.Palette
+import androidx.palette.graphics.Palette
 
 class PaletteHelper {
 
