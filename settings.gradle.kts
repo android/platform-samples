@@ -1,8 +1,5 @@
 import java.util.Properties
 
-include(":samples:graphics:pallete")
-
-
 /*
  * Copyright 2022 The Android Open Source Project
  *

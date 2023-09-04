@@ -23,5 +23,5 @@ android {
 }
 
 dependencies {
-    implementation(libs.android.pallete)
+    implementation(libs.androidx.palette)
 }
