@@ -16,7 +16,14 @@
 
 package com.example.platform.graphics.pallete
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import com.example.platform.pallete.R
 import com.google.android.catalog.framework.annotations.Sample
 
 
@@ -24,9 +31,15 @@ import com.google.android.catalog.framework.annotations.Sample
     name = "Testing Palette API",
     description = "This sample demonstrates using an Palette API.",
     documentation = "https://developer.android.com/develop/ui/views/graphics/palette-colors#kts",
-    tags = ["UltraHDR"],
+    tags = ["Graphics"],
 )
 @Composable
 fun PaletteSampleScreen() {
-
+    Row {
+        Image(
+            painter = painterResource(id = R.drawable.img_carles_rabada_unsplash),
+            contentDescription = null,
+            modifier = Modifier.fillMaxHeight(0.5f)
+        )
+    }
 }
