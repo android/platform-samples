@@ -26,6 +26,7 @@ plugins {
     alias(libs.plugins.benManesVersions)
 
     id("com.example.platform")
+    alias(libs.plugins.android.library) apply false
 
 }
 
