@@ -15,5 +15,5 @@
   -->
 
 <resources>
-    <dimen name="ultrahdr_color_mode_current_mode_padding">16dp</dimen>
+    <dimen name="ultrahdr_color_mode_current_mode_padding">8dp</dimen>
 </resources>

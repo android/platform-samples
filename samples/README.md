@@ -28,6 +28,8 @@ This sample demonstrates displaying an UltraHDR image.
 This sample demonstrates displaying an UltraHDR image in a Compose View .
 - [Displaying UltraHDR (Glide)](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDRUsingGlide.kt):
 This sample demonstrates using the Glide image loading library to detect the
+- [Editing UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/edit/EditingUltraHDR.kt):
+This sample demonstrates editing an UltraHDR image. Spatial edit operations like crop, rotate, scale are supported.
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
