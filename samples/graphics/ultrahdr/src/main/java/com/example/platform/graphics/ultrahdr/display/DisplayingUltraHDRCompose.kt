@@ -15,6 +15,7 @@
  */
 package com.example.platform.graphics.ultrahdr.display
 
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
@@ -22,6 +23,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -29,10 +31,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material3.Divider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.asImageBitmap
@@ -40,58 +49,64 @@ import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
+import com.example.platform.graphics.ultrahdr.R
+import com.example.platform.graphics.ultrahdr.common.ColorModeControls
 import com.example.platform.graphics.ultrahdr.databinding.DisplayingUltrahdrBinding
 import com.google.android.catalog.framework.annotations.Sample
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import androidx.compose.ui.viewinterop.AndroidView as AndroidView
 
+@RequiresApi(34)
 @Sample(
     name = "Displaying UltraHDR (Compose)",
-    description = "This sample demonstrates displaying an UltraHDR image in a Compose View .",
+    description = "This sample demonstrates displaying an UltraHDR image in a Compose View and an Android View",
     documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
     tags = ["UltraHDR", "Compose"],
 )
-@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-class DisplayingUltraHDRCompose : Fragment() {
-    /**
-     *  Android ViewBinding.
-     */
-    private var _binding: DisplayingUltrahdrBinding? = null
-    private val binding get() = _binding!!
 
+@Composable
+fun RenderComposeView() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ): View {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                rendercomposeView()
-            }
+    val tempBitmap = Bitmap.createBitmap(500, 500, Bitmap.Config.RGB_565)
+    var bitmap by remember { mutableStateOf(tempBitmap) }
+    val context = LocalContext.current
+
+    // Load asset and bitmap on background thread
+    LaunchedEffect(Unit) {
+
+        // Same bitmap is used to load image in an image view and image (Compose)
+        bitmap = withContext(Dispatchers.IO) {
+            val ultraHdrImage = "gainmaps/night_highrise.jpg"
+            val stream = context.assets.open(ultraHdrImage)
+            BitmapFactory.decodeStream(stream)
         }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        binding.colorModeControls.detach()
-    }
-
-}
-
-@Composable
-fun rendercomposeView() {
-
-    val ultra_hdr_image = "gainmaps/night_highrise.jpg"
-    val stream = LocalContext.current.assets.open(ultra_hdr_image)
-    val bitmap = BitmapFactory.decodeStream(stream)
-
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
+        // Add SDR/HDR Color mode controls
+        AndroidView(
+            modifier = Modifier.fillMaxWidth(),
+            factory = {
+                ColorModeControls(it)
+                    .apply {
+                        setWindow((it as ComponentActivity).window)
+                    }
+            },
+        )
+
+        // Render UltraHDR in a Compose Image
         Text(text = "Image (Compose)")
         Image(
             bitmap = bitmap.asImageBitmap(),
@@ -107,7 +122,8 @@ fun rendercomposeView() {
             color = MaterialTheme.colorScheme.primary,
         )
 
-        Text(text = "ImageView")
+        // Render UltraHDR in View (ImageView)
+        Text(text = "ImageView (Android View)")
         AndroidView(
             modifier = Modifier.weight(1f),
             factory = {
@@ -115,12 +131,9 @@ fun rendercomposeView() {
                     setImageBitmap(bitmap)
                 }
             },
+            update = {
+                it.setImageBitmap(bitmap)
+            },
         )
     }
-}
-
-@Preview(showSystemUi = true)
-@Composable
-fun Preview1() {
-    rendercomposeView()
 }
