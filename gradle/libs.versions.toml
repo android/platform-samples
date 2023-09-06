@@ -18,7 +18,7 @@ accompanist = "0.28.0"
 androidx-datastore = "1.0.0"
 androidx-navigation = "2.6.0"
 androidx-window = "1.1.0"
-agp = "8.1.0"
+agp = "8.1.1"
 casa = "0.4.3"
 coil = "2.3.0"
 ksp = "1.8.21-1.0.11"
@@ -117,8 +117,8 @@ play-services-location = { module = "com.google.android.gms:play-services-locati
 
 androidx-work-runtime-ktx = "androidx.work:work-runtime-ktx:2.8.1"
 androidx-core-remoteviews = "androidx.core:core-remoteviews:1.0.0-beta03"
-androidx-glance-appwidget = "androidx.glance:glance-appwidget:1.0.0-rc01"
-androidx-glance-material3 = "androidx.glance:glance-material3:1.0.0-rc01"
+androidx-glance-appwidget = "androidx.glance:glance-appwidget:1.0.0"
+androidx-glance-material3 = "androidx.glance:glance-material3:1.0.0"
 androidx-startup = 'androidx.startup:startup-runtime:1.1.1'
 androidx-window = { module = "androidx.window:window", version.ref = "androidx-window" }
 androidx-window-java = { module = "androidx.window:window-java", version.ref = "androidx-window" }
