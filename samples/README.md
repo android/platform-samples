@@ -26,12 +26,12 @@ Demonstrates how to implement data access auditing for your app to identify
 This sample demonstrates displaying an UltraHDR image.
 - [Displaying UltraHDR (Glide)](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDRUsingGlide.kt):
 This sample demonstrates using the Glide image loading library to detect the
-- [Editing UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/edit/EditingUltraHDR.kt):
-This sample demonstrates editing an UltraHDR image. Spatial edit operations like crop, rotate, scale are supported.
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
 Demonstrates basic Drag and Drop functionality.
+- [Editing UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/edit/EditingUltraHDR.kt):
+This sample demonstrates editing an UltraHDR image and the resulting gainmap as well. Spatial edit operations like crop, rotate, scale are supported
 - [Find devices sample](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/FindBLEDevicesSample.kt):
 This example will demonstrate how to scanning for Low Energy Devices
 - [Haptics - 1. Vibration effects](user-interface/haptics/src/main/java/com/example/platform/ui/haptics/Haptics.kt):
@@ -88,6 +88,8 @@ This samples shows how to use the BLE intent to scan for devices
 This sample shows how to detect that the user capture the screen in Android 14 onwards
 - [Selected Photos Access](storage/src/main/java/com/example/platform/storage/mediastore/SelectedPhotosAccess.kt):
 Check and request storage permissions
+- [Send data with sharesheet](user-interface/share-sender/src/main/java/com/example/platform/ui/share/sender/ShareSender.kt):
+Send texts and images with other apps using the Android Sharesheet.
 - [Single Permission](privacy/permissions/src/main/java/com/example/platform/privacy/permissions/SinglePermission.kt):
 Shows the recommended flow to request single runtime permissions
 - [Speakable Text](accessibility/src/main/java/com/example/platform/accessibility/SpeakableText.kt):
