@@ -80,6 +80,7 @@ Select images/videos in a privacy-friendly way using the photo picker
 Basic usage of Picture-in-Picture mode showcasing a stopwatch
 - [Picture in Picture (PiP) - Video playback](user-interface/picture-in-picture/src/main/java/com/example/android/pip/PiPMovieActivity.kt):
 Basic usage of Picture-in-Picture mode showcasing video playback
+- [Predictive Back](user-interface/predictiveback/src/main/java/com/example/platform/ui/predictiveback/PBHostingActivity.kt):
 - [Quick Settings](user-interface/quicksettings/src/main/java/com/example/platform/ui/quicksettings/QuickSettings.kt):
 Add your custom tile to the Quick Settings.
 - [Scan with BLE Intent](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/BLEScanIntentSample.kt):
