@@ -89,7 +89,7 @@ This sample shows how to detect that the user capture the screen in Android 14 o
 - [Selected Photos Access](storage/src/main/java/com/example/platform/storage/mediastore/SelectedPhotosAccess.kt):
 Check and request storage permissions
 - [Send data with sharesheet](user-interface/share/src/main/java/com/example/platform/ui/share/sender/ShareSender.kt):
-Send texts and images with other apps using the Android Sharesheet.
+Send texts and images to other apps using the Android Sharesheet.
 - [Single Permission](privacy/permissions/src/main/java/com/example/platform/privacy/permissions/SinglePermission.kt):
 Shows the recommended flow to request single runtime permissions
 - [Speakable Text](accessibility/src/main/java/com/example/platform/accessibility/SpeakableText.kt):
