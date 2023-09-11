@@ -24,6 +24,17 @@ import android.net.Uri
 import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
 
+/**
+ * Exposes asset files in this app with content URIs.
+ *
+ * For now, it only exposes JPEG images stored in
+ * "${PROJECT_HOME}/samples/graphics/ultrahdr/src/main/assets/gainmaps"
+ * with URIs starting with
+ * "content://com.example.platform.ui.share.sender.provider/image/".
+ *
+ * In order to expose files in your data or cache directory, use
+ * [androidx.core.content.FileProvider].
+ */
 class AssetFileProvider : ContentProvider() {
 
     companion object {
@@ -46,7 +57,6 @@ class AssetFileProvider : ContentProvider() {
 
     override fun openAssetFile(uri: Uri, mode: String): AssetFileDescriptor? {
         val segments = uri.pathSegments
-        println("openAssetFile: $uri")
         return when (segments[0]) {
             "image" -> {
                 val filename = segments[1]

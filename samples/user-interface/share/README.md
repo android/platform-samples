@@ -20,9 +20,9 @@ Android Sharesheet also provides these customization options that cover all the 
 you might need in your app.
 
 - Add or reorder targets
-- Know which app has received the data
-- Exclude target candidates
-- Add custom actions
+- Know which app has received the data (API level 22+)
+- Exclude target candidates (API level 24+)
+- Add custom actions (API level 34+)
 
 <img src="https://github.com/android/platform-samples/assets/1237536/d5733271-55ae-4b1a-bdc9-c4f9253e8d64" width="256" alt="Sharesheet" />
 

@@ -46,7 +46,7 @@ import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
     name = "Send data with sharesheet",
-    description = "Send texts and images with other apps using the Android Sharesheet.",
+    description = "Send texts and images to other apps using the Android Sharesheet.",
 )
 @Composable
 fun ShareSender() {
