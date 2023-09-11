@@ -17,11 +17,10 @@
 package com.example.platform.ui.predictiveback
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.platform.ui.predictiveback.databinding.FragmentAnimationListBinding
 
@@ -32,8 +31,6 @@ class PBListFragment : Fragment() {
         get() = checkNotNull(_binding){
             "Cannot access binding in PBListFragment because it is null."
         }
-
-    private val pbViewModel: PBViewModel by viewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -41,7 +38,6 @@ class PBListFragment : Fragment() {
         _binding = FragmentAnimationListBinding.inflate(inflater, container, false)
         binding.pbRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        val animations = pbViewModel.animations
         val adapter = PBListAdapter(animations)
         binding.pbRecyclerView.adapter = adapter
 
