@@ -30,6 +30,7 @@ dependencies {
     implementation(libs.androidx.window)
     implementation(libs.androidx.window.java)
     implementation(libs.androidx.window.rxjava2)
+    implementation(libs.androidx.window.core)
     implementation(libs.rxjava2.android)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.constraintlayout)
