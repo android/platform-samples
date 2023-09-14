@@ -123,6 +123,7 @@ androidx-startup = 'androidx.startup:startup-runtime:1.1.1'
 androidx-window = { module = "androidx.window:window", version.ref = "androidx-window" }
 androidx-window-java = { module = "androidx.window:window-java", version.ref = "androidx-window" }
 androidx-window-rxjava2 = { module = "androidx.window:window-rxjava2", version.ref = "androidx-window" }
+androidx-window-core = { module = "androidx.window:window-core", version.ref = "androidx-window" }
 androidx-media = "androidx.media:media:1.6.0"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
