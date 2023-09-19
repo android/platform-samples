@@ -16,22 +16,25 @@
 
 package com.example.platform.ui.predictiveback
 
-data class PBAnimation(val title: String, val description: String)
+enum class PBAnimation {
+    SYS_UI, BACK_TO_HOME, CROSS_ACTIVITY, CROSS_FRAGMENT
+}
+data class PBAnimationText(val title: String, val description: String)
 
-val animations = listOf(
-    PBAnimation(
+val animations = mapOf<PBAnimation, PBAnimationText>(
+    PBAnimation.SYS_UI to PBAnimationText(
         "Enable System Animations",
         "The system animations are back-to-home and default cross-activity. To see them: (1) Enable gesture navigation. (2) In Android 14, enable the Predictive Back Developer Option."
     ),
-    PBAnimation(
+    PBAnimation.BACK_TO_HOME to PBAnimationText(
         "Back-to-Home",
         "To see the back-to-home animation, go to the root activity and swipe back from either the left or right edge to exit the app."
     ),
-    PBAnimation(
+    PBAnimation.CROSS_ACTIVITY to PBAnimationText(
         "Default Cross-Activity",
         "To see the default cross-activity animation, on this screen swipe back from either the left or right edge."
     ),
-    PBAnimation(
+    PBAnimation.CROSS_FRAGMENT to PBAnimationText(
         "Cross-Fragment",
         "Animation example coming soon."
     )
