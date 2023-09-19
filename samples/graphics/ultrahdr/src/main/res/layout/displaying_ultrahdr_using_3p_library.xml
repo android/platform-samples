@@ -24,6 +24,37 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <RadioGroup
+        android:id="@+id/library_selection_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:layout_marginTop="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:layout_marginEnd="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/mode_glide"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/displaying_ultrahdr_3p_libraries_title_glide" />
+
+        <RadioButton
+            android:id="@+id/mode_fresco"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/displaying_ultrahdr_3p_libraries_title_fresco" />
+
+        <RadioButton
+            android:id="@+id/mode_coil"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/displaying_ultrahdr_3p_libraries_title_coil" />
+    </RadioGroup>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -51,7 +82,6 @@
             tools:ignore="ButtonStyle" />
 
     </LinearLayout>
-
 
     <ImageView
         android:id="@+id/image_container"
