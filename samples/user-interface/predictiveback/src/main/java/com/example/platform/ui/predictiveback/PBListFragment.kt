@@ -21,7 +21,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.platform.ui.predictiveback.databinding.FragmentAnimationListBinding
 
 class PBListFragment : Fragment() {
@@ -36,10 +35,8 @@ class PBListFragment : Fragment() {
         savedInstanceState: Bundle?,
     ): View {
         _binding = FragmentAnimationListBinding.inflate(inflater, container, false)
-        binding.pbRecyclerView.layoutManager = LinearLayoutManager(context)
 
-        val adapter = PBListAdapter(animations)
-        binding.pbRecyclerView.adapter = adapter
+        setAnimationText()
 
         return binding.root
     }
@@ -47,5 +44,16 @@ class PBListFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun setAnimationText() {
+        binding.sysUiTitle.text = animations[PBAnimation.SYS_UI]?.title ?: ""
+        binding.sysUiDescription.text = animations[PBAnimation.SYS_UI]?.description ?: ""
+        binding.backToHomeTitle.text = animations[PBAnimation.BACK_TO_HOME]?.title ?: ""
+        binding.backToHomeDescription.text = animations[PBAnimation.BACK_TO_HOME]?.description ?: ""
+        binding.crossActivityTitle.text = animations[PBAnimation.CROSS_ACTIVITY]?.title ?: ""
+        binding.crossActivityDescription.text = animations[PBAnimation.CROSS_ACTIVITY]?.description ?: ""
+        binding.crossFragmentTitle.text = animations[PBAnimation.CROSS_FRAGMENT]?.title ?: ""
+        binding.crossFragmentDescription.text = animations[PBAnimation.CROSS_FRAGMENT]?.description ?: ""
     }
 }
