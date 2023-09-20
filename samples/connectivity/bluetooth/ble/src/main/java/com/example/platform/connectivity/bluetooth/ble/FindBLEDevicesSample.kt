@@ -66,6 +66,7 @@ import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import com.example.platform.connectivity.bluetooth.ble.server.GATTServerSampleService.Companion.SERVICE_UUID
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.delay
 

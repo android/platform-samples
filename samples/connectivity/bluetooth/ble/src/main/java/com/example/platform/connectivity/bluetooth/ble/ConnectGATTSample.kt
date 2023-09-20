@@ -54,6 +54,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
+import com.example.platform.connectivity.bluetooth.ble.server.GATTServerSampleService.Companion.CHARACTERISTIC_UUID
+import com.example.platform.connectivity.bluetooth.ble.server.GATTServerSampleService.Companion.SERVICE_UUID
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -133,6 +135,9 @@ fun ConnectDeviceScreen(device: BluetoothDevice, onClose: () -> Unit) {
         Button(
             onClick = {
                 scope.launch(Dispatchers.IO) {
+                    if (state?.connectionState == BluetoothProfile.STATE_DISCONNECTED) {
+                        state?.gatt?.connect()
+                    }
                     // Example on how to request specific MTUs
                     // Note that from Android 14 onwards the system will define a default MTU and
                     // it will only be sent once to the peripheral device

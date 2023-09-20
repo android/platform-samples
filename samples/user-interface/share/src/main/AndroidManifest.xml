@@ -25,9 +25,60 @@
             android:exported="false"
             android:grantUriPermissions="true" />
 
+        <!-- This BroadcastReceiver handles results of the sharesheet. -->
         <receiver
             android:name=".sender.ShareResultReceiver"
             android:exported="false" />
+
+        <activity
+            android:name=".receiver.ShareReceiverActivity"
+            android:exported="true"
+            android:label="@string/receive_share">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+            <!--
+                Handle ACTION_SEND intents to receive data shared by other apps.
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:mimeType="text/*" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+
+            <!--
+                The app should handle Intent that's dispatched when one of our dynamic shortcuts is
+                clicked. This is typically done with ACTION_VIEW intents with content URI for the
+                clicked item.
+            -->
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="platform.example.com"
+                    android:pathPattern="/receiver/*"
+                    android:scheme="https" />
+            </intent-filter>
+
+            <!--
+                This XML describes what our dynamic shortcuts support.
+            -->
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/sharing_shortcuts" />
+
+        </activity>
 
     </application>
 

@@ -29,8 +29,8 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.colorScheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -39,6 +39,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.example.platform.base.PermissionBox
 import com.google.android.catalog.framework.annotations.Sample
+import com.google.android.catalog.framework.ui.theme.CatalogTheme
 
 @Sample(
     name = "Call Notification Sample",
@@ -55,10 +56,10 @@ class CallNotificationSample : ComponentActivity() {
         notificationSource = NotificationSource(this, NotificationReceiver::class.java)
 
         setContent {
-            MaterialTheme {
+            CatalogTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier.fillMaxSize().statusBarsPadding(),
                     color = colorScheme.background,
                 ) {
                     // We should be using make_own_call permissions but this requires
