@@ -17,4 +17,6 @@
 <resources>
     <string name="title_activity_predictive_back_sample">PredictiveBackSample</string>
     <string name="predictive_back_sample_first_activity_header">Predictive Back Samples</string>
+    <string name="fragment_nav_component_header">Fragment</string>
+    <string name="fragment_nav_component_body">Swipe back to see Predictive Back cross-fragment animations using Navigation Component default animations.</string>
 </resources>

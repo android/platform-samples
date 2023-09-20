@@ -55,6 +55,7 @@ androidx-activity-compose = "androidx.activity:activity-compose:1.7.2"
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "androidx-navigation" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidx-navigation" }
+androidx-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "androidx-navigation" }
 androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2"
 androidx-viewpager2 = "androidx.viewpager2:viewpager2:1.0.0"
 

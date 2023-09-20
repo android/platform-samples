@@ -36,6 +36,6 @@ val animations = mapOf<PBAnimation, PBAnimationText>(
     ),
     PBAnimation.CROSS_FRAGMENT to PBAnimationText(
         "Cross-Fragment",
-        "Animation example coming soon."
+        "Click to see cross-fragment animations with Navigation Component's default animators."
     )
 )
