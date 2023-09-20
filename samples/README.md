@@ -1,5 +1,7 @@
 # Available Samples
 
+- [](user-interface/predictiveback/src/main/java/com/example/platform/ui/predictiveback/PBHostingActivity.kt):
+
 - [App Widgets](user-interface/appwidgets/src/main/java/com/example/platform/ui/appwidgets/AppWidgets.kt):
 Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples
 - [Call Notification Sample](connectivity/callnotification/src/main/java/com/example/platform/connectivity/callnotification/CallNotificationSample.kt):
@@ -80,9 +82,10 @@ Select images/videos in a privacy-friendly way using the photo picker
 Basic usage of Picture-in-Picture mode showcasing a stopwatch
 - [Picture in Picture (PiP) - Video playback](user-interface/picture-in-picture/src/main/java/com/example/android/pip/PiPMovieActivity.kt):
 Basic usage of Picture-in-Picture mode showcasing video playback
-- [Predictive Back](user-interface/predictiveback/src/main/java/com/example/platform/ui/predictiveback/PBHostingActivity.kt):
 - [Quick Settings](user-interface/quicksettings/src/main/java/com/example/platform/ui/quicksettings/QuickSettings.kt):
 Add your custom tile to the Quick Settings.
+- [Receive data shared by other apps](user-interface/share/src/main/java/com/example/platform/ui/share/receiver/ShareReceiverActivity.kt):
+Receive texts and images from other apps.
 - [Scan with BLE Intent](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/BLEScanIntentSample.kt):
 This samples shows how to use the BLE intent to scan for devices
 - [Screenshot Detection](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/ScreenshotDetection.kt):
