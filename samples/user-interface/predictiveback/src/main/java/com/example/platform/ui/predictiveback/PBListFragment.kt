@@ -42,6 +42,9 @@ class PBListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.customCrossActivityCard.setOnClickListener {
+            findNavController().navigate(R.id.show_PBCustomCrossActivityAnimation)
+        }
         binding.crossFragmentCard.setOnClickListener {
             findNavController().navigate(R.id.show_PBNavigationComponentDefaultAnimations)
         }
@@ -59,6 +62,8 @@ class PBListFragment : Fragment() {
         binding.backToHomeDescription.text = animations[PBAnimation.BACK_TO_HOME]?.description ?: ""
         binding.crossActivityTitle.text = animations[PBAnimation.CROSS_ACTIVITY]?.title ?: ""
         binding.crossActivityDescription.text = animations[PBAnimation.CROSS_ACTIVITY]?.description ?: ""
+        binding.customCrossActivityTitle.text = animations[PBAnimation.CUSTOM_CROSS_ACTIVITY]?.title ?: ""
+        binding.customCrossActivityDescription.text = animations[PBAnimation.CUSTOM_CROSS_ACTIVITY]?.description ?: ""
         binding.crossFragmentTitle.text = animations[PBAnimation.CROSS_FRAGMENT]?.title ?: ""
         binding.crossFragmentDescription.text = animations[PBAnimation.CROSS_FRAGMENT]?.description ?: ""
     }
