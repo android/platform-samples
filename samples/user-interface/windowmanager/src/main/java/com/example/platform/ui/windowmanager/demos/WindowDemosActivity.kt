@@ -23,6 +23,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.platform.ui.windowmanager.DisplayFeaturesActivity
 import com.example.platform.ui.windowmanager.MediaPlayerActivity
 import com.example.platform.ui.windowmanager.R
+import com.example.platform.ui.windowmanager.RearDisplayModeActivity
 import com.example.platform.ui.windowmanager.SplitLayoutActivity
 import com.example.platform.ui.windowmanager.WindowMetricsActivity
 import com.example.platform.ui.windowmanager.embedding.SplitActivityList
@@ -75,6 +76,11 @@ import com.google.android.catalog.framework.annotations.Sample
                 buttonTitle = getString(R.string.media_player_activity),
                 description = getString(R.string.media_player_activity_demo_description),
                 clazz = MediaPlayerActivity::class.java
+            ),
+            DemoItem(
+                buttonTitle = getString(R.string.rear_display_activity),
+                description = getString(R.string.rear_display_activity_demo_description),
+                clazz = RearDisplayModeActivity::class.java
             ),
         )
         val recyclerView = findViewById<RecyclerView>(R.id.demo_recycler_view)

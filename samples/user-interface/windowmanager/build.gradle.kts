@@ -16,6 +16,7 @@
 
 plugins {
     id("com.example.platform.sample")
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -37,4 +38,5 @@ dependencies {
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.core)
+    implementation(libs.appcompat)
 }

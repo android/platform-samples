@@ -14,7 +14,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -26,171 +26,170 @@
             android:name="android.window.PROPERTY_ACTIVITY_EMBEDDING_SPLITS_ENABLED"
             android:value="true" />
 
-        <activity android:name=".demos.WindowDemosActivity"
+        <activity
+            android:name=".demos.WindowDemosActivity"
             android:exported="true"
             android:label="@string/windowManagerDemos">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".RearDisplayModeActivity"
+            android:exported="false"
+            android:label="@string/rear_display_activity"/>
         <activity
             android:name=".MediaPlayerActivity"
-            android:exported="false"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
-            android:theme="@style/FoldableMediaPlayer"
-            android:label="@string/media_player_activity" />
+            android:exported="false"
+            android:label="@string/media_player_activity"
+            android:theme="@style/FoldableMediaPlayer" />
         <activity
             android:name=".DisplayFeaturesActivity"
             android:exported="false"
-            android:supportsPictureInPicture="true"
-            android:label="@string/display_features" />
+            android:label="@string/display_features"
+            android:supportsPictureInPicture="true" />
         <activity
             android:name=".SplitLayoutActivity"
             android:exported="false"
             android:label="@string/split_layout" />
-        <activity android:name=".WindowMetricsActivity"
+        <activity
+            android:name=".WindowMetricsActivity"
             android:configChanges="orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:exported="false"
-            android:label="@string/window_metrics"/>
+            android:label="@string/window_metrics" />
         <activity
             android:name=".embedding.SplitActivityA"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="true"
             android:label="Split Main"
-            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity"/>
+            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity" />
+
+        <activity-alias
+            android:name=".embedding.SplitActivityTrampolineTarget"
+            android:targetActivity=".embedding.SplitActivityA" />
+
         <activity
             android:name=".embedding.SplitActivityB"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="false"
             android:label="B"
-            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity"/>
+            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity" />
         <activity
             android:name=".embedding.SplitActivityC"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="false"
             android:label="C"
-            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity"/>
+            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity" />
         <activity
             android:name=".embedding.SplitActivityD"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="false"
             android:label="D"
-            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity"/>
+            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity" />
         <activity
             android:name=".embedding.SplitActivityE"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="false"
             android:label="E"
-            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity"/>
+            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity" />
         <activity
             android:name=".embedding.SplitActivityF"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="false"
             android:label="F"
-            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity"/>
+            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity" />
         <activity
             android:name=".embedding.SplitActivityPlaceholder"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="false"
             android:label="Placeholder"
-            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity"/>
+            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity" />
         <activity
             android:name=".embedding.ExpandedDialogActivity"
-            android:theme="@style/ExpandedDialogTheme"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="false"
             android:label="Dialog Activity"
-            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
-            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity"/>
+            android:taskAffinity="com.example.platform.ui.windowmanager.manual_split_affinity"
+            android:theme="@style/ExpandedDialogTheme" />
         <activity
             android:name=".embedding.SplitActivityTrampoline"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="true"
             android:label="Split Trampoline"
-            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
-            android:taskAffinity="com.example.platform.ui.windowmanager.trampoline_affinity">
-        </activity>
-        <activity-alias
-            android:name=".embedding.SplitActivityTrampolineTarget"
-            android:targetActivity=".embedding.SplitActivityA"/>
+            android:taskAffinity="com.example.platform.ui.windowmanager.trampoline_affinity"></activity>
         <activity
             android:name=".embedding.SplitActivityList"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="true"
             android:label="Split List"
-            android:taskAffinity="com.example.platform.ui.windowmanager.list_detail_split_affinity">
-        </activity>
+            android:taskAffinity="com.example.platform.ui.windowmanager.list_detail_split_affinity"></activity>
         <activity
             android:name=".embedding.SplitActivityDetail"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="false"
             android:label="Item detail"
             android:launchMode="singleTop"
-            android:taskAffinity="com.example.platform.ui.windowmanager.list_detail_split_affinity"/>
+            android:taskAffinity="com.example.platform.ui.windowmanager.list_detail_split_affinity" />
         <activity
             android:name=".embedding.SplitActivityListPlaceholder"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="false"
             android:label="Placeholder"
             android:taskAffinity="com.example.platform.ui.windowmanager.list_detail_split_affinity" />
-
-        <!-- The demo App to show how to change the current split layout with the current device and
-         window states -->
-
+        <!--
+ The demo App to show how to change the current split layout with the current device and
+         window states
+        -->
         <activity
             android:name=".embedding.SplitDeviceStateActivityA"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="true"
             android:label="Split on Device State"
-            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
-            android:taskAffinity="com.example.platform.ui.windowmanager.split_device_state_activity_affinity">
-        </activity>
+            android:taskAffinity="com.example.platform.ui.windowmanager.split_device_state_activity_affinity"></activity>
         <activity
             android:name=".embedding.SplitDeviceStateActivityB"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="true"
             android:label="Split on Device State B"
-            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
-            android:taskAffinity="com.example.platform.ui.windowmanager.split_device_state_activity_affinity">
-        </activity>
-
-        <!-- The demo app to show how to change layout with runtime APIs -->
+            android:taskAffinity="com.example.platform.ui.windowmanager.split_device_state_activity_affinity"></activity> <!-- The demo app to show how to change layout with runtime APIs -->
         <activity
             android:name=".embedding.SplitAttributesToggleMainActivity"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
             android:exported="true"
             android:label="Split Toggle at Runtime"
-            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
-            android:taskAffinity="com.example.platform.ui.windowmanager.split_attributes_toggle_activity_affinity">
-        </activity>
+            android:taskAffinity="com.example.platform.ui.windowmanager.split_attributes_toggle_activity_affinity"></activity>
         <activity
             android:name=".embedding.SplitAttributesTogglePrimaryActivity"
-            android:label="Split Toggle Activity A"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
+            android:label="Split Toggle Activity A"
             android:taskAffinity="com.example.platform.ui.windowmanager.split_attributes_toggle_activity_affinity" />
         <activity
             android:name=".embedding.SplitAttributesToggleSecondaryActivity"
-            android:label="Split Toggle Activity B"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
+            android:label="Split Toggle Activity B"
             android:taskAffinity="com.example.platform.ui.windowmanager.split_attributes_toggle_activity_affinity" />
         <activity
             android:name=".embedding.SplitAttributesTogglePlaceholderActivity"
-            android:label="Split Toggle Placeholder"
             android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|colorMode|density|touchscreen"
-            android:taskAffinity="com.example.platform.ui.windowmanager.split_attributes_toggle_activity_affinity" />
-
-        <!-- Activity embedding initializer -->
-
-        <provider android:name="androidx.startup.InitializationProvider"
+            android:label="Split Toggle Placeholder"
+            android:taskAffinity="com.example.platform.ui.windowmanager.split_attributes_toggle_activity_affinity" /> <!-- Activity embedding initializer -->
+        <provider
+            android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
             tools:node="merge">
-            <!-- This entry makes ExampleWindowInitializer discoverable. -->
-            <meta-data  android:name="com.example.platform.ui.windowmanager.embedding.ExampleWindowInitializer"
-                android:value="androidx.startup" />
-        </provider>
 
-        <!-- The app itself supports activity embedding, so a system override is not needed. -->
+            <!-- This entry makes ExampleWindowInitializer discoverable. -->
+            <meta-data
+                android:name="com.example.platform.ui.windowmanager.embedding.ExampleWindowInitializer"
+                android:value="androidx.startup" />
+        </provider> <!-- The app itself supports activity embedding, so a system override is not needed. -->
         <property
             android:name="android.window.PROPERTY_ACTIVITY_EMBEDDING_ALLOW_SYSTEM_OVERRIDE"
             android:value="false" />
-
     </application>
+
 </manifest>

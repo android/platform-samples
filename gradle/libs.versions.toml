@@ -17,7 +17,7 @@
 accompanist = "0.28.0"
 androidx-datastore = "1.0.0"
 androidx-navigation = "2.6.0"
-androidx-window = "1.1.0"
+androidx-window = "1.2.0-beta03"
 agp = "8.1.1"
 casa = "0.4.3"
 coil = "2.3.0"
@@ -39,6 +39,9 @@ androidxTestRules = "1.5.0"
 androidxTestRunner = "1.5.2"
 androidxUiAutomator = "2.2.0"
 media3 = "1.1.0"
+appcompat = "1.6.1"
+material = "1.9.0"
+constraintlayout = "2.1.4"
 
 [libraries]
 
@@ -136,6 +139,9 @@ androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "medi
 glide = "com.github.bumptech.glide:glide:4.15.1"
 
 mdc = "com.google.android.material:material:1.9.0"
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [plugins]
 affectedmoduledetector = { id = "com.dropbox.affectedmoduledetector", version = "0.2.0" }
