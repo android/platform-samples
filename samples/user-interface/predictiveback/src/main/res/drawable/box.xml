@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright 2023 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,9 +14,16 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <string name="title_activity_predictive_back_sample">PredictiveBackSample</string>
-    <string name="predictive_back_sample_first_activity_header">Predictive Back Samples</string>
-    <string name="fragment_nav_component_header">Fragment</string>
-    <string name="fragment_nav_component_body">Swipe back to see Predictive Back cross-fragment animations using Navigation Component default animations.</string>
-</resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+    <stroke android:width="2dp" />
+
+    <solid android:color="#3d84cd" />
+
+    <padding
+        android:left="1dp"
+        android:right="1dp"
+        android:bottom="1dp"
+        android:top="1dp" />
+
+    <corners android:radius="5dp" />
+</shape>

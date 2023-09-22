@@ -21,15 +21,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.platform.ui.predictiveback.databinding.FragmentAnimationListBinding
 
 class PBListFragment : Fragment() {
 
     private var _binding: FragmentAnimationListBinding? = null
-    private val binding
-        get() = checkNotNull(_binding){
-            "Cannot access binding in PBListFragment because it is null."
-        }
+    private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
@@ -39,6 +37,14 @@ class PBListFragment : Fragment() {
         setAnimationText()
 
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.crossFragmentCard.setOnClickListener {
+            findNavController().navigate(R.id.show_PBNavigationComponentDefaultAnimations)
+        }
     }
 
     override fun onDestroyView() {
