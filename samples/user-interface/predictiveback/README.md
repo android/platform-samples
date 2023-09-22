@@ -4,7 +4,7 @@ Shows different types of predictive back animations, including:
 
 + Back-to-home
 + Cross-activity
-+ Custom cross-activity.
++ Custom cross-activity
 
 Although animation resources are expected for `overrideActivityTransition`, we strongly recommend to
 stop using animation and to instead use animator and androidx transitions for most use cases.
@@ -27,7 +27,9 @@ stop using animation and to instead use animator and androidx transitions for mo
     }
 ```
 
-+ Cross-fragment animations with navigation component default animations. Example code:
++ Cross-fragment animations
+
+Example code uses navigation component default animations.
 
 ```xml
 <action
