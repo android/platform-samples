@@ -11,7 +11,7 @@ Shows different types of predictive back animations, including:
 ## Custom cross-activity
 
 In general, rely on the default cross-activity animation; however, if required use
-overrideActivityTransition in place of overridePendingTransition. Although animation resources are
+`overrideActivityTransition` instead of `overridePendingTransition`. Although animation resources are
 expected for `overrideActivityTransition`, we strongly recommend to stop using animation and to
 instead use animator and androidx transitions for most use cases.
 
