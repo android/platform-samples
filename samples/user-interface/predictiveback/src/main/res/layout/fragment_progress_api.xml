@@ -20,18 +20,29 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="16dp"
-    tools:context=".PBNavigationComponentDefaultAnimations">
+    tools:context=".PBProgressAPI">
 
     <TextView
         android:id="@+id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="168dp"
         android:text="@string/fragment_header"
         android:textAppearance="?attr/textAppearanceTitleMedium"
         android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/box"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@drawable/android"
+        app:layout_constraintBottom_toBottomOf="@+id/box"
+        app:layout_constraintEnd_toEndOf="@+id/box"
+        app:layout_constraintTop_toTopOf="@+id/box" />
 
     <View
         android:id="@+id/box"
@@ -43,18 +54,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/button"
+        style="@style/Widget.Material3.Button.ElevatedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?attr/textAppearanceButton"
+        app:layout_constraintBottom_toBottomOf="@+id/box"
+        app:layout_constraintEnd_toEndOf="@+id/box"
+        app:layout_constraintStart_toStartOf="@+id/box"
+        app:layout_constraintTop_toTopOf="@+id/box" />
+
     <TextView
         android:id="@+id/body"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="300dp"
+        android:layout_marginBottom="70dp"
         android:fontFamily="sans-serif"
-        android:text="@string/fragment_nav_component_body"
+        android:maxWidth="300dp"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/box"
-        app:layout_constraintStart_toStartOf="@+id/box"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/box" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
