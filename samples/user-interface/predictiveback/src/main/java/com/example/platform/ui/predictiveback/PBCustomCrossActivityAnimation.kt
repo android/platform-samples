@@ -32,14 +32,14 @@ class PBCustomCrossActivityAnimation : AppCompatActivity() {
         binding = ActivityCustomCrossAnimationBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        this.overrideActivityTransition(
+        overrideActivityTransition(
             OVERRIDE_TRANSITION_OPEN,
             android.R.anim.fade_in,
             0
         )
 
 
-        this.overrideActivityTransition(
+        overrideActivityTransition(
             OVERRIDE_TRANSITION_CLOSE,
             0,
             android.R.anim.fade_out

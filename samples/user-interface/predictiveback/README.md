@@ -13,13 +13,13 @@ stop using animation and to instead use animator and androidx transitions for mo
     override fun onCreate(savedInstanceState: Bundle?) {
         "..."
 
-        this.overrideActivityTransition(
+        overrideActivityTransition(
             OVERRIDE_TRANSITION_OPEN,
             android.R.anim.fade_in,
             0
         )
     
-        this.overrideActivityTransition(
+        overrideActivityTransition(
             OVERRIDE_TRANSITION_CLOSE,
             0,
             android.R.anim.fade_out
