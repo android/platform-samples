@@ -31,10 +31,18 @@
             app:exitAnim="@animator/nav_default_exit_anim"
             app:popEnterAnim="@animator/nav_default_pop_enter_anim"
             app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/show_PBCustomCrossActivityAnimation"
+            app:destination="@id/PBCustomCrossActivityAnimation" />
     </fragment>
     <fragment
         android:id="@+id/PBNavigationComponentDefaultAnimations"
         android:name="com.example.platform.ui.predictiveback.PBNavigationComponentDefaultAnimations"
         android:label="fragment_navigation_component_default_animations"
         tools:layout="@layout/fragment_navigation_component_default_animations" />
+    <activity
+        android:id="@+id/PBCustomCrossActivityAnimation"
+        android:name="com.example.platform.ui.predictiveback.PBCustomCrossActivityAnimation"
+        android:label="activity_custom_cross_animation"
+        tools:layout="@layout/activity_custom_cross_animation" />
 </navigation>

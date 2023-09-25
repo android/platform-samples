@@ -17,7 +17,7 @@
 package com.example.platform.ui.predictiveback
 
 enum class PBAnimation {
-    SYS_UI, BACK_TO_HOME, CROSS_ACTIVITY, CROSS_FRAGMENT
+    SYS_UI, BACK_TO_HOME, CROSS_ACTIVITY, CUSTOM_CROSS_ACTIVITY, CROSS_FRAGMENT
 }
 data class PBAnimationText(val title: String, val description: String)
 
@@ -33,6 +33,10 @@ val animations = mapOf<PBAnimation, PBAnimationText>(
     PBAnimation.CROSS_ACTIVITY to PBAnimationText(
         "Default Cross-Activity",
         "To see the default cross-activity animation, on this screen swipe back from either the left or right edge."
+    ),
+    PBAnimation.CUSTOM_CROSS_ACTIVITY to PBAnimationText(
+        "Custom Cross-Activity",
+        "Click to see a custom cross-activity animation."
     ),
     PBAnimation.CROSS_FRAGMENT to PBAnimationText(
         "Cross-Fragment",

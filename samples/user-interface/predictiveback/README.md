@@ -4,7 +4,32 @@ Shows different types of predictive back animations, including:
 
 + Back-to-home
 + Cross-activity
-+ Cross-fragment animations with navigation component default animations. Example code:
++ Custom cross-activity
+
+Although animation resources are expected for `overrideActivityTransition`, we strongly recommend to
+stop using animation and to instead use animator and androidx transitions for most use cases.
+
+```kotlin
+    override fun onCreate(savedInstanceState: Bundle?) {
+        "..."
+
+        overrideActivityTransition(
+            OVERRIDE_TRANSITION_OPEN,
+            android.R.anim.fade_in,
+            0
+        )
+    
+        overrideActivityTransition(
+            OVERRIDE_TRANSITION_CLOSE,
+            0,
+            android.R.anim.fade_out
+        )
+    }
+```
+
++ Cross-fragment animations
+
+Example code uses navigation component default animations.
 
 ```xml
 <action
@@ -17,4 +42,3 @@ Shows different types of predictive back animations, including:
 ```
 
 + (coming soon) androidx-transitions
-+ (coming soon) custom cross-activity
