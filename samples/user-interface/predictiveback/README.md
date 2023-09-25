@@ -10,8 +10,10 @@ Shows different types of predictive back animations, including:
 
 ## Custom cross-activity
 
-Although animation resources are expected for `overrideActivityTransition`, we strongly recommend to
-stop using animation and to instead use animator and androidx transitions for most use cases.
+In general, rely on the default cross-activity animation; however, if required use
+overrideActivityTransition in place of overridePendingTransition. Although animation resources are
+expected for `overrideActivityTransition`, we strongly recommend to stop using animation and to
+instead use animator and androidx transitions for most use cases.
 
 ```kotlin
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +49,7 @@ Example code uses navigation component default animations.
 
 ## Custom Progress API animation
 
-The following example using Progress API follows the
+The following example using the Progress API follows the
 [Predictive Back Design Guidance](https://developer.android.com/design/ui/mobile/guides/patterns/predictive-back).
 
 ```kotlin

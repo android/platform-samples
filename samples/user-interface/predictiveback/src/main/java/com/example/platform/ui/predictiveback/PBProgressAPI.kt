@@ -70,14 +70,14 @@ class PBProgressAPI : Fragment() {
                     "Disable the callback to go back.",
                     Toast.LENGTH_SHORT
                 ).show()
-                resetState()
+                resetCallbackState()
             }
 
             override fun handleOnBackCancelled() {
-                resetState()
+                resetCallbackState()
             }
 
-            private fun resetState() {
+            private fun resetCallbackState() {
                 binding.box.scaleX = 1F
                 binding.box.scaleY = 1F
                 binding.box.translationX = 0F
@@ -88,11 +88,11 @@ class PBProgressAPI : Fragment() {
             this.viewLifecycleOwner,
             predictiveBackCallback
         )
-        updateState(predictiveBackCallback)
+        updateCallbackState(predictiveBackCallback)
 
         binding.button.setOnClickListener {
             predictiveBackCallback.isEnabled = !predictiveBackCallback.isEnabled
-            updateState(predictiveBackCallback)
+            updateCallbackState(predictiveBackCallback)
         }
     }
 
@@ -101,13 +101,13 @@ class PBProgressAPI : Fragment() {
         _binding = null
     }
 
-    private fun updateState(callback: OnBackPressedCallback) {
+    private fun updateCallbackState(callback: OnBackPressedCallback) {
         when (callback.isEnabled) {
             true -> {
                 binding.button.text = "disable callback"
                 binding.body.text =
-                    "Swipe back to see the box move using the Predictive Back Progress APIs" +
-                            " on Android 14+ devices."
+                    "Swipe back to see the box move using the Predictive Back" +
+                            " Progress APIs on Android 14+ devices."
             }
             false -> {
                 binding.button.text = "enable callback"
