@@ -17,14 +17,18 @@
 package com.example.platform.graphics.pallete
 
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -39,6 +43,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.ImagePainter
 import com.example.platform.pallete.R
 import com.google.android.catalog.framework.annotations.Sample
+import kotlinx.coroutines.delay
 
 @Sample(
     name = "Palette API",
@@ -50,15 +55,11 @@ import com.google.android.catalog.framework.annotations.Sample
 fun PaletteSampleScreen() {
     var profileState: Palette? by remember { mutableStateOf(null) }
 
-    ContextCompat.getDrawable(
-        LocalContext.current,
-        R.drawable.img_carles_rabada_unsplash,
-    )?.let { drawable ->
-        Bitmap.createBitmap(
-            drawable.intrinsicWidth,
-            drawable.intrinsicHeight,
-            Bitmap.Config.ARGB_8888,
-        ).also { bitmap ->
+    BitmapFactory.decodeResource(
+        LocalContext.current.resources,
+        R.drawable.test_2,
+    ).let { bitmap ->
+        if (profileState == null) {
             Palette.from(bitmap).generate { palette ->
                 profileState = palette
             }
@@ -67,23 +68,52 @@ fun PaletteSampleScreen() {
 
     Column {
         profileState?.let { pallete ->
+            Log.d("TAG", "PaletteSampleScreen: $pallete")
+            Log.d("TAG", "PaletteSampleScreen: ${pallete.getLightVibrantColor(0)}")
+            Log.d("TAG", "PaletteSampleScreen: ${pallete.getVibrantColor(0)}")
+            Log.d("TAG", "PaletteSampleScreen: ${pallete.getDarkVibrantColor(0)}")
+            Log.d("TAG", "PaletteSampleScreen: ${pallete.getLightMutedColor(0)}")
+            Log.d("TAG", "PaletteSampleScreen: ${pallete.getMutedColor(0)}")
+            Log.d("TAG", "PaletteSampleScreen: ${pallete.getDarkMutedColor(0)}")
+
             Text(
                 text = "This text and background color is from vibrant swatch.",
                 style = MaterialTheme.typography.titleMedium.copy(
                     color = Color(pallete.vibrantSwatch?.titleTextColor ?: 0),
                 ),
-                modifier = Modifier.background(
-                    color = Color(pallete.vibrantSwatch?.bodyTextColor ?: 0),
-                ),
+                modifier = Modifier
+                    .clickable {
+                    }
+                    .fillMaxWidth()
+                    .background(
+                        color = Color(pallete.vibrantSwatch?.rgb ?: 0),
+                    ),
             )
         }
         Row {
             Image(
-                painter = painterResource(id = R.drawable.img_carles_rabada_unsplash),
+                painter = painterResource(id = R.drawable.test_2),
                 contentDescription = null,
                 modifier = Modifier.fillMaxWidth(0.5f),
             )
             Column {
+                profileState?.let {
+                    it.swatches.forEach { swatch ->
+                        if (swatch.bodyTextColor != 0) {
+                            Text(
+                                text = it.toString(),
+                                style = MaterialTheme.typography.titleMedium.copy(
+                                    color = Color(swatch.titleTextColor),
+                                ),
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(
+                                        color = Color(swatch?.rgb ?: 0),
+                                    ),
+                            )
+                        }
+                    }
+                }
 
             }
         }
