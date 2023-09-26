@@ -48,6 +48,9 @@ class PBListFragment : Fragment() {
         binding.crossFragmentCard.setOnClickListener {
             findNavController().navigate(R.id.show_PBNavigationComponentDefaultAnimations)
         }
+        binding.progressApiCard.setOnClickListener {
+            findNavController().navigate(R.id.show_PBProgressAPI)
+        }
     }
 
     override fun onDestroyView() {
@@ -66,5 +69,7 @@ class PBListFragment : Fragment() {
         binding.customCrossActivityDescription.text = animations[PBAnimation.CUSTOM_CROSS_ACTIVITY]?.description ?: ""
         binding.crossFragmentTitle.text = animations[PBAnimation.CROSS_FRAGMENT]?.title ?: ""
         binding.crossFragmentDescription.text = animations[PBAnimation.CROSS_FRAGMENT]?.description ?: ""
+        binding.progressApiTitle.text = animations[PBAnimation.PROGRESS_API]?.title ?: ""
+        binding.progressApiDescription.text = animations[PBAnimation.PROGRESS_API]?.description ?: ""
     }
 }

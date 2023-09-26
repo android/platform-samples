@@ -17,7 +17,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
     <stroke android:width="2dp" />
 
-    <solid android:color="#3d84cd" />
+    <solid android:color="#4285F4" />
 
     <padding
         android:left="1dp"

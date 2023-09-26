@@ -34,6 +34,9 @@
         <action
             android:id="@+id/show_PBCustomCrossActivityAnimation"
             app:destination="@id/PBCustomCrossActivityAnimation" />
+        <action
+            android:id="@+id/show_PBProgressAPI"
+            app:destination="@id/PBProgressAPI" />
     </fragment>
     <fragment
         android:id="@+id/PBNavigationComponentDefaultAnimations"
@@ -45,4 +48,9 @@
         android:name="com.example.platform.ui.predictiveback.PBCustomCrossActivityAnimation"
         android:label="activity_custom_cross_animation"
         tools:layout="@layout/activity_custom_cross_animation" />
+    <fragment
+        android:id="@+id/PBProgressAPI"
+        android:name="com.example.platform.ui.predictiveback.PBProgressAPI"
+        android:label="fragment_progress_api"
+        tools:layout="@layout/fragment_progress_api" />
 </navigation>

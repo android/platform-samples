@@ -80,8 +80,8 @@ Select images/videos in a privacy-friendly way using the photo picker
 Basic usage of Picture-in-Picture mode showcasing a stopwatch
 - [Picture in Picture (PiP) - Video playback](user-interface/picture-in-picture/src/main/java/com/example/android/pip/PiPMovieActivity.kt):
 Basic usage of Picture-in-Picture mode showcasing video playback
-- [Predictive Back](user-interface/predictiveback/src/main/java/com/example/platform/ui/predictiveback/PBHostingActivity.kt):
-See Predictive Back animations.
+- [Predictive Back Sample](user-interface/predictiveback/src/main/java/com/example/platform/ui/predictiveback/PBHostingActivity.kt):
+Shows Predictive Back animations.
 - [Quick Settings](user-interface/quicksettings/src/main/java/com/example/platform/ui/quicksettings/QuickSettings.kt):
 Add your custom tile to the Quick Settings.
 - [Receive data shared by other apps](user-interface/share/src/main/java/com/example/platform/ui/share/receiver/ShareReceiverActivity.kt):

@@ -1,13 +1,19 @@
-# PredictiveBackSample samples
+# Predictive Back Samples
 
 Shows different types of predictive back animations, including:
 
 + Back-to-home
 + Cross-activity
 + Custom cross-activity
++ Cross-fragment animation
++ Custom Progress API animation
 
-Although animation resources are expected for `overrideActivityTransition`, we strongly recommend to
-stop using animation and to instead use animator and androidx transitions for most use cases.
+## Custom cross-activity
+
+In general, rely on the default cross-activity animation; however, if required use
+`overrideActivityTransition` instead of `overridePendingTransition`. Although animation resources are
+expected for `overrideActivityTransition`, we strongly recommend to stop using animation and to
+instead use animator and androidx transitions for most use cases.
 
 ```kotlin
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -27,7 +33,7 @@ stop using animation and to instead use animator and androidx transitions for mo
     }
 ```
 
-+ Cross-fragment animations
+## Cross-fragment animation
 
 Example code uses navigation component default animations.
 
@@ -41,4 +47,45 @@ Example code uses navigation component default animations.
     app:popExitAnim="@animator/nav_default_pop_exit_anim" />
 ```
 
-+ (coming soon) androidx-transitions
+## Custom Progress API animation
+
+The following example using the Progress API follows the
+[Predictive Back Design Guidance](https://developer.android.com/design/ui/mobile/guides/patterns/predictive-back).
+
+```kotlin
+override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+    "..."
+
+    val windowWidth = requireActivity().windowManager.currentWindowMetrics.bounds.width()
+    val maxXShift = windowWidth / 20
+
+    val predictiveBackCallback = object: OnBackPressedCallback(enabled=false) {
+
+        override fun handleOnBackProgressed(backEvent: BackEventCompat) {
+            when (backEvent.swipeEdge) {
+                BackEventCompat.EDGE_LEFT ->
+                    binding.box.translationX = backEvent.progress * maxXShift
+                BackEventCompat.EDGE_RIGHT ->
+                    binding.box.translationX = -(backEvent.progress * maxXShift)
+            }
+            binding.box.scaleX = 1F - (0.1F * backEvent.progress)
+            binding.box.scaleY = 1F - (0.1F * backEvent.progress)
+        }
+
+        override fun handleOnBackPressed() {
+            // your back handling logic
+        }
+
+        override fun handleOnBackCancelled() {
+            binding.box.scaleX = 1F
+            binding.box.scaleY = 1F
+            binding.box.translationX = 0F
+        }
+    }
+    
+    requireActivity().onBackPressedDispatcher.addCallback(
+        this.viewLifecycleOwner,
+        predictiveBackCallback
+    )
+}
+```

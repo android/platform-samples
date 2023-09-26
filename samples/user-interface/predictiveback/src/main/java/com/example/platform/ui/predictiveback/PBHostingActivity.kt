@@ -22,8 +22,10 @@ import com.example.platform.ui.predictiveback.databinding.HostingActivityBinding
 import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
-    name="Predictive Back Sample",
-    description="Shows Predictive Back animations."
+    name = "Predictive Back Sample",
+    description = "Shows Predictive Back animations.",
+    documentation = "https://developer.android.com/about/versions/14/features/predictive-back",
+    tags = ["predictive"]
 )
 class PBHostingActivity : AppCompatActivity() {
 
