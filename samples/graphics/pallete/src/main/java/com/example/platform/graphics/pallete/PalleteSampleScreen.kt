@@ -58,7 +58,7 @@ fun PaletteSampleScreen() {
         modifier = Modifier
             .fillMaxSize()
             .verticalScroll(scrollState),
-    ) {g
+    ) {
         PaletteViewer(imageId = R.drawable.img_carles_rabada_unsplash)
         PaletteViewer(imageId = R.drawable.img_adam_birkett_unsplash)
     }
