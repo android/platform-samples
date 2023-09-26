@@ -16,19 +16,21 @@
 
 package com.example.platform.graphics.pallete
 
-import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.util.Log
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -37,13 +39,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.core.content.ContextCompat
+import androidx.compose.ui.unit.dp
 import androidx.palette.graphics.Palette
-import coil.compose.AsyncImagePainter
-import coil.compose.ImagePainter
 import com.example.platform.pallete.R
 import com.google.android.catalog.framework.annotations.Sample
-import kotlinx.coroutines.delay
 
 @Sample(
     name = "Palette API",
@@ -53,68 +52,145 @@ import kotlinx.coroutines.delay
 )
 @Composable
 fun PaletteSampleScreen() {
+    val scrollState = rememberScrollState()
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState),
+    ) {g
+        PaletteViewer(imageId = R.drawable.img_carles_rabada_unsplash)
+        PaletteViewer(imageId = R.drawable.img_adam_birkett_unsplash)
+    }
+}
+
+@Composable
+fun PaletteViewer(
+    @DrawableRes imageId: Int,
+) {
     var profileState: Palette? by remember { mutableStateOf(null) }
 
     BitmapFactory.decodeResource(
         LocalContext.current.resources,
-        R.drawable.test_2,
+        imageId,
     ).let { bitmap ->
-        if (profileState == null) {
-            Palette.from(bitmap).generate { palette ->
-                profileState = palette
-            }
+        Palette.from(bitmap).generate { palette ->
+            profileState = palette
         }
     }
 
     Column {
-        profileState?.let { pallete ->
-            Log.d("TAG", "PaletteSampleScreen: $pallete")
-            Log.d("TAG", "PaletteSampleScreen: ${pallete.getLightVibrantColor(0)}")
-            Log.d("TAG", "PaletteSampleScreen: ${pallete.getVibrantColor(0)}")
-            Log.d("TAG", "PaletteSampleScreen: ${pallete.getDarkVibrantColor(0)}")
-            Log.d("TAG", "PaletteSampleScreen: ${pallete.getLightMutedColor(0)}")
-            Log.d("TAG", "PaletteSampleScreen: ${pallete.getMutedColor(0)}")
-            Log.d("TAG", "PaletteSampleScreen: ${pallete.getDarkMutedColor(0)}")
-
+        profileState?.let { palette ->
             Text(
                 text = "This text and background color is from vibrant swatch.",
                 style = MaterialTheme.typography.titleMedium.copy(
-                    color = Color(pallete.vibrantSwatch?.titleTextColor ?: 0),
+                    color = Color(palette.vibrantSwatch?.titleTextColor ?: 0),
                 ),
                 modifier = Modifier
                     .clickable {
                     }
                     .fillMaxWidth()
                     .background(
-                        color = Color(pallete.vibrantSwatch?.rgb ?: 0),
+                        color = Color(palette.vibrantSwatch?.rgb ?: 0),
                     ),
             )
-        }
-        Row {
-            Image(
-                painter = painterResource(id = R.drawable.test_2),
-                contentDescription = null,
-                modifier = Modifier.fillMaxWidth(0.5f),
-            )
-            Column {
-                profileState?.let {
-                    it.swatches.forEach { swatch ->
-                        if (swatch.bodyTextColor != 0) {
-                            Text(
-                                text = it.toString(),
-                                style = MaterialTheme.typography.titleMedium.copy(
-                                    color = Color(swatch.titleTextColor),
-                                ),
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .background(
-                                        color = Color(swatch?.rgb ?: 0),
-                                    ),
-                            )
-                        }
+            Row {
+                Image(
+                    painter = painterResource(id = imageId),
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxWidth(0.5f),
+                )
+                Column {
+                    palette.lightVibrantSwatch?.let { swatch ->
+                        Text(
+                            text = "Light Vibrant",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                color = Color(swatch.titleTextColor),
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = Color(swatch.rgb),
+                                )
+                                .padding(5.dp),
+                        )
+                    }
+
+                    palette.vibrantSwatch?.let { swatch ->
+                        Text(
+                            text = "Vibrant",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                color = Color(swatch.titleTextColor),
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = Color(swatch.rgb),
+                                )
+                                .padding(5.dp),
+                        )
+                    }
+
+                    palette.darkVibrantSwatch?.let { swatch ->
+                        Text(
+                            text = "Dark Vibrant",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                color = Color(swatch.titleTextColor),
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = Color(swatch.rgb),
+                                )
+                                .padding(5.dp),
+                        )
+                    }
+
+                    palette.lightMutedSwatch?.let { swatch ->
+                        Text(
+                            text = "Light Muted",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                color = Color(swatch.titleTextColor),
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = Color(swatch.rgb),
+                                )
+                                .padding(5.dp),
+                        )
+                    }
+
+                    palette.mutedSwatch?.let { swatch ->
+                        Text(
+                            text = "Muted",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                color = Color(swatch.titleTextColor),
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = Color(swatch.rgb),
+                                )
+                                .padding(5.dp),
+                        )
+                    }
+
+                    palette.darkMutedSwatch?.let { swatch ->
+                        Text(
+                            text = "Dark Muted",
+                            style = MaterialTheme.typography.titleMedium.copy(
+                                color = Color(swatch.titleTextColor),
+                            ),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(
+                                    color = Color(swatch.rgb),
+                                )
+                                .padding(5.dp),
+                        )
                     }
                 }
-
             }
         }
     }
