@@ -51,6 +51,9 @@ class PBListFragment : Fragment() {
         binding.progressApiCard.setOnClickListener {
             findNavController().navigate(R.id.show_PBProgressAPI)
         }
+        binding.transitionsCard.setOnClickListener {
+            findNavController().navigate(R.id.show_PBTransition)
+        }
     }
 
     override fun onDestroyView() {
@@ -71,5 +74,7 @@ class PBListFragment : Fragment() {
         binding.crossFragmentDescription.text = animations[PBAnimation.CROSS_FRAGMENT]?.description ?: ""
         binding.progressApiTitle.text = animations[PBAnimation.PROGRESS_API]?.title ?: ""
         binding.progressApiDescription.text = animations[PBAnimation.PROGRESS_API]?.description ?: ""
+        binding.transitionsTitle.text = animations[PBAnimation.TRANSITION]?.title ?: ""
+        binding.transitionsDescription.text = animations[PBAnimation.TRANSITION]?.description ?: ""
     }
 }
