@@ -82,12 +82,17 @@ class PBTransition : Fragment() {
 
             override fun handleOnBackCancelled() {
                 // If the user cancels the back gesture, reset the state
-                transition(ShowText.LONG)
+                TransitionManager.beginDelayedTransition(
+                    binding.textContainer,
+                    ChangeBounds()
+                )
+                changeTextVisibility(ShowText.LONG)
             }
         }
 
         binding.shortText.setOnClickListener {
-            transition(ShowText.LONG)
+            TransitionManager.beginDelayedTransition(binding.textContainer, transitionSet)
+            changeTextVisibility(ShowText.LONG)
             callback.isEnabled = true
         }
 
@@ -101,11 +106,6 @@ class PBTransition : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
-    }
-
-    private fun transition(showText: ShowText) {
-        TransitionManager.beginDelayedTransition(binding.textContainer, transitionSet)
-        changeTextVisibility(showText)
     }
 
     enum class ShowText { SHORT, LONG }
