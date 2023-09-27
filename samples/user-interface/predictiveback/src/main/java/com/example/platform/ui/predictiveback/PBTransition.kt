@@ -96,7 +96,7 @@ class PBTransition : Fragment() {
             callback.isEnabled = true
         }
 
-        this.requireActivity().onBackPressedDispatcher.addCallback(callback)
+        this.requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
         binding.apply {
             longText.movementMethod = ScrollingMovementMethod();
