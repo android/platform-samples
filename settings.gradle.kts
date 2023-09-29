@@ -32,7 +32,7 @@ dependencyResolutionManagement {
         mavenCentral()
 
         // Using SNAPSHOTS for Telecom SDK. This should be removed once telecom SDK is stable
-        maven { url = uri("https://androidx.dev/snapshots/builds/10800912/artifacts/repository") }
+        maven { url = uri("https://androidx.dev/snapshots/builds/10876735/artifacts/repository") }
     }
 }
 

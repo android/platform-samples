@@ -42,6 +42,7 @@ sealed class TelecomCall {
         val isActive: Boolean,
         val isOnHold: Boolean,
         val isMuted: Boolean,
+        val errorCode: Int?,
         val currentCallEndpoint: CallEndpointCompat?,
         val availableCallEndpoints: List<CallEndpointCompat>,
         internal val actionSource: Channel<TelecomCallAction>,
