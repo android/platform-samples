@@ -114,7 +114,7 @@ class TelecomCallRepository(private val callsManager: CallsManager) {
         try {
             callsManager.addCall(
                 attributes,
-                onIsCallAnswered, // Watch or Auto needs to know if it can answer the call
+                onIsCallAnswered, // Watch needs to know if it can answer the call
                 onIsCallDisconnected,
                 onIsCallActive,
                 onIsCallInactive
