@@ -26,7 +26,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-telecom:1.0.0-SNAPSHOT")
+    implementation("androidx.core:core-telecom:1.0.0-alpha02")
     implementation(project(mapOf("path" to ":samples:connectivity:audio")))
 
     androidTestImplementation(platform(libs.compose.bom))
