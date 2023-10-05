@@ -32,10 +32,8 @@ import com.example.platform.ui.windowmanager.databinding.ActivityDisplayFeatures
 import com.example.platform.ui.windowmanager.infolog.InfoLogAdapter
 import com.example.platform.ui.windowmanager.util.PictureInPictureUtil.appendPictureInPictureMenu
 import com.example.platform.ui.windowmanager.util.PictureInPictureUtil.handlePictureInPictureMenuItem
+import com.example.platform.ui.windowmanager.util.getCurrentTimeString
 import com.example.platform.ui.windowmanager.util.getLayoutParamsForFeatureInFrameLayout
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -155,9 +153,5 @@ open class DisplayFeaturesActivity : AppCompatActivity() {
         infoLogAdapter.notifyDataSetChanged()
     }
 
-    private fun getCurrentTimeString(): String {
-        val sdf = SimpleDateFormat("HH:mm:ss.SSS", Locale.getDefault())
-        val currentDate = sdf.format(Date())
-        return currentDate.toString()
-    }
+
 }
