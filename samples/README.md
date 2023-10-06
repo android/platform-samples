@@ -10,9 +10,9 @@ Demonstrates displaying processed pixel data directly from the camera sensor
 This sample demonstrates the importance of proper color contrast and how to 
 - [Communication Audio Manager Sample](connectivity/audio/src/main/java/com/example/platform/connectivity/audio/AudioCommsSample.kt):
 This sample shows how to use audio manager to for Communication application that self-manage the call.
-- [Companion Device Manager Sample](connectivity/bluetooth/companion/src/main/java/com/example/platform/connectivity/bluetooth/cdm/CompanionDeviceManagerSample.kt):
-This samples shows how to use the CDM to pair and connect with BLE devices
 - [Companion Device Manager Sample](connectivity/bluetooth/companion/src/main/java/com/example/platform/connectivity/bluetooth/ble/CompanionDeviceManagerSample.kt):
+This samples shows how to use the CDM to pair and connect with BLE devices
+- [Companion Device Manager Sample](connectivity/bluetooth/companion/src/main/java/com/example/platform/connectivity/bluetooth/cdm/CompanionDeviceManagerSample.kt):
 This samples shows how to use the CDM to pair and connect with BLE devices
 - [Connect to a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/ConnectGATTSample.kt):
 Shows how to connect to a GATT server hosted by the BLE device and perform simple operations

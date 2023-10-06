@@ -23,10 +23,13 @@ import android.telecom.DisconnectCause
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.telecom.CallAttributesCompat
-import androidx.core.telecom.CallControlCallback
+import androidx.core.telecom.CallControlResult
 import androidx.core.telecom.CallControlScope
-import androidx.core.telecom.CallEndpointCompat
+import androidx.core.telecom.CallException
 import androidx.core.telecom.CallsManager
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -107,95 +110,57 @@ class TelecomCallRepository(private val callsManager: CallsManager) {
 
         // Creates a channel to send actions to the call scope.
         val actionSource = Channel<TelecomCallAction>()
-
         // Register the call and handle actions in the scope
-        callsManager.addCall(attributes) {
-            // TODO this should eventually be moved inside the addCall method b/290562928
-            setCallback(
-                // Register the callback to be notified about other call actions
-                // from other services or devices (e.g Auto, watch)
-                // In our case we will update the call status based on the callback action and
-                // return true to let the Telecom SDK continue the action.
-                object : CallControlCallback {
-                    override suspend fun onAnswer(callType: Int): Boolean {
-                        updateCurrentCall {
-                            copy(isActive = true, isOnHold = false)
-                        }
-                        return true
-                    }
-
-                    override suspend fun onDisconnect(disconnectCause: DisconnectCause): Boolean {
-                        updateCurrentCall {
-                            TelecomCall.Unregistered(id, callAttributes, disconnectCause)
-                        }
-                        return true
-                    }
-
-                    override suspend fun onSetActive(): Boolean {
-                        updateCurrentCall {
-                            copy(
-                                isActive = true,
-                                isOnHold = false,
-                            )
-                        }
-                        return true
-                    }
-
-                    override suspend fun onSetInactive(): Boolean {
-                        updateCurrentCall {
-                            copy(
-                                isActive = false,
-                                isOnHold = true,
-                            )
-                        }
-                        return true
-                    }
-                },
-            )
-
-            // Consume the actions to interact with the call inside the scope
-            launch {
-                try {
+        try {
+            callsManager.addCall(
+                attributes,
+                onIsCallAnswered, // Watch needs to know if it can answer the call
+                onIsCallDisconnected,
+                onIsCallActive,
+                onIsCallInactive
+            ) {
+                // Consume the actions to interact with the call inside the scope
+                launch {
                     processCallActions(actionSource.consumeAsFlow())
-                } finally {
-                    // TODO this should wrap addCall once b/291604411 is fixed
-                    _currentCall.value = TelecomCall.None
                 }
-            }
 
-            // Update the state to registered with default values while waiting for Telecom updates
-            _currentCall.value = TelecomCall.Registered(
-                id = getCallId(),
-                isActive = false,
-                isOnHold = false,
-                callAttributes = attributes,
-                isMuted = false,
-                currentCallEndpoint = null,
-                availableCallEndpoints = emptyList(),
-                actionSource = actionSource,
-            )
+                // Update the state to registered with default values while waiting for Telecom updates
+                _currentCall.value = TelecomCall.Registered(
+                    id = getCallId(),
+                    isActive = false,
+                    isOnHold = false,
+                    callAttributes = attributes,
+                    isMuted = false,
+                    errorCode = null,
+                    currentCallEndpoint = null,
+                    availableCallEndpoints = emptyList(),
+                    actionSource = actionSource,
+                )
 
-            launch {
-                currentCallEndpoint.collect {
-                    updateCurrentCall {
-                        copy(currentCallEndpoint = it)
+                launch {
+                    currentCallEndpoint.collect {
+                        updateCurrentCall {
+                            copy(currentCallEndpoint = it)
+                        }
+                    }
+                }
+                launch {
+                    availableEndpoints.collect {
+                        updateCurrentCall {
+                            copy(availableCallEndpoints = it)
+                        }
+                    }
+                }
+                launch {
+                    isMuted.collect {
+                        updateCurrentCall {
+                            copy(isMuted = it)
+                        }
                     }
                 }
             }
-            launch {
-                availableEndpoints.collect {
-                    updateCurrentCall {
-                        copy(availableCallEndpoints = it)
-                    }
-                }
-            }
-            launch {
-                isMuted.collect {
-                    updateCurrentCall {
-                        copy(isMuted = it)
-                    }
-                }
-            }
+        } finally {
+            _currentCall.value = TelecomCall.None
         }
     }
 
@@ -228,20 +193,29 @@ class TelecomCallRepository(private val callsManager: CallsManager) {
                 }
 
                 TelecomCallAction.Hold -> {
-                    if (setInactive()) {
-                        updateCurrentCall {
-                            copy(isOnHold = true)
+                    when (val result = setInactive()) {
+                        is CallControlResult.Success -> {
+                            onIsCallInactive()
+                        }
+
+                        is CallControlResult.Error -> {
+                            updateCurrentCall {
+                                copy(errorCode = result.errorCode)
+                            }
                         }
                     }
                 }
 
                 TelecomCallAction.Activate -> {
-                    if (setActive()) {
-                        updateCurrentCall {
-                            copy(
-                                isActive = true,
-                                isOnHold = false,
-                            )
+                    when (val result = setActive()) {
+                        is CallControlResult.Success -> {
+                            onIsCallActive()
+                        }
+
+                        is CallControlResult.Error -> {
+                            updateCurrentCall {
+                                copy(errorCode = result.errorCode)
+                            }
                         }
                     }
                 }
@@ -287,24 +261,69 @@ class TelecomCallRepository(private val callsManager: CallsManager) {
 
     private suspend fun CallControlScope.doDisconnect(action: TelecomCallAction.Disconnect) {
         disconnect(action.cause)
-        updateCurrentCall {
-            TelecomCall.Unregistered(id, callAttributes, action.cause)
-        }
+        onIsCallDisconnected(action.cause)
     }
 
     private suspend fun CallControlScope.doAnswer() {
-        if (answer(CallAttributesCompat.CALL_TYPE_AUDIO_CALL)) {
-            updateCurrentCall {
-                copy(isActive = true, isOnHold = false)
+        when (answer(CallAttributesCompat.CALL_TYPE_AUDIO_CALL)) {
+            is CallControlResult.Success -> {
+                onIsCallAnswered(CallAttributesCompat.CALL_TYPE_AUDIO_CALL)
             }
-        } else {
-            updateCurrentCall {
-                TelecomCall.Unregistered(
-                    id = id,
-                    callAttributes = callAttributes,
-                    disconnectCause = DisconnectCause(DisconnectCause.BUSY),
-                )
+
+            is CallControlResult.Error -> {
+                updateCurrentCall {
+                    TelecomCall.Unregistered(
+                        id = id,
+                        callAttributes = callAttributes,
+                        disconnectCause = DisconnectCause(DisconnectCause.BUSY),
+                    )
+                }
             }
+        }
+    }
+
+    /**
+     *  Can the call be successfully answered??
+     *  TIP: We would check the connection/call state to see if we can answer a call
+     *  Example you may need to wait for another call to hold.
+     **/
+    val onIsCallAnswered: suspend(type: Int) -> Unit = {
+        updateCurrentCall {
+            copy(isActive = true, isOnHold = false)
+        }
+    }
+
+    /**
+     * Can the call perform a disconnect
+     */
+    val onIsCallDisconnected: suspend (cause: DisconnectCause) -> Unit = {
+        updateCurrentCall {
+            TelecomCall.Unregistered(id, callAttributes, it)
+        }
+    }
+
+    /**
+     *  Check is see if we can make the call active.
+     *  Other calls and state might stop us from activating the call
+     */
+    val onIsCallActive: suspend () -> Unit = {
+        updateCurrentCall {
+            copy(
+                errorCode = null,
+                isActive = true,
+                isOnHold = false,
+            )
+        }
+    }
+
+    /**
+     * Check to see if we can make the call inactivate
+     */
+    val onIsCallInactive: suspend () -> Unit = {
+        updateCurrentCall {
+            copy(
+                errorCode = null,
+                isOnHold = true)
         }
     }
 }

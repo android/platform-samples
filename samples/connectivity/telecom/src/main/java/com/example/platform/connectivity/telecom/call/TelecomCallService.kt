@@ -131,8 +131,10 @@ class TelecomCallService : Service() {
                 delay(2000)
             }
 
-            // Register the call with the Telecom stack
-            telecomRepository.registerCall(name, uri, incoming)
+            launch {
+                // Register the call with the Telecom stack
+                telecomRepository.registerCall(name, uri, incoming)
+            }
 
             if (!incoming) {
                 // If doing an outgoing call, fake the other end picks it up for demo purposes.

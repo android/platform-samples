@@ -19,6 +19,7 @@ package com.example.platform.connectivity.telecom.call
 import android.Manifest
 import android.os.Build
 import android.telecom.DisconnectCause
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -64,6 +65,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.telecom.CallEndpointCompat
 import androidx.core.telecom.CallEndpointCompat.Companion.TYPE_BLUETOOTH
@@ -110,6 +112,7 @@ internal fun TelecomCallScreen(repository: TelecomCallRepository, onCallFinished
                 isActive = newCall.isActive,
                 isOnHold = newCall.isOnHold,
                 isMuted = newCall.isMuted,
+                errorCode = newCall.errorCode,
                 currentEndpoint = newCall.currentCallEndpoint,
                 endpoints = newCall.availableCallEndpoints,
                 onCallAction = newCall::processAction,
@@ -139,10 +142,16 @@ private fun CallScreen(
     isActive: Boolean,
     isOnHold: Boolean,
     isMuted: Boolean,
+    errorCode: Int?,
     currentEndpoint: CallEndpointCompat?,
     endpoints: List<CallEndpointCompat>,
     onCallAction: (TelecomCallAction) -> Unit,
 ) {
+
+    if(errorCode != null) {
+        Toast.makeText(LocalContext.current, "errorCode=($errorCode)", Toast.LENGTH_SHORT).show()
+    }
+
     Column(
         Modifier
             .fillMaxSize(),
