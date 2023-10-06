@@ -37,8 +37,14 @@
             </intent-filter>
         </activity>
         <activity
+            android:name=".DualScreenActivity"
+            android:exported="false"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+            android:label="@string/dual_screen_activity"/>
+        <activity
             android:name=".RearDisplayModeActivity"
             android:exported="false"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
             android:label="@string/rear_display_activity"/>
         <activity
             android:name=".MediaPlayerActivity"

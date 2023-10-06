@@ -20,6 +20,9 @@ import android.view.View
 import android.widget.FrameLayout
 import androidx.window.layout.DisplayFeature
 import androidx.window.layout.FoldingFeature
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
 /**
  * Offset the [DisplayFeature]'s bounds to match its respective
@@ -110,4 +113,10 @@ private fun getFeatureBoundsInWindow(
     featureRectInView.offset(-viewLocationInWindow[0], -viewLocationInWindow[1])
 
     return featureRectInView
+}
+
+fun getCurrentTimeString(): String {
+    val sdf = SimpleDateFormat("HH:mm:ss.SSS", Locale.getDefault())
+    val currentDate = sdf.format(Date())
+    return currentDate.toString()
 }

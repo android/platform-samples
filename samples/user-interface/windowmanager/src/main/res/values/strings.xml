@@ -108,4 +108,7 @@
     <string name="toggle_rear_display">Toggle Rear Display Mode</string>
     <string name="rear_display_activity">Rear Display Mode</string>
     <string name="rear_display_activity_demo_description">Demo of the Rear Display Mode</string>
+    <string name="dual_screen_activity">Dual Screen Activity</string>
+    <string name="dual_screen_activity_demo_description">Demo of an Activity that can present content on both displays of a foldable device simultaneously</string>
+    <string name="toggle_dual_screen">Toggle Dual Screen Mode</string>
 </resources>

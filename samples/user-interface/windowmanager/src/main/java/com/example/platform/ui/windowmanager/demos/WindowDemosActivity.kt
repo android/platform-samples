@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
+import com.example.platform.ui.windowmanager.DualScreenActivity
 import com.example.platform.ui.windowmanager.DisplayFeaturesActivity
 import com.example.platform.ui.windowmanager.MediaPlayerActivity
 import com.example.platform.ui.windowmanager.R
@@ -81,6 +82,11 @@ import com.google.android.catalog.framework.annotations.Sample
                 buttonTitle = getString(R.string.rear_display_activity),
                 description = getString(R.string.rear_display_activity_demo_description),
                 clazz = RearDisplayModeActivity::class.java
+            ),
+            DemoItem(
+                buttonTitle = getString(R.string.dual_screen_activity),
+                description = getString(R.string.dual_screen_activity_demo_description),
+                clazz = DualScreenActivity::class.java
             ),
         )
         val recyclerView = findViewById<RecyclerView>(R.id.demo_recycler_view)
