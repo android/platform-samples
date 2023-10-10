@@ -20,7 +20,7 @@ Shows how to connect to a GATT server hosted by the BLE device and perform simpl
 Center child views horizontally or vertically.
 - [Conversion suggestions](user-interface/text/src/main/java/com/example/platform/ui/text/ConversionSuggestions.kt):
 Demonstrates how to implement the incremental search feature for non-alphabet languages with the Conversion Suggestions API.
-- [Create a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/GATTServerSample.kt):
+- [Create a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/server/GATTServerSample.kt):
 Shows how to create a GATT server and communicate with the GATT client
 - [Data Access](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
 Demonstrates how to implement data access auditing for your app to identify 
@@ -32,6 +32,8 @@ This sample demonstrates using the Glide image loading library to detect the
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
 Demonstrates basic Drag and Drop functionality.
+- [Editing UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/edit/EditingUltraHDR.kt):
+This sample demonstrates editing an UltraHDR image and the resulting gainmap as well. Spatial edit operations like crop, rotate, scale are supported
 - [Find devices sample](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/FindBLEDevicesSample.kt):
 This example will demonstrate how to scanning for Low Energy Devices
 - [Haptics - 1. Vibration effects](user-interface/haptics/src/main/java/com/example/platform/ui/haptics/Haptics.kt):
@@ -80,14 +82,20 @@ Select images/videos in a privacy-friendly way using the photo picker
 Basic usage of Picture-in-Picture mode showcasing a stopwatch
 - [Picture in Picture (PiP) - Video playback](user-interface/picture-in-picture/src/main/java/com/example/android/pip/PiPMovieActivity.kt):
 Basic usage of Picture-in-Picture mode showcasing video playback
+- [Predictive Back Sample](user-interface/predictiveback/src/main/java/com/example/platform/ui/predictiveback/PBHostingActivity.kt):
+Shows Predictive Back animations.
 - [Quick Settings](user-interface/quicksettings/src/main/java/com/example/platform/ui/quicksettings/QuickSettings.kt):
 Add your custom tile to the Quick Settings.
+- [Receive data shared by other apps](user-interface/share/src/main/java/com/example/platform/ui/share/receiver/ShareReceiverActivity.kt):
+Receive texts and images from other apps.
 - [Scan with BLE Intent](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/BLEScanIntentSample.kt):
 This samples shows how to use the BLE intent to scan for devices
 - [Screenshot Detection](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/ScreenshotDetection.kt):
 This sample shows how to detect that the user capture the screen in Android 14 onwards
 - [Selected Photos Access](storage/src/main/java/com/example/platform/storage/mediastore/SelectedPhotosAccess.kt):
 Check and request storage permissions
+- [Send data with sharesheet](user-interface/share/src/main/java/com/example/platform/ui/share/sender/ShareSender.kt):
+Send texts and images to other apps using the Android Sharesheet.
 - [Single Permission](privacy/permissions/src/main/java/com/example/platform/privacy/permissions/SinglePermission.kt):
 Shows the recommended flow to request single runtime permissions
 - [Speakable Text](accessibility/src/main/java/com/example/platform/accessibility/SpeakableText.kt):
@@ -98,6 +106,8 @@ A sample showcasing how to handle calls with the Jetpack Telecom API
 buildSpannedString is useful for quickly building a rich text.
 - [UltraHDR Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2UltraHDRCapture.kt):
 This sample demonstrates how to capture a 10-bit compressed still image and 
+- [UltraHDR to HDR Video](media/ultrahdr/src/main/java/com/example/platform/media/ultrahdr/video/UltraHDRToHDRVideo.kt):
+This sample demonstrates converting a series of UltraHDR images into a HDR 
 - [Visualizing an UltraHDR Gainmap](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/VisualizingAnUltraHDRGainmap.kt):
 This sample demonstrates visualizing the underlying gainmap of an UltraHDR 
 - [WindowInsetsAnimation](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/WindowInsetsAnimation.kt):

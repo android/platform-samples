@@ -12,17 +12,17 @@ This repository contains a collection of samples that demonstrate the use of dif
 
 Browse the samples inside each topic samples folder:
 
-- [Accessibility](samples/accessibility)
-- [Camera](samples/camera)
-- [Connectivity](samples/connectivity)
-- [Graphics](samples/graphics)
-- [Location](samples/location)
-- [Privacy](samples/privacy)
-- [Storage](samples/storage)
-- [User-interface](samples/user-interface)
+- [Accessibility](https://github.com/android/platform-samples/tree/main/samples/accessibility)
+- [Camera](https://github.com/android/platform-samples/tree/main/samples/camera)
+- [Connectivity](https://github.com/android/platform-samples/tree/main/samples/connectivity)
+- [Graphics](https://github.com/android/platform-samples/tree/main/samples/graphics)
+- [Location](https://github.com/android/platform-samples/tree/main/samples/location)
+- [Privacy](https://github.com/android/platform-samples/tree/main/samples/privacy)
+- [Storage](https://github.com/android/platform-samples/tree/main/samples/storage)
+- [User-interface](https://github.com/android/platform-samples/tree/main/samples/user-interface)
 - More to come...
 
-We are constantly adding new samples to this repository. You can find a list of all the available samples [here](samples/README.md).
+We are constantly adding new samples to this repository. You can find a list of all the available samples [here](https://github.com/android/platform-samples/tree/main/samples/README.md).
 
 > 🚧 **Work-in-Progress:** we are working on brining more existing and new samples into this format.
 

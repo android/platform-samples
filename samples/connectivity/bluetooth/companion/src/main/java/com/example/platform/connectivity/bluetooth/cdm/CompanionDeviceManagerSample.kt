@@ -64,7 +64,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
 import com.example.platform.base.PermissionBox
 import com.example.platform.connectivity.bluetooth.ble.ConnectDeviceScreen
-import com.example.platform.connectivity.bluetooth.ble.SERVICE_UUID
+import com.example.platform.connectivity.bluetooth.ble.server.GATTServerSampleService.Companion.SERVICE_UUID
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch

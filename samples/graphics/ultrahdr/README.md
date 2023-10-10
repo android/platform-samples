@@ -1,8 +1,8 @@
-# UltraHDR Samples
+# UltraHDR Graphics Samples
 
 This is a catalog of graphics related UltraHDR samples that demonstrate the usage and capabilities of UltraHDR images on the Android Platform
 
-> 🚧 **Work-in-Progress:** We are activtly working on bringing more UltraHDR samples
+> 🚧 **Work-in-Progress:** We are actively working on bringing more UltraHDR samples
 
 Check out the UltraHDR HDR specifications at https://developer.android.com/guide/topics/media/hdr-image-format
 

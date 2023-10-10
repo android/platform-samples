@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright 2020 The Android Open Source Project
 
   Licensed under the Apache License, Version 2.0 (the "License");
@@ -106,4 +105,10 @@
     <!-- Big Buck Bunny video provided by the Blender Foundation.
 (c) copyright 2008, Blender Foundation / www.bigbuckbunny.org -->
     <string name="media_url_mp4">https://storage.googleapis.com/exoplayer-test-media-0/BigBuckBunny_320x180.mp4</string>
+    <string name="toggle_rear_display">Toggle Rear Display Mode</string>
+    <string name="rear_display_activity">Rear Display Mode</string>
+    <string name="rear_display_activity_demo_description">Demo of the Rear Display Mode</string>
+    <string name="dual_screen_activity">Dual Screen Activity</string>
+    <string name="dual_screen_activity_demo_description">Demo of an Activity that can present content on both displays of a foldable device simultaneously</string>
+    <string name="toggle_dual_screen">Toggle Dual Screen Mode</string>
 </resources>

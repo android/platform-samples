@@ -84,7 +84,7 @@ private fun BackgroundLocationControls() {
         val enqueued = workerState?.find { !it.state.isFinished } != null
         if (enqueued) {
             ControlsState(
-                text = "Check the logcat for location updates every 2 min",
+                text = "Check the logcat for location updates every 15 min",
                 action = "Disable updates",
                 onClick = {
                     workManager.cancelUniqueWork(BgLocationWorker.workName)
@@ -95,12 +95,12 @@ private fun BackgroundLocationControls() {
                 text = "Enable location updates and bring the app in the background.",
                 action = "Enable updates",
                 onClick = {
-                    // Schedule a periodic worker to check for location every 2 min
+                    // Schedule a periodic worker to check for location every 15 min
                     workManager.enqueueUniquePeriodicWork(
                         BgLocationWorker.workName,
                         ExistingPeriodicWorkPolicy.KEEP,
                         PeriodicWorkRequestBuilder<BgLocationWorker>(
-                            2,
+                            15,
                             TimeUnit.MINUTES,
                         ).build(),
                     )

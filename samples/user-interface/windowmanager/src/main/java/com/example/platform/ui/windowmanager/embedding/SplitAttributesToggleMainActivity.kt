@@ -27,6 +27,7 @@ import androidx.collection.ArraySet
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.window.WindowSdkExtensions
 import androidx.window.core.ExperimentalWindowApi
 import com.example.platform.ui.windowmanager.embedding.SplitDeviceStateActivityBase.Companion.SUFFIX_AND_HORIZONTAL_LAYOUT_IN_TABLETOP
 import androidx.window.embedding.ActivityEmbeddingController
@@ -69,7 +70,7 @@ open class SplitAttributesToggleMainActivity : SplitAttributesToggleActivityBase
 
         activityEmbeddingController = ActivityEmbeddingController.getInstance(this)
 
-        if (!splitController.isSplitAttributesCalculatorSupported()) {
+        if (WindowSdkExtensions.getInstance().extensionVersion < 2) {
             placeholderFoldingAwareAttrsRadioButton.isEnabled = false
             viewBinding.placeholderUseCustomizedSplitAttributes.isEnabled = false
             splitRuleFoldingAwareAttrsRadioButton.isEnabled = false

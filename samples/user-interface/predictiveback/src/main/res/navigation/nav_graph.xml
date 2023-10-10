@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2023 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     https://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/PBListFragment">
+    <fragment
+        android:id="@+id/PBListFragment"
+        android:name="com.example.platform.ui.predictiveback.PBListFragment"
+        android:label="fragment_animation_list"
+        tools:layout="@layout/fragment_animation_list" >
+        <action
+            android:id="@+id/show_PBNavigationComponentDefaultAnimations"
+            app:destination="@id/PBNavigationComponentDefaultAnimations"
+            app:enterAnim="@animator/nav_default_enter_anim"
+            app:exitAnim="@animator/nav_default_exit_anim"
+            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
+            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+        <action
+            android:id="@+id/show_PBCustomCrossActivityAnimation"
+            app:destination="@id/PBCustomCrossActivityAnimation" />
+        <action
+            android:id="@+id/show_PBProgressAPI"
+            app:destination="@id/PBProgressAPI" />
+    </fragment>
+    <fragment
+        android:id="@+id/PBNavigationComponentDefaultAnimations"
+        android:name="com.example.platform.ui.predictiveback.PBNavigationComponentDefaultAnimations"
+        android:label="fragment_navigation_component_default_animations"
+        tools:layout="@layout/fragment_navigation_component_default_animations" />
+    <activity
+        android:id="@+id/PBCustomCrossActivityAnimation"
+        android:name="com.example.platform.ui.predictiveback.PBCustomCrossActivityAnimation"
+        android:label="activity_custom_cross_animation"
+        tools:layout="@layout/activity_custom_cross_animation" />
+    <fragment
+        android:id="@+id/PBProgressAPI"
+        android:name="com.example.platform.ui.predictiveback.PBProgressAPI"
+        android:label="fragment_progress_api"
+        tools:layout="@layout/fragment_progress_api" />
+</navigation>

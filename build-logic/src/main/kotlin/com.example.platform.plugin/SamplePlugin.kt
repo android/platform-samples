@@ -99,6 +99,7 @@ class SamplePlugin : Plugin<Project> {
                 "androidTestImplementation"(platform(libs.findLibrary("compose.bom").get()))
 
                 "implementation"(libs.findLibrary("casa.base").get())
+                "implementation"(libs.findLibrary("casa.ui").get())
                 "ksp"(libs.findLibrary("casa.processor").get())
 
                 "implementation"(libs.findLibrary("hilt.android").get())

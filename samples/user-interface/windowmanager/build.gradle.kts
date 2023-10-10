@@ -16,6 +16,7 @@
 
 plugins {
     id("com.example.platform.sample")
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -30,10 +31,12 @@ dependencies {
     implementation(libs.androidx.window)
     implementation(libs.androidx.window.java)
     implementation(libs.androidx.window.rxjava2)
+    implementation(libs.androidx.window.core)
     implementation(libs.rxjava2.android)
     implementation(libs.androidx.startup)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.core)
+    implementation(libs.appcompat)
 }
