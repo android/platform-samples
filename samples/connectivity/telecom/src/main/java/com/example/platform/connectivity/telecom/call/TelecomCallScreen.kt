@@ -346,7 +346,7 @@ private fun CallControls(
             IconButton(onClick = { showEndPoints = !showEndPoints }) {
                 Icon(
                     getEndpointIcon(endpointType),
-                    contentDescription = "Localized description",
+                    contentDescription = "Toggle Endpoints",
                 )
                 Icon(
                     if (showEndPoints) {
@@ -417,7 +417,7 @@ private fun CallEndPointItem(
         leadingIcon = {
             Icon(
                 getEndpointIcon(endPoint.type),
-                contentDescription = null,
+                contentDescription = endPoint.name.toString(),
             )
         },
     )

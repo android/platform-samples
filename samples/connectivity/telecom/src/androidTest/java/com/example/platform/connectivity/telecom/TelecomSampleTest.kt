@@ -86,23 +86,15 @@ class TelecomSampleTest {
             onNode(hasText("Bob")).assertIsDisplayed()
 
             // Check Toggle between speaker and earphone (except for tablets)
-            val speaker = "Toggle speaker"
-            onNodeWithContentDescription(speaker).apply {
+            val speaker = "Speaker"
+            val endpoints = "Toggle Endpoints"
+            onNodeWithContentDescription(endpoints).apply {
                 assertIsEnabled()
-                assert(
-                    if (isTablet) {
-                        isOn()
-                    } else {
-                        isOff()
-                    },
-                )
-                if (!isTablet) {
-                    performClick()
-                }
+                performClick()
+
             }
-            if (!isTablet) {
-                waitUntilExactlyOneExists(hasContentDescription(speaker) and isOn(), 5000)
-            }
+
+            waitUntilExactlyOneExists(hasContentDescription(speaker) and isOn(), 5000)
 
             val onHold = "Pause or resume call"
             onNodeWithContentDescription(onHold).apply {
