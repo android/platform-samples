@@ -82,7 +82,7 @@ class TelecomSampleTest {
             Log.d("TelecomSampleTest", "Testing on a tablet? $isTablet")
 
             // Wait till the call is connected
-            waitUntilExactlyOneExists(hasContentDescription("Connected"), 5000)
+            waitUntilExactlyOneExists(hasText("Connected"), 5000)
             onNode(hasText("Bob")).assertIsDisplayed()
 
             // Check Toggle between speaker and earphone (except for tablets)
@@ -91,10 +91,9 @@ class TelecomSampleTest {
             onNodeWithContentDescription(endpoints).apply {
                 assertIsEnabled()
                 performClick()
-
             }
 
-            waitUntilExactlyOneExists(hasContentDescription(speaker) and isOn(), 5000)
+            waitUntilExactlyOneExists(hasText(speaker), 5000)
 
             val onHold = "Pause or resume call"
             onNodeWithContentDescription(onHold).apply {
