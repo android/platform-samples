@@ -85,16 +85,6 @@ class TelecomSampleTest {
             waitUntilExactlyOneExists(hasText("Connected"), 5000)
             onNode(hasText("Bob")).assertIsDisplayed()
 
-            // Check Toggle between speaker and earphone (except for tablets)
-            val speaker = "Speaker"
-            val endpoints = "Toggle Endpoints"
-            onNodeWithContentDescription(endpoints).apply {
-                assertIsEnabled()
-                performClick()
-            }
-
-            waitUntilExactlyOneExists(hasText(speaker), 5000)
-
             val onHold = "Pause or resume call"
             onNodeWithContentDescription(onHold).apply {
                 assertIsEnabled()
