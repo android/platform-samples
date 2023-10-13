@@ -47,7 +47,10 @@ class NotificationSource<T>(
         const val ChannelId = "1234"
         const val ChannelIntID = 1234
 
+        const val ChannelOnGoingIntID = 1233
+        const val ChannelOnGoingID = "1233"
         /*
+
         Notification state sent via in intent to inform receiving broadcast what action the user wants to take
          */
         enum class NotificationState(val value: Int) {
@@ -68,7 +71,7 @@ class NotificationSource<T>(
         //Channel for on going call, this has low importance so that the notification is not always shown
         @SuppressLint("NewApi")
         private val notificationChannelOngoing = NotificationChannel(
-            ChannelId, "Call Notifications",
+            ChannelOnGoingID, "Call Notifications",
             NotificationManager.IMPORTANCE_LOW,
         )
 
@@ -141,6 +144,13 @@ class NotificationSource<T>(
     }
 
     /**
+     * Will cancel notification and dismiss from sysUI
+     */
+    fun cancelNotification() {
+        notificationManager.cancel(ChannelIntID)
+    }
+
+    /**
      * Creates a notification for incoming calls.
      * This notification plays a ringtone and is not dismissible
      */
@@ -192,7 +202,8 @@ class NotificationSource<T>(
             cancelCallIntent, PendingIntent.FLAG_IMMUTABLE,
         )
 
-        return NotificationCompat.Builder(context, ChannelId)
+
+        return NotificationCompat.Builder(context, ChannelOnGoingID)
             .setSmallIcon(R.drawable.ic_dialog_dialer)
             .setFullScreenIntent(pendingIntent, false)
             .setOngoing(true)
