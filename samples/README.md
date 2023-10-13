@@ -68,6 +68,8 @@ Basic motion example using referenced ConstraintLayout files
 Shows the recommended flow to request multiple RELATED runtime permissions
 - [Package Visibility](privacy/data/src/main/java/com/example/platform/privacy/data/PackageVisibility.kt):
 A sample that showcase how the package visibility queries affects the available packages
+- [Palette API](graphics/pallete/src/main/java/com/example/platform/graphics/pallete/PalleteSampleScreen.kt):
+This sample demonstrates using an Palette API.
 - [PdfRenderer](graphics/pdf/src/main/java/com/example/platform/graphics/pdf/PdfRenderer.kt):
 Demonstrates how to use PdfRenderer to display PDF documents on the screen.
 - [Permissionless](privacy/permissions/src/main/java/com/example/platform/privacy/permissions/Permissionless.kt):
