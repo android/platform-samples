@@ -26,6 +26,4 @@ android {
 
 dependencies {
     // Add samples specific dependencies
-    implementation(libs.compose.runtime.runtime)
-    implementation(libs.compose.ui.ui)
 }
