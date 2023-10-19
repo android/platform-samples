@@ -21,7 +21,3 @@ plugins {
 android {
     namespace = "com.example.platform.ui.haptics"
 }
-
-dependencies {
-    implementation(libs.compose.material.iconsext)
-}

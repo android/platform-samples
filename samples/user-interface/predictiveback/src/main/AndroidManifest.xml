@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity
+            android:name=".PBCustomCrossActivityAnimation"
+            android:exported="false"
+            android:label="@string/title_activity_custom_cross_animation"
+            android:theme="@style/Theme.PlatformSamples" />
+        <activity
+            android:name=".PBHostingActivity"
+            android:exported="false"
+            android:label="@string/title_activity_predictive_back_sample"
+            android:theme="@style/Theme.PlatformSamples" />
+    </application>
+
+</manifest>

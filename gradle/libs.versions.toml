@@ -17,9 +17,9 @@
 accompanist = "0.28.0"
 androidx-datastore = "1.0.0"
 androidx-navigation = "2.6.0"
-androidx-window = "1.1.0"
-agp = "8.1.0"
-casa = "0.4.3"
+androidx-window = "1.2.0-beta03"
+agp = "8.1.1"
+casa = "0.4.4"
 coil = "2.3.0"
 ksp = "1.8.21-1.0.11"
 compose-bom = "2023.06.01"
@@ -39,6 +39,9 @@ androidxTestRules = "1.5.0"
 androidxTestRunner = "1.5.2"
 androidxUiAutomator = "2.2.0"
 media3 = "1.1.0"
+appcompat = "1.6.1"
+material = "1.9.0"
+constraintlayout = "2.1.4"
 
 [libraries]
 
@@ -46,15 +49,17 @@ media3 = "1.1.0"
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 
 androidx-activity = "androidx.activity:activity:1.7.2"
-androidx-core = "androidx.core:core-ktx:1.10.1"
+androidx-core = "androidx.core:core-ktx:1.12.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-exifinterface = "androidx.exifinterface:exifinterface:1.3.6"
-androidx-fragment = "androidx.fragment:fragment-ktx:1.6.0"
+# Fragment 1.7.0 alpha is for predictive back to work with Fragment transitions
+androidx-fragment = "androidx.fragment:fragment-ktx:1.7.0-alpha04"
 androidx-activity-compose = "androidx.activity:activity-compose:1.7.2"
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "androidx-navigation" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidx-navigation" }
-androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1"
+androidx-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "androidx-navigation" }
+androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2"
 androidx-viewpager2 = "androidx.viewpager2:viewpager2:1.0.0"
 
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
@@ -116,13 +121,14 @@ play-services-location = { module = "com.google.android.gms:play-services-locati
 
 
 androidx-work-runtime-ktx = "androidx.work:work-runtime-ktx:2.8.1"
-androidx-core-remoteviews = "androidx.core:core-remoteviews:1.0.0-beta03"
-androidx-glance-appwidget = "androidx.glance:glance-appwidget:1.0.0-rc01"
-androidx-glance-material3 = "androidx.glance:glance-material3:1.0.0-rc01"
+androidx-core-remoteviews = "androidx.core:core-remoteviews:1.0.0"
+androidx-glance-appwidget = "androidx.glance:glance-appwidget:1.0.0"
+androidx-glance-material3 = "androidx.glance:glance-material3:1.0.0"
 androidx-startup = 'androidx.startup:startup-runtime:1.1.1'
 androidx-window = { module = "androidx.window:window", version.ref = "androidx-window" }
 androidx-window-java = { module = "androidx.window:window-java", version.ref = "androidx-window" }
 androidx-window-rxjava2 = { module = "androidx.window:window-rxjava2", version.ref = "androidx-window" }
+androidx-window-core = { module = "androidx.window:window-core", version.ref = "androidx-window" }
 androidx-media = "androidx.media:media:1.6.0"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
@@ -132,9 +138,14 @@ androidx-media3-common = { module = "androidx.media3:media3-common", version.ref
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3" }
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 
+fresco = "com.facebook.fresco:fresco:3.0.0"
+fresco-nativeimagetranscoder = "com.facebook.fresco:nativeimagetranscoder:2.6.0!!"
 glide = "com.github.bumptech.glide:glide:4.15.1"
 
 mdc = "com.google.android.material:material:1.9.0"
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 [plugins]
 affectedmoduledetector = { id = "com.dropbox.affectedmoduledetector", version = "0.2.0" }
