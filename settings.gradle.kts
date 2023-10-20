@@ -57,7 +57,14 @@ if (samples.isEmpty()) {
         // Find all build.gradle files under samples folder
         settingsDir.walk()
             .filter { it.name == "build.gradle" || it.name == "build.gradle.kts" }
-            .filter { it.path.contains("${separator}samples${separator}") }
+            .filter {
+                val relativePath = if (it.isAbsolute) {
+                    it.path.substring(settingsDir.path.length)
+                } else {
+                    it.path
+                }
+                relativePath.contains("${separator}samples${separator}")
+            }
             .map { it.parent.substring(rootDir.path.length) }
             .forEach {
                 add(it.replace(separator, ":"))
