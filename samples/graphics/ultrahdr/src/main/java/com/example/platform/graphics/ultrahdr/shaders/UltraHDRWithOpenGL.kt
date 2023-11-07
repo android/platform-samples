@@ -45,7 +45,7 @@ import java.util.function.Consumer
     tags = ["UltraHDR"],
 )
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-class UltraHDRWithGraphics : Fragment() {
+class UltraHDRWithOpenGL : Fragment() {
     /**
      *  Android ViewBinding.
      */
@@ -76,7 +76,7 @@ class UltraHDRWithGraphics : Fragment() {
         val stream = context?.assets?.open(ULTRA_HDR_IMAGE_LAMPS)
         val bitmap = BitmapFactory.decodeStream(stream)
 
-        val gainmapRenderer = UltraHDRGLGainmapRenderer(bitmap)
+        val gainmapRenderer = UltraHDRWithOpenGLRenderer(bitmap)
         val glRenderer = GLRenderer().apply {
             registerEGLContextCallback(
                 object : GLRenderer.EGLContextCallback {

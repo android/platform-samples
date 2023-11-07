@@ -34,7 +34,7 @@ import kotlin.math.min
 import kotlin.math.pow
 
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-class UltraHDRGLGainmapRenderer(private val bitmap: Bitmap) {
+class UltraHDRWithOpenGLRenderer(private val bitmap: Bitmap) {
     private val FLOAT_SIZE_BYTES = 4
     private val TRIANGLE_VERTICES_DATA_STRIDE_BYTES = 5 * FLOAT_SIZE_BYTES
     private val TRIANGLE_VERTICES_DATA_POS_OFFSET = 0
