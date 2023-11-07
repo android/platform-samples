@@ -124,6 +124,7 @@ androidx-work-runtime-ktx = "androidx.work:work-runtime-ktx:2.8.1"
 androidx-core-remoteviews = "androidx.core:core-remoteviews:1.0.0"
 androidx-glance-appwidget = "androidx.glance:glance-appwidget:1.0.0"
 androidx-glance-material3 = "androidx.glance:glance-material3:1.0.0"
+androidx-graphics-core = { group = "androidx.graphics", name = "graphics-core", version = "1.0.0-alpha05" }
 androidx-startup = 'androidx.startup:startup-runtime:1.1.1'
 androidx-window = { module = "androidx.window:window", version.ref = "androidx-window" }
 androidx-window-java = { module = "androidx.window:window-java", version.ref = "androidx-window" }

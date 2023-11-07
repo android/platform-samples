@@ -32,4 +32,8 @@ dependencies {
     // Fresco
     implementation(libs.fresco)
     implementation(libs.fresco.nativeimagetranscoder)
+    implementation(libs.androidx.graphics.core)
+
+    // Graphics
+
 }

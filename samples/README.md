@@ -25,7 +25,7 @@ Demonstrates how to implement data access auditing for your app to identify
 - [Displaying UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDR.kt):
 This sample demonstrates displaying an UltraHDR image.
 - [Displaying UltraHDR (3P Libraries)](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDRUsing3PLibrary.kt):
-This sample demonstrates using the various popular image loading libraries to display Ultra HDR images
+This sample demonstrates using the various popular image loading library to
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
@@ -106,6 +106,8 @@ buildSpannedString is useful for quickly building a rich text.
 This sample demonstrates how to capture a 10-bit compressed still image and 
 - [UltraHDR to HDR Video](media/ultrahdr/src/main/java/com/example/platform/media/ultrahdr/video/UltraHDRToHDRVideo.kt):
 This sample demonstrates converting a series of UltraHDR images into a HDR 
+- [UltraHDR with Graphics](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/shaders/UltraHDRWithGraphics.kt):
+This sample demonstrates displaying an UltraHDR image via and OpenGL Pipeline
 - [Visualizing an UltraHDR Gainmap](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/VisualizingAnUltraHDRGainmap.kt):
 This sample demonstrates visualizing the underlying gainmap of an UltraHDR 
 - [WindowInsetsAnimation](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/WindowInsetsAnimation.kt):
