@@ -63,6 +63,8 @@ class UltraHDRWithOpenGLRenderer(
     private var mDisplayRatioSdr = 0f
     private var mDisplayRatioHdr = 0f
 
+    val desiredHdrSdrRatio get() = bitmap.gainmap?.displayRatioForFullHdr ?: 1f
+
     /**
      * Location of UltraHDR vertex shader program.
      */
@@ -80,8 +82,6 @@ class UltraHDRWithOpenGLRenderer(
     init {
         triangleVertices.put(triangleVerticesData).position(0)
     }
-
-    val desiredHdrSdrRatio get() = bitmap.gainmap?.displayRatioForFullHdr ?: 1f
 
     private fun loadShader(shaderType: Int, source: String): Int {
         var shader = glCreateShader(shaderType)
@@ -150,6 +150,20 @@ class UltraHDRWithOpenGLRenderer(
         dest[4] = trfn[4]
         dest[5] = trfn[5] * gain
         dest[6] = trfn[6] * gain
+    }
+
+    fun mul3x3(lhs: FloatArray, rhs: FloatArray): FloatArray {
+        val r = FloatArray(9)
+        r[0] = lhs[0] * rhs[0] + lhs[3] * rhs[1] + lhs[6] * rhs[2]
+        r[1] = lhs[1] * rhs[0] + lhs[4] * rhs[1] + lhs[7] * rhs[2]
+        r[2] = lhs[2] * rhs[0] + lhs[5] * rhs[1] + lhs[8] * rhs[2]
+        r[3] = lhs[0] * rhs[3] + lhs[3] * rhs[4] + lhs[6] * rhs[5]
+        r[4] = lhs[1] * rhs[3] + lhs[4] * rhs[4] + lhs[7] * rhs[5]
+        r[5] = lhs[2] * rhs[3] + lhs[5] * rhs[4] + lhs[8] * rhs[5]
+        r[6] = lhs[0] * rhs[6] + lhs[3] * rhs[7] + lhs[6] * rhs[8]
+        r[7] = lhs[1] * rhs[6] + lhs[4] * rhs[7] + lhs[7] * rhs[8]
+        r[8] = lhs[2] * rhs[6] + lhs[5] * rhs[7] + lhs[8] * rhs[8]
+        return r
     }
 
     private fun skcmsTransferfunctionEval(tf: FloatArray, x: Float): Float {
@@ -247,7 +261,7 @@ class UltraHDRWithOpenGLRenderer(
         System.arraycopy(inv, 0, dest, 0, inv.size)
     }
 
-    fun onContextCreated() {
+    fun onContextCreated(destColorSpace: ColorSpace) {
         mProgram = createProgram(ultraHDRVertexShader, ultraHDRFragmentShader)
         if (mProgram == 0) return
 
@@ -297,7 +311,9 @@ class UltraHDRWithOpenGLRenderer(
         // Bind the base transfer function
         val srcTF = FloatArray(7)
         System.arraycopy(kSRGB, 0, srcTF, 0, srcTF.size)
-        (bitmap.colorSpace as? ColorSpace.Rgb)?.transferParameters?.let { params ->
+
+        val srcColorspace: ColorSpace.Rgb = bitmap.colorSpace!! as ColorSpace.Rgb
+        srcColorspace.transferParameters!!.let { params ->
             srcTF[0] = params.g.toFloat()
             srcTF[1] = params.a.toFloat()
             srcTF[2] = params.b.toFloat()
@@ -309,6 +325,13 @@ class UltraHDRWithOpenGLRenderer(
 
         val srcTfHandle = glGetUniformLocation(mProgram, "srcTF")
         glUniform1fv(srcTfHandle, 7, srcTF, 0)
+
+        val srcD50 = ColorSpace.adapt(srcColorspace, ColorSpace.ILLUMINANT_D50) as ColorSpace.Rgb
+        val destD50 = ColorSpace.adapt(destColorSpace, ColorSpace.ILLUMINANT_D50) as ColorSpace.Rgb
+
+        val gamutTransform = mul3x3(destD50.inverseTransform, srcD50.transform)
+        val gamutHandle = glGetUniformLocation(mProgram, "gamutTransform")
+        glUniformMatrix3fv(gamutHandle, 1, false, gamutTransform, 0)
 
         val gainmap = bitmap.gainmap!!
         val isAlpha = gainmap.gainmapContents.config == Bitmap.Config.ALPHA_8
@@ -336,7 +359,6 @@ class UltraHDRWithOpenGLRenderer(
     }
 
     fun onContextDestroyed() {
-
     }
 
     private fun uniform(name: String) = glGetUniformLocation(mProgram, name)
@@ -436,8 +458,7 @@ class UltraHDRWithOpenGLRenderer(
         checkGlError("glEnableVertexAttribArray maTextureHandle")
 
         Matrix.setRotateM(mMMatrix, 0, 0f, 0f, 0f, 1.0f)
-        val scale = width.toFloat().coerceAtMost(height.toFloat())
-        Matrix.scaleM(mMVPMatrix, 0, mMMatrix, 0, scale, scale, 1f)
+        Matrix.scaleM(mMVPMatrix, 0, mMMatrix, 0, width.toFloat(), height.toFloat(), 1f)
         Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mMVPMatrix, 0)
 
         glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mMVPMatrix, 0)
@@ -454,7 +475,7 @@ class UltraHDRWithOpenGLRenderer(
         /**
          * Location of UltraHDR fragment shader program.
          */
-        private const val FILE_ULTRAHDR_FRAGMENT_SHADER = "shaders/fs_uhdr_tonemapper.glsl"
+        private const val FILE_ULTRAHDR_FRAGMENT_SHADER = "shaders/fs_uhdr_tonemapper.frag"
 
         private const val FLOAT_SIZE_BYTES = 4
         private const val TRIANGLE_VERTICES_DATA_STRIDE_BYTES = 5 * FLOAT_SIZE_BYTES
@@ -463,12 +484,12 @@ class UltraHDRWithOpenGLRenderer(
 
         private val triangleVerticesData = floatArrayOf(
             // X, Y, Z, U, V
-            0f, 0f, .5f, 1f, 0f,
-            0f, 1f, .5f, 1f, 1f,
-            1f, 0f, .5f, 0f, 0f,
-            1f, 1f, .5f, 0f, 1f,
-            0f, 1f, .5f, 1f, 1f,
-            1f, 0f, .5f, 0f, 0f,
+            0f, 0f, .5f, 0f, 0f,
+            0f, 1f, .5f, 0f, 1f,
+            1f, 0f, .5f, 1f, 0f,
+            1f, 1f, .5f, 1f, 1f,
+            0f, 1f, .5f, 0f, 1f,
+            1f, 0f, .5f, 1f, 0f,
         )
     }
 }

@@ -106,8 +106,8 @@ buildSpannedString is useful for quickly building a rich text.
 This sample demonstrates how to capture a 10-bit compressed still image and 
 - [UltraHDR to HDR Video](media/ultrahdr/src/main/java/com/example/platform/media/ultrahdr/video/UltraHDRToHDRVideo.kt):
 This sample demonstrates converting a series of UltraHDR images into a HDR 
-- [UltraHDR with Graphics](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/opengl/UltraHDRWithOpenGL.kt):
-This sample demonstrates displaying an UltraHDR image via and OpenGL Pipeline
+- [UltraHDR x OpenGLES SurfaceView](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/opengl/UltraHDRWithOpenGL.kt):
+This sample demonstrates displaying an UltraHDR image via and OpenGL Pipeline 
 - [Visualizing an UltraHDR Gainmap](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/VisualizingAnUltraHDRGainmap.kt):
 This sample demonstrates visualizing the underlying gainmap of an UltraHDR 
 - [WindowInsetsAnimation](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/WindowInsetsAnimation.kt):

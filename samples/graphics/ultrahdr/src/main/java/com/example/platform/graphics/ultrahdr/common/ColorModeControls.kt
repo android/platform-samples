@@ -106,7 +106,11 @@ class ColorModeControls : LinearLayout, WindowObserver {
 
             binding.ultrahdrColorModeCurrentMode.run {
                 val mode = when (it.colorMode) {
-                    ActivityInfo.COLOR_MODE_DEFAULT -> resources.getString(R.string.color_mode_sdr)
+                    ActivityInfo.COLOR_MODE_DEFAULT -> String.format(
+                        resources.getString(R.string.color_mode_sdr_with_ratio),
+                        sdrHdrRatio,
+                    )
+
                     ActivityInfo.COLOR_MODE_HDR -> String.format(
                         resources.getString(R.string.color_mode_hdr_with_ratio),
                         sdrHdrRatio,
@@ -114,7 +118,7 @@ class ColorModeControls : LinearLayout, WindowObserver {
 
                     else -> resources.getString(R.string.color_mode_unknown)
                 }
-                text = "Activity Color Mode: " + mode
+                text = mode
             }
         }
     }

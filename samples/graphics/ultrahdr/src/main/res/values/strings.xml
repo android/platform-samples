@@ -39,11 +39,22 @@
     <string name="displaying_edited_ultrahdr">Edit UltraHDR Image</string>
     <string name="displaying_edited_gainmap">Edit Gainmap</string>
 
+    <!-- UltraHDR with OpenGL Strings -->
+    <string name="ultrahdr_with_opengl_reference_image_text">Reference Image</string>
+    <string name="ultrahdr_with_opengl_opengl_render_image_text">Custom UltraHDR render though GLES to SurfaceView:</string>
+    <string name="ultrahdr_with_opengl_surface_view_extended_brightness">GLES SurfaceView desired brightness range: %f</string>
+    <string name="ultrahdr_with_opengl_title_0">0%</string>
+    <string name="ultrahdr_with_opengl_title_30">30%</string>
+    <string name="ultrahdr_with_opengl_title_70">70%</string>
+    <string name="ultrahdr_with_opengl_title_100">100%</string>
+
     <!-- ColorModeControls Strings -->
     <string name="color_mode_sdr">SDR</string>
     <string name="color_mode_hdr">HDR</string>
-    <string name="color_mode_hdr_with_ratio">HDR | SDR/HDR Ratio = %f</string>
+    <string name="color_mode_sdr_with_ratio">Display.ColorMode: SDR | Ratio = %f</string>
+    <string name="color_mode_hdr_with_ratio">Display.ColorMode: HDR | Ratio = %f</string>
     <string name="color_mode_unknown">Unknown</string>
+
 
     <string name="refresh_ultrahdr_edited_image">Refresh</string>
 

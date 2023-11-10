@@ -7,6 +7,7 @@ precision mediump float;
 varying vec2 vTextureCoord;
 
 uniform highp float srcTF[7];
+uniform highp mat3 gamutTransform;
 uniform highp float destTF[7];
 uniform sampler2D base;
 uniform sampler2D gainmap;
@@ -86,6 +87,7 @@ void main() {
     }
 
     vec4 result = vec4(H.xyz / max(S.w, 0.0001), S.w);
+    result.rgb = (gamutTransform * result.rgb);
     result.x = toDest(result.x);
     result.y = toDest(result.y);
     result.z = toDest(result.z);

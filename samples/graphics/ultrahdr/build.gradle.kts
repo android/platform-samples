@@ -1,4 +1,3 @@
-
 /*
  * Copyright 2023 The Android Open Source Project
  *
@@ -32,8 +31,7 @@ dependencies {
     // Fresco
     implementation(libs.fresco)
     implementation(libs.fresco.nativeimagetranscoder)
+
+    // Graphics Core
     implementation(libs.androidx.graphics.core)
-
-    // Graphics
-
 }
