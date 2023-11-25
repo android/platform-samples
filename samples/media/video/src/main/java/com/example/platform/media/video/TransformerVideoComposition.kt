@@ -16,7 +16,6 @@
 
 package com.example.platform.media.video
 
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -25,12 +24,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.Effect
 import androidx.media3.common.MediaItem
-import androidx.media3.common.MimeTypes
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.effect.RgbFilter
 import androidx.media3.effect.ScaleAndRotateTransformation
@@ -42,7 +39,6 @@ import androidx.media3.transformer.Effects
 import androidx.media3.transformer.ExportException
 import androidx.media3.transformer.ExportResult
 import androidx.media3.transformer.ProgressHolder
-import androidx.media3.transformer.TransformationRequest
 import androidx.media3.transformer.Transformer
 import com.example.platform.media.video.databinding.TransformerCompositionLayoutBinding
 import com.google.android.catalog.framework.annotations.Sample
@@ -128,7 +124,6 @@ class TransformerVideoComposition : Fragment() {
                 }
             },
         )
-
         try {
             externalCacheFile = createExternalCacheFile("transformer-output.mp4")
         } catch (e: IOException) {
@@ -157,7 +152,8 @@ class TransformerVideoComposition : Fragment() {
     private fun createComposition(): Composition {
         val video1 = EditedMediaItem.Builder(
             // apply effects only on the first item
-            MediaItem.fromUri(URI_ITEM1)).setEffects(getSelectedEffects())
+            MediaItem.fromUri(URI_ITEM1))
+            .setEffects(getSelectedEffects())
             .build()
         val video2 = EditedMediaItem.Builder(
             MediaItem.fromUri(URI_ITEM2))
