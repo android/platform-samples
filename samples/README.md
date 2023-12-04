@@ -12,6 +12,8 @@ This sample demonstrates the importance of proper color contrast and how to
 This sample shows how to use audio manager to for Communication application that self-manage the call.
 - [Companion Device Manager Sample](connectivity/bluetooth/companion/src/main/java/com/example/platform/connectivity/bluetooth/cdm/CompanionDeviceManagerSample.kt):
 This samples shows how to use the CDM to pair and connect with BLE devices
+- [Compressing UltraHDR Images](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/CompressingUltraHDRImages.kt):
+This sample demonstrates displaying an UltraHDR image in a Compose View and an Android View
 - [Connect to a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/ConnectGATTSample.kt):
 Shows how to connect to a GATT server hosted by the BLE device and perform simple operations
 - [ConstraintLayout - 1. Centering Views](user-interface/constraintlayout/src/main/java/com/example/platform/ui/constraintlayout/ConstraintLayout.kt):
@@ -25,7 +27,7 @@ Demonstrates how to implement data access auditing for your app to identify
 - [Displaying UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDR.kt):
 This sample demonstrates displaying an UltraHDR image.
 - [Displaying UltraHDR (3P Libraries)](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDRUsing3PLibrary.kt):
-This sample demonstrates using the various popular image loading libraries to display Ultra HDR images
+This sample demonstrates using the various popular image loading library to
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
