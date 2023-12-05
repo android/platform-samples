@@ -38,6 +38,9 @@
     <string name="displaying_ultrahdr_option_title_scale">Scale</string>
     <string name="displaying_edited_ultrahdr">Edit UltraHDR Image</string>
     <string name="displaying_edited_gainmap">Edit Gainmap</string>
+    <string name="displaying_orignal_ultrahdr">Original UltraHDR Image</string>
+    <string name="displaying_compressed_image">Compressed UltraHDR image </string>
+    <string name="ultra_hdr_image_size">Displayed image size</string>
 
     <!-- UltraHDR with OpenGL Strings -->
     <string name="ultrahdr_with_opengl_reference_image_text">Reference Image</string>
