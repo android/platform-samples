@@ -21,9 +21,11 @@ import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.util.Log
 import android.view.Display
 import android.view.Window
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -34,6 +36,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.Divider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -49,6 +53,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.DialogWindowProvider
 import com.example.platform.graphics.ultrahdr.R
 import com.google.android.catalog.framework.annotations.Sample
@@ -75,6 +81,10 @@ fun DisplayUltraHDRScreen() {
 
     // Load asset and bitmap on background thread
     LaunchedEffect(Unit) {
+        window?.let {
+            colorMode = getColorMode(it, display)
+        }
+
         // Same bitmap is used to load image in an image view and image (Compose)
         bitmap = withContext(Dispatchers.IO) {
             val ultraHdrImage = "gainmaps/night_highrise.jpg"
@@ -89,11 +99,7 @@ fun DisplayUltraHDRScreen() {
 
         Log.d(TAG, "HDR/SDR Ratio Changed ${display.hdrSdrRatio}")
 
-        colorMode = when (window.colorMode) {
-            ActivityInfo.COLOR_MODE_DEFAULT -> ColorMode.Default
-            ActivityInfo.COLOR_MODE_HDR -> ColorMode.Hdr(display.hdrSdrRatio)
-            else -> ColorMode.Unknown
-        }
+        colorMode = getColorMode(window, display)
     }
 
     DisposableEffect(window, display) {
@@ -157,6 +163,28 @@ fun DisplayUltraHDRScreen() {
                 modifier = Modifier.weight(1f),
             )
         }
+
+        Divider(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 4.dp),
+            thickness = 1.dp,
+            color = MaterialTheme.colorScheme.primary,
+        )
+
+        // Render UltraHDR in View (ImageView)
+        Text(text = "ImageView (Android View)")
+        AndroidView(
+            modifier = Modifier.weight(1f),
+            factory = {
+                ImageView(it).apply {
+                    setImageBitmap(bitmap)
+                }
+            },
+            update = {
+                it.setImageBitmap(bitmap)
+            },
+        )
     }
 }
 
@@ -171,7 +199,7 @@ private sealed interface ColorMode {
 }
 
 @Composable
-fun findWindow(): Window? =
+private fun findWindow(): Window? =
     (LocalView.current.parent as? DialogWindowProvider)?.window ?: LocalContext.current.findWindow()
 
 private tailrec fun Context.findWindow(): Window? =
@@ -180,3 +208,10 @@ private tailrec fun Context.findWindow(): Window? =
         is ContextWrapper -> baseContext.findWindow()
         else -> null
     }
+
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
+private fun getColorMode(window: Window, display: Display) = when (window.colorMode) {
+    ActivityInfo.COLOR_MODE_DEFAULT -> ColorMode.Default
+    ActivityInfo.COLOR_MODE_HDR -> ColorMode.Hdr(display.hdrSdrRatio)
+    else -> ColorMode.Unknown
+}
