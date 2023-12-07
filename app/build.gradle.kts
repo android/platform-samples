@@ -17,7 +17,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     id("com.example.platform.convention")
 }
@@ -79,7 +79,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     implementation(libs.coil.base)
     implementation(libs.coil.video)
@@ -91,7 +91,7 @@ dependencies {
     }
 
     // Testing
-    kaptAndroidTest(libs.hilt.compiler)
+    kspAndroidTest(libs.hilt.compiler)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.androidx.navigation.testing)
     androidTestImplementation(libs.compose.ui.test.manifest)
