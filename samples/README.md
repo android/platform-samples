@@ -28,6 +28,8 @@ Demonstrates how to implement data access auditing for your app to identify
 This sample demonstrates displaying an UltraHDR image.
 - [Displaying UltraHDR (3P Libraries)](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDRUsing3PLibrary.kt):
 This sample demonstrates using the various popular image loading library to
+- [Displaying UltraHDR (Compose)](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayUltraHDRScreen.kt):
+This sample demonstrates displaying an UltraHDR image in a Compose View and an Android View
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
