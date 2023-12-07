@@ -107,11 +107,11 @@ A sample showcasing how to handle calls with the Jetpack Telecom API
 - [TextSpan](user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.
 - [UltraHDR Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2UltraHDRCapture.kt):
-This sample demonstrates how to capture a 10-bit compressed still image and 
+This sample demonstrates how to capture a 10-bit compressed Ultra HDR still image.
 - [UltraHDR to HDR Video](media/ultrahdr/src/main/java/com/example/platform/media/ultrahdr/video/UltraHDRToHDRVideo.kt):
-This sample demonstrates converting a series of UltraHDR images into a HDR 
+This sample demonstrates converting a series of Ultra HDR still images into an HDR video. 
 - [Visualizing an UltraHDR Gainmap](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/VisualizingAnUltraHDRGainmap.kt):
-This sample demonstrates visualizing the underlying gainmap of an UltraHDR 
+This sample demonstrates visualizing the underlying gainmap of an Ultra HDR image.
 - [WindowInsetsAnimation](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/WindowInsetsAnimation.kt):
 Shows how to react to the on-screen keyboard (IME) changing visibility, and also controlling the IME's visibility.
 - [WindowManager](user-interface/windowmanager/src/main/java/com/example/platform/ui/windowmanager/demos/WindowDemosActivity.kt):
