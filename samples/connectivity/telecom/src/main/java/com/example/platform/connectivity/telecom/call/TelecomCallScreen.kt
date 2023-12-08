@@ -392,9 +392,9 @@ private fun CallControls(
         }
     }
 
-    // Show a rational dialog if user didn't accepted the permissions
+    // Show a rationale dialog if user didn't accepted the permissions
     if (showRationale) {
-        RationalMicDialog(
+        RationaleMicDialog(
             onResult = { request ->
                 if (request) {
                     micPermission.launchPermissionRequest()
@@ -434,7 +434,7 @@ private fun getEndpointIcon(type: @CallEndpointCompat.Companion.EndpointType Int
 }
 
 @Composable
-private fun RationalMicDialog(onResult: (Boolean) -> Unit) {
+private fun RationaleMicDialog(onResult: (Boolean) -> Unit) {
     AlertDialog(
         onDismissRequest = { onResult(false) },
         confirmButton = {
