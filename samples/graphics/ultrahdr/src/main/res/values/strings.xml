@@ -20,6 +20,11 @@
     <string name="displaying_ultrahdr_option_title_canyon">Grand Canyon</string>
     <string name="displaying_ultrahdr_option_title_train_station">Train Station</string>
 
+    <!-- VDisplaying UltraHDR Using 3P Libraries  Strings -->
+    <string name="displaying_ultrahdr_3p_libraries_title_glide">Glide</string>
+    <string name="displaying_ultrahdr_3p_libraries_title_fresco">Fresco</string>
+    <string name="displaying_ultrahdr_3p_libraries_title_coil">Coil</string>
+
     <!-- Visualizing An UltraHDR Gainmap Strings -->
     <string name="visualizing_ultrahdr_gainmap_mode_title_jpeg">SDR JPEG</string>
     <string name="visualizing_ultrahdr_gainmap_mode_title_gainmap">Gainmap</string>
@@ -33,12 +38,15 @@
     <string name="displaying_ultrahdr_option_title_scale">Scale</string>
     <string name="displaying_edited_ultrahdr">Edit UltraHDR Image</string>
     <string name="displaying_edited_gainmap">Edit Gainmap</string>
-
+    <string name="displaying_orignal_ultrahdr">Original UltraHDR Image</string>
+    <string name="displaying_compressed_image">Compressed UltraHDR image </string>
+    <string name="ultra_hdr_image_size">Displayed image size</string>
 
     <!-- ColorModeControls Strings -->
     <string name="color_mode_sdr">SDR</string>
     <string name="color_mode_hdr">HDR</string>
     <string name="color_mode_hdr_with_ratio">HDR | SDR/HDR Ratio = %f</string>
+    <string name="color_mode_details">Color Mode = %s</string>
     <string name="color_mode_unknown">Unknown</string>
 
     <string name="refresh_ultrahdr_edited_image">Refresh</string>

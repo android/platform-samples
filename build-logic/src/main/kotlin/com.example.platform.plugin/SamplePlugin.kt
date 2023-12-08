@@ -41,9 +41,9 @@ class SamplePlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
-                apply("org.jetbrains.kotlin.kapt")
                 apply("com.google.devtools.ksp")
                 apply("dagger.hilt.android.plugin")
+                apply("kotlin-parcelize")
                 apply<CommonConventionPlugin>()
             }
 
@@ -102,7 +102,7 @@ class SamplePlugin : Plugin<Project> {
                 "ksp"(libs.findLibrary("casa.processor").get())
 
                 "implementation"(libs.findLibrary("hilt.android").get())
-                "kapt"(libs.findLibrary("hilt.compiler").get())
+                "ksp"(libs.findLibrary("hilt.compiler").get())
 
                 "implementation"(libs.findLibrary("androidx.core").get())
                 "implementation"(libs.findLibrary("androidx.fragment").get())
@@ -113,6 +113,8 @@ class SamplePlugin : Plugin<Project> {
                 "implementation"(libs.findLibrary("androidx.lifecycle.viewmodel.compose").get())
                 "implementation"(libs.findLibrary("compose.ui.ui").get())
                 "implementation"(libs.findLibrary("compose.material3").get())
+                "implementation"(libs.findLibrary("compose.material.iconsext").get())
+
 
                 "implementation"(libs.findLibrary("coil.compose").get())
                 "implementation"(libs.findLibrary("coil.video").get())

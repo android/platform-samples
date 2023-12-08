@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2023 The Android Open Source Project
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     https://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <com.example.platform.graphics.ultrahdr.common.ColorModeControls
+        android:id="@+id/color_mode_controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <RadioGroup
+        android:id="@+id/library_selection_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:layout_marginTop="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:layout_marginEnd="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/mode_glide"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/displaying_ultrahdr_3p_libraries_title_glide" />
+
+        <RadioButton
+            android:id="@+id/mode_fresco"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/displaying_ultrahdr_3p_libraries_title_fresco" />
+
+        <RadioButton
+            android:id="@+id/mode_coil"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/displaying_ultrahdr_3p_libraries_title_coil" />
+    </RadioGroup>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/ultrahdr_color_mode_current_mode_padding">
+
+        <Button
+            android:id="@+id/option_sdr_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ultrahdr_color_mode_current_mode_padding"
+            android:layout_marginEnd="@dimen/ultrahdr_color_mode_current_mode_padding"
+            android:layout_weight="1"
+            android:text="@string/visualizing_ultrahdr_gainmap_mode_title_jpeg"
+            tools:ignore="ButtonStyle" />
+
+        <Button
+            android:id="@+id/option_ultrahdr_image"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/ultrahdr_color_mode_current_mode_padding"
+            android:layout_marginEnd="@dimen/ultrahdr_color_mode_current_mode_padding"
+            android:layout_weight="1"
+            android:text="@string/visualizing_ultrahdr_gainmap_mode_title_ultrahdr"
+            tools:ignore="ButtonStyle" />
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/image_container"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@null" />
+
+</LinearLayout>

@@ -12,6 +12,8 @@ This sample demonstrates the importance of proper color contrast and how to
 This sample shows how to use audio manager to for Communication application that self-manage the call.
 - [Companion Device Manager Sample](connectivity/bluetooth/companion/src/main/java/com/example/platform/connectivity/bluetooth/cdm/CompanionDeviceManagerSample.kt):
 This samples shows how to use the CDM to pair and connect with BLE devices
+- [Compressing UltraHDR Images](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/CompressingUltraHDRImages.kt):
+This sample demonstrates displaying an UltraHDR image in a Compose View and an Android View
 - [Connect to a GATT server](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/ConnectGATTSample.kt):
 Shows how to connect to a GATT server hosted by the BLE device and perform simple operations
 - [ConstraintLayout - 1. Centering Views](user-interface/constraintlayout/src/main/java/com/example/platform/ui/constraintlayout/ConstraintLayout.kt):
@@ -24,8 +26,10 @@ Shows how to create a GATT server and communicate with the GATT client
 Demonstrates how to implement data access auditing for your app to identify 
 - [Displaying UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDR.kt):
 This sample demonstrates displaying an UltraHDR image.
-- [Displaying UltraHDR (Glide)](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDRUsingGlide.kt):
-This sample demonstrates using the Glide image loading library to detect the
+- [Displaying UltraHDR (3P Libraries)](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDRUsing3PLibrary.kt):
+This sample demonstrates using the various popular image loading library to
+- [Displaying UltraHDR (Compose)](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayUltraHDRScreen.kt):
+This sample demonstrates displaying an UltraHDR image in a Compose View and an Android View
 - [Downloadable Fonts](user-interface/text/src/main/java/com/example/platform/ui/text/DownloadableFonts.kt):
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
@@ -98,14 +102,16 @@ Send texts and images to other apps using the Android Sharesheet.
 Shows the recommended flow to request single runtime permissions
 - [Speakable Text](accessibility/src/main/java/com/example/platform/accessibility/SpeakableText.kt):
 The sample demonstrates the importance of having proper labels for
+- [Telecom Call Sample](connectivity/telecom/src/main/java/com/example/platform/connectivity/telecom/TelecomCallSample.kt):
+A sample showcasing how to handle calls with the Jetpack Telecom API
 - [TextSpan](user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.
 - [UltraHDR Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2UltraHDRCapture.kt):
-This sample demonstrates how to capture a 10-bit compressed still image and 
+This sample demonstrates how to capture a 10-bit compressed Ultra HDR still image.
 - [UltraHDR to HDR Video](media/ultrahdr/src/main/java/com/example/platform/media/ultrahdr/video/UltraHDRToHDRVideo.kt):
-This sample demonstrates converting a series of UltraHDR images into a HDR 
+This sample demonstrates converting a series of Ultra HDR still images into an HDR video. 
 - [Visualizing an UltraHDR Gainmap](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/VisualizingAnUltraHDRGainmap.kt):
-This sample demonstrates visualizing the underlying gainmap of an UltraHDR 
+This sample demonstrates visualizing the underlying gainmap of an Ultra HDR image.
 - [WindowInsetsAnimation](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/WindowInsetsAnimation.kt):
 Shows how to react to the on-screen keyboard (IME) changing visibility, and also controlling the IME's visibility.
 - [WindowManager](user-interface/windowmanager/src/main/java/com/example/platform/ui/windowmanager/demos/WindowDemosActivity.kt):
