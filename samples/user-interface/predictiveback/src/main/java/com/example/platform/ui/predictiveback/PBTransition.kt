@@ -64,9 +64,8 @@ class PBTransition : Fragment() {
                 controller = TransitionManager.controlDelayedTransition(
                     binding.textContainer,
                     transitionSet
-                ).also {
-                    changeTextVisibility(ShowText.SHORT)
-                }
+                )
+                changeTextVisibility(ShowText.SHORT)
             }
 
             override fun handleOnBackProgressed(backEvent: BackEventCompat) {
@@ -98,9 +97,7 @@ class PBTransition : Fragment() {
 
         this.requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
 
-        binding.apply {
-            longText.movementMethod = ScrollingMovementMethod();
-        }
+        binding.longText.movementMethod = ScrollingMovementMethod()
     }
 
     override fun onDestroyView() {
