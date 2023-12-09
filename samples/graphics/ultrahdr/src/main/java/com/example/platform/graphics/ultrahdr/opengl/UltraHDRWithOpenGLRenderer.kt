@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.example.platform.graphics.ultrahdr.opengl
 
 import android.content.Context
@@ -45,23 +44,23 @@ class UltraHDRWithOpenGLRenderer(
             .order(ByteOrder.nativeOrder())
             .asFloatBuffer()
 
-    private val mMVPMatrix = FloatArray(16)
-    private val mOrthoMatrix = FloatArray(16)
-    private val mProjMatrix = FloatArray(16)
-    private val mMMatrix = FloatArray(16)
-    private val mVMatrix = FloatArray(16)
-    private val mDestTF = FloatArray(7)
+    private val mvpMatrix = FloatArray(16)
+    private val orthoMatrix = FloatArray(16)
+    private val projMatrix = FloatArray(16)
+    private val mMatrix = FloatArray(16)
+    private val vMatrix = FloatArray(16)
+    private val destTF = FloatArray(7)
 
-    private var mProgram = 0
-    private var mTextureID = 0
-    private var mGainmapTextureID = 0
+    private var program = 0
+    private var textureID = 0
+    private var gainmapTextureID = 0
     private var muMVPMatrixHandle = 0
     private var maPositionHandle = 0
     private var maTextureHandle = 0
-    private var mDestTFHandle = 0
-    private var mWHandle = 0
-    private var mDisplayRatioSdr = 0f
-    private var mDisplayRatioHdr = 0f
+    private var destTFHandle = 0
+    private var wHandle = 0
+    private var displayRatioSdr = 0f
+    private var displayRatioHdr = 0f
 
     val desiredHdrSdrRatio get() = bitmap.gainmap?.displayRatioForFullHdr ?: 1f
 
@@ -262,29 +261,29 @@ class UltraHDRWithOpenGLRenderer(
     }
 
     fun onContextCreated(destColorSpace: ColorSpace) {
-        mProgram = createProgram(ultraHDRVertexShader, ultraHDRFragmentShader)
-        if (mProgram == 0) return
+        program = createProgram(ultraHDRVertexShader, ultraHDRFragmentShader)
+        if (program == 0) return
 
-        maPositionHandle = glGetAttribLocation(mProgram, "aPosition")
+        maPositionHandle = glGetAttribLocation(program, "aPosition")
         checkGlError("glGetAttribLocation aPosition")
 
         if (maPositionHandle == -1)
             throw RuntimeException("Could not get attrib location for aPosition")
 
-        maTextureHandle = glGetAttribLocation(mProgram, "aTextureCoord")
+        maTextureHandle = glGetAttribLocation(program, "aTextureCoord")
         checkGlError("glGetAttribLocation aTextureCoord")
 
         if (maTextureHandle == -1)
             throw java.lang.RuntimeException("Could not get attrib location for aTextureCoord")
 
-        muMVPMatrixHandle = glGetUniformLocation(mProgram, "uMVPMatrix")
+        muMVPMatrixHandle = glGetUniformLocation(program, "uMVPMatrix")
         checkGlError("glGetUniformLocation uMVPMatrix")
 
         if (muMVPMatrixHandle == -1)
             throw java.lang.RuntimeException("Could not get attrib location for uMVPMatrix")
 
-        mDestTFHandle = glGetUniformLocation(mProgram, "destTF")
-        mWHandle = uniform("W")
+        destTFHandle = glGetUniformLocation(program, "destTF")
+        wHandle = uniform("W")
 
         val textures = IntArray(2)
         glGenTextures(2, textures, 0)
@@ -294,18 +293,18 @@ class UltraHDRWithOpenGLRenderer(
         )
             throw IllegalArgumentException("Cannot handle HARDWARE bitmaps")
 
-        mTextureID = textures[0]
-        mGainmapTextureID = textures[1]
-        glBindTexture(GL_TEXTURE_2D, mTextureID)
+        textureID = textures[0]
+        gainmapTextureID = textures[1]
+        glBindTexture(GL_TEXTURE_2D, textureID)
         setupTexture(bitmap)
-        glBindTexture(GL_TEXTURE_2D, mGainmapTextureID)
+        glBindTexture(GL_TEXTURE_2D, gainmapTextureID)
         setupTexture(bitmap.gainmap!!.gainmapContents)
 
         // Bind the base & gainmap textures
-        glUseProgram(mProgram)
-        val textureLoc = glGetUniformLocation(mProgram, "base")
+        glUseProgram(program)
+        val textureLoc = glGetUniformLocation(program, "base")
         glUniform1i(textureLoc, 0)
-        val gainmapLoc = glGetUniformLocation(mProgram, "gainmap")
+        val gainmapLoc = glGetUniformLocation(program, "gainmap")
         glUniform1i(gainmapLoc, 1)
 
         // Bind the base transfer function
@@ -323,14 +322,14 @@ class UltraHDRWithOpenGLRenderer(
             srcTF[6] = params.f.toFloat()
         }
 
-        val srcTfHandle = glGetUniformLocation(mProgram, "srcTF")
+        val srcTfHandle = glGetUniformLocation(program, "srcTF")
         glUniform1fv(srcTfHandle, 7, srcTF, 0)
 
         val srcD50 = ColorSpace.adapt(srcColorspace, ColorSpace.ILLUMINANT_D50) as ColorSpace.Rgb
         val destD50 = ColorSpace.adapt(destColorSpace, ColorSpace.ILLUMINANT_D50) as ColorSpace.Rgb
 
         val gamutTransform = mul3x3(destD50.inverseTransform, srcD50.transform)
-        val gamutHandle = glGetUniformLocation(mProgram, "gamutTransform")
+        val gamutHandle = glGetUniformLocation(program, "gamutTransform")
         glUniformMatrix3fv(gamutHandle, 1, false, gamutTransform, 0)
 
         val gainmap = bitmap.gainmap!!
@@ -346,11 +345,11 @@ class UltraHDRWithOpenGLRenderer(
         setVec3Uniform("epsilonSdr", gainmap.epsilonSdr)
         setVec3Uniform("epsilonHdr", gainmap.epsilonHdr)
 
-        mDisplayRatioSdr = gainmap.minDisplayRatioForHdrTransition
-        mDisplayRatioHdr = gainmap.displayRatioForFullHdr
+        displayRatioSdr = gainmap.minDisplayRatioForHdrTransition
+        displayRatioHdr = gainmap.displayRatioForFullHdr
 
         Matrix.setLookAtM(
-            mVMatrix,
+            vMatrix,
             0,
             0f, 0f, -5f,
             0f, 0f, 0f,
@@ -361,7 +360,7 @@ class UltraHDRWithOpenGLRenderer(
     fun onContextDestroyed() {
     }
 
-    private fun uniform(name: String) = glGetUniformLocation(mProgram, name)
+    private fun uniform(name: String) = glGetUniformLocation(program, name)
 
     private fun setVec3Uniform(name: String, vec3: FloatArray) =
         glUniform3f(uniform(name), vec3[0], vec3[1], vec3[2])
@@ -412,33 +411,33 @@ class UltraHDRWithOpenGLRenderer(
         glViewport(0, 0, bufferWidth, bufferHeight)
 
         Matrix.orthoM(
-            mOrthoMatrix, 0, 0f, bufferWidth.toFloat(), 0f,
+            orthoMatrix, 0, 0f, bufferWidth.toFloat(), 0f,
             bufferHeight.toFloat(), -1f, 1f,
         )
 
-        Matrix.multiplyMM(mProjMatrix, 0, mOrthoMatrix, 0, transform, 0)
+        Matrix.multiplyMM(projMatrix, 0, orthoMatrix, 0, transform, 0)
 
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f)
         glClear(GL_DEPTH_BUFFER_BIT or GL_COLOR_BUFFER_BIT)
-        glUseProgram(mProgram)
+        glUseProgram(program)
         checkGlError("glUseProgram")
 
         // This isn't a good assumption to make, and applying a color gamut matrix from the source
         // to the destination should be added.
-        trfnApplyGain(kSRGB, hdrSdrRatio, mDestTF)
-        invertTrfn(mDestTF, mDestTF)
-        glUniform1fv(mDestTFHandle, 7, mDestTF, 0)
+        trfnApplyGain(kSRGB, hdrSdrRatio, destTF)
+        invertTrfn(destTF, destTF)
+        glUniform1fv(destTFHandle, 7, destTF, 0)
 
         glActiveTexture(GL_TEXTURE0)
-        glBindTexture(GL_TEXTURE_2D, mTextureID)
+        glBindTexture(GL_TEXTURE_2D, textureID)
         glActiveTexture(GL_TEXTURE1)
-        glBindTexture(GL_TEXTURE_2D, mGainmapTextureID)
+        glBindTexture(GL_TEXTURE_2D, gainmapTextureID)
 
-        val targetRatio = ln(hdrSdrRatio.toDouble()) - ln(mDisplayRatioSdr.toDouble())
-        val maxRatio = ln(mDisplayRatioHdr.toDouble()) - ln(mDisplayRatioSdr.toDouble())
+        val targetRatio = ln(hdrSdrRatio.toDouble()) - ln(displayRatioSdr.toDouble())
+        val maxRatio = ln(displayRatioHdr.toDouble()) - ln(displayRatioSdr.toDouble())
         val wUnclamped = targetRatio / maxRatio
         val w = max(min(wUnclamped, 1.0), 0.0).toFloat()
-        glUniform1f(mWHandle, w)
+        glUniform1f(wHandle, w)
 
         triangleVertices.position(TRIANGLE_VERTICES_DATA_POS_OFFSET)
         glVertexAttribPointer(
@@ -457,11 +456,11 @@ class UltraHDRWithOpenGLRenderer(
         glEnableVertexAttribArray(maTextureHandle)
         checkGlError("glEnableVertexAttribArray maTextureHandle")
 
-        Matrix.setRotateM(mMMatrix, 0, 0f, 0f, 0f, 1.0f)
-        Matrix.scaleM(mMVPMatrix, 0, mMMatrix, 0, width.toFloat(), height.toFloat(), 1f)
-        Matrix.multiplyMM(mMVPMatrix, 0, mProjMatrix, 0, mMVPMatrix, 0)
+        Matrix.setRotateM(mMatrix, 0, 0f, 0f, 0f, 1.0f)
+        Matrix.scaleM(mvpMatrix, 0, mMatrix, 0, width.toFloat(), height.toFloat(), 1f)
+        Matrix.multiplyMM(mvpMatrix, 0, projMatrix, 0, mvpMatrix, 0)
 
-        glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mMVPMatrix, 0)
+        glUniformMatrix4fv(muMVPMatrixHandle, 1, false, mvpMatrix, 0)
         glDrawArrays(GL_TRIANGLES, 0, 6)
         checkGlError("glDrawArrays")
     }
