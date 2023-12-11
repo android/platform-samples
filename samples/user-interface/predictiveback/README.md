@@ -13,7 +13,8 @@ Shows different types of predictive back animations, including:
 In general, rely on the default cross-activity animation; however, if required use
 `overrideActivityTransition` instead of `overridePendingTransition`. Although animation resources are
 expected for `overrideActivityTransition`, we strongly recommend to stop using animation and to
-instead use animator and androidx transitions for most use cases.
+instead use animator and androidx transitions for most use cases. For more details see the
+[developer documentation](https://developer.android.com/guide/navigation/custom-back/predictive-back-gesture).
 
 ```kotlin
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,3 +90,85 @@ override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
     )
 }
 ```
+
+## Custom AndroidX Transition
+For more details see the
+[developer documentation](https://developer.android.com/about/versions/14/features/predictive-back#androidx-transitions).
+
+```kotlin
+class MyFragment : Fragment() {
+
+    val transitionSet = TransitionSet().apply {
+        addTransition(Fade(Fade.MODE_OUT))
+        addTransition(ChangeBounds())
+        addTransition(Fade(Fade.MODE_IN))
+    }
+    
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val callback = object : OnBackPressedCallback(enabled = false) {
+
+            var controller: TransitionSeekController? = null
+
+            override fun handleOnBackStarted(backEvent: BackEvent) {
+                // Create the transition
+                controller = TransitionManager.controlDelayedTransition(
+                    // textContainer is a FrameLayout containing the shortText and longText TextViews
+                    binding.textContainer,
+                    transitionSet
+                )
+                changeTextVisibility(ShowText.SHORT)
+            }
+
+            override fun handleOnBackProgressed(backEvent: BackEvent) {
+                // Play the transition as the user swipes back
+                if (controller?.isReady == true) {
+                    controller?.currentFraction = backEvent.progress
+                }
+            }
+
+            override fun handleOnBackPressed() {
+                // Finish playing the transition when the user commits back
+                controller?.animateToEnd()
+                this.isEnabled = false
+            }
+
+            override fun handleOnBackCancelled() {
+                // If the user cancels the back gesture, reset the state
+                transition(ShowText.LONG)
+            }
+        }
+
+        binding.shortText.setOnClickListener {
+            transition(ShowText.LONG)
+            callback.isEnabled = true
+        }
+
+        this.requireActivity().onBackPressedDispatcher.addCallback(callback)
+    }
+
+    private fun transition(showText: ShowText) {
+        TransitionManager.beginDelayedTransition(
+            binding.textContainer,
+            transitionSet
+        )
+        changeTextVisibility(showText)
+    }
+
+    enum class ShowText { SHORT, LONG }
+    private fun changeTextVisibility(showText: ShowText) {
+        when (showText) {
+            ShowText.SHORT -> {
+                binding.shortText.isVisible = true
+                binding.longText.isVisible = false
+            }
+            ShowText.LONG -> {
+                binding.shortText.isVisible = false
+                binding.longText.isVisible = true
+            }
+        }
+    }
+}
+```
+
