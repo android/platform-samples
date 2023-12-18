@@ -13,25 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+        
+// This vertex shader program transforms vertices from object space to clip space and
+// prepares texture coordinates for fragment shader processing in a fragment shader.
+//
+// refer to fs_uhdr_tonemapper.frag
+//
+uniform mat4 uMVPMatrix;
+attribute vec4 aPosition;
+attribute vec2 aTextureCoord;
+varying vec2 vTextureCoord;
 
-
-plugins {
-    id("com.example.platform.sample")
-}
-
-android {
-    namespace = "com.example.platform.graphics.ultrahdr"
-    viewBinding.isEnabled = true
-}
-
-dependencies {
-    // Glide
-    implementation(libs.glide)
-
-    // Fresco
-    implementation(libs.fresco)
-    implementation(libs.fresco.nativeimagetranscoder)
-
-    // Graphics Core
-    implementation(libs.androidx.graphics.core)
+void main() {
+    gl_Position = uMVPMatrix * aPosition;
+    vTextureCoord = aTextureCoord;
 }

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <com.example.platform.graphics.ultrahdr.common.ColorModeControls
+        android:id="@+id/color_mode_controls"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/ultrahdr_color_mode_current_mode_padding" />
+
+    <TextView
+        android:id="@+id/opengl_surface_view_extended_brightness"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:gravity="center_horizontal"
+        android:text="@string/ultrahdr_with_opengl_surface_view_extended_brightness" />
+
+    <RadioGroup
+        android:id="@+id/opengl_brightness_group"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:layout_marginTop="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:layout_marginEnd="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/opengl_brightness_0"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ultrahdr_with_opengl_title_0" />
+
+        <RadioButton
+            android:id="@+id/opengl_brightness_30"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ultrahdr_with_opengl_title_30" />
+
+        <RadioButton
+            android:id="@+id/opengl_brightness_70"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ultrahdr_with_opengl_title_70" />
+
+        <RadioButton
+            android:id="@+id/opengl_brightness_100"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ultrahdr_with_opengl_title_100" />
+    </RadioGroup>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:text="@string/ultrahdr_with_opengl_reference_image_text" />
+
+    <ImageView
+        android:id="@+id/image_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="1"
+        android:contentDescription="@null" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/ultrahdr_color_mode_current_mode_padding"
+        android:text="@string/ultrahdr_with_opengl_opengl_render_image_text" />
+
+    <SurfaceView
+        android:id="@+id/surface_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+</LinearLayout>
