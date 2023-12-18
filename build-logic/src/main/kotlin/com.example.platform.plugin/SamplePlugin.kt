@@ -41,7 +41,6 @@ class SamplePlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
-                apply("org.jetbrains.kotlin.kapt")
                 apply("com.google.devtools.ksp")
                 apply("dagger.hilt.android.plugin")
                 apply("kotlin-parcelize")
@@ -103,7 +102,7 @@ class SamplePlugin : Plugin<Project> {
                 "ksp"(libs.findLibrary("casa.processor").get())
 
                 "implementation"(libs.findLibrary("hilt.android").get())
-                "kapt"(libs.findLibrary("hilt.compiler").get())
+                "ksp"(libs.findLibrary("hilt.compiler").get())
 
                 "implementation"(libs.findLibrary("androidx.core").get())
                 "implementation"(libs.findLibrary("androidx.fragment").get())

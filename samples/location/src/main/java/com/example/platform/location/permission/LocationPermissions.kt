@@ -118,7 +118,7 @@ fun PermissionRequestButton(isGranted: Boolean, title: String, onClick: () -> Un
 }
 
 /**
- * Simple AlertDialog that displays the given rational state
+ * Simple AlertDialog that displays the given rationale state
  */
 @Composable
 fun PermissionRationaleDialog(rationaleState: RationaleState) {

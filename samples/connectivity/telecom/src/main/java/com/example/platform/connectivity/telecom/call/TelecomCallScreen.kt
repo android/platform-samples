@@ -298,7 +298,7 @@ private fun CallControls(
     onCallAction: (TelecomCallAction) -> Unit,
 ) {
     val micPermission = rememberPermissionState(permission = Manifest.permission.RECORD_AUDIO)
-    var showRational by remember(micPermission.status) {
+    var showRationale by remember(micPermission.status) {
         mutableStateOf(false)
     }
 
@@ -329,7 +329,7 @@ private fun CallControls(
             IconButton(
                 onClick = {
                     if (micPermission.status.shouldShowRationale) {
-                        showRational = true
+                        showRationale = true
                     } else {
                         micPermission.launchPermissionRequest()
                     }
@@ -392,14 +392,14 @@ private fun CallControls(
         }
     }
 
-    // Show a rational dialog if user didn't accepted the permissions
-    if (showRational) {
-        RationalMicDialog(
+    // Show a rationale dialog if user didn't accepted the permissions
+    if (showRationale) {
+        RationaleMicDialog(
             onResult = { request ->
                 if (request) {
                     micPermission.launchPermissionRequest()
                 }
-                showRational = false
+                showRationale = false
             },
         )
     }
@@ -434,7 +434,7 @@ private fun getEndpointIcon(type: @CallEndpointCompat.Companion.EndpointType Int
 }
 
 @Composable
-private fun RationalMicDialog(onResult: (Boolean) -> Unit) {
+private fun RationaleMicDialog(onResult: (Boolean) -> Unit) {
     AlertDialog(
         onDismissRequest = { onResult(false) },
         confirmButton = {

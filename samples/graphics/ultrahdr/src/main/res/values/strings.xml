@@ -56,8 +56,8 @@
     <string name="color_mode_hdr">HDR</string>
     <string name="color_mode_sdr_with_ratio">Display.ColorMode: SDR | Ratio = %f</string>
     <string name="color_mode_hdr_with_ratio">Display.ColorMode: HDR | Ratio = %f</string>
+    <string name="color_mode_details">Color Mode = %s</string>
     <string name="color_mode_unknown">Unknown</string>
-
 
     <string name="refresh_ultrahdr_edited_image">Refresh</string>
 
