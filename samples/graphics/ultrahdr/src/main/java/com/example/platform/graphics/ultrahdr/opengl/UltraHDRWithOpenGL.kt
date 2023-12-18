@@ -238,8 +238,6 @@ class UltraHDRWithOpenGL : Fragment(),
     ) {
         transaction.setDataSpace(targetSurfaceControl, if (isWideGamut) P3_XRB else SRGB_XRB)
         transaction.setExtendedRangeBrightness(targetSurfaceControl, hdrSdrRatio, desiredRatio)
-        transaction.commit()
-        super.onDrawComplete(targetSurfaceControl, transaction, frameBuffer, syncFence)
     }
 
     companion object {
