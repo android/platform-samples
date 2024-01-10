@@ -5,7 +5,7 @@ This module contains samples related to Bluetooth BLE APIs
 - [Find BLE devices](src/main/java/com/example/platform/connectivity/bluetooth/ble/FindBLEDevicesSample.kt)
 - [Find BLE devices using a PendingIntent](src/main/java/com/example/platform/connectivity/bluetooth/ble/BLEScanIntentSample.kt)
 - [Connect to scanned BLE devices](src/main/java/com/example/platform/connectivity/bluetooth/ble/ConnectGATTSample.kt)
-- [Create a GATT server, advertise and handle connections](src/main/java/com/example/platform/connectivity/bluetooth/ble/GATTServerSample.kt)
+- [Create a GATT server, advertise and handle connections](src/main/java/com/example/platform/connectivity/bluetooth/ble/server/GATTServerSample.kt) 
 
 More info at 
 https://developer.android.com/guide/topics/connectivity/bluetooth/ble-overview
