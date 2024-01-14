@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.example.platform.ui.predictiveback.databinding.FragmentAnimationListBinding
 
@@ -48,6 +49,14 @@ class PBListFragment : Fragment() {
         binding.crossFragmentCard.setOnClickListener {
             findNavController().navigate(R.id.show_PBNavigationComponentDefaultAnimations)
         }
+        binding.sharedElementCrossFragment.setOnClickListener {
+            findNavController().navigate(
+                R.id.show_PBSharedElementTransitionFragment,
+                null,
+                null,
+                FragmentNavigatorExtras(it to "second_card")
+            )
+        }
         binding.progressApiCard.setOnClickListener {
             findNavController().navigate(R.id.show_PBProgressAPI)
         }
@@ -72,6 +81,8 @@ class PBListFragment : Fragment() {
         binding.customCrossActivityDescription.text = animations[PBAnimation.CUSTOM_CROSS_ACTIVITY]?.description ?: ""
         binding.crossFragmentTitle.text = animations[PBAnimation.CROSS_FRAGMENT]?.title ?: ""
         binding.crossFragmentDescription.text = animations[PBAnimation.CROSS_FRAGMENT]?.description ?: ""
+        binding.sharedElementCrossFragmentTitle.text = animations[PBAnimation.SHARED_ELEMENT_CROSS_FRAGMENT]?.title ?: ""
+        binding.sharedElementCrossFragmentDescription.text = animations[PBAnimation.SHARED_ELEMENT_CROSS_FRAGMENT]?.description ?: ""
         binding.progressApiTitle.text = animations[PBAnimation.PROGRESS_API]?.title ?: ""
         binding.progressApiDescription.text = animations[PBAnimation.PROGRESS_API]?.description ?: ""
         binding.transitionsTitle.text = animations[PBAnimation.TRANSITION]?.title ?: ""

@@ -36,18 +36,13 @@
             app:destination="@id/PBCustomCrossActivityAnimation" />
         <action
             android:id="@+id/show_PBProgressAPI"
-            app:destination="@id/PBProgressAPI"
-            app:enterAnim="@animator/nav_default_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+            app:destination="@id/PBProgressAPI"/>
         <action
             android:id="@+id/show_PBTransition"
-            app:destination="@id/PBTransition"
-            app:enterAnim="@animator/nav_default_enter_anim"
-            app:exitAnim="@animator/nav_default_exit_anim"
-            app:popEnterAnim="@animator/nav_default_pop_enter_anim"
-            app:popExitAnim="@animator/nav_default_pop_exit_anim" />
+            app:destination="@id/PBTransition"/>
+        <action
+            android:id="@+id/show_PBSharedElementTransitionFragment"
+            app:destination="@id/PBSharedElementTransitionFragment" />
     </fragment>
     <fragment
         android:id="@+id/PBNavigationComponentDefaultAnimations"
@@ -69,4 +64,9 @@
         android:name="com.example.platform.ui.predictiveback.PBTransition"
         android:label="fragment_transition"
         tools:layout="@layout/fragment_transition" />
+    <fragment
+        android:id="@+id/PBSharedElementTransitionFragment"
+        android:name="com.example.platform.ui.predictiveback.PBSharedElementTransitionFragment"
+        android:label="fragment_shared_element_transition"
+        tools:layout="@layout/fragment_shared_element_transition" />
 </navigation>
