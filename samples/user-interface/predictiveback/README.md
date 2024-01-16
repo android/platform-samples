@@ -6,7 +6,9 @@ Shows different types of predictive back animations, including:
 + Cross-activity
 + Custom cross-activity
 + Cross-fragment animation
++ Shared element cross-fragment animation
 + Custom Progress API animation
++ Custom AndroidX Transition
 
 ## Custom cross-activity
 
@@ -47,6 +49,39 @@ Example code uses navigation component default animations.
     app:popEnterAnim="@animator/nav_default_pop_enter_anim"
     app:popExitAnim="@animator/nav_default_pop_exit_anim" />
 ```
+
+## Shared element cross-fragment animation
+
+Example code shows a simple cross-fragment animation between two [shared elements](https://developer.android.com/guide/fragments/animate#shared)
+that automatically works with predictive back gesture navigation provided fragment and androidx
+transitions dependencies are upgraded to
+[1.7.0](https://developer.android.com/jetpack/androidx/releases/fragment#1.7.0-alpha08) and
+[1.5.0](https://developer.android.com/jetpack/androidx/releases/transition#1.5.0-alpha06) respectively.
+
+On the first fragment, where "second_card" is the `android:transitionName` of a view in the second
+fragment:
+```kotlin
+binding.sharedElementCrossFragment.setOnClickListener {
+   findNavController().navigate(
+       R.id.show_PBSharedElementTransitionFragment,
+       null,
+       null,
+       FragmentNavigatorExtras(it to "second_card")
+   )
+}
+```
+
+On the second fragment:
+```kotlin
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    enterTransition = AutoTransition()
+    sharedElementEnterTransition = AutoTransition()
+}
+```
+
+Note that `enterTransition` must be specified in addition to `sharedElementEnterTransition`, which
+will mark the shared element as seekable and therefore enable the predictive back gesture to play.
 
 ## Custom Progress API animation
 
