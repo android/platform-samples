@@ -48,7 +48,8 @@ import com.google.android.catalog.framework.annotations.Sample
 @Sample(
     name = "App Widgets",
     description = "Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples",
-    documentation = "https://developer.android.com/develop/ui/views/appwidgets/overview"
+    documentation = "https://developer.android.com/develop/ui/views/appwidgets/overview",
+    tags = ["App Widgets"]
 )
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

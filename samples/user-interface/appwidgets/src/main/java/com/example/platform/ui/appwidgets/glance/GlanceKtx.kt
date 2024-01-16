@@ -46,7 +46,7 @@ fun AppWidgetBox(
     content: @Composable () -> Unit,
 ) {
     Box(
-        modifier = appWidgetBackgroundModifier().then(modifier),
+        modifier = GlanceModifier.appWidgetBackgroundModifier().then(modifier),
         contentAlignment = contentAlignment,
         content = content,
     )
@@ -64,7 +64,7 @@ fun AppWidgetColumn(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Column(
-        modifier = appWidgetBackgroundModifier().then(modifier),
+        modifier = GlanceModifier.appWidgetBackgroundModifier().then(modifier),
         verticalAlignment = verticalAlignment,
         horizontalAlignment = horizontalAlignment,
         content = content,
@@ -72,29 +72,26 @@ fun AppWidgetColumn(
 }
 
 @Composable
-fun appWidgetBackgroundModifier() = GlanceModifier
-    .fillMaxSize()
-    .padding(16.dp)
-    .appWidgetBackground()
-    .background(GlanceTheme.colors.background)
-    .appWidgetBackgroundCornerRadius()
+fun GlanceModifier.appWidgetBackgroundModifier(): GlanceModifier {
+    return this.fillMaxSize()
+        .padding(16.dp)
+        .appWidgetBackground()
+        .background(GlanceTheme.colors.background)
+        .appWidgetBackgroundCornerRadius()
+}
 
 fun GlanceModifier.appWidgetBackgroundCornerRadius(): GlanceModifier {
     if (Build.VERSION.SDK_INT >= 31) {
         cornerRadius(android.R.dimen.system_app_widget_background_radius)
-    } else {
-        cornerRadius(16.dp)
     }
-    return this
+    return cornerRadius(16.dp)
 }
 
 fun GlanceModifier.appWidgetInnerCornerRadius(): GlanceModifier {
     if (Build.VERSION.SDK_INT >= 31) {
-        cornerRadius(android.R.dimen.system_app_widget_inner_radius)
-    } else {
-        cornerRadius(8.dp)
+        return cornerRadius(android.R.dimen.system_app_widget_inner_radius)
     }
-    return this
+    return cornerRadius(8.dp)
 }
 
 @Composable
