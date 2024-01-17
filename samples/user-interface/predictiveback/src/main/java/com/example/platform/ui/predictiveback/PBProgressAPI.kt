@@ -25,6 +25,8 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.BackEventCompat
 import androidx.activity.OnBackPressedCallback
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.example.platform.ui.predictiveback.databinding.FragmentProgressApiBinding
 
 class PBProgressAPI : Fragment() {
@@ -43,6 +45,18 @@ class PBProgressAPI : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Handle insets so fragment is edge-to-edge
+        binding.header.setOnApplyWindowInsetsListener { header, windowInsets ->
+            val topBarInset = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            } else {
+                windowInsets.systemWindowInsetTop
+            }
+            header.updatePadding(top = topBarInset)
+            windowInsets
+        }
+
+        // Create a predictive back Progress API animation
         val windowWidth = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
             requireActivity().windowManager.currentWindowMetrics.bounds.width()
         } else {

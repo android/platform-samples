@@ -16,11 +16,15 @@
 
 package com.example.platform.ui.predictiveback
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import androidx.transition.AutoTransition
 import com.example.platform.ui.predictiveback.databinding.FragmentSharedElementTransitionBinding
 
@@ -31,6 +35,7 @@ class PBSharedElementTransitionFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Make a predictive back cross-fragment shared element transition
         enterTransition = AutoTransition()
         sharedElementEnterTransition = AutoTransition()
     }
@@ -42,6 +47,20 @@ class PBSharedElementTransitionFragment : Fragment() {
         _binding = FragmentSharedElementTransitionBinding
             .inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        // Handle insets so fragment is edge-to-edge
+        binding.header.setOnApplyWindowInsetsListener { header, windowInsets ->
+            val topBarInset = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            } else {
+                windowInsets.systemWindowInsetTop
+            }
+            header.updatePadding(top = topBarInset)
+            windowInsets
+        }
+        super.onViewCreated(view, savedInstanceState)
     }
 
     override fun onDestroyView() {

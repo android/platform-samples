@@ -16,9 +16,13 @@
 
 package com.example.platform.ui.predictiveback
 
+import android.os.Build
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.example.platform.ui.predictiveback.databinding.ActivityCustomCrossAnimationBinding
 
 class PBCustomCrossActivityAnimation : AppCompatActivity() {
@@ -28,9 +32,21 @@ class PBCustomCrossActivityAnimation : AppCompatActivity() {
     @RequiresApi(34)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
 
         binding = ActivityCustomCrossAnimationBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Handle insets so activity is edge-to-edge
+        binding.header.setOnApplyWindowInsetsListener { header, windowInsets ->
+            val topBarInset = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            } else {
+                windowInsets.systemWindowInsetTop
+            }
+            header.updatePadding(top = topBarInset)
+            windowInsets
+        }
 
         overrideActivityTransition(
             OVERRIDE_TRANSITION_OPEN,
@@ -38,7 +54,7 @@ class PBCustomCrossActivityAnimation : AppCompatActivity() {
             0
         )
 
-
+        // Create a predictive back custom cross-activity animation
         overrideActivityTransition(
             OVERRIDE_TRANSITION_CLOSE,
             0,

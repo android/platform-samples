@@ -16,10 +16,18 @@
 
 package com.example.platform.ui.predictiveback
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowInsets
+import androidx.annotation.RequiresApi
+import androidx.core.view.MarginLayoutParamsCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
@@ -43,12 +51,34 @@ class PBListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Handle insets so fragment is edge-to-edge
+        binding.header.setOnApplyWindowInsetsListener { header, windowInsets ->
+            val topBarInset = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            } else {
+                windowInsets.systemWindowInsetTop
+            }
+            header.updatePadding(top = topBarInset)
+            windowInsets
+        }
+        // TODO: This doesn't seem to apply a bottom inset to the last card
+        binding.transitionsCard.setOnApplyWindowInsetsListener { card, windowInsets ->
+            val bottomBarInset = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).bottom
+            } else {
+                windowInsets.systemWindowInsetBottom
+            }
+            card.updatePadding(bottom = bottomBarInset)
+            windowInsets
+        }
+
         binding.customCrossActivityCard.setOnClickListener {
             findNavController().navigate(R.id.show_PBCustomCrossActivityAnimation)
         }
         binding.crossFragmentCard.setOnClickListener {
             findNavController().navigate(R.id.show_PBNavigationComponentDefaultAnimations)
         }
+        // Create a predictive back cross fragment shared element transition
         binding.sharedElementCrossFragment.setOnClickListener {
             findNavController().navigate(
                 R.id.show_PBSharedElementTransitionFragment,

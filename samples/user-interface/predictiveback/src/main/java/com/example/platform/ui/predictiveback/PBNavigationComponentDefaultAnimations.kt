@@ -16,11 +16,14 @@
 
 package com.example.platform.ui.predictiveback
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 import com.example.platform.ui.predictiveback.databinding.FragmentNavigationComponentDefaultAnimationsBinding
 
 class PBNavigationComponentDefaultAnimations : Fragment() {
@@ -34,6 +37,21 @@ class PBNavigationComponentDefaultAnimations : Fragment() {
         _binding = FragmentNavigationComponentDefaultAnimationsBinding
             .inflate(inflater, container, false)
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        // Handle insets so fragment is edge-to-edge
+        // See nav_graph.xml for the associated predictive back animation
+        binding.header.setOnApplyWindowInsetsListener { header, windowInsets ->
+            val topBarInset = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                windowInsets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            } else {
+                windowInsets.systemWindowInsetTop
+            }
+            header.updatePadding(top = topBarInset)
+            windowInsets
+        }
     }
 
     override fun onDestroyView() {

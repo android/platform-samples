@@ -23,9 +23,10 @@
     tools:context=".PBNavigationComponentDefaultAnimations">
 
     <TextView
-        android:id="@+id/title"
+        android:id="@+id/header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_margin="16dp"
         android:text="@string/fragment_header"
         android:textAppearance="?attr/textAppearanceTitleMedium"
         android:textSize="24sp"
