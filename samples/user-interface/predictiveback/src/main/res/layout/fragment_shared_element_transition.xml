@@ -50,11 +50,7 @@
             android:padding="16dp"
             android:text="@string/sharedElementTransitionText"
             android:textAppearance="?attr/textAppearanceBodyMedium"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:textSize="16sp"/>
 
     </com.google.android.material.card.MaterialCardView>
 
