@@ -56,7 +56,7 @@ import java.util.concurrent.TimeUnit
 @Sample(
     name = "Video Composition using Media3 Transformer",
     description = "This sample demonstrates concatenation of two video assets using Media3 " +
-            "Transformer libraly.",
+            "Transformer library.",
     documentation = "https://developer.android.com/guide/topics/media/transformer",
     tags = ["Transformer"],
 )
@@ -67,12 +67,21 @@ class TransformerVideoComposition : Fragment() {
     private var _binding: TransformerCompositionLayoutBinding? = null
     private val binding get() = _binding!!
 
+    /**
+     * cache file used to save the output result of the transcoding operation.
+     */
     private var externalCacheFile: File? = null
+    /**
+     * [ExoPlayer], used to playback the output of the transcoding operation.
+     */
     private var player: ExoPlayer? = null
+    /**
+     * [Stopwatch], used to track the progress of the transcoding operation.
+     */
     private var exportStopwatch: Stopwatch? = null
 
     /**
-     * [Transformer.Listener] receives callbacks for export events
+     * [Transformer.Listener] receives callbacks for export events.
      */
     private val transformerListener: Transformer.Listener =
         object : Transformer.Listener {
@@ -94,7 +103,7 @@ class TransformerVideoComposition : Fragment() {
         }
 
     /**
-     * Plays export output in [ExoPlayer]
+     * Plays export output in [ExoPlayer].
      */
     private fun playOutput() {
         Log.i(TAG, "Initiate playback using ExoPlayer.")
@@ -132,23 +141,19 @@ class TransformerVideoComposition : Fragment() {
     }
 
     override fun onPause() {
-        // Note: there is a bug in the app setup that does not call this method
         super.onPause()
         releasePlayer()
     }
 
     override fun onStop() {
-        // Note: there is a bug in the app setup that does not call this method
         super.onStop()
         releasePlayer()
     }
 
-    override fun onDestroyView() {
-        // Note: there is a bug in the app setup that does not call this method
-        super.onDestroyView()
-        releasePlayer()
-    }
-
+    /**
+     * Builds a [Composition] that contains 1 [EditedMediaItemSequence] with 2
+     * video assets, and optionally an audio sequence with one audio track.
+     */
     private fun createComposition(): Composition {
         val video1 = EditedMediaItem.Builder(
             // apply effects only on the first item
@@ -164,9 +169,11 @@ class TransformerVideoComposition : Fragment() {
 
         if (binding.backgroundAudioChip.isChecked) {
             val backgroundAudio = EditedMediaItem.Builder(MediaItem.fromUri(URI_AUDIO)).build()
+            // create an audio sequence that will be looping over the duration of the first video
+            // sequence.
             val audioSequence = EditedMediaItemSequence(
                 ImmutableList.of(backgroundAudio),
-                /* isLooping*/true,
+                /* isLooping*/true
             )
             compositionSequences.add(audioSequence)
         }
@@ -174,6 +181,9 @@ class TransformerVideoComposition : Fragment() {
         return Composition.Builder(compositionSequences).build()
     }
 
+    /**
+     * Creates an external cache file that will be used to save the [Composition] output.
+     */
     @Throws(IOException::class)
     private fun createExternalCacheFile(fileName: String): File {
         val file = File(requireActivity().externalCacheDir, fileName)
@@ -182,8 +192,12 @@ class TransformerVideoComposition : Fragment() {
         return file
     }
 
+    /**
+     * Sets up [Transformer] and [Composition] and starts the transcoding operation.
+     */
     private fun exportComposition() {
         val composition = createComposition()
+        // set up a Transformer instance and add a callback listener.
         val transformer = Transformer.Builder(requireContext())
             .addListener(transformerListener)
             .build()
@@ -192,6 +206,9 @@ class TransformerVideoComposition : Fragment() {
         startTimer(transformer)
     }
 
+    /**
+     * Gets a list of [Effects].
+     */
     private fun getSelectedEffects(): Effects {
         val selectedEffects = ArrayList<Effect>()
         if (binding.grayscaleChip.isChecked) {
@@ -206,6 +223,9 @@ class TransformerVideoComposition : Fragment() {
             /* videoEffects= */ selectedEffects)
     }
 
+    /**
+     * Sets up an [ExoPlayer] instance to playback the output cache file.
+     */
     private suspend fun playbackUsingExoPlayer() = withContext(Dispatchers.Main) {
         binding.mediaPlayer.useController = true
 
@@ -220,6 +240,9 @@ class TransformerVideoComposition : Fragment() {
         player.play()
     }
 
+    /**
+     * Releases an [ExoPlayer] instance and resets the [Stopwatch].
+     */
     private fun releasePlayer() {
         exportStopwatch!!.reset()
         binding.mediaPlayer.player?.stop()
@@ -227,6 +250,9 @@ class TransformerVideoComposition : Fragment() {
         player = null
     }
 
+    /**
+     * Sets up a timer and [Handler] to handle progress updates from the transcoding operation.
+     */
     private fun startTimer(transformer: Transformer) {
         exportStopwatch?.reset()
         exportStopwatch?.start()
