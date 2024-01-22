@@ -26,4 +26,5 @@
     <string name="long_lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec luctus est at sollicitudin gravida. Donec nec augue consectetur, vulputate massa nec, aliquam tortor. Aliquam vestibulum enim gravida massa pretium, tristique blandit nisi sagittis. Nulla facilisi. Cras erat mi, ultrices ut vulputate eu, sagittis suscipit augue. Pellentesque varius elit sit amet nisl suscipit sollicitudin. Sed non tortor fermentum, iaculis erat vel, vestibulum elit. Integer hendrerit tortor eget urna vulputate hendrerit. Integer consequat cursus sem sed fringilla. Fusce ac sodales dolor. Phasellus eleifend lacus sed libero luctus, fringilla pharetra odio lobortis. Fusce quis sapien ac nulla venenatis congue mollis aliquet nulla. Nunc commodo ipsum in leo rutrum ultrices. Nunc tincidunt neque quam, a dictum nisl sagittis vel.
     </string>
+    <string name="sharedElementTransitionText">Swipe back to see a shared element Predictive Back transition.</string>
 </resources>

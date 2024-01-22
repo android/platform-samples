@@ -22,6 +22,7 @@ enum class PBAnimation {
     CROSS_ACTIVITY,
     CUSTOM_CROSS_ACTIVITY,
     CROSS_FRAGMENT,
+    SHARED_ELEMENT_CROSS_FRAGMENT,
     PROGRESS_API,
     TRANSITION
 }
@@ -47,6 +48,10 @@ val animations = mapOf<PBAnimation, PBAnimationText>(
     PBAnimation.CROSS_FRAGMENT to PBAnimationText(
         "Cross-Fragment",
         "Click to see cross-fragment animations with Navigation Component's default animators."
+    ),
+    PBAnimation.SHARED_ELEMENT_CROSS_FRAGMENT to PBAnimationText(
+        title = "Shared Element Cross-Fragment",
+        description = "Click to see a shared element cross-fragment animation."
     ),
     PBAnimation.PROGRESS_API to PBAnimationText(
         "Progress API",
