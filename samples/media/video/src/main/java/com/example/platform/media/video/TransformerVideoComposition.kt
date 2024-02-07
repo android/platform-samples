@@ -194,6 +194,7 @@ class TransformerVideoComposition : Fragment() {
 
     /**
      * Sets up [Transformer] and [Composition] and starts the transcoding operation.
+     * [Transformer] internal processing is done on separate thread.
      */
     private fun exportComposition() {
         val composition = createComposition()
