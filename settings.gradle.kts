@@ -22,6 +22,8 @@ pluginManagement {
         google()
         mavenCentral()
         gradlePluginPortal()
+        // Uncomment this to use a snapshot version of casa-android.
+        // maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
 }
 
@@ -30,6 +32,8 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        // Uncomment this to use a snapshot version of casa-android.
+        // maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
 }
 

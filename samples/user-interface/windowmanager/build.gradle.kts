@@ -27,7 +27,7 @@ android {
 }
 
 dependencies {
-    implementation(libs.mdc)
+    implementation(libs.material)
     implementation(libs.androidx.window)
     implementation(libs.androidx.window.java)
     implementation(libs.androidx.window.rxjava2)

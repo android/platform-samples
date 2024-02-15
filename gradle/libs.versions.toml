@@ -16,20 +16,20 @@
 [versions]
 accompanist = "0.32.0"
 androidx-datastore = "1.0.0"
-androidx-navigation = "2.7.5"
+androidx-navigation = "2.7.7"
 androidx-window = "1.2.0"
-agp = "8.2.1"
-casa = "0.5.0"
+agp = "8.2.2"
+casa = "0.5.1"
 coil = "2.4.0"
-ksp = "1.9.20-1.0.14"
-compose-bom = "2023.10.01"
-composeCompiler = "1.5.4"
+ksp = "1.9.22-1.0.17"
+compose-bom = "2024.02.00"
+composeCompiler = "1.5.9"
 hilt = "2.48.1"
-kotlin = "1.9.20"
+kotlin = "1.9.22"
 kotlin-serialization = "1.6.0"
 ktlint = "0.48.1"
 coroutines = "1.7.3"
-play-services-location = "21.0.1"
+play-services-location = "21.1.0"
 junit4 = "4.13.2"
 androidxEspresso = "3.5.1"
 androidxTestCore = "1.5.0"
@@ -38,9 +38,9 @@ androidxTestExtTruth = "1.5.0"
 androidxTestRules = "1.5.0"
 androidxTestRunner = "1.5.2"
 androidxUiAutomator = "2.2.0"
-media3 = "1.2.0"
+media3 = "1.2.1"
 appcompat = "1.6.1"
-material = "1.10.0"
+material = "1.11.0"
 constraintlayout = "2.1.4"
 
 [libraries]
@@ -53,14 +53,14 @@ androidx-core = "androidx.core:core-ktx:1.12.0"
 androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
 androidx-exifinterface = "androidx.exifinterface:exifinterface:1.3.7"
 # Fragment 1.7.0 alpha and Transition 1.5.0 alpha are required for predictive back to work with Fragments and transitions
-androidx-fragment = "androidx.fragment:fragment-ktx:1.7.0-alpha07"
-androidx-transition = "androidx.transition:transition-ktx:1.5.0-alpha05"
+androidx-fragment = "androidx.fragment:fragment-ktx:1.7.0-alpha10"
+androidx-transition = "androidx.transition:transition-ktx:1.5.0-alpha06"
 androidx-activity-compose = "androidx.activity:activity-compose:1.8.2"
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "androidx-navigation" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidx-navigation" }
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "androidx-navigation" }
-androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2"
+androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0"
 androidx-viewpager2 = "androidx.viewpager2:viewpager2:1.0.0"
 
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
@@ -131,7 +131,7 @@ androidx-window = { module = "androidx.window:window", version.ref = "androidx-w
 androidx-window-java = { module = "androidx.window:window-java", version.ref = "androidx-window" }
 androidx-window-rxjava2 = { module = "androidx.window:window-rxjava2", version.ref = "androidx-window" }
 androidx-window-core = { module = "androidx.window:window-core", version.ref = "androidx-window" }
-androidx-media = "androidx.media:media:1.6.0"
+androidx-media = "androidx.media:media:1.7.0"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
 androidx-draganddrop = "androidx.draganddrop:draganddrop:1.0.0"
@@ -146,7 +146,6 @@ fresco = "com.facebook.fresco:fresco:3.0.0"
 fresco-nativeimagetranscoder = "com.facebook.fresco:nativeimagetranscoder:2.6.0!!"
 glide = "com.github.bumptech.glide:glide:4.15.1"
 
-mdc = "com.google.android.material:material:1.10.0"
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
