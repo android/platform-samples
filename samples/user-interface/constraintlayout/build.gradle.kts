@@ -27,6 +27,6 @@ android {
 
 dependencies {
     implementation(libs.androidx.constraintlayout)
-    implementation(libs.mdc)
+    implementation(libs.material)
     implementation(libs.lottie)
 }

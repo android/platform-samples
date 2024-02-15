@@ -26,6 +26,6 @@ android {
 }
 
 dependencies {
-    implementation(libs.mdc)
+    implementation(libs.material)
     implementation(libs.androidx.dynamicanimation)
 }

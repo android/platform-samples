@@ -35,5 +35,5 @@ dependencies {
     implementation(libs.androidx.glance.material3)
     // Recommended to use WorkManager to load data for widgets
     implementation(libs.androidx.work.runtime.ktx)
-    implementation(libs.mdc)
+    implementation(libs.material)
 }
