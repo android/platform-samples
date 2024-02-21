@@ -22,13 +22,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Interpolator
+import android.view.animation.PathInterpolator
 import android.widget.Toast
 import androidx.activity.BackEventCompat
 import androidx.activity.OnBackPressedCallback
 import com.example.platform.ui.predictiveback.databinding.FragmentProgressApiBinding
 
 class PBProgressAPI : Fragment() {
-
+    companion object {
+        val STANDARD_DECELERATE: Interpolator = PathInterpolator(0f, 0f, 0f, 1f)
+    }
     private var _binding: FragmentProgressApiBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
@@ -54,14 +58,18 @@ class PBProgressAPI : Fragment() {
 
             // Follows Predictive Back Design Guidance: https://developer.android.com/design/ui/mobile/guides/patterns/predictive-back
             override fun handleOnBackProgressed(backEvent: BackEventCompat) {
+                // Applies a decelerate interpolator
+                val backProgress = backEvent.progress
+                val interpolatedProgress = STANDARD_DECELERATE.getInterpolation(backProgress)
+
                 when (backEvent.swipeEdge) {
                     BackEventCompat.EDGE_LEFT ->
-                        binding.box.translationX = backEvent.progress * maxXShift
+                        binding.box.translationX = interpolatedProgress * maxXShift
                     BackEventCompat.EDGE_RIGHT ->
-                        binding.box.translationX = -(backEvent.progress * maxXShift)
+                        binding.box.translationX = -(interpolatedProgress * maxXShift)
                 }
-                binding.box.scaleX = 1F - (0.1F * backEvent.progress)
-                binding.box.scaleY = 1F - (0.1F * backEvent.progress)
+                binding.box.scaleX = 1F - (0.1F * interpolatedProgress)
+                binding.box.scaleY = 1F - (0.1F * interpolatedProgress)
             }
 
             override fun handleOnBackPressed() {
