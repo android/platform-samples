@@ -34,6 +34,8 @@ This sample demonstrates displaying an UltraHDR image in a Compose View and an A
 Download fonts instead of bundling them in the app resources.
 - [Drag and Drop](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDrop.kt):
 Demonstrates basic Drag and Drop functionality.
+- [Drag and Drop - Helper](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDropWithHelper.kt):
+Drag and Drop using the DragHelper and DropHelper from DragAndDropHelper library
 - [Drag and Drop in MultiWindow mode](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDropMultiWindow.kt):
 Drag and drop to another app visible in multiwindow mode
 - [Editing UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/edit/EditingUltraHDR.kt):
