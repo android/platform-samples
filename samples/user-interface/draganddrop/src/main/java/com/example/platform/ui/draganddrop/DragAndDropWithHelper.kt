@@ -49,7 +49,7 @@ class DragAndDropWithHelper : Fragment(R.layout.fragment_drag_and_drop_with_help
         binding = FragmentDragAndDropWithHelperBinding.bind(view)
         ConstraintSet().clone(binding.root)
 
-        binding.tvGreeting.text = getString(R.string.greeting_text)
+        binding.tvGreeting.text = getString(R.string.dnd_helper_greeting)
         /*
         data for drag
         for simplicity we have considered text as a data type to drag

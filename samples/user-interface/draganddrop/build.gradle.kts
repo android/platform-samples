@@ -30,4 +30,7 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.draganddrop)
     implementation(libs.glide)
+    implementation(libs.androidx.media3.common)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.exoplayer)
 }

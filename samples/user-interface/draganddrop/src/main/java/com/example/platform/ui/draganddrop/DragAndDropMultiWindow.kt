@@ -51,7 +51,7 @@ class DragAndDropMultiWindow : Fragment(R.layout.fragment_dnd_multiwindow) {
         binding.ivSource.tag = resources.getString(R.string.source_image_url)
         Glide.with(this).asBitmap().load(resources.getString(R.string.source_image_url))
             .into(binding.ivSource)
-        Glide.with(this).asBitmap().load(resources.getString(R.string.targer_image_url))
+        Glide.with(this).asBitmap().load(resources.getString(R.string.target_image_url))
             .into(binding.ivTarget)
         setupDrag(binding.ivSource)
         setupDrop(binding.ivTarget)
@@ -72,7 +72,7 @@ class DragAndDropMultiWindow : Fragment(R.layout.fragment_dnd_multiwindow) {
             // view can directly specify the flags in this helper method.
             // additionally if you are using [View.startDragAndDrop] for drag implementation
             // you can set the flags in similar fashion
-            var flags = View.DRAG_FLAG_GLOBAL or View.DRAG_FLAG_GLOBAL_URI_READ
+            val flags = View.DRAG_FLAG_GLOBAL or View.DRAG_FLAG_GLOBAL_URI_READ
             view.startDragAndDrop(
                 dragData,
                 View.DragShadowBuilder(view),
