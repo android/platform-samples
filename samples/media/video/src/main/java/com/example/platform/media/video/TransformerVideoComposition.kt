@@ -176,7 +176,12 @@ class TransformerVideoComposition : Fragment() {
             .setFrameRate(30)
             .build()
         val compositionSequences = ArrayList<EditedMediaItemSequence>()
+
+        // This works
         val videoSequence = EditedMediaItemSequence(ImmutableList.of(video1, image, video2))
+        // This doesn't work and results in a 0 second video of the image being exported
+//        val videoSequence = EditedMediaItemSequence(ImmutableList.of(image, video1, video2))
+        
         compositionSequences.add(videoSequence)
 
         if (binding.backgroundAudioChip.isChecked) {
