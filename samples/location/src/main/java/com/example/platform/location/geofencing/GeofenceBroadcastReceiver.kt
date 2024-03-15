@@ -18,8 +18,10 @@ package com.example.platform.location.geofencing
 
 import android.content.BroadcastReceiver
 import android.content.Context
+import android.content.Context.RECEIVER_NOT_EXPORTED
 import android.content.Intent
 import android.content.IntentFilter
+import android.os.Build
 import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
@@ -55,12 +57,16 @@ fun GeofenceBroadcastReceiver(
                         " Transition ${geofencingEvent.geofenceTransition}"
                 Log.d(
                     TAG,
-                    alertString
+                    alertString,
                 )
                 currentSystemOnEvent(alertString)
             }
         }
-        context.registerReceiver(broadcast, intentFilter)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            context.registerReceiver(broadcast, intentFilter, RECEIVER_NOT_EXPORTED)
+        } else {
+            context.registerReceiver(broadcast, intentFilter)
+        }
         onDispose {
             context.unregisterReceiver(broadcast)
         }
