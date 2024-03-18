@@ -31,7 +31,6 @@ import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
 import androidx.media3.effect.RgbFilter
 import androidx.media3.effect.ScaleAndRotateTransformation
-import androidx.media3.effect.VideoCompositorSettings
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.transformer.Composition
 import androidx.media3.transformer.EditedMediaItem
@@ -168,17 +167,19 @@ class TransformerVideoComposition : Fragment() {
             MediaItem.fromUri(URI_VIDEO2),
         )
             .build()
-        val image = EditedMediaItem.Builder(
-            MediaItem.fromUri(URI_IMAGE),
-        )
-            .setDurationUs(3_000_000) // Show the image for 3 seconds in the composition
-            .setFrameRate(30)
-            .build()
-        val compositionSequences = ArrayList<EditedMediaItemSequence>()
 
-        val videoSequence = arrayListOf<EditedMediaItem>()
+        val compositionSequences = mutableListOf<EditedMediaItemSequence>()
+
+        val videoSequence = mutableListOf<EditedMediaItem>()
 
         if (binding.imageChip.isChecked) {
+            val image = EditedMediaItem.Builder(
+                MediaItem.fromUri(URI_IMAGE),
+            )
+                .setDurationUs(3_000_000) // Show the image for 3 seconds in the composition
+                .setFrameRate(30)
+                .build()
+
             // Add image as first item in video sequence
             videoSequence.add(image)
         }
@@ -237,7 +238,7 @@ class TransformerVideoComposition : Fragment() {
      * Gets a list of [Effects].
      */
     private fun getSelectedEffects(): Effects {
-        val selectedEffects = ArrayList<Effect>()
+        val selectedEffects = mutableListOf<Effect>()
         if (binding.grayscaleChip.isChecked) {
             selectedEffects.add(RgbFilter.createGrayscaleFilter())
         }
@@ -320,7 +321,7 @@ class TransformerVideoComposition : Fragment() {
         private const val URI_VIDEO2 =
             "https://storage.googleapis.com/exoplayer-test-media-0/android-block-1080-hevc.mp4"
         private const val URI_IMAGE =
-            "https://storage.googleapis.com/exoplayer-test-media-1/jpg/tokyo.jpg"
+            "https://developer.android.com/static/images/media/overview/migrate-to-media3_1440.png"
         private const val URI_AUDIO =
             "https://storage.googleapis.com/exoplayer-test-media-0/play.mp3"
     }
