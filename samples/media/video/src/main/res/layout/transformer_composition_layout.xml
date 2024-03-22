@@ -50,6 +50,12 @@
             android:layout_height="wrap_content"
             android:checkable="true"
             android:text="@string/grayscale"/>
+        <com.google.android.material.chip.Chip
+            android:id="@+id/image_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checkable="true"
+            android:text="@string/image"/>
     </com.google.android.material.chip.ChipGroup>
 
     <Button
