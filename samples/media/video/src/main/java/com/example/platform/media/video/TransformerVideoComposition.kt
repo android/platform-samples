@@ -71,10 +71,12 @@ class TransformerVideoComposition : Fragment() {
      * cache file used to save the output result of the transcoding operation.
      */
     private var externalCacheFile: File? = null
+
     /**
      * [ExoPlayer], used to playback the output of the transcoding operation.
      */
     private var player: ExoPlayer? = null
+
     /**
      * [Stopwatch], used to track the progress of the transcoding operation.
      */
@@ -157,15 +159,34 @@ class TransformerVideoComposition : Fragment() {
     private fun createComposition(): Composition {
         val video1 = EditedMediaItem.Builder(
             // apply effects only on the first item
-            MediaItem.fromUri(URI_ITEM1))
+            MediaItem.fromUri(URI_VIDEO1),
+        )
             .setEffects(getSelectedEffects())
             .build()
         val video2 = EditedMediaItem.Builder(
-            MediaItem.fromUri(URI_ITEM2))
+            MediaItem.fromUri(URI_VIDEO2),
+        )
             .build()
-        val compositionSequences = ArrayList<EditedMediaItemSequence>()
-        val videoSequence = EditedMediaItemSequence(ImmutableList.of(video1, video2))
-        compositionSequences.add(videoSequence)
+
+        val compositionSequences = mutableListOf<EditedMediaItemSequence>()
+
+        val videoSequence = mutableListOf<EditedMediaItem>()
+
+        if (binding.imageChip.isChecked) {
+            val image = EditedMediaItem.Builder(
+                MediaItem.fromUri(URI_IMAGE),
+            )
+                .setDurationUs(3_000_000) // Show the image for 3 seconds in the composition
+                .setFrameRate(30)
+                .build()
+
+            // Add image as first item in video sequence
+            videoSequence.add(image)
+        }
+
+        videoSequence.addAll(listOf(video1, video2))
+
+        compositionSequences.add(EditedMediaItemSequence(videoSequence))
 
         if (binding.backgroundAudioChip.isChecked) {
             val backgroundAudio = EditedMediaItem.Builder(MediaItem.fromUri(URI_AUDIO)).build()
@@ -173,12 +194,18 @@ class TransformerVideoComposition : Fragment() {
             // sequence.
             val audioSequence = EditedMediaItemSequence(
                 ImmutableList.of(backgroundAudio),
-                /* isLooping*/true
+                /* isLooping*/true,
             )
             compositionSequences.add(audioSequence)
         }
 
-        return Composition.Builder(compositionSequences).build()
+        return Composition.Builder(compositionSequences)
+            // Output file should always contain an audio track because the two video clips
+            // contain audio tracks. Setting this to true handles the case where if our video
+            // sequence doesn't produce any audio at timestamp 0 (ie: if the first item is an
+            // image), the export can still succeed.
+            .experimentalSetForceAudioTrack(true)
+            .build()
     }
 
     /**
@@ -211,17 +238,21 @@ class TransformerVideoComposition : Fragment() {
      * Gets a list of [Effects].
      */
     private fun getSelectedEffects(): Effects {
-        val selectedEffects = ArrayList<Effect>()
+        val selectedEffects = mutableListOf<Effect>()
         if (binding.grayscaleChip.isChecked) {
             selectedEffects.add(RgbFilter.createGrayscaleFilter())
         }
         if (binding.scaleChip.isChecked) {
-            selectedEffects.add(ScaleAndRotateTransformation.Builder()
-                .setScale(.2f, .2f)
-                .build())
+            selectedEffects.add(
+                ScaleAndRotateTransformation.Builder()
+                    .setScale(.2f, .2f)
+                    .build(),
+            )
         }
-        return Effects(/* audioProcessors= */ listOf(),
-            /* videoEffects= */ selectedEffects)
+        return Effects(
+            /* audioProcessors= */ listOf(),
+            /* videoEffects= */ selectedEffects,
+        )
     }
 
     /**
@@ -281,13 +312,16 @@ class TransformerVideoComposition : Fragment() {
          * Class Tag
          */
         private val TAG = TransformerVideoComposition::class.java.simpleName
+
         /**
          * Video and audio assets
          */
-        private const val URI_ITEM1 =
+        private const val URI_VIDEO1 =
             "https://storage.googleapis.com/exoplayer-test-media-1/mp4/android-screens-10s.mp4"
-        private const val URI_ITEM2 =
+        private const val URI_VIDEO2 =
             "https://storage.googleapis.com/exoplayer-test-media-0/android-block-1080-hevc.mp4"
+        private const val URI_IMAGE =
+            "https://developer.android.com/static/images/media/overview/migrate-to-media3_1440.png"
         private const val URI_AUDIO =
             "https://storage.googleapis.com/exoplayer-test-media-0/play.mp3"
     }
