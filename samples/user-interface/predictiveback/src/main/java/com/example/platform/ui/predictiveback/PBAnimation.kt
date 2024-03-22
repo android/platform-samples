@@ -24,7 +24,8 @@ enum class PBAnimation {
     CROSS_FRAGMENT,
     SHARED_ELEMENT_CROSS_FRAGMENT,
     PROGRESS_API,
-    TRANSITION
+    TRANSITION,
+    MATERIAL_SHARED_AXIS
 }
 data class PBAnimationText(val title: String, val description: String)
 
@@ -60,5 +61,9 @@ val animations = mapOf<PBAnimation, PBAnimationText>(
     PBAnimation.TRANSITION to PBAnimationText(
         "Transition",
         "Click to see an animation created with AndroidX Transitions and the Predictive Back Progress API."
+    ),
+    PBAnimation.MATERIAL_SHARED_AXIS to PBAnimationText(
+        "Material Shared Axis",
+        "Click to see an animation created with Material Shared Axis."
     )
 )

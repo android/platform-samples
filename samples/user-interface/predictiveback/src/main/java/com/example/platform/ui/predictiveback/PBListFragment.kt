@@ -63,6 +63,9 @@ class PBListFragment : Fragment() {
         binding.transitionsCard.setOnClickListener {
             findNavController().navigate(R.id.show_PBTransition)
         }
+        binding.materialSharedAxisCard.setOnClickListener {
+            findNavController().navigate(R.id.show_PBMaterialSharedAxisAnimations)
+        }
     }
 
     override fun onDestroyView() {
@@ -87,5 +90,7 @@ class PBListFragment : Fragment() {
         binding.progressApiDescription.text = animations[PBAnimation.PROGRESS_API]?.description ?: ""
         binding.transitionsTitle.text = animations[PBAnimation.TRANSITION]?.title ?: ""
         binding.transitionsDescription.text = animations[PBAnimation.TRANSITION]?.description ?: ""
+        binding.materialSharedAxisTitle.text = animations[PBAnimation.MATERIAL_SHARED_AXIS]?.title ?: ""
+        binding.materialSharedAxisDescription.text = animations[PBAnimation.MATERIAL_SHARED_AXIS]?.description ?: ""
     }
 }
