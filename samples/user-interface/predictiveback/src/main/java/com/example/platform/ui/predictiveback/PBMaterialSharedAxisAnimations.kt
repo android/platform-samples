@@ -17,11 +17,16 @@
 package com.example.platform.ui.predictiveback
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.FragmentNavigatorExtras
+import androidx.navigation.fragment.findNavController
 import com.example.platform.ui.predictiveback.databinding.FragmentMaterialSharedAxisBinding
+import com.google.android.material.transition.MaterialSharedAxis
 
 class PBMaterialSharedAxisAnimations : Fragment() {
 
@@ -34,6 +39,25 @@ class PBMaterialSharedAxisAnimations : Fragment() {
         _binding = FragmentMaterialSharedAxisBinding
             .inflate(inflater, container, false)
         return binding.root
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        Log.d("material", "Inside material shared axis fragment")
+
+        enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, /* forward= */ true)
+        returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, /* forward= */ false)
+
+        val predictiveBackCallback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                findNavController().popBackStack()
+            }
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(
+            this.viewLifecycleOwner,
+            predictiveBackCallback
+        )
     }
 
     override fun onDestroyView() {
