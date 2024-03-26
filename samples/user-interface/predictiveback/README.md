@@ -211,7 +211,7 @@ class MyFragment : Fragment() {
 ## Cross-fragment animation with MaterialSharedAxis
 
 MaterialSharedAxis is a Visibility transition. A Visibility transition is triggered when the target
-View's visibility is changed or when the View is added or removed. This means MaterialSharedAxis
+Fragment's visibility is changed or when the Fragment is added or removed. This means MaterialSharedAxis
 requires a View to be changing in visibility or to be added or removed to trigger its animation.
 
 For more details see the
