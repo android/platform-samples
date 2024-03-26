@@ -43,6 +43,9 @@
         <action
             android:id="@+id/show_PBSharedElementTransitionFragment"
             app:destination="@id/PBSharedElementTransitionFragment" />
+        <action
+            android:id="@+id/show_PBMaterialSharedAxisAnimations"
+            app:destination="@id/PBMaterialSharedAxisAnimations" />
     </fragment>
     <fragment
         android:id="@+id/PBNavigationComponentDefaultAnimations"
@@ -69,4 +72,9 @@
         android:name="com.example.platform.ui.predictiveback.PBSharedElementTransitionFragment"
         android:label="fragment_shared_element_transition"
         tools:layout="@layout/fragment_shared_element_transition" />
+    <fragment
+        android:id="@+id/PBMaterialSharedAxisAnimations"
+        android:name="com.example.platform.ui.predictiveback.PBMaterialSharedAxisAnimations"
+        android:label="fragment_material_shared_axis"
+        tools:layout="@layout/fragment_material_shared_axis" />
 </navigation>

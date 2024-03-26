@@ -9,6 +9,7 @@ Shows different types of predictive back animations, including:
 + Shared element cross-fragment animation
 + Custom Progress API animation
 + Custom AndroidX Transition
++ Cross-fragment animation with MaterialSharedAxis
 
 ## Custom cross-activity
 
@@ -206,4 +207,34 @@ class MyFragment : Fragment() {
     }
 }
 ```
+
+## Cross-fragment animation with MaterialSharedAxis
+
+MaterialSharedAxis is a Visibility transition. A Visibility transition is triggered when the target
+Fragment's visibility is changed or when the Fragment is added or removed. This means MaterialSharedAxis
+requires a View to be changing in visibility or to be added or removed to trigger its animation.
+
+For more details see the
+[developer documentation](https://m2.material.io/develop/android/theming/motion#shared-axis).
+
+```kotlin
+// FragmentA.kt
+
+override fun onCreateView(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, /* forward= */ true)
+    reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, /* forward= */ false)
+}
+
+// FragmentB.kt
+
+override fun onCreateView(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+
+    enterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, /* forward= */ true)
+    returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, /* forward= */ false)
+}
+```
+
 
