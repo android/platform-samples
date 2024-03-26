@@ -24,6 +24,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import com.example.platform.ui.predictiveback.databinding.FragmentAnimationListBinding
+import com.google.android.material.transition.MaterialSharedAxis
 
 class PBListFragment : Fragment() {
 
@@ -36,6 +37,10 @@ class PBListFragment : Fragment() {
         _binding = FragmentAnimationListBinding.inflate(inflater, container, false)
 
         setAnimationText()
+
+        exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, /* forward= */ true)
+        reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, /* forward= */ false)
+
 
         return binding.root
     }
