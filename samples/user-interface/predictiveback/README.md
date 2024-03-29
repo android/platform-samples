@@ -10,6 +10,7 @@ Shows different types of predictive back animations, including:
 + Custom Progress API animation
 + Custom AndroidX Transition
 + Cross-fragment animation with MaterialSharedAxis
++ setCustomAnimations
 
 ## Custom cross-activity
 
@@ -236,5 +237,12 @@ override fun onCreateView(savedInstanceState: Bundle?) {
     returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, /* forward= */ false)
 }
 ```
+## setCustomAnimations
 
+Use setEnterTransition, setExitTransition, setReenterTransition, setReturnTransition,
+setSharedElementEnterTransition, setSharedElementReturnTransition instead of setCustomAnimations
+where possible. However, if you are using setCustomAnimations, here's a code sample showing
+predictive back working with animators.
+
+#TODO: add in code sample
 
