@@ -50,7 +50,7 @@
             android:id="@+id/show_PBSetCustomAnimations"
             app:destination="@id/PBSetCustomAnimations"
             app:enterAnim="@animator/fade_in"
-            app:exitAnim="@animator/fade_in"
+            app:exitAnim="@animator/fade_out"
             app:popEnterAnim="@animator/fade_in"
             app:popExitAnim="@animator/fade_out"/>
     </fragment>
