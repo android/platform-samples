@@ -48,11 +48,7 @@
             app:destination="@id/PBMaterialSharedAxisAnimations" />
         <action
             android:id="@+id/show_PBSetCustomAnimations"
-            app:destination="@id/PBSetCustomAnimations"
-            app:enterAnim="@animator/fade_in"
-            app:exitAnim="@animator/fade_out"
-            app:popEnterAnim="@animator/fade_in"
-            app:popExitAnim="@animator/fade_out"/>
+            app:destination="@id/PBSetCustomAnimations" />
     </fragment>
     <fragment
         android:id="@+id/PBNavigationComponentDefaultAnimations"
@@ -86,7 +82,7 @@
         tools:layout="@layout/fragment_material_shared_axis" />
     <fragment
         android:id="@+id/PBSetCustomAnimations"
-        android:name="com.example.platform.ui.predictiveback.PBSetCustomAnimations"
+        android:name="com.example.platform.ui.predictiveback.PBSetCustomAnimationsFirstFragment"
         android:label="fragment_set_custom_animations"
         tools:layout="@layout/fragment_set_custom_animations" />
 </navigation>
