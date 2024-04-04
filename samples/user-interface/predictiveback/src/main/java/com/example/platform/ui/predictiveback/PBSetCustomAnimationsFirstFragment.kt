@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,13 +17,10 @@
 package com.example.platform.ui.predictiveback
 
 import android.os.Bundle
-import android.text.TextUtils.replace
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
 import com.example.platform.ui.predictiveback.databinding.FragmentSetCustomAnimationsBinding
 
 class PBSetCustomAnimationsFirstFragment : Fragment() {
@@ -37,22 +34,6 @@ class PBSetCustomAnimationsFirstFragment : Fragment() {
     ): View {
         _binding = FragmentSetCustomAnimationsBinding
             .inflate(inflater, container, false)
-
-        val box = binding.box
-
-        box.setOnClickListener {
-            Log.d("PBFirstFragment", "box clicked")
-            childFragmentManager.commit {
-                setCustomAnimations(
-                    android.R.animator.fade_in, // enter
-                    android.R.animator.fade_out, // exit
-                    android.R.animator.fade_in, // popEnter
-                    android.R.animator.fade_out) // popExit
-                replace(R.id.container_id, PBSetCustomAnimationsSecondFragment())
-                setReorderingAllowed(true)
-                addToBackStack(null)
-            }
-        }
 
         return binding.root
     }

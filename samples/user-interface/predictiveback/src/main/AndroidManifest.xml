@@ -3,6 +3,11 @@
 
     <application>
         <activity
+            android:name=".PBSetCustomAnimationsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_set_custom_animations"
+            android:theme="@style/Theme.PlatformSamples"/>
+        <activity
             android:name=".PBCustomCrossActivityAnimation"
             android:exported="false"
             android:label="@string/title_activity_custom_cross_animation"

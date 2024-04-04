@@ -71,7 +71,7 @@ class PBListFragment : Fragment() {
             findNavController().navigate(R.id.show_PBMaterialSharedAxisAnimations)
         }
         binding.setCustomAnimationsCard.setOnClickListener {
-            findNavController().navigate(R.id.show_PBSetCustomAnimations)
+            findNavController().navigate(R.id.show_PBSetCustomAnimationsActivity)
         }
     }
 

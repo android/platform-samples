@@ -47,8 +47,8 @@
             android:id="@+id/show_PBMaterialSharedAxisAnimations"
             app:destination="@id/PBMaterialSharedAxisAnimations" />
         <action
-            android:id="@+id/show_PBSetCustomAnimations"
-            app:destination="@id/PBSetCustomAnimations" />
+            android:id="@+id/show_PBSetCustomAnimationsActivity"
+            app:destination="@id/PBSetCustomAnimationsActivity" />
     </fragment>
     <fragment
         android:id="@+id/PBNavigationComponentDefaultAnimations"
@@ -80,9 +80,10 @@
         android:name="com.example.platform.ui.predictiveback.PBMaterialSharedAxisAnimations"
         android:label="fragment_material_shared_axis"
         tools:layout="@layout/fragment_material_shared_axis" />
-    <fragment
-        android:id="@+id/PBSetCustomAnimations"
-        android:name="com.example.platform.ui.predictiveback.PBSetCustomAnimationsFirstFragment"
-        android:label="fragment_set_custom_animations"
-        tools:layout="@layout/fragment_set_custom_animations" />
+    <activity
+        android:id="@+id/PBSetCustomAnimationsActivity"
+        android:name="com.example.platform.ui.predictiveback.PBSetCustomAnimationsActivity"
+        android:label="activity_set_custom_animations"
+        tools:layout="@layout/activity_set_custom_animations" />
+
 </navigation>
