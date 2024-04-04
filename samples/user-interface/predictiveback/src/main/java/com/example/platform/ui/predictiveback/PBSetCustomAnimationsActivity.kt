@@ -31,13 +31,8 @@ class PBSetCustomAnimationsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         supportFragmentManager.commit {
-            setCustomAnimations(
-                android.R.animator.fade_in, // enter
-                android.R.animator.fade_out, // exit
-                android.R.animator.fade_in, // popEnter
-                android.R.animator.fade_out) // popExit
             replace(R.id.fragment_container, PBSetCustomAnimationsFirstFragment())
-            addToBackStack(null)
         }
+
     }
 }

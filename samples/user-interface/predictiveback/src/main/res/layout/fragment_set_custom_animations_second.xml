@@ -49,7 +49,7 @@
         android:layout_height="wrap_content"
         android:maxWidth="300dp"
         android:fontFamily="sans-serif"
-        android:text="@string/setCustomAnimations_desc"
+        android:text="@string/setCustomAnimations_body"
         android:textAppearance="?attr/textAppearanceBodyMedium"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"

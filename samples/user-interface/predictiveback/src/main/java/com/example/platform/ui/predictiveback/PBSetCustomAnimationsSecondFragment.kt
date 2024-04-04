@@ -21,33 +21,20 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.commit
-import com.example.platform.ui.predictiveback.databinding.FragmentSetCustomAnimationsBinding
+import com.example.platform.ui.predictiveback.databinding.FragmentSetCustomAnimationsSecondBinding
 
-class PBSetCustomAnimationsFirstFragment : Fragment() {
+class PBSetCustomAnimationsSecondFragment : Fragment() {
 
-    private var _binding: FragmentSetCustomAnimationsBinding? = null
+    private var _binding: FragmentSetCustomAnimationsSecondBinding? = null
     private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = FragmentSetCustomAnimationsBinding
+        _binding = FragmentSetCustomAnimationsSecondBinding
             .inflate(inflater, container, false)
 
-        binding.box.setOnClickListener {
-            parentFragmentManager.commit {
-                setCustomAnimations(
-                    android.R.animator.fade_in, // enter
-                    android.R.animator.fade_out, // exit
-                    android.R.animator.fade_in, // popEnter
-                    android.R.animator.fade_out) // popExit
-                replace(R.id.fragment_container,PBSetCustomAnimationsSecondFragment())
-                setReorderingAllowed(true)
-                addToBackStack(null)
-            }
-        }
         return binding.root
     }
 
