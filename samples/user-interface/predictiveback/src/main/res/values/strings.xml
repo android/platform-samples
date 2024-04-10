@@ -30,6 +30,6 @@
     <string name="sharedElementTransitionText">Swipe back to see a shared element Predictive Back transition.</string>
     <string name="fragment_material_shared_axis_body">Swipe back to see a Material Shared Axis transition.</string>
     <string name="setCustomAnimations_body">Swipe back to see a setCustomAnimations transition.</string>
-    <string name="setCustomAnimations_desc">Click on the box</string>
+    <string name="setCustomAnimations_desc">Click on the button</string>
 
 </resources>

@@ -36,7 +36,7 @@ class PBSetCustomAnimationsFirstFragment : Fragment() {
         _binding = FragmentSetCustomAnimationsBinding
             .inflate(inflater, container, false)
 
-        binding.box.setOnClickListener {
+        binding.button.setOnClickListener {
             parentFragmentManager.commit {
                 setCustomAnimations(
                     android.R.animator.fade_in, // enter

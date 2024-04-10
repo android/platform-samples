@@ -239,11 +239,11 @@ override fun onCreateView(savedInstanceState: Bundle?) {
 ```
 ## setCustomAnimations
 
-Use setEnterTransition, setExitTransition, setReenterTransition, setReturnTransition,
-setSharedElementEnterTransition, setSharedElementReturnTransition instead of setCustomAnimations
+Use `setEnterTransition`, `setExitTransition`, `setReenterTransition`, `setReturnTransition`,
+`setSharedElementEnterTransition`, `setSharedElementReturnTransition` instead of `setCustomAnimations`
 where possible. 
 
-However, if you are using setCustomAnimations, here's a code sample showing
+However, if you are using `setCustomAnimations`, here's a code sample showing
 predictive back working with animators and fragment manager.
 
 ```kotlin
