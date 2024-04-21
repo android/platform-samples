@@ -24,7 +24,7 @@ Browse the samples inside each topic samples folder:
 
 We are constantly adding new samples to this repository. You can find a list of all the available samples [here](https://github.com/android/platform-samples/tree/main/samples/README.md).
 
-> 🚧 **Work-in-Progress:** we are working on brining more existing and new samples into this format.
+> 🚧 **Work-in-Progress:** we are working on bringing more existing and new samples into this format.
 
 ## How to run
 
