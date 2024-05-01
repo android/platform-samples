@@ -71,16 +71,11 @@ class DragAndDropWithHelper : Fragment(R.layout.fragment_drag_and_drop_with_help
     }
 
     @RequiresApi(Build.VERSION_CODES.N)
-    private fun setupDrag(draggableView: ImageView) {
-        /*
-        Usual way of implementing the drag would involve the use of setLongClickListener method ,
-        defining clipdata , building shadow and starting the drag as showcased in
-        https://developer.android.com/develop/ui/views/touch-and-input/drag-drop#StartDrag
-        DragStartHelper provide the utility method to avoid this boilerplate code and prove ease of
-        implementation for dragging the view.
+    private fun setupDrag(draggableView: ImageView) {/*
+        DragStartHelper is a utility class for implementing drag and drop support
+        DragStartHelper provide the ease of implementation for dragging the view.
          */
-        DragStartHelper(draggableView)
-        { view: View, _: DragStartHelper ->
+        DragStartHelper(draggableView) { view: View, _: DragStartHelper ->
             val item = ClipData.Item(view.tag as? CharSequence)
             val dragData = ClipData(
                 view.tag as? CharSequence,
@@ -96,12 +91,9 @@ class DragAndDropWithHelper : Fragment(R.layout.fragment_drag_and_drop_with_help
         }.attach()
     }
 
-    private fun setupDrop(targetView: ImageView) {
-        /*
+    private fun setupDrop(targetView: ImageView) {/*
         Similar to drag method, drop in normal way be handled with implementing the listener for
-        Drop event, and handling each DropEvent as showcased here
-        https://developer.android.com/develop/ui/views/touch-and-input/drag-drop#RespondEventSample
-        DropHelper provides the utility method for the ease of this implementation
+        Drop event,
          */
         DropHelper.configureView(
             requireActivity(),
@@ -110,9 +102,7 @@ class DragAndDropWithHelper : Fragment(R.layout.fragment_drag_and_drop_with_help
         ) { _, payload: ContentInfoCompat ->
             val item = payload.clip.getItemAt(0)
             val dragData = item.text
-            Glide.with(this)
-                .load(dragData)
-                .centerCrop().into(targetView)
+            Glide.with(this).load(dragData).centerCrop().into(targetView)
             val (_, remaining) = payload.partition { it == item }
             remaining
         }

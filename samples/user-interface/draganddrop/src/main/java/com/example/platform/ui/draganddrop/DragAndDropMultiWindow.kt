@@ -60,8 +60,7 @@ class DragAndDropMultiWindow : Fragment(R.layout.fragment_dnd_multiwindow) {
 
     @RequiresApi(Build.VERSION_CODES.N)
     private fun setupDrag(draggableView: ImageView) {
-        DragStartHelper(draggableView)
-        { view: View, _: DragStartHelper ->
+        DragStartHelper(draggableView) { view: View, _: DragStartHelper ->
             val item = ClipData.Item(view.tag as? CharSequence)
             val dragData = ClipData(
                 view.tag as? CharSequence,
@@ -70,8 +69,6 @@ class DragAndDropMultiWindow : Fragment(R.layout.fragment_dnd_multiwindow) {
             )
             // Flag is required so that data from clipdata can be read by the drop target.
             // view can directly specify the flags in this helper method.
-            // additionally if you are using [View.startDragAndDrop] for drag implementation
-            // you can set the flags in similar fashion
             val flags = View.DRAG_FLAG_GLOBAL or View.DRAG_FLAG_GLOBAL_URI_READ
             view.startDragAndDrop(
                 dragData,
@@ -82,29 +79,21 @@ class DragAndDropMultiWindow : Fragment(R.layout.fragment_dnd_multiwindow) {
         }.attach()
     }
 
-    private fun setupDrop(targetView: ImageView) {
-        // DropHelper manages permission to read data across app, provided DRAG permission has been
-        // granted by drag source. No additional code is required as transient permission
-        // are granted and released
-        // Consider using [WorkManager] if processing of clipdata is long-running
-        // if you are setting up [onDragListener] , you have to add ask for permission before
-        // handling the data and release permissions once done with it.
-        // e.g.
-        // val dropPermissions = requestDragAndDropPermissions()
-        // -- handle the clipdata
-        // dropPermissions.release()
-        // Please refer [https://developer.android.com/develop/ui/views/touch-and-input/drag-drop#DragPermissionsMultiWindow]
-        // for more details
-        DropHelper.configureView(
+   private fun setupDrop(targetView: ImageView) {
+       /**
+        * DropHelper manages permission to read data across app, provided DRAG permission has been
+        * granted by drag source. No additional code is required as transient permission
+        * are granted and released
+        * Consider performing processing of [ClipData] in background if it is long-running
+        */
+       DropHelper.configureView(
             requireActivity(),
             targetView,
             arrayOf("text/*"),
         ) { _, payload: ContentInfoCompat ->
             val item = payload.clip.getItemAt(0)
             val dragData = item.text
-            Glide.with(this)
-                .load(dragData)
-                .centerCrop().into(targetView)
+            Glide.with(this).load(dragData).centerCrop().into(targetView)
             val (_, remaining) = payload.partition { it == item }
             remaining
         }

@@ -36,6 +36,8 @@ Download fonts instead of bundling them in the app resources.
 Demonstrates basic Drag and Drop functionality.
 - [Drag and Drop - Helper](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDropWithHelper.kt):
 Drag and Drop using the DragHelper and DropHelper from DragAndDropHelper library
+- [Drag and Drop in Compose](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDropUsingCompose.kt):
+Drag and drop in Compose
 - [Drag and Drop in MultiWindow mode](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDropMultiWindow.kt):
 Drag and drop to another app visible in multiwindow mode
 - [Drag and Drop using the RichContentReceiver](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDropRichContentReceiverFragment.kt):
