@@ -24,6 +24,8 @@ Demonstrates how to implement the incremental search feature for non-alphabet la
 Shows how to create a GATT server and communicate with the GATT client
 - [Data Access](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/DataAccess.kt):
 Demonstrates how to implement data access auditing for your app to identify 
+- [Dialer Sample](connectivity/telecom/src/main/java/com/example/platform/connectivity/telecom/dialer/DialerActivity.kt):
+A sample showcasing how to become the default phone application
 - [Displaying UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDR.kt):
 This sample demonstrates displaying an UltraHDR image.
 - [Displaying UltraHDR (3P Libraries)](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/DisplayingUltraHDRUsing3PLibrary.kt):

@@ -26,7 +26,13 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-telecom:1.0.0-alpha02")
+    implementation("androidx.core:core-telecom:1.0.0-alpha03")
+    implementation("androidx.car.app:app:1.3.0-beta01")
+    // For Android Auto specific functionality
+    implementation("androidx.car.app:app-projected:1.3.0-beta01")
+    // For testing
+    testImplementation("androidx.car.app:app-testing:1.3.0-beta01")
+
     implementation(project(mapOf("path" to ":samples:connectivity:audio")))
 
     androidTestImplementation(platform(libs.compose.bom))

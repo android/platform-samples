@@ -140,7 +140,7 @@ private fun TelecomCallOptions() {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-private fun Context.launchCall(action: String, name: String, uri: Uri) {
+fun Context.launchCall(action: String, name: String, uri: Uri) {
     startService(
         Intent(this, TelecomCallService::class.java).apply {
             this.action = action
