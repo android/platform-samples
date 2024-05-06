@@ -22,4 +22,14 @@
     <string name="drop_image">Dropped image (sampled to %1$d x %2$d)</string>
     <string name="drop_error">Error: could not load file: %1$s</string>
     <string name="new_task">New task</string>
+    <string name="dnd_helper_greeting">Drag and Drop using Helper classes</string>
+    <string name="source_image"> Source Image</string>
+    <string name="target_image"> Target Image</string>
+    <string name="reset_btn_text">Reset</string>
+    <string name="dnd_multiwindow_greeting">Drag and Drop across apps visible in multi-window mode</string>
+    <string name="source_image_url">https://services.google.com/fh/files/misc/qq10.jpeg</string>
+    <string name="target_image_url">https://services.google.com/fh/files/misc/qq8.jpeg</string>
+    <string name="target_image_url1">https://services.google.com/fh/files/misc/qq9.jpeg</string>
+    <string name="greeting_rich_content"> Rich Content Receiver for Drag and Drop</string>
+    <string name="editable_drag_text">Editable Drag Text</string>
 </resources>

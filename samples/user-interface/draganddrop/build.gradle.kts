@@ -17,7 +17,7 @@
 plugins {
     id("com.example.platform.sample")
 }
-    
+
 android {
     namespace = "com.example.platform.ui.draganddrop"
     buildFeatures {
@@ -29,4 +29,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.androidx.constraintlayout)
     implementation(libs.androidx.draganddrop)
+    implementation(libs.glide)
+    implementation(libs.androidx.media3.common)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.glide.compose)
 }
