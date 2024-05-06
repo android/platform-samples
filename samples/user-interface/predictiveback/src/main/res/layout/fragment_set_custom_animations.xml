@@ -38,6 +38,7 @@
         android:layout_width="300dp"
         android:layout_height="100dp"
         android:background="@drawable/button"
+        app:backgroundTint="@null"
         android:text="Click Me!"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
