@@ -130,7 +130,7 @@ private fun WidgetInfoCard(providerInfo: AppWidgetProviderInfo) {
     val context = LocalContext.current
     val label = providerInfo.loadLabel(context.packageManager)
     val description = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        providerInfo.loadDescription(context).toString()
+        (providerInfo.loadDescription(context)?:"").toString();
     } else {
         "Description not available"
     }
@@ -143,7 +143,7 @@ private fun WidgetInfoCard(providerInfo: AppWidgetProviderInfo) {
         }
     ) {
         Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
-            Column {
+            Column(modifier = Modifier.padding(end = 8.dp)) {
                 Text(
                     text = label,
                     style = MaterialTheme.typography.titleSmall

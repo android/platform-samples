@@ -17,4 +17,105 @@
 <resources>
     <dimen name="widget_margin">0dp</dimen>
     <dimen name="widget_element_min_length">48dp</dimen>
+    <!-- Common dimens -->
+
+    <!-- Following are sizes for handheld devices such as phones and foldables.
+     See the dimens override for large screen devices -->
+
+    <!-- Layout dimens -->
+
+    <!-- short text row, 2x1 default drop size, max resizeable to 4-cell width -->
+    <integer name="sample_short_text_row_target_cell_width">2</integer>
+    <integer name="sample_short_text_row_target_cell_height">1</integer>
+    <dimen name="sample_short_text_row_widget_min_width">120dp</dimen>
+    <dimen name="sample_short_text_row_widget_min_height">55dp</dimen>
+    <dimen name="sample_short_text_row_min_resize_width">120dp</dimen>
+    <dimen name="sample_short_text_row_max_resize_width">624dp</dimen>
+
+    <!-- long text (sizes to have approximately 2x2 drop size, 2x2 min resize size
+     and 4x2 maximum resize size -->
+    <integer name="sample_long_text_target_cell_width">2</integer>
+    <integer name="sample_long_text_target_cell_height">2</integer>
+    <dimen name="sample_long_text_widget_min_width">120dp</dimen>
+    <dimen name="sample_long_text_widget_min_height">126dp</dimen>
+    <dimen name="sample_long_text_min_resize_width">120dp</dimen>
+    <dimen name="sample_long_text_min_resize_height">126dp</dimen>
+    <dimen name="sample_long_text_max_resize_width">624dp</dimen>
+    <dimen name="sample_long_text_max_resize_height">252dp</dimen>
+
+    <!--
+    text & image (sizes to have approximately 4x2 as default drop size and
+    2x2 as minimum resize and 4x4 as maximum resize size).
+    -->
+    <integer name="sample_text_with_image_target_cell_width">4</integer>
+    <integer name="sample_text_with_image_target_cell_height">2</integer>
+    <dimen name="sample_text_with_image_widget_min_width">256dp</dimen>
+    <dimen name="sample_text_with_image_widget_min_height">126dp</dimen>
+    <dimen name="sample_text_with_image_widget_min_resize_width">120dp</dimen>
+    <dimen name="sample_text_with_image_widget_min_resize_height">126dp</dimen>
+    <dimen name="sample_text_with_image_widget_max_resize_width">624dp</dimen>
+    <dimen name="sample_text_with_image_widget_max_resize_height">488dp</dimen>
+
+    <!-- list of image & texts (sizes to have approximately 4x2 default drop size,
+    2x2 as minimum resize size and 4x4 as maximum resize size). For image heavy
+    widgets like this, a 4x2 drop size allows the default view that user will see
+    to include the images. And if user wishes to use it as a utility compact
+    widget, a 2x2 resize would be possible where only list text is displayed.
+    -->
+    <integer name="sample_text_with_image_list_target_cell_width">4</integer>
+    <integer name="sample_text_with_image_list_target_cell_height">2</integer>
+    <dimen name="sample_text_with_image_list_widget_min_width">256dp</dimen>
+    <dimen name="sample_text_with_image_list_widget_min_height">126dp</dimen>
+    <dimen name="sample_text_with_image_widget_list_min_resize_width">120dp</dimen>
+    <dimen name="sample_text_with_image_list_widget_min_resize_height">126dp</dimen>
+    <dimen name="sample_text_with_image_list_widget_max_resize_width">624dp</dimen>
+    <dimen name="sample_text_with_image_list_widget_max_resize_height">488dp</dimen>
+
+    <!-- check list (sizes to have approximately 2x2 default drop size, 2x2 as
+    minimum resize size and 4x4 as maximum resize size). For utility widgets like
+    these a 2x2 default drop size is great. -->
+    <integer name="sample_check_list_target_cell_width">2</integer>
+    <integer name="sample_check_list_target_cell_height">2</integer>
+    <dimen name="sample_check_list_widget_min_width">120dp</dimen>
+    <dimen name="sample_check_list_widget_min_height">126dp</dimen>
+    <dimen name="sample_check_list_widget_min_resize_width">120dp</dimen>
+    <dimen name="sample_check_list_widget_min_resize_height">126dp</dimen>
+    <dimen name="sample_check_list_widget_max_resize_width">624dp</dimen>
+    <dimen name="sample_check_list_widget_max_resize_height">488dp</dimen>
+
+    <!-- action list (sizes to have approximately 4x2 default drop size,
+    2x2 as minimum resize size and 4x4 as maximum resize size). If 2x2 drop size
+    works for your use case, recommend preferring it. -->
+    <integer name="sample_action_list_target_cell_width">4</integer>
+    <integer name="sample_action_list_target_cell_height">2</integer>
+    <dimen name="sample_action_list_widget_min_width">256dp</dimen>
+    <dimen name="sample_action_list_widget_min_height">126dp</dimen>
+    <dimen name="sample_action_list_widget_min_resize_width">120dp</dimen>
+    <dimen name="sample_action_list_widget_min_resize_height">126dp</dimen>
+    <dimen name="sample_action_list_widget_max_resize_width">624dp</dimen>
+    <dimen name="sample_action_list_widget_max_resize_height">488dp</dimen>
+
+    <!-- image grid (sizes to have approximately 4x3 default drop size,
+    2x2 as minimum resize size and 4x4 as maximum resize size) -->
+    <integer name="sample_image_grid_target_cell_width">4</integer>
+    <integer name="sample_image_grid_target_cell_height">3</integer>
+    <dimen name="sample_image_grid_widget_min_width">256dp</dimen>
+    <dimen name="sample_image_grid_widget_min_height">196dp</dimen>
+    <dimen name="sample_image_grid_widget_min_resize_width">120dp</dimen>
+    <dimen name="sample_image_grid_widget_min_resize_height">126dp</dimen>
+    <dimen name="sample_image_grid_widget_max_resize_width">624dp</dimen>
+    <dimen name="sample_image_grid_widget_max_resize_height">488dp</dimen>
+
+    <!-- hero style image grid (sizes to have approximately 4x3 default drop size,
+    2x2 as minimum resize size and 4x4 as maximum resize size) -->
+    <integer name="sample_hero_style_image_grid_target_cell_width">4</integer>
+    <integer name="sample_hero_style_image_grid_target_cell_height">3</integer>
+    <dimen name="sample_hero_style_image_grid_widget_min_width">256dp</dimen>
+    <dimen name="sample_hero_style_image_grid_widget_min_height">196dp</dimen>
+    <dimen name="sample_hero_style_image_grid_widget_min_resize_width">120dp</dimen>
+    <dimen name="sample_hero_style_image_grid_widget_min_resize_height">126dp</dimen>
+    <dimen name="sample_hero_style_image_grid_widget_max_resize_width">624dp</dimen>
+    <dimen name="sample_hero_style_image_grid_widget_max_resize_height">488dp</dimen>
+
+    <!-- other sizes go here -->
 </resources>

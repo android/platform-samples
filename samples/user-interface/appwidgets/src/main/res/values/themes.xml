@@ -47,4 +47,6 @@
     <style name="Theme.AppWidget.AppWidgetContainer.WeatherForecast" parent="Theme.AppWidget.AppWidgetContainer">
         <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
+
+    <style name="Theme.LayoutSamples" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>
