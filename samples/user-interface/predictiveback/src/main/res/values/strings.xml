@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2023 The Android Open Source Project
+  ~ Copyright 2024 The Android Open Source Project
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 <resources>
     <string name="title_activity_predictive_back_sample">PredictiveBackSample</string>
     <string name="title_activity_custom_cross_animation">CustomCrossActivity</string>
+    <string name="title_activity_set_custom_animations">SetCustomAnimationsActivity</string>
     <string name="predictive_back_sample_first_activity_header">Predictive Back Samples</string>
     <string name="fragment_header">Fragment</string>
     <string name="fragment_nav_component_body">Swipe back to see Predictive Back cross-fragment animations using Navigation Component default animations.</string>
@@ -28,4 +29,7 @@
     </string>
     <string name="sharedElementTransitionText">Swipe back to see a shared element Predictive Back transition.</string>
     <string name="fragment_material_shared_axis_body">Swipe back to see a Material Shared Axis transition.</string>
+    <string name="setCustomAnimations_body">Swipe back to see a setCustomAnimations transition.</string>
+    <string name="setCustomAnimations_desc">Click on the button</string>
+
 </resources>

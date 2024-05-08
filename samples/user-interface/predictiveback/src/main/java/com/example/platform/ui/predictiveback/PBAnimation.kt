@@ -25,7 +25,8 @@ enum class PBAnimation {
     SHARED_ELEMENT_CROSS_FRAGMENT,
     PROGRESS_API,
     TRANSITION,
-    MATERIAL_SHARED_AXIS
+    MATERIAL_SHARED_AXIS,
+    SET_CUSTOM_ANIMATIONS
 }
 data class PBAnimationText(val title: String, val description: String)
 
@@ -65,5 +66,10 @@ val animations = mapOf<PBAnimation, PBAnimationText>(
     PBAnimation.MATERIAL_SHARED_AXIS to PBAnimationText(
         "Material Shared Axis",
         "Click to see an animation created with Material Shared Axis."
+    ),
+    PBAnimation.SET_CUSTOM_ANIMATIONS to PBAnimationText(
+        "setCustomAnimations",
+        "Click to see an animation created with setCustomAnimations."
     )
+
 )

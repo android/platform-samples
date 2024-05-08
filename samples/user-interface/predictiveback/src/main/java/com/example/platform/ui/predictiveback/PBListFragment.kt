@@ -41,7 +41,6 @@ class PBListFragment : Fragment() {
         exitTransition = MaterialSharedAxis(MaterialSharedAxis.Z, /* forward= */ true)
         reenterTransition = MaterialSharedAxis(MaterialSharedAxis.Z, /* forward= */ false)
 
-
         return binding.root
     }
 
@@ -71,6 +70,9 @@ class PBListFragment : Fragment() {
         binding.materialSharedAxisCard.setOnClickListener {
             findNavController().navigate(R.id.show_PBMaterialSharedAxisAnimations)
         }
+        binding.setCustomAnimationsCard.setOnClickListener {
+            findNavController().navigate(R.id.show_PBSetCustomAnimationsActivity)
+        }
     }
 
     override fun onDestroyView() {
@@ -97,5 +99,7 @@ class PBListFragment : Fragment() {
         binding.transitionsDescription.text = animations[PBAnimation.TRANSITION]?.description ?: ""
         binding.materialSharedAxisTitle.text = animations[PBAnimation.MATERIAL_SHARED_AXIS]?.title ?: ""
         binding.materialSharedAxisDescription.text = animations[PBAnimation.MATERIAL_SHARED_AXIS]?.description ?: ""
+        binding.setCustomAnimationsTitle.text = animations[PBAnimation.SET_CUSTOM_ANIMATIONS]?.title ?: ""
+        binding.setCustomAnimationsDescription.text = animations[PBAnimation.SET_CUSTOM_ANIMATIONS]?.description ?: ""
     }
 }

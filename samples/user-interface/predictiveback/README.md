@@ -10,6 +10,7 @@ Shows different types of predictive back animations, including:
 + Custom Progress API animation
 + Custom AndroidX Transition
 + Cross-fragment animation with MaterialSharedAxis
++ setCustomAnimations
 
 ## Custom cross-activity
 
@@ -236,5 +237,50 @@ override fun onCreateView(savedInstanceState: Bundle?) {
     returnTransition = MaterialSharedAxis(MaterialSharedAxis.Z, /* forward= */ false)
 }
 ```
+## setCustomAnimations
 
+Use `setEnterTransition`, `setExitTransition`, `setReenterTransition`, `setReturnTransition`,
+`setSharedElementEnterTransition`, `setSharedElementReturnTransition` instead of `setCustomAnimations`
+where possible. 
+
+However, if you are using `setCustomAnimations`, here's a code sample showing
+predictive back working with animators and fragment manager.
+
+```kotlin
+// PBSetCustomAnimationsActivity.kt
+
+override fun onCreate(savedInstanceState: Bundle?) {
+    super.onCreate(savedInstanceState)
+    
+    "..."
+    supportFragmentManager.commit {
+        replace(R.id.fragment_container, PBSetCustomAnimationsFirstFragment())
+    }
+
+}
+
+// PBSetCustomAnimationsFirstFragment.kt
+
+override fun onCreateView(
+    inflater: LayoutInflater, container: ViewGroup?,
+    savedInstanceState: Bundle?,
+): View {
+    _binding = FragmentSetCustomAnimationsBinding
+        .inflate(inflater, container, false)
+
+    binding.box.setOnClickListener {
+        parentFragmentManager.commit {
+            setCustomAnimations(
+                android.R.animator.fade_in, // enter
+                android.R.animator.fade_out, // exit
+                android.R.animator.fade_in, // popEnter
+                android.R.animator.fade_out) // popExit
+            replace(R.id.fragment_container,PBSetCustomAnimationsSecondFragment())
+            setReorderingAllowed(true)
+            addToBackStack(null)
+        }
+    }
+    return binding.root
+}
+```
 
