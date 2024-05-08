@@ -1,4 +1,4 @@
-package com.example.layoutsamples.collections.layout
+package com.example.platform.ui.appwidgets.glance.layout.collections.layout
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
@@ -21,13 +21,13 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.example.platform.ui.appwidgets.R
-import com.example.layoutsamples.collections.layout.CheckListLayoutDimensions.contentEndPadding
-import com.example.layoutsamples.collections.layout.CheckListLayoutDimensions.scaffoldHorizontalPadding
-import com.example.layoutsamples.collections.layout.CheckListLayoutDimensions.widgetPadding
-import com.example.layoutsamples.collections.layout.CheckListLayoutSize.Companion.isWiderThan
-import com.example.layoutsamples.collections.layout.CheckListLayoutSize.Companion.showTitleBar
-import com.example.layoutsamples.collections.layout.CheckListLayoutSize.Small
-import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.contentEndPadding
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.scaffoldHorizontalPadding
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.widgetPadding
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutSize.Companion.isWiderThan
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutSize.Companion.showTitleBar
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutSize.Small
+import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
 
 /**
  * A layout focused on presenting list of items in a check list. Content is displayed in a
@@ -68,7 +68,7 @@ import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
 
  *
  * @see [CheckListItem] for accepted inputs.
- * @see [com.example.layoutsamples.collections.CheckListAppWidgetReceiver]
+ * @see [com.example.platform.ui.appwidgets.glance.layout.collections.CheckListAppWidgetReceiver]
  */
 @Composable
 fun CheckListLayout(
@@ -301,7 +301,7 @@ private inline fun takeComposableIf(
 
 /**
  * Holds data corresponding to each item in a
- * [com.example.layoutsamples.collections.layout.CheckListLayout].
+ * [com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayout].
  *
  * @param key a unique identifier for a specific item
  * @param title a short text (1-2 words) representing the item

@@ -1,4 +1,4 @@
-package com.example.layoutsamples.utils
+package com.example.platform.ui.appwidgets.glance.layout.utils
 
 /**
  * Set of aspect ratios generally used for images in a widget

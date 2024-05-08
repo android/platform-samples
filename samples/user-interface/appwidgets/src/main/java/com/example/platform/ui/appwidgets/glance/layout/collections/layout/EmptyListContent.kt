@@ -1,9 +1,9 @@
-package com.example.layoutsamples.collections.layout
+package com.example.platform.ui.appwidgets.glance.layout.collections.layout
 
 import androidx.compose.runtime.Composable
 import androidx.glance.LocalContext
 import com.example.platform.ui.appwidgets.R
-import com.example.layoutsamples.utils.ActionUtils
+import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils
 
 /**
  * Content to be displayed when there are no items in the list. To be displayed below the

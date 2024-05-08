@@ -1,4 +1,4 @@
-package com.example.layoutsamples.collections.layout
+package com.example.platform.ui.appwidgets.glance.layout.collections.layout
 
 import android.graphics.Bitmap
 import androidx.annotation.DrawableRes
@@ -25,18 +25,18 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.example.platform.ui.appwidgets.R
-import com.example.layoutsamples.collections.layout.Dimensions.NUM_GRID_CELLS
-import com.example.layoutsamples.collections.layout.Dimensions.fillItemItemPadding
-import com.example.layoutsamples.collections.layout.Dimensions.filledItemCornerRadius
-import com.example.layoutsamples.collections.layout.Dimensions.imageCornerRadius
-import com.example.layoutsamples.collections.layout.Dimensions.verticalSpacing
-import com.example.layoutsamples.collections.layout.Dimensions.widgetPadding
-import com.example.layoutsamples.collections.layout.ImageTextListLayoutSize.Companion.shouldDisplayTrailingIconButton
-import com.example.layoutsamples.collections.layout.ImageTextListLayoutSize.Companion.showTitleBar
-import com.example.layoutsamples.collections.layout.ImageTextListLayoutSize.Large
-import com.example.layoutsamples.collections.layout.ImageTextListLayoutSize.Medium
-import com.example.layoutsamples.collections.layout.ImageTextListLayoutSize.Small
-import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.Dimensions.NUM_GRID_CELLS
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.Dimensions.fillItemItemPadding
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.Dimensions.filledItemCornerRadius
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.Dimensions.imageCornerRadius
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.Dimensions.verticalSpacing
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.Dimensions.widgetPadding
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageTextListLayoutSize.Companion.shouldDisplayTrailingIconButton
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageTextListLayoutSize.Companion.showTitleBar
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageTextListLayoutSize.Large
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageTextListLayoutSize.Medium
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageTextListLayoutSize.Small
+import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
 
 /**
  * A layout focused on presenting a list of text with an image, and an optional icon button. The
@@ -50,7 +50,7 @@ import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
  * In this sample layout, text is the primary focus of the widget and image acts as a supporting
  * content. So, we prefer displaying horizontal [ListItem]s in most displays. However, for a
  * image-centric widget, you may prefer displaying a grid of
- * [com.example.layoutsamples.components.list.VerticalListItem]s featuring the image across all
+ * [com.example.platform.ui.appwidgets.glance.layout.components.list.VerticalListItem]s featuring the image across all
  * sizes.
  *
  * The layout serves as an implementation suggestion, but should be customized to fit your
@@ -72,7 +72,7 @@ import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
  *              item, a supporting text and an image.
  *
  * @see [ImageTextListItemData] for accepted inputs.
- * @see [com.example.layoutsamples.collections.ImageTextListAppWidget]
+ * @see [com.example.platform.ui.appwidgets.glance.layout.collections.ImageTextListAppWidget]
  */
 @Composable
 fun ImageTextListLayout(
@@ -300,7 +300,7 @@ private fun FilledHorizontalListItem(
 }
 
 /**
- * Holds data fields for a [com.example.layoutsamples.collections.layout.ImageTextListLayout].
+ * Holds data fields for a [com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageTextListLayout].
  *
  * @param key a unique identifier for a specific item
  * @param title a short text (1-3 words) representing the item

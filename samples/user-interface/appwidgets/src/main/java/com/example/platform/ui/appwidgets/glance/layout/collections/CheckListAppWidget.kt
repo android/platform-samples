@@ -1,4 +1,4 @@
-package com.example.layoutsamples.collections
+package com.example.platform.ui.appwidgets.glance.layout.collections
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -14,11 +14,11 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
 import com.example.platform.ui.appwidgets.R
-import com.example.layoutsamples.collections.data.FakeCheckListDataRepository
-import com.example.layoutsamples.collections.data.FakeCheckListDataRepository.Companion.getCheckListDataRepo
-import com.example.layoutsamples.collections.layout.CheckListItem
-import com.example.layoutsamples.collections.layout.CheckListLayout
-import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
+import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeCheckListDataRepository
+import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeCheckListDataRepository.Companion.getCheckListDataRepo
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListItem
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayout
+import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

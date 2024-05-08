@@ -1,4 +1,4 @@
-package com.example.layoutsamples.collections.layout
+package com.example.platform.ui.appwidgets.glance.layout.collections.layout
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
@@ -33,11 +33,11 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.example.platform.ui.appwidgets.R
-import com.example.layoutsamples.collections.layout.HeroStyleImageGridLayoutDimensions.GRID_CELLS
-import com.example.layoutsamples.collections.layout.HeroStyleImageGridLayoutDimensions.contentPadding
-import com.example.layoutsamples.collections.layout.HeroStyleImageGridLayoutDimensions.gridCellSpacing
-import com.example.layoutsamples.collections.layout.HeroStyleImageGridLayoutDimensions.itemWidth
-import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.HeroStyleImageGridLayoutDimensions.GRID_CELLS
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.HeroStyleImageGridLayoutDimensions.contentPadding
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.HeroStyleImageGridLayoutDimensions.gridCellSpacing
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.HeroStyleImageGridLayoutDimensions.itemWidth
+import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
 
 /**
  * A layout focused on presenting a grid of images (with optional title and supporting text) below
@@ -47,7 +47,7 @@ import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
  * hero image, title text is not displayed. The action icon buttons in the title bar are displayed
  * with a solid background color for visibility.
  *
- * [com.example.layoutsamples.collections.HeroStyleImageGridAppWidget] loads the images as bitmaps,
+ * [com.example.platform.ui.appwidgets.glance.layout.collections.HeroStyleImageGridAppWidget] loads the images as bitmaps,
  * and scales them to fit into widget's limits. Number of items are capped. When using bitmaps,
  * this approach is suitable for use cases that recommend / feature limited items.
  *
@@ -67,7 +67,7 @@ import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
  *              and supporting text.
  *
  * @see [ImageGridItemData] for accepted inputs.
- * @see [com.example.layoutsamples.collections.ImageGridAppWidget]
+ * @see [com.example.platform.ui.appwidgets.glance.layout.collections.ImageGridAppWidget]
  */
 @Composable
 fun HeroStyleImageGridLayout(

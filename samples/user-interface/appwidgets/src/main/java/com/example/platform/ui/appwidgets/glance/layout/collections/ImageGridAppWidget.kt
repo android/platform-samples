@@ -1,4 +1,4 @@
-package com.example.layoutsamples.collections
+package com.example.platform.ui.appwidgets.glance.layout.collections
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,10 +17,10 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
 import com.example.platform.ui.appwidgets.R
-import com.example.layoutsamples.collections.data.FakeImageGridDataRepository.Companion.cleanUp
-import com.example.layoutsamples.collections.data.FakeImageGridDataRepository.Companion.getImageGridDataRepo
-import com.example.layoutsamples.collections.layout.ImageGridItemData
-import com.example.layoutsamples.collections.layout.ImageGridLayout
+import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeImageGridDataRepository.Companion.cleanUp
+import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeImageGridDataRepository.Companion.getImageGridDataRepo
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridItemData
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

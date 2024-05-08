@@ -1,4 +1,4 @@
-package com.example.layoutsamples.text.layout
+package com.example.platform.ui.appwidgets.glance.layout.text.layout
 
 import android.graphics.Bitmap
 import androidx.annotation.DrawableRes
@@ -36,19 +36,19 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.example.platform.ui.appwidgets.R
-import com.example.layoutsamples.collections.layout.NoDataContent
-import com.example.layoutsamples.text.layout.TextWithImageLayoutDimensions.contentSize
-import com.example.layoutsamples.text.layout.TextWithImageLayoutDimensions.contentSpacing
-import com.example.layoutsamples.text.layout.TextWithImageLayoutDimensions.pictureRadius
-import com.example.layoutsamples.text.layout.TextWithImageLayoutDimensions.widgetPadding
-import com.example.layoutsamples.text.layout.TextWithImageLayoutSize.HorizontalLarge
-import com.example.layoutsamples.text.layout.TextWithImageLayoutSize.HorizontalSmall
-import com.example.layoutsamples.text.layout.TextWithImageLayoutSize.VerticalLarge
-import com.example.layoutsamples.text.layout.TextWithImageLayoutSize.VerticalSmall
-import com.example.layoutsamples.text.layout.TextWithImageLayoutTextStyles.primaryTextFontValues
-import com.example.layoutsamples.text.layout.TextWithImageLayoutTextStyles.secondaryTextFontValues
-import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
-import com.example.layoutsamples.utils.FontUtils
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.NoDataContent
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutDimensions.contentSize
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutDimensions.contentSpacing
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutDimensions.pictureRadius
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutDimensions.widgetPadding
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutSize.HorizontalLarge
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutSize.HorizontalSmall
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutSize.VerticalLarge
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutSize.VerticalSmall
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutTextStyles.primaryTextFontValues
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutTextStyles.secondaryTextFontValues
+import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
+import com.example.platform.ui.appwidgets.glance.layout.utils.FontUtils
 
 /**
  * A layout focused on presenting a long text (~65 characters), its one line caption, a supporting
@@ -72,7 +72,7 @@ import com.example.layoutsamples.utils.FontUtils
  * @param data the primary text, caption, secondary text and image to be displayed.
  *
  * @see [TextWithImageData] for accepted inputs.
- * @see [com.example.layoutsamples.text.TextWithImageAppWidget]
+ * @see [com.example.platform.ui.appwidgets.glance.layout.text.TextWithImageAppWidget]
  *
  */
 @Composable
@@ -299,7 +299,7 @@ private fun GlanceModifier.maybeClickable(action: Action?): GlanceModifier {
 
 /**
  * Data object holding information displayed in
- * [com.example.layoutsamples.text.layout.TextWithImageLayout].
+ * [com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayout].
  */
 data class TextWithImageData(
   val textData: TextData,
@@ -308,7 +308,7 @@ data class TextWithImageData(
 
 /**
  * Data object holding texts displayed in
- * [com.example.layoutsamples.text.layout.TextWithImageLayout].
+ * [com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayout].
  *
  * @param key a unique identifier for the data being displayed as primary content e.g. article ID,
  * in an "article of the day" widget. This may not be necessary for your use case; in this sample,
@@ -329,7 +329,7 @@ data class TextData(
 
 /**
  * Data object holding raw information about the image accompanying the [TextData] in
- * [com.example.layoutsamples.text.layout.TextWithImageLayout].
+ * [com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayout].
  *
  * @param resId an image accompanying the [TextData] content; for example, a preview image of
  * an article in an "article of the day" widget.

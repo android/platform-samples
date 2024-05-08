@@ -1,4 +1,4 @@
-package com.example.layoutsamples.config
+package com.example.platform.ui.appwidgets.glance.layout.config
 
 import android.app.Activity
 import android.appwidget.AppWidgetManager

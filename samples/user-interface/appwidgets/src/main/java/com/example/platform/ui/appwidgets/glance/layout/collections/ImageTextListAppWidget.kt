@@ -1,4 +1,4 @@
-package com.example.layoutsamples.collections
+package com.example.platform.ui.appwidgets.glance.layout.collections
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -17,10 +17,10 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
 import com.example.platform.ui.appwidgets.R
-import com.example.layoutsamples.collections.data.FakeImageTextListDataRepository
-import com.example.layoutsamples.collections.data.FakeImageTextListDataRepository.Companion.getImageTextListDataRepo
-import com.example.layoutsamples.collections.layout.ImageTextListItemData
-import com.example.layoutsamples.collections.layout.ImageTextListLayout
+import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeImageTextListDataRepository
+import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeImageTextListDataRepository.Companion.getImageTextListDataRepo
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageTextListItemData
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageTextListLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

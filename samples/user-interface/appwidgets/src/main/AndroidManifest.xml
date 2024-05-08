@@ -40,7 +40,7 @@
         </activity>
         <activity
             android:label="Canonical Layouts"
-            android:name="com.example.layoutsamples.MainActivity"
+            android:name=".glance.layout.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.LayoutSamples">
             <intent-filter>
@@ -48,11 +48,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="com.example.layoutsamples.ActionDemonstrationActivity" />
+        <activity android:name=".glance.layout.ActionDemonstrationActivity" />
 
         <!-- Long text variants -->
         <receiver
-            android:name="com.example.layoutsamples.text.LongTextAppWidgetReceiver"
+            android:name=".glance.layout.text.LongTextAppWidgetReceiver"
             android:enabled="@bool/glance_appwidget_available"
             android:exported="false"
             android:label="@string/sample_long_text_app_widget_name">
@@ -65,7 +65,7 @@
                 android:resource="@xml/sample_long_text_widget_info" />
         </receiver>
         <receiver
-            android:name="com.example.layoutsamples.text.TextWithImageAppWidgetReceiver"
+            android:name=".glance.layout.text.TextWithImageAppWidgetReceiver"
             android:enabled="@bool/glance_appwidget_available"
             android:exported="false"
             android:label="@string/sample_text_and_image_app_widget_name">
@@ -80,7 +80,7 @@
 
         <!-- List of image + text -->
         <receiver
-            android:name="com.example.layoutsamples.collections.ImageTextListAppWidgetReceiver"
+            android:name=".glance.layout.collections.ImageTextListAppWidgetReceiver"
             android:enabled="@bool/glance_appwidget_available"
             android:exported="false"
             android:label="@string/sample_text_and_image_list_app_widget_name">
@@ -95,7 +95,7 @@
 
         <!-- List of Icon button + text -->
         <receiver
-            android:name="com.example.layoutsamples.collections.CheckListAppWidgetReceiver"
+            android:name=".glance.layout.collections.CheckListAppWidgetReceiver"
             android:enabled="@bool/glance_appwidget_available"
             android:exported="false"
             android:label="@string/sample_check_list_app_widget_name">
@@ -110,7 +110,7 @@
 
         <!-- Action List -->
         <receiver
-            android:name="com.example.layoutsamples.collections.ActionListAppWidgetAppWidgetReceiver"
+            android:name=".glance.layout.collections.ActionListAppWidgetAppWidgetReceiver"
             android:enabled="@bool/glance_appwidget_available"
             android:exported="false"
             android:label="@string/sample_action_list_app_widget_name">
@@ -125,7 +125,7 @@
 
         <!-- Image Grid -->
         <receiver
-            android:name="com.example.layoutsamples.collections.ImageGridAppWidgetReceiver"
+            android:name=".glance.layout.collections.ImageGridAppWidgetReceiver"
             android:enabled="@bool/glance_appwidget_available"
             android:exported="false"
             android:label="@string/sample_image_grid_app_widget_name">

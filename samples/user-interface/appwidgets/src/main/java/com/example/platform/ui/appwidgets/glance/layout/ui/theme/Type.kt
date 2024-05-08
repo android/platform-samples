@@ -1,4 +1,4 @@
-package com.example.layoutsamples.ui.theme
+package com.example.platform.ui.appwidgets.glance.layout.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

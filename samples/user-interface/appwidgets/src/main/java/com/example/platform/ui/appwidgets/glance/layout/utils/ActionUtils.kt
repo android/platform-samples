@@ -1,11 +1,11 @@
-package com.example.layoutsamples.utils
+package com.example.platform.ui.appwidgets.glance.layout.utils
 
 import androidx.compose.runtime.Composable
 import androidx.glance.action.Action
 import androidx.glance.action.actionParametersOf
 import androidx.glance.action.actionStartActivity
-import com.example.layoutsamples.ActionDemonstrationActivity
-import com.example.layoutsamples.ActionSourceMessageKey
+import com.example.platform.ui.appwidgets.glance.layout.ActionDemonstrationActivity
+import com.example.platform.ui.appwidgets.glance.layout.ActionSourceMessageKey
 
 /**
  * Utility functions for creating [Action]s.

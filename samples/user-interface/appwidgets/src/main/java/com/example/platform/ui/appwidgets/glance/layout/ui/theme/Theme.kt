@@ -1,4 +1,4 @@
-package com.example.layoutsamples.ui.theme
+package com.example.platform.ui.appwidgets.glance.layout.ui.theme
 
 import android.app.Activity
 import android.os.Build

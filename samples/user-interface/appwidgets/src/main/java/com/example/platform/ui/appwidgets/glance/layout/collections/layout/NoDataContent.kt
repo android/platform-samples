@@ -1,4 +1,4 @@
-package com.example.layoutsamples.collections.layout
+package com.example.platform.ui.appwidgets.glance.layout.collections.layout
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp

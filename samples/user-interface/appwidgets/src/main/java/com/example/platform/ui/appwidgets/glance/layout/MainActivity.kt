@@ -1,4 +1,4 @@
-package com.example.layoutsamples
+package com.example.platform.ui.appwidgets.glance.layout
 
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProviderInfo
@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
-import com.example.layoutsamples.ui.theme.LayoutSamplesTheme
+import com.example.platform.ui.appwidgets.glance.layout.ui.theme.LayoutSamplesTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 

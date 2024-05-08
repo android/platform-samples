@@ -1,4 +1,4 @@
-package com.example.layoutsamples.text.data
+package com.example.platform.ui.appwidgets.glance.layout.text.data
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -9,19 +9,19 @@ import androidx.glance.GlanceId
 import coil.ImageLoader
 import coil.request.ErrorResult
 import coil.request.ImageRequest
-import com.example.layoutsamples.utils.AspectRatio
-import com.example.layoutsamples.utils.AspectRatio.Companion.asDouble
-import com.example.layoutsamples.text.layout.ImageData
-import com.example.layoutsamples.text.layout.TextData
-import com.example.layoutsamples.text.layout.TextWithImageData
-import com.example.layoutsamples.utils.ImageUtils
-import com.example.layoutsamples.utils.ImageUtils.getMaxWidgetMemoryAllowedSizeInBytes
+import com.example.platform.ui.appwidgets.glance.layout.utils.AspectRatio
+import com.example.platform.ui.appwidgets.glance.layout.utils.AspectRatio.Companion.asDouble
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.ImageData
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextData
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageData
+import com.example.platform.ui.appwidgets.glance.layout.utils.ImageUtils
+import com.example.platform.ui.appwidgets.glance.layout.utils.ImageUtils.getMaxWidgetMemoryAllowedSizeInBytes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import com.example.layoutsamples.computeIfAbsent as computeIfAbsentExt
+import com.example.platform.ui.appwidgets.glance.layout.computeIfAbsent as computeIfAbsentExt
 /**
  * An fake in-memory repository to provide data for displaying different demo samples in
- * [com.example.layoutsamples.text.layout.TextWithImageLayout]
+ * [com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayout]
  */
 class FakeTextWithImageRepository {
   private val data = MutableStateFlow<TextWithImageData?>(null)

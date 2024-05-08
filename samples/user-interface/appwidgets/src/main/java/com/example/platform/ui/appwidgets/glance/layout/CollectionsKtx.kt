@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.layoutsamples
+package com.example.platform.ui.appwidgets.glance.layout
 
 /**
  * This function should be rmeoved when API level is raised to 24. It exists to provide removeIf

@@ -1,9 +1,9 @@
-package com.example.layoutsamples.collections.data
+package com.example.platform.ui.appwidgets.glance.layout.collections.data
 
 import android.os.Build
 import androidx.glance.GlanceId
 import com.example.platform.ui.appwidgets.R
-import com.example.layoutsamples.collections.layout.ActionListItem
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListItem
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 

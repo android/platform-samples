@@ -1,4 +1,4 @@
-package com.example.layoutsamples.collections.data
+package com.example.platform.ui.appwidgets.glance.layout.collections.data
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -10,18 +10,18 @@ import coil.ImageLoader
 import coil.request.CachePolicy
 import coil.request.ErrorResult
 import coil.request.ImageRequest
-import com.example.layoutsamples.utils.AspectRatio
-import com.example.layoutsamples.utils.AspectRatio.Companion.asDouble
-import com.example.layoutsamples.collections.layout.ImageGridItemData
-import com.example.layoutsamples.utils.ImageUtils.getMaxPossibleImageSize
-import com.example.layoutsamples.utils.ImageUtils.getMaxWidgetMemoryAllowedSizeInBytes
+import com.example.platform.ui.appwidgets.glance.layout.utils.AspectRatio
+import com.example.platform.ui.appwidgets.glance.layout.utils.AspectRatio.Companion.asDouble
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridItemData
+import com.example.platform.ui.appwidgets.glance.layout.utils.ImageUtils.getMaxPossibleImageSize
+import com.example.platform.ui.appwidgets.glance.layout.utils.ImageUtils.getMaxWidgetMemoryAllowedSizeInBytes
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
-import com.example.layoutsamples.computeIfAbsent as computeIfAbsentExt
+import com.example.platform.ui.appwidgets.glance.layout.computeIfAbsent as computeIfAbsentExt
 /**
  * A fake in-memory implementation of repository that produces a list of
  * [ImageGridItemData].

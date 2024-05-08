@@ -1,4 +1,4 @@
-package com.example.layoutsamples.collections.layout
+package com.example.platform.ui.appwidgets.glance.layout.collections.layout
 
 import android.graphics.Bitmap
 import androidx.annotation.DrawableRes
@@ -26,16 +26,16 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.example.platform.ui.appwidgets.R
-import com.example.layoutsamples.collections.layout.ImageGridLayoutDimensions.contentPadding
-import com.example.layoutsamples.collections.layout.ImageGridLayoutDimensions.gridCells
-import com.example.layoutsamples.collections.layout.ImageGridLayoutDimensions.imageCornerRadius
-import com.example.layoutsamples.collections.layout.ImageGridLayoutDimensions.itemCornerRadius
-import com.example.layoutsamples.collections.layout.ImageGridLayoutDimensions.textStartMargin
-import com.example.layoutsamples.collections.layout.ImageGridLayoutDimensions.titleTextBreakpoint
-import com.example.layoutsamples.collections.layout.ImageGridLayoutSize.Large
-import com.example.layoutsamples.collections.layout.ImageGridLayoutSize.Medium
-import com.example.layoutsamples.collections.layout.ImageGridLayoutSize.Small
-import com.example.layoutsamples.utils.ActionUtils
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridLayoutDimensions.contentPadding
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridLayoutDimensions.gridCells
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridLayoutDimensions.imageCornerRadius
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridLayoutDimensions.itemCornerRadius
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridLayoutDimensions.textStartMargin
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridLayoutDimensions.titleTextBreakpoint
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridLayoutSize.Large
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridLayoutSize.Medium
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridLayoutSize.Small
+import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils
 
 /**
  * A layout focused on presenting a grid of images (with optional title and supporting text). The
@@ -47,7 +47,7 @@ import com.example.layoutsamples.utils.ActionUtils
  * The layout scales by adjusting the number of grid cells, and the font size of the texts (if
  * present).
  *
- * [com.example.layoutsamples.collections.ImageGridAppWidget] loads the images as bitmaps, and
+ * [com.example.platform.ui.appwidgets.glance.layout.collections.ImageGridAppWidget] loads the images as bitmaps, and
  * scales them to fit into widget's limits. Number of items are capped. When using bitmaps, this
  * approach is suitable for use cases that recommend / feature limited items.
  *
@@ -67,7 +67,7 @@ import com.example.layoutsamples.utils.ActionUtils
  *              and supporting text.
  *
  * @see [ImageGridItemData] for accepted inputs.
- * @see [com.example.layoutsamples.collections.ImageGridAppWidget]
+ * @see [com.example.platform.ui.appwidgets.glance.layout.collections.ImageGridAppWidget]
  */
 @Composable
 fun ImageGridLayout(

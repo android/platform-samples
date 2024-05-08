@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.layoutsamples.text
+package com.example.platform.ui.appwidgets.glance.layout.text
 
 import android.content.Context
 import androidx.compose.runtime.Composable
@@ -27,10 +27,10 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
 import com.example.platform.ui.appwidgets.R
-import com.example.layoutsamples.text.data.FakeLongTextRepository
-import com.example.layoutsamples.text.layout.LongTextLayout
-import com.example.layoutsamples.text.layout.LongTextLayoutData
-import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
+import com.example.platform.ui.appwidgets.glance.layout.text.data.FakeLongTextRepository
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayout
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutData
+import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 

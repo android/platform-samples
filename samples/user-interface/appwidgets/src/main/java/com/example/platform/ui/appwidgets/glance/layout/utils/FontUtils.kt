@@ -1,4 +1,4 @@
-package com.example.layoutsamples.utils
+package com.example.platform.ui.appwidgets.glance.layout.utils
 
 import android.content.Context
 import android.text.TextUtils

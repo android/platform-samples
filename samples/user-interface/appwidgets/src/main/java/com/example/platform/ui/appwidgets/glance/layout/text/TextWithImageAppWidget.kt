@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.layoutsamples.text
+package com.example.platform.ui.appwidgets.glance.layout.text
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -32,10 +32,10 @@ import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
 import com.example.platform.ui.appwidgets.R
-import com.example.layoutsamples.text.data.FakeTextWithImageRepository
-import com.example.layoutsamples.text.data.FakeTextWithImageRepository.Companion.getRepo
-import com.example.layoutsamples.text.layout.TextWithImageData
-import com.example.layoutsamples.text.layout.TextWithImageLayout
+import com.example.platform.ui.appwidgets.glance.layout.text.data.FakeTextWithImageRepository
+import com.example.platform.ui.appwidgets.glance.layout.text.data.FakeTextWithImageRepository.Companion.getRepo
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageData
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext

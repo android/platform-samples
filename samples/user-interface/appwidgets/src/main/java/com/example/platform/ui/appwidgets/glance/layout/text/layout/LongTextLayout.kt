@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.layoutsamples.text.layout
+package com.example.platform.ui.appwidgets.glance.layout.text.layout
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
@@ -39,10 +39,10 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import com.example.layoutsamples.text.layout.LongTextLayoutDimensions.captionFontSizeAndMaxLines
-import com.example.layoutsamples.text.layout.LongTextLayoutDimensions.contentPadding
-import com.example.layoutsamples.text.layout.LongTextLayoutDimensions.primaryTextFontSizeAndMaxLines
-import com.example.layoutsamples.utils.FontUtils.calculateFontSizeAndMaxLines
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutDimensions.captionFontSizeAndMaxLines
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutDimensions.contentPadding
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutDimensions.primaryTextFontSizeAndMaxLines
+import com.example.platform.ui.appwidgets.glance.layout.utils.FontUtils.calculateFontSizeAndMaxLines
 
 /**
  * A layout focused on presenting text only content.
@@ -200,7 +200,7 @@ private fun GlanceModifier.maybeClickable(action: Action?): GlanceModifier {
 }
 
 /**
- * Information to be displayed in a [com.example.layoutsamples.text.layout.LongTextLayout].
+ * Information to be displayed in a [com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayout].
  *
  * @param key a unique identifier for the data being displayed as primary content e.g. article ID,
  * in an "article of the day" widget. This may not be necessary for your use case; in this sample,

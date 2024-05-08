@@ -1,9 +1,9 @@
-package com.example.layoutsamples.collections.data
+package com.example.platform.ui.appwidgets.glance.layout.collections.data
 
 import androidx.glance.GlanceId
-import com.example.layoutsamples.collections.layout.CheckListItem
-import com.example.layoutsamples.computeIfAbsent as computeIfAbsentExt
-import com.example.layoutsamples.removeIf as removeIfExt
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListItem
+import com.example.platform.ui.appwidgets.glance.layout.computeIfAbsent as computeIfAbsentExt
+import com.example.platform.ui.appwidgets.glance.layout.removeIf as removeIfExt
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope

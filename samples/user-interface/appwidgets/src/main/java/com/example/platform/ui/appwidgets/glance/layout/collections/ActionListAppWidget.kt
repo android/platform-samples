@@ -1,4 +1,4 @@
-package com.example.layoutsamples.collections
+package com.example.platform.ui.appwidgets.glance.layout.collections
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -13,11 +13,11 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
-import com.example.layoutsamples.collections.data.FakeActionListDataRepository
-import com.example.layoutsamples.collections.data.FakeActionListDataRepository.Companion.getActionListDataRepo
-import com.example.layoutsamples.collections.layout.ActionListItem
-import com.example.layoutsamples.collections.layout.ActionListLayout
-import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
+import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeActionListDataRepository
+import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeActionListDataRepository.Companion.getActionListDataRepo
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListItem
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayout
+import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
 import com.example.platform.ui.appwidgets.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext

@@ -1,4 +1,4 @@
-package com.example.layoutsamples.collections.layout
+package com.example.platform.ui.appwidgets.glance.layout.collections.layout
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
@@ -29,19 +29,19 @@ import androidx.glance.semantics.semantics
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import com.example.layoutsamples.collections.layout.ActionListLayoutDimensions.circularCornerRadius
-import com.example.layoutsamples.collections.layout.ActionListLayoutDimensions.filledItemCornerRadius
-import com.example.layoutsamples.collections.layout.ActionListLayoutDimensions.filledItemPadding
-import com.example.layoutsamples.collections.layout.ActionListLayoutDimensions.gridCells
-import com.example.layoutsamples.collections.layout.ActionListLayoutDimensions.itemContentSpacing
-import com.example.layoutsamples.collections.layout.ActionListLayoutDimensions.stateIconBackgroundSize
-import com.example.layoutsamples.collections.layout.ActionListLayoutDimensions.stateIconSize
-import com.example.layoutsamples.collections.layout.ActionListLayoutDimensions.verticalSpacing
-import com.example.layoutsamples.collections.layout.ActionListLayoutDimensions.widgetPadding
-import com.example.layoutsamples.collections.layout.ActionListLayoutSize.Companion.showTitleBar
-import com.example.layoutsamples.collections.layout.ActionListLayoutSize.Large
-import com.example.layoutsamples.collections.layout.ActionListLayoutSize.Small
-import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutDimensions.circularCornerRadius
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutDimensions.filledItemCornerRadius
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutDimensions.filledItemPadding
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutDimensions.gridCells
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutDimensions.itemContentSpacing
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutDimensions.stateIconBackgroundSize
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutDimensions.stateIconSize
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutDimensions.verticalSpacing
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutDimensions.widgetPadding
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutSize.Companion.showTitleBar
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutSize.Large
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutSize.Small
+import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
 
 /**
  * A layout focused on presenting list of two-state actions represented by a title (1-2 words),
@@ -81,7 +81,7 @@ import com.example.layoutsamples.utils.ActionUtils.actionStartDemoActivity
  * @param actionButtonClick handler to toggle the state.
  *
  * @see [FilledActionListItem] for accepted inputs.
- * @see [com.example.layoutsamples.collections.CheckListAppWidget]
+ * @see [com.example.platform.ui.appwidgets.glance.layout.collections.CheckListAppWidget]
  *
  */
 @Composable
@@ -369,7 +369,7 @@ private fun GlanceModifier.filledContainer(isChecked: Boolean): GlanceModifier {
 
 /**
  * Holds data corresponding to each item in a
- * [com.example.layoutsamples.collections.layout.ActionListLayout].
+ * [com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayout].
  *
  * @param key a unique identifier for a specific item
  * @param title a short text (1-2 words) representing the item

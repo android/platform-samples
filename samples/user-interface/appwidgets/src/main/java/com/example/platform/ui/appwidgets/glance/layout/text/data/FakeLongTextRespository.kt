@@ -1,13 +1,13 @@
-package com.example.layoutsamples.text.data
+package com.example.platform.ui.appwidgets.glance.layout.text.data
 
 import androidx.glance.GlanceId
-import com.example.layoutsamples.text.layout.LongTextLayoutData
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import com.example.layoutsamples.computeIfAbsent as computeIfAbsentExt
+import com.example.platform.ui.appwidgets.glance.layout.computeIfAbsent as computeIfAbsentExt
 /**
  * An fake in-memory repository to provide data for displaying different demo samples in
- * [com.example.layoutsamples.text.layout.LongTextLayout]
+ * [com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayout]
  */
 class FakeLongTextRepository {
   private var itemIndex: Int = 0
