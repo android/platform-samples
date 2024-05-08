@@ -1,5 +1,6 @@
 package com.example.layoutsamples.collections
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -75,6 +76,7 @@ class ActionListAppWidget : GlanceAppWidget() {
 class ActionListAppWidgetAppWidgetReceiver : GlanceAppWidgetReceiver() {
   override val glanceAppWidget = ActionListAppWidget()
 
+  @SuppressLint("RestrictedApi")
   override fun onDeleted(context: Context, appWidgetIds: IntArray) {
     appWidgetIds.forEach {
       FakeActionListDataRepository.cleanUp(AppWidgetId(appWidgetId = it))

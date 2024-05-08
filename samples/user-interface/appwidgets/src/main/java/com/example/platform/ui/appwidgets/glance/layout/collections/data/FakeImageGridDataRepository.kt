@@ -21,7 +21,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.runBlocking
-
+import com.example.layoutsamples.computeIfAbsent as computeIfAbsentExt
 /**
  * A fake in-memory implementation of repository that produces a list of
  * [ImageGridItemData].
@@ -182,7 +182,7 @@ class FakeImageGridDataRepository {
      */
     fun getImageGridDataRepo(glanceId: GlanceId): FakeImageGridDataRepository {
       return synchronized(repositories) {
-        repositories.computeIfAbsent(glanceId) { FakeImageGridDataRepository() }
+        repositories.computeIfAbsentExt(glanceId) { FakeImageGridDataRepository() }!!
       }
     }
 

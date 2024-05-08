@@ -72,6 +72,6 @@ abstract class BaseConfigurationActivity(private val dataSources: List<String>) 
   }
 
   companion object {
-    const val TAG = "BaseConfigurationActivity"
+    const val TAG = "BaseConfigurationAct"
   }
 }

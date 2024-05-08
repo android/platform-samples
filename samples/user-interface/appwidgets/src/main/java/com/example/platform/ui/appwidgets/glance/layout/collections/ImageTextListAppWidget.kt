@@ -1,5 +1,6 @@
 package com.example.layoutsamples.collections
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -88,6 +89,7 @@ class ImageTextListAppWidget : GlanceAppWidget() {
 class ImageTextListAppWidgetReceiver : GlanceAppWidgetReceiver() {
   override val glanceAppWidget = ImageTextListAppWidget()
 
+  @SuppressLint("RestrictedApi")
   override fun onDeleted(context: Context, appWidgetIds: IntArray) {
     appWidgetIds.forEach {
       FakeImageTextListDataRepository.cleanUp(AppWidgetId(appWidgetId = it))

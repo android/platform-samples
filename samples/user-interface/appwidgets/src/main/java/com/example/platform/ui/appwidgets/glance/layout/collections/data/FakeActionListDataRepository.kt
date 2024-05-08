@@ -1,5 +1,6 @@
 package com.example.layoutsamples.collections.data
 
+import android.os.Build
 import androidx.glance.GlanceId
 import com.example.platform.ui.appwidgets.R
 import com.example.layoutsamples.collections.layout.ActionListItem
@@ -109,7 +110,10 @@ class FakeActionListDataRepository {
      */
     fun getActionListDataRepo(glanceId: GlanceId): FakeActionListDataRepository {
       return synchronized(repositories) {
-        repositories.computeIfAbsent(glanceId) { FakeActionListDataRepository() }
+          if (!repositories.contains(glanceId)) {
+              repositories[glanceId] = FakeActionListDataRepository()
+          }
+          return repositories[glanceId]?:FakeActionListDataRepository()
       }
     }
 

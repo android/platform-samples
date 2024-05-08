@@ -1,5 +1,6 @@
 package com.example.layoutsamples.collections
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -84,6 +85,7 @@ class HeroStyleImageGridAppWidget : GlanceAppWidget() {
 class HeroStyleImageGridAppWidgetReceiver : GlanceAppWidgetReceiver() {
   override val glanceAppWidget: GlanceAppWidget = HeroStyleImageGridAppWidget()
 
+  @SuppressLint("RestrictedApi")
   override fun onDeleted(context: Context, appWidgetIds: IntArray) {
     appWidgetIds.forEach {
       FakeImageGridDataRepository.cleanUp(AppWidgetId(appWidgetId = it))

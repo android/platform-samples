@@ -113,14 +113,21 @@ fun HeroStyleImageGridLayout(
 
   @Composable
   fun HeroGridWidgetContent() {
-    val systemCornerRadiusDefined = LocalContext.current.resources
-      .getResourceName(android.R.dimen.system_app_widget_background_radius) != null
-    val cornerRadiusModifier =
-      if (android.os.Build.VERSION.SDK_INT >= 31 && systemCornerRadiusDefined) {
-        GlanceModifier.cornerRadius(android.R.dimen.system_app_widget_background_radius)
+      val isApi31 = android.os.Build.VERSION.SDK_INT >= 31
+      val cornerRadiusModifier = if (isApi31) {
+
+          val systemCornerRadiusDefined = LocalContext.current.resources
+              .getResourceName(android.R.dimen.system_app_widget_background_radius) != null
+
+          if ( systemCornerRadiusDefined) {
+                  GlanceModifier.cornerRadius(android.R.dimen.system_app_widget_background_radius)
+          } else {
+              GlanceModifier
+          }
       } else {
-        GlanceModifier
+          GlanceModifier
       }
+
 
     Box(
       GlanceModifier

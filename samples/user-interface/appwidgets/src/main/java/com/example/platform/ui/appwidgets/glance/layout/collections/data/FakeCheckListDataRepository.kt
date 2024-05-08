@@ -2,6 +2,8 @@ package com.example.layoutsamples.collections.data
 
 import androidx.glance.GlanceId
 import com.example.layoutsamples.collections.layout.CheckListItem
+import com.example.layoutsamples.computeIfAbsent as computeIfAbsentExt
+import com.example.layoutsamples.removeIf as removeIfExt
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -42,7 +44,7 @@ class FakeCheckListDataRepository {
         delay(500)
 
         items.value = items.value.toMutableList().apply {
-          removeIf { item ->
+          removeIfExt { item ->
             item.key == key
           }
         }
@@ -107,7 +109,7 @@ class FakeCheckListDataRepository {
      */
     fun getCheckListDataRepo(glanceId: GlanceId): FakeCheckListDataRepository {
       return synchronized(repositories) {
-        repositories.computeIfAbsent(glanceId) { FakeCheckListDataRepository() }
+          repositories.computeIfAbsentExt(glanceId) { FakeCheckListDataRepository() }!!
       }
     }
 

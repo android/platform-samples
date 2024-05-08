@@ -15,6 +15,7 @@ import com.example.platform.ui.appwidgets.R
 import com.example.layoutsamples.utils.AspectRatio
 import com.example.layoutsamples.utils.AspectRatio.Companion.asDouble
 import com.example.layoutsamples.collections.layout.ImageTextListItemData
+import com.example.layoutsamples.computeIfAbsent as computeIfAbsentExt
 import com.example.layoutsamples.utils.ImageUtils
 import com.example.layoutsamples.utils.ImageUtils.getMaxWidgetMemoryAllowedSizeInBytes
 import kotlin.random.Random
@@ -187,7 +188,7 @@ class FakeImageTextListDataRepository {
      */
     fun getImageTextListDataRepo(glanceId: GlanceId): FakeImageTextListDataRepository {
       return synchronized(repositories) {
-        repositories.computeIfAbsent(glanceId) { FakeImageTextListDataRepository() }
+        repositories.computeIfAbsentExt(glanceId) { FakeImageTextListDataRepository() }!!
       }
     }
 

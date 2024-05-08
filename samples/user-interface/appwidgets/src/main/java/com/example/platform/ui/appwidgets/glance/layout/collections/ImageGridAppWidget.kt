@@ -1,5 +1,6 @@
 package com.example.layoutsamples.collections
 
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -84,6 +85,7 @@ fun WidgetContent(
 class ImageGridAppWidgetReceiver : GlanceAppWidgetReceiver() {
   override val glanceAppWidget: GlanceAppWidget = ImageGridAppWidget()
 
+  @SuppressLint("RestrictedApi")
   override fun onDeleted(context: Context, appWidgetIds: IntArray) {
     appWidgetIds.forEach {
       cleanUp(AppWidgetId(appWidgetId = it))

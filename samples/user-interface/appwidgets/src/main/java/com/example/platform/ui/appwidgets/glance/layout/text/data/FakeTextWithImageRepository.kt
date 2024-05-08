@@ -18,7 +18,7 @@ import com.example.layoutsamples.utils.ImageUtils
 import com.example.layoutsamples.utils.ImageUtils.getMaxWidgetMemoryAllowedSizeInBytes
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-
+import com.example.layoutsamples.computeIfAbsent as computeIfAbsentExt
 /**
  * An fake in-memory repository to provide data for displaying different demo samples in
  * [com.example.layoutsamples.text.layout.TextWithImageLayout]
@@ -95,9 +95,9 @@ class FakeTextWithImageRepository {
      */
     fun getRepo(glanceId: GlanceId): FakeTextWithImageRepository {
       return synchronized(repositories) {
-        repositories.computeIfAbsent(glanceId) {
+        repositories.computeIfAbsentExt(glanceId) {
           FakeTextWithImageRepository()
-        }
+        }!!
       }
     }
 

@@ -4,7 +4,7 @@ import androidx.glance.GlanceId
 import com.example.layoutsamples.text.layout.LongTextLayoutData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-
+import com.example.layoutsamples.computeIfAbsent as computeIfAbsentExt
 /**
  * An fake in-memory repository to provide data for displaying different demo samples in
  * [com.example.layoutsamples.text.layout.LongTextLayout]
@@ -43,9 +43,9 @@ class FakeLongTextRepository {
      */
     fun getRepo(glanceId: GlanceId): FakeLongTextRepository {
       return synchronized(repositories) {
-        repositories.computeIfAbsent(glanceId) {
+        repositories.computeIfAbsentExt(glanceId) {
           FakeLongTextRepository()
-        }
+        }!!
       }
     }
 
