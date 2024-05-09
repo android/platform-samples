@@ -115,68 +115,69 @@ class FakeImageGridDataRepository {
     val supportingText: String? = null,
   )
 
-  companion object {
-    private val repositories = mutableMapOf<GlanceId, FakeImageGridDataRepository>()
+    companion object {
+        private val repositories = mutableMapOf<GlanceId, FakeImageGridDataRepository>()
 
-    private val demoItems = listOf(
-      ImageGridItemBackendData(
-        key = "1",
-        imageUrl = "https://images.unsplash.com/photo-1444464666168-49d633b86797",
-        imageContentDescription = "Perched blue and orange bird",
-        title = "Perched blue and orange bird",
-        supportingText = "2000 views"
-      ),
-      ImageGridItemBackendData(
-        key = "2",
-        imageUrl = "https://images.unsplash.com/photo-1500349812227-3264f5f54181",
-        imageContentDescription = "Orange Lacewing butterfly",
-        title = "Orange Lacewing butterfly",
-        supportingText = "1900 views"
-      ),
-      ImageGridItemBackendData(
-        key = "3",
-        imageUrl = "https://images.unsplash.com/photo-1578326457399-3b34dbbf23b8",
-        imageContentDescription = "Zebra",
-        title = "Zebra in African safari",
-        supportingText = "7000 views"
-      ),
-      ImageGridItemBackendData(
-        key = "4",
-        imageUrl = "https://images.unsplash.com/photo-1564349683136-77e08dba1ef7",
-        imageContentDescription = "Panda",
-        title = "The hungry panda",
-        supportingText = "1100 views"
-      ),
-      ImageGridItemBackendData(
-        key = "5",
-        imageUrl = "https://images.unsplash.com/photo-1585256262155-c044dc6ad38e",
-        imageContentDescription = "Humming bird",
-        title = "Beautiful humming bird",
-        supportingText = "700 views"
-      ),
-      ImageGridItemBackendData(
-        key = "6",
-        imageUrl = "https://images.unsplash.com/photo-1497752531616-c3afd9760a11",
-        imageContentDescription = "Racoon",
-        title = "Racoon on lawn grass",
-        supportingText = "1500 views"
-      ),
-      ImageGridItemBackendData(
-        key = "7",
-        imageUrl = "https://images.unsplash.com/photo-1425082661705-1834bfd09dca",
-        imageContentDescription = "Brown hamster",
-        title = "Brown hamster",
-        supportingText = "800 views"
-      ),
-      ImageGridItemBackendData(
-        key = "8",
-        imageUrl = "https://images.unsplash.com/reserve/RFDKkrvXSHqBaWMMl4W5_Heavy_company",
-        imageContentDescription = "Elephant in afternoon sun",
-        title = "Elephant in afternoon sun",
-        supportingText = "1200 views"
-      )
-    )
-
+        // Courtesy of https://unsplash.com/@iamliam
+        // 16:9 images
+        private val demoItems = listOf(
+            ImageGridItemBackendData(
+                key = "1",
+                imageUrl = "https://images.unsplash.com/photo-1531306760863-7fb02a41db12",
+                imageContentDescription = "Flowers at a wedding reception",
+                title = "Flowers at a wedding reception",
+                supportingText = "33,822 views"
+            ),
+            ImageGridItemBackendData(
+                key = "2",
+                imageUrl = "https://images.unsplash.com/photo-1566964423430-3e52903303a5",
+                imageContentDescription = "An up-close look at a Blushing Bride Protea flower.",
+                title = "An up-close look at a Blushing Bride Protea flower.",
+                supportingText = "31,072 views"
+            ),
+            ImageGridItemBackendData(
+                key = "3",
+                imageUrl = "https://images.unsplash.com/photo-1685540466252-8c21e7c37624",
+                imageContentDescription = "A single water droplet rests in a budding red pansy.",
+                title = "A single water droplet rests in a budding red pansy.",
+                supportingText = "193 views"
+            ),
+            ImageGridItemBackendData(
+                key = "4",
+                imageUrl = "https://images.unsplash.com/photo-1582817954171-c3533fffde89",
+                imageContentDescription = "Blossom, petal, flower",
+                title = "Blossom, petal, flower",
+                supportingText = "23,815 views",
+            ),
+            ImageGridItemBackendData(
+                key = "5",
+                imageUrl = "https://images.unsplash.com/photo-1565314912546-0d18918fdc8f",
+                imageContentDescription = "Green plant, sky and flowers",
+                title = "Green plant, sky and flowers",
+                supportingText = "99,467 views"
+            ),
+            ImageGridItemBackendData(
+                key = "6",
+                imageUrl = "https://images.unsplash.com/photo-1671525784444-392a8f8daa3f",
+                imageContentDescription = "A snow-shoer walking up Strelapass",
+                title = "A snow-shoer walking up Strelapass",
+                supportingText = "3,033 views",
+            ),
+            ImageGridItemBackendData(
+                key = "7",
+                imageUrl = "https://images.unsplash.com/photo-1671525737370-1d490286372e",
+                imageContentDescription = "Davos at sunrise, viewed from Schatzalp",
+                title = "Davos at sunrise, viewed from Schatzalp",
+                supportingText = "4,054 views",
+            ),
+            ImageGridItemBackendData(
+                key = "8",
+                imageUrl = "https://images.unsplash.com/photo-1629027272726-2eed15f90e8e",
+                imageContentDescription = "Nasturtium plants",
+                title = "Nasturtium plants",
+                supportingText = "975 views",
+            )
+        )
     /**
      * Returns the repository instance for the given widget represented by [glanceId].
      */

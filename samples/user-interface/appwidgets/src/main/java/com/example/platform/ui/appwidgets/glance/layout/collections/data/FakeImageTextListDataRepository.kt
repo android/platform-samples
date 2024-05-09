@@ -45,7 +45,7 @@ class FakeImageTextListDataRepository {
     val showData = Random.nextInt(50) < 5
 
     items = if (showData) {
-      items.shuffled()
+        demoItems.take(MAX_ITEMS).shuffled()
     } else {
       listOf()
     }
@@ -130,56 +130,57 @@ class FakeImageTextListDataRepository {
     private const val MAX_ITEMS = 10
     private const val TAG = "FITLDR"
 
-    private val demoItems = listOf(
-      DemoDataItem(
-        key = "1",
-        supportingImageUrl = "https://images.unsplash.com/photo-1563379926898-05f4575a45d8",
-        title = "Seafood pasta with shrimps and tomatoes in a pan",
-        supportingText = "45 min",
-      ),
-      DemoDataItem(
-        key = "2",
-        title = "Oat pancakes with honey and bananas",
-        supportingText = "15 min",
-        supportingImageUrl = "https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445",
-      ),
-      DemoDataItem(
-        key = "3",
-        title = "The ultimate barbeque platter",
-        supportingText = "1 hr",
-        supportingImageUrl = "https://images.unsplash.com/photo-1555939594-58d7cb561ad1"
-      ),
-      DemoDataItem(
-        key = "4",
-        title = "Kale olive salad with onions and pecans",
-        supportingText = "15 min",
-        supportingImageUrl = "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe",
-      ),
-      DemoDataItem(
-        key = "5",
-        title = "Indulging strawberry cheesecake",
-        supportingText = "1 hr",
-        supportingImageUrl = "https://images.unsplash.com/photo-1565958011703-44f9829ba187",
-      ),
-      DemoDataItem(
-        key = "6",
-        title = "Devil eggs with avacado toast",
-        supportingText = "30 min",
-        supportingImageUrl = "https://images.unsplash.com/photo-1482049016688-2d3e1b311543",
-      ),
-      DemoDataItem(
-        key = "7",
-        title = "Salmon and cucumbers!",
-        supportingText = "1 hr",
-        supportingImageUrl = "https://images.unsplash.com/photo-1467003909585-2f8a72700288",
-      ),
-      DemoDataItem(
-        key = "8",
-        title = "Salad: the path to a healthier, happier you",
-        supportingText = "30 min",
-        supportingImageUrl = "https://images.unsplash.com/photo-1512621776951-a57141f2eefd",
-      ),
-    )
+      // Courtesy of https://unsplash.com/@iamliam
+      private val demoItems = listOf(
+          DemoDataItem(
+              key = "1",
+              title = "Flowers at a wedding reception",
+              supportingText = "33,822 views",
+              supportingImageUrl = "https://images.unsplash.com/photo-1531306760863-7fb02a41db12"
+          ),
+          DemoDataItem(
+              key = "2",
+              title = "An up-close look at a Blushing Bride Protea flower.",
+              supportingText = "31,072 views",
+              supportingImageUrl = "https://images.unsplash.com/photo-1566964423430-3e52903303a5",
+          ),
+          DemoDataItem(
+              key = "3",
+              supportingImageUrl = "https://images.unsplash.com/photo-1685540466252-8c21e7c37624",
+              title = "A single water droplet rests in a budding red pansy.",
+              supportingText = "193 views",
+          ),
+          DemoDataItem(
+              key = "4",
+              title = "Blossom, petal, flower",
+              supportingText = "23,815 views",
+              supportingImageUrl = "https://images.unsplash.com/photo-1582817954171-c3533fffde89",
+          ),
+          DemoDataItem(
+              key = "5",
+              title = "Orchids at New York Botanical Garden",
+              supportingText = "205,481 views",
+              supportingImageUrl = "https://images.unsplash.com/photo-1565357153781-98bf8686488a",
+          ),
+          DemoDataItem(
+              key = "6",
+              title = "Tabletop composition with flower",
+              supportingText = "85,060 views",
+              supportingImageUrl = "https://images.unsplash.com/photo-1591404789216-d03646c78f73",
+          ),
+          DemoDataItem(
+              key = "7",
+              title = "Wild bee on flower",
+              supportingText = "6,692 views",
+              supportingImageUrl = "https://images.unsplash.com/photo-1653927050791-5fc981435d12",
+          ),
+          DemoDataItem(
+              key = "8",
+              title = "Flowers on a vine",
+              supportingText = "31,862 views",
+              supportingImageUrl = "https://images.unsplash.com/photo-1531307119710-accdb402fe03",
+          ),
+      )
 
     private val repositories = mutableMapOf<GlanceId, FakeImageTextListDataRepository>()
 

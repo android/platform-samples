@@ -118,35 +118,43 @@ class FakeTextWithImageRepository {
       val caption: String,
     )
 
-    val demoItems = listOf(
-      DemoData(
-        primary = "Seafood pasta with shrimps and tomatoes in a pan",
-        secondary = "Savor the taste of the ocean with this simple, one-pan seafood pasta.",
-        caption = "45 min",
-        url = "https://images.unsplash.com/photo-1563379926898-05f4575a45d8",
-        imageContentDescription = "image of seafood pasta",
-      ),
-      DemoData(
-        primary = "Ramen noodles with soft boiled egg, shrimp and snow peas.",
-        secondary = "Slurp up comfort with this simple ramen noodle bowl, brimming with fresh flavors",
-        caption = "50 min",
-        url = "https://images.unsplash.com/photo-1569718212165-3a8278d5f624",
-        imageContentDescription = "image of ramen noodles",
-      ),
-      DemoData(
-        primary = "a platter of crackers, strawberries, and fruit",
-        secondary = "Wine, cheese, crackers and berries. What more could a party ask for?",
-        caption = "15 min",
-        url = "https://images.unsplash.com/photo-1496412705862-e0088f16f791",
-        imageContentDescription = "image of a platter of crackers, strawberries, and fruit",
-      ),
-      DemoData(
-        primary = "Salted egg chicken rice for lunch",
-        secondary = "Treat yourself to this umami-packed lunchtime delight.",
-        caption = "15 min",
-        url = "https://images.unsplash.com/photo-1564671165093-20688ff1fffa",
-        imageContentDescription = "image of a salted egg chicken rice",
+      // Courtesy of https://unsplash.com/@iamliam
+      val demoItems = listOf(
+          DemoData(
+              primary = "Davos at sunrise, viewed from Schatzalp",
+              secondary = "Golden light washes over the alpine village of Davos, a breathtaking view unfolding from Schatzalp's vantage point.",
+              caption = "33,822 views",
+              url = "https://images.unsplash.com/photo-1671525737370-1d490286372e",
+              imageContentDescription = "Davos at sunrise, viewed from Schatzalp",
+          ),
+          DemoData(
+              primary = "Flowers at a wedding reception",
+              secondary = "I took this photo at a wedding reception. The flowers were in a vase next to a window",
+              caption = "33,822 views",
+              url = "https://images.unsplash.com/photo-1531306760863-7fb02a41db12",
+              imageContentDescription = "Flowers at a wedding reception",
+          ),
+          DemoData(
+              primary = "Blushing Bride",
+              secondary = "An up-close look at a Blushing Bride Protea flower, native to South Africa",
+              caption = "31,072 views",
+              url = "https://images.unsplash.com/photo-1566964423430-3e52903303a5",
+              imageContentDescription = "Blushing Bride flower",
+          ),
+          DemoData(
+              primary = "Winter in Switzerland",
+              secondary = "A snow-shoer walking up Strelapass on snow lined with deep trails from skiiers",
+              caption = "15 min",
+              url = "https://images.unsplash.com/photo-1671525784444-392a8f8daa3f",
+              imageContentDescription = "A snow-shoer walking up Strelapass on snow lined with deep trails from skiiers",
+          ),
+          DemoData(
+              primary = "A single water droplet rests in a budding red pansy.",
+              secondary = "Secrets held within a drop: A microcosm of beauty in a world of red.",
+              caption = "193 views",
+              url = "https://images.unsplash.com/photo-1685540466252-8c21e7c37624",
+              imageContentDescription = "A single water droplet rests in a budding red pansy.",
+          )
       )
-    )
   }
 }

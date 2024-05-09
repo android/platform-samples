@@ -20,7 +20,7 @@
 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:initialLayout="@layout/glance_default_loading_layout"
-    android:previewImage="@drawable/sample_image_text_list"
+    android:previewImage="@drawable/sample_image_text_list_preview"
     android:maxResizeHeight="@dimen/sample_text_with_image_list_widget_max_resize_height"
     android:maxResizeWidth="@dimen/sample_text_with_image_list_widget_max_resize_width"
     android:targetCellWidth="@integer/sample_text_with_image_list_target_cell_width"
