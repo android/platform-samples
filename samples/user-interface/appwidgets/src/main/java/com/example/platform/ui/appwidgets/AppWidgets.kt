@@ -56,9 +56,19 @@ import com.google.android.catalog.framework.annotations.Sample
 fun AppWidgets() {
     val context = LocalContext.current
     val widgetManager = AppWidgetManager.getInstance(context)
+
     // Get a list of our app widget providers to retrieve their info
     val widgetProviders = widgetManager.getInstalledProvidersForPackage(context.packageName, null)
+        .showCanonicalLayoutsFirst()
 
+    AppWidgetsList(widgetProviders)
+}
+
+@RequiresApi(Build.VERSION_CODES.O)
+@Composable
+fun AppWidgetsList(widgetProviders: List<AppWidgetProviderInfo>) {
+    val context = LocalContext.current
+    val widgetManager = AppWidgetManager.getInstance(context)
     LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         item {
             AppInfoText()
@@ -74,6 +84,16 @@ fun AppWidgets() {
         items(widgetProviders) { providerInfo ->
             WidgetInfoCard(providerInfo)
         }
+    }
+}
+
+private fun MutableList<AppWidgetProviderInfo>.showCanonicalLayoutsFirst(): List<AppWidgetProviderInfo> {
+    return this.toMutableList().apply {
+        sortWith (
+            compareBy {
+                if (it.provider.className.startsWith("com.example.platform.ui.appwidgets.glance.layout")) -1 else 1
+            }
+        )
     }
 }
 

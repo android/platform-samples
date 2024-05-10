@@ -41,6 +41,8 @@
         <activity
             android:label="Canonical Layouts"
             android:name=".glance.layout.MainActivity"
+            android:clearTaskOnLaunch="true"
+            android:taskAffinity="com.example.platform.canonicallayout"
             android:exported="true"
             android:theme="@style/Theme.LayoutSamples">
             <intent-filter>

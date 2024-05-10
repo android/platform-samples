@@ -3,9 +3,11 @@ package com.example.platform.ui.appwidgets.glance.layout
 import android.appwidget.AppWidgetManager
 import android.appwidget.AppWidgetProviderInfo
 import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -29,6 +31,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
+import com.example.platform.ui.appwidgets.AppWidgetsList
 import com.example.platform.ui.appwidgets.glance.layout.ui.theme.LayoutSamplesTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -36,6 +39,7 @@ import kotlinx.coroutines.launch
 val TAG = "layoutsamples"
 
 class MainActivity : ComponentActivity() {
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,16 +48,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             val scope = rememberCoroutineScope()
             LayoutSamplesTheme {
-                LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(8.dp)) {
-                    item {
-                        AppDescription()
-                    }
-                    items(ourWidgets) { providerInfo: AppWidgetProviderInfo ->
-                        WidgetRow(
-                            providerInfo = providerInfo,
-                            onClick = { requestPin(providerInfo, this@MainActivity, scope) })
-                    }
-                }
+                AppWidgetsList(widgetProviders = ourWidgets)
             }
         }
     }
@@ -62,7 +57,7 @@ class MainActivity : ComponentActivity() {
 private fun Context.ourWidgets(): List<AppWidgetProviderInfo> {
     val appWidgetManager = AppWidgetManager.getInstance(this)
     return appWidgetManager.installedProviders
-        .filter { providerInfo: AppWidgetProviderInfo -> providerInfo.provider.packageName == packageName }
+        .filter { it.provider.className.startsWith("com.example.platform.ui.appwidgets.glance.layout") }
 }
 
 @Composable
