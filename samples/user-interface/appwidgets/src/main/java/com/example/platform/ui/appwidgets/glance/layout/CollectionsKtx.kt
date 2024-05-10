@@ -17,7 +17,7 @@
 package com.example.platform.ui.appwidgets.glance.layout
 
 /**
- * This function should be rmeoved when API level is raised to 24. It exists to provide removeIf
+ * This function should be removed when API level is raised to 24. It exists to provide removeIf
  * from java.util.Collection
  */
 fun <T> MutableList<T>.removeIf(filter: (T) -> Boolean): Boolean {

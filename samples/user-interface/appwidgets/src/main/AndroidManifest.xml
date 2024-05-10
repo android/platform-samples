@@ -38,20 +38,6 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-        <activity
-            android:label="Canonical Layouts"
-            android:name=".glance.layout.MainActivity"
-            android:clearTaskOnLaunch="true"
-            android:taskAffinity="com.example.platform.canonicallayout"
-            android:exported="true"
-            android:theme="@style/Theme.LayoutSamples">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".glance.layout.ActionDemonstrationActivity" />
-
         <!-- Long text variants -->
         <receiver
             android:name=".glance.layout.text.LongTextAppWidgetReceiver"
@@ -111,6 +97,8 @@
         </receiver>
 
         <!-- Action List -->
+        <activity android:name=".glance.layout.ActionDemonstrationActivity" />
+
         <receiver
             android:name=".glance.layout.collections.ActionListAppWidgetAppWidgetReceiver"
             android:enabled="@bool/glance_appwidget_available"
