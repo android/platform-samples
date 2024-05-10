@@ -21,6 +21,8 @@ sample together with the
 
 # Getting Started
 
+## Widget Samples
+
 The sample contains 3 type of widgets:
 
 - ToDo list: showcasing how to create a list of items
@@ -31,6 +33,8 @@ Those are implemented in two packages:
 
 - [rv](src/main/java/com/example/platform/ui/appwidgets/rv) for RemoteViews implementation
 - [glance](src/main/java/com/example/platform/ui/appwidgets/glance) for Glance implementation
+
+## Widget Pinning
 
 In addition, the [AppWidgets.kt](src/main/java/com/example/platform/ui/appwidgets/AppWidgets.kt)
 showcases how to request the launcher to "pin" an appwidget.
@@ -46,6 +50,11 @@ alt="Images widget showcase"
 title="Showcase of the Images widget implementation" />
 
 > More showcasing resources in the [screenshots folder](screenshots)
+
+## Canonical Layouts
+
+These [layouts](./src/main/java/com/example/platform/ui/appwidgets/glance/layout) demonstrate how to write responsive, high-quality layouts for use with your 
+Glance widgets. 
 
 ## Run a new configuration
 

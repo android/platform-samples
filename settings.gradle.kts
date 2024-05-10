@@ -34,6 +34,9 @@ dependencyResolutionManagement {
         mavenCentral()
         // Uncomment this to use a snapshot version of casa-android.
         // maven("https://oss.sonatype.org/content/repositories/snapshots/")
+        maven {
+            url = uri("https://androidx.dev/snapshots/builds/11809947/artifacts/repository")
+        }
     }
 }
 
