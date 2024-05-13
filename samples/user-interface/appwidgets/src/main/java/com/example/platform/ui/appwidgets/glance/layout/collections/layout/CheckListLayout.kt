@@ -13,7 +13,6 @@ import androidx.glance.action.Action
 import androidx.glance.appwidget.components.CircleIconButton
 import androidx.glance.appwidget.components.Scaffold
 import androidx.glance.appwidget.components.TitleBar
-import androidx.glance.layout.Box
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
@@ -21,7 +20,7 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.example.platform.ui.appwidgets.R
-import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.contentEndPadding
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.checkListRowStartPadding
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.scaffoldHorizontalPadding
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.widgetPadding
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutSize.Companion.isWiderThan
@@ -124,20 +123,17 @@ fun CheckListLayout(
       null
     }
   ) {
-    // Apply end padding to compensate for the start padding included via checkbox icon.
-    Box(modifier = GlanceModifier.padding(end = contentEndPadding)) {
-      if (items.isEmpty()) {
-        EmptyListContent()
-      } else {
-        Content(
-          items = items,
-          checkedItems = checkedItems,
-          onCheck = onCheck,
-          checkedIconRes = checkedIconRes,
-          unCheckedIconRes = unCheckedIconRes,
-          checkButtonContentDescription = checkButtonContentDescription,
-        )
-      }
+    if (items.isEmpty()) {
+      EmptyListContent()
+    } else {
+      Content(
+        items = items,
+        checkedItems = checkedItems,
+        onCheck = onCheck,
+        checkedIconRes = checkedIconRes,
+        unCheckedIconRes = unCheckedIconRes,
+        checkButtonContentDescription = checkButtonContentDescription,
+      )
     }
   }
 }
@@ -235,7 +231,7 @@ private fun CheckListItem(
 
   // List item itself is not clickable, as it contains more trailing actions.
   ListItem(
-    modifier = modifier.fillMaxWidth(),
+    modifier = modifier.fillMaxWidth().padding(start = checkListRowStartPadding),
     contentSpacing = 0.dp, // Since check box's tap target covers the needed visual spacing
     leadingContent = { CheckButton() },
     headlineContent = { Title() },
@@ -395,10 +391,9 @@ private object CheckListLayoutTextStyles {
 private object CheckListLayoutDimensions {
   val widgetPadding = 12.dp
 
-  // Padding needed to deduct from widget's start padding to align the check icon with title bar.
-  val checkboxIconOffsetPadding = 8.dp
-  // To compensate for the space taken by tap target padding of the checkbox, we use less padding in
-  // the start.
-  val scaffoldHorizontalPadding = widgetPadding - checkboxIconOffsetPadding
-  val contentEndPadding = checkboxIconOffsetPadding
+  // Full width scrollable content
+  val scaffoldHorizontalPadding = 0.dp
+  // Match with the padding applied to the app icon in title bar; this allow us to vertically align
+  // the app icon with check icon button.
+  val checkListRowStartPadding = 2.dp
 }
