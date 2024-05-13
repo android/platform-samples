@@ -22,6 +22,7 @@ import androidx.glance.text.TextStyle
 import com.example.platform.ui.appwidgets.R
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.checkListRowStartPadding
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.scaffoldHorizontalPadding
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.verticalItemSpacing
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.widgetPadding
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutSize.Companion.isWiderThan
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutSize.Companion.showTitleBar
@@ -150,6 +151,7 @@ private fun Content(
   RoundedScrollingLazyColumn(
     modifier = GlanceModifier.fillMaxSize(),
     items = items,
+    verticalItemsSpacing = verticalItemSpacing,
     itemContentProvider = { item ->
       CheckListItem(
         item = item,
@@ -390,6 +392,8 @@ private object CheckListLayoutTextStyles {
 
 private object CheckListLayoutDimensions {
   val widgetPadding = 12.dp
+
+  val verticalItemSpacing = 16.dp
 
   // Full width scrollable content
   val scaffoldHorizontalPadding = 0.dp
