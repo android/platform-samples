@@ -401,7 +401,7 @@ private object CheckListLayoutTextStyles {
 private object CheckListLayoutDimensions {
   val widgetPadding = 12.dp
 
-  val verticalItemSpacing = 16.dp
+  val verticalItemSpacing = 4.dp
 
   // Full width scrollable content
   val scaffoldHorizontalPadding = 0.dp
