@@ -21,6 +21,7 @@ import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.example.platform.ui.appwidgets.R
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.checkListRowStartPadding
+import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.checkListRowEndPadding
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.scaffoldHorizontalPadding
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.verticalItemSpacing
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.widgetPadding
@@ -181,6 +182,12 @@ private fun CheckListItem(
   modifier: GlanceModifier = GlanceModifier,
   isChecked: Boolean,
 ) {
+    val listItemEndPadding = if (item.hasTrailingIcons) {
+        0.dp
+    } else {
+        checkListRowEndPadding
+    }
+
   @Composable
   fun CheckButton() {
     CircleIconButton(
@@ -233,7 +240,8 @@ private fun CheckListItem(
 
   // List item itself is not clickable, as it contains more trailing actions.
   ListItem(
-    modifier = modifier.fillMaxWidth().padding(start = checkListRowStartPadding),
+      modifier = modifier.fillMaxWidth()
+          .padding(start = checkListRowStartPadding, end = listItemEndPadding),
     contentSpacing = 0.dp, // Since check box's tap target covers the needed visual spacing
     leadingContent = { CheckButton() },
     headlineContent = { Title() },
@@ -400,4 +408,6 @@ private object CheckListLayoutDimensions {
   // Match with the padding applied to the app icon in title bar; this allow us to vertically align
   // the app icon with check icon button.
   val checkListRowStartPadding = 2.dp
+  // Padding to be applied on right of each item if there isn't a icon button on right.
+  val checkListRowEndPadding = widgetPadding
 }
