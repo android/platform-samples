@@ -40,6 +40,7 @@ import com.example.platform.ui.appwidgets.glance.layout.collections.layout.NoDat
 import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutDimensions.contentSize
 import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutDimensions.contentSpacing
 import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutDimensions.pictureRadius
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutDimensions.verticalTextsSpacing
 import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutDimensions.widgetPadding
 import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutSize.HorizontalLarge
 import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutSize.HorizontalSmall
@@ -178,7 +179,7 @@ private fun HorizontalContent(data: TextWithImageData, showImage: Boolean) {
         // Use 40% of available width for text area if showing image on side.
         width = (0.4 * contentWidth).takeIf { showImage } ?: contentWidth,
         // Use 80% of vertical space for text area.
-        height = 0.80 * (contentSize.height - contentSpacing)
+        height = 0.80 * (contentSize.height - (2 * verticalTextsSpacing))
       )
     )
     if (showImage) {
@@ -201,8 +202,8 @@ private fun VerticalContent(
     verticalAlignment = Alignment.Vertical.Bottom,
     modifier = GlanceModifier.fillMaxHeight()
   ) {
-    val contentWidth = contentSize.width - contentSpacing
-    val contentHeight = contentSize.height - (2 * contentSpacing)
+    val contentWidth = contentSize.width
+    val contentHeight = contentSize.height - (2 * verticalTextsSpacing)
 
     if (showImage) {
       Image(
@@ -216,8 +217,8 @@ private fun VerticalContent(
       showSecondaryText = showSecondaryText,
       modifier = GlanceModifier.fillMaxWidth(),
       availableSize = DpSize(
-        // Use 90% of available width to leave some offset for word break differences.
-        width = 0.9 * contentWidth,
+        // Use 80% of available width to leave some offset for word break differences.
+        width = 0.8 * contentWidth,
         // Use 40% vertical space for text area if showing image
         height = (0.4 * contentHeight).takeIf { showImage } ?: contentHeight
       )
@@ -248,7 +249,7 @@ private fun TextStack(
       style = TextWithImageLayoutTextStyles.caption,
       modifier = GlanceModifier.fillMaxWidth()
     )
-    Spacer(modifier = GlanceModifier.height(contentSpacing / 2))
+    Spacer(modifier = GlanceModifier.height(verticalTextsSpacing))
     Text(
       text = data.primary,
       maxLines = primaryTextMaxLines,
@@ -260,7 +261,7 @@ private fun TextStack(
         availableSize = availableSize
       )
 
-      Spacer(modifier = GlanceModifier.height(contentSpacing / 2))
+      Spacer(modifier = GlanceModifier.height(verticalTextsSpacing))
       Text(
         text = data.secondary,
         maxLines = secondaryTextMaxLines,
@@ -372,7 +373,8 @@ private enum class TextWithImageLayoutSize {
     }
   }
 
-  fun showTitleBar() = this != HorizontalSmall && this != VerticalSmall
+    @Composable
+    fun showTitleBar() = LocalSize.current.height >= 180.dp
 }
 
 
@@ -436,11 +438,16 @@ private object TextWithImageLayoutDimensions {
   /** Corner radius to be applied to an image. */
   val pictureRadius = 16.dp
 
-  /**
-   * Space between larger building blocks within the layout. e.g space between text stack and
-   * the image.
-   */
-  val contentSpacing = 4.dp
+    /**
+     * Space between larger building blocks within the layout. e.g space between text stack and
+     * the image.
+     */
+    val contentSpacing = 12.dp
+
+    /**
+     * Vertical spacing between text items
+     */
+    val verticalTextsSpacing = 4.dp
 
   /** Height of the title bar. */
   private val titleBarHeight: Dp
