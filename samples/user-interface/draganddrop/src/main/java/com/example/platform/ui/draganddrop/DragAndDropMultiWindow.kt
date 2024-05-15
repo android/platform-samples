@@ -37,7 +37,7 @@ import com.google.android.catalog.framework.annotations.Sample
 @Sample(
     name = "Drag and Drop in MultiWindow mode",
     description = "Drag and drop to another app visible in multiwindow mode",
-    documentation = "",
+    documentation = "https://developer.android.com/develop/ui/views/touch-and-input/drag-drop/multi-window",
 )
 class DragAndDropMultiWindow : Fragment(R.layout.fragment_dnd_multiwindow) {
     lateinit var binding: FragmentDndMultiwindowBinding
@@ -47,11 +47,11 @@ class DragAndDropMultiWindow : Fragment(R.layout.fragment_dnd_multiwindow) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentDndMultiwindowBinding.bind(view)
         ConstraintSet().clone(binding.root)
-        binding.tvGreeting.text = resources.getString(R.string.dnd_multiwindow_greeting)
-        binding.ivSource.tag = resources.getString(R.string.source_image_url)
-        Glide.with(this).asBitmap().load(resources.getString(R.string.source_image_url))
+        binding.tvGreeting.text = resources.getString(R.string.multiwindow_greeting)
+        binding.ivSource.tag = resources.getString(R.string.multi_source_image_url)
+        Glide.with(this).asBitmap().load(resources.getString(R.string.multi_source_image_url))
             .into(binding.ivSource)
-        Glide.with(this).asBitmap().load(resources.getString(R.string.target_image_url))
+        Glide.with(this).asBitmap().load(resources.getString(R.string.multi_target_image_url))
             .into(binding.ivTarget)
         setupDrag(binding.ivSource)
         setupDrop(binding.ivTarget)

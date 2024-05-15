@@ -49,23 +49,23 @@ class DragAndDropWithHelper : Fragment(R.layout.fragment_drag_and_drop_with_help
         binding = FragmentDragAndDropWithHelperBinding.bind(view)
         ConstraintSet().clone(binding.root)
 
-        binding.tvGreeting.text = getString(R.string.dnd_helper_greeting)
+        binding.tvGreeting.text = getString(R.string.helper_greeting)
         /*
         data for drag
         for simplicity we have considered text as a data type to drag
         For rich content like Image to be used as drag data type please check the sample for
         Drag and Drop - rich content
          */
-        binding.ivSource.tag = getString(R.string.source_image_url)
-        Glide.with(this).asBitmap().load(getString(R.string.source_image_url))
+        binding.ivSource.tag = getString(R.string.helper_source_image_url)
+        Glide.with(this).asBitmap().load(getString(R.string.helper_source_image_url))
             .into(binding.ivSource)
-        Glide.with(this).asBitmap().load(getString(R.string.target_image_url))
+        Glide.with(this).asBitmap().load(getString(R.string.helper_target_image_url))
             .into(binding.ivTarget)
         setupDrag(binding.ivSource)
         setupDrop(binding.ivTarget)
         // resetting the to state before drag
         binding.btnReset.setOnClickListener {
-            Glide.with(this).asBitmap().load(getString(R.string.target_image_url))
+            Glide.with(this).asBitmap().load(getString(R.string.helper_target_image_url))
                 .into(binding.ivTarget)
         }
     }
