@@ -1,16 +1,24 @@
-# Drag and Drop
+# Drag and Drop Samples
 
-An android application demonstrating basic Drag and Drop functionality using the
-[`Jetpack Drag and Drop Library`](https://developer.android.com/jetpack/androidx/releases/draganddrop).
+The samples in this directory address various various ways of implementing Drag and Drop, along with
+implementation of RichContentReceiver
 
-Allows for plain-text items and images to be dragged into the app. Has a plain-text item and a PNG
-item that can be dragged within, out of, or to a second instance of the demo.
+- [Drag and Drop using Views](src/main/java/com/example/platform/ui/draganddrop/DragAndDropWithViews.kt)
+  This sample demonstrate basic implementation with onLongClickListener and implementing
+  DragListener callback
+- [Drag and Drop in Multi-Window mode](src/main/java/com/example/platform/ui/draganddrop/DragAndDropMultiWindow.kt)
+  This sample demonstrate the drag-and-drop across apps.
+- [Drag and Drop using DragAndDropHelper Library](src/main/java/com/example/platform/ui/draganddrop/DragAndDropWithHelper.kt)
+  This sample uses
+  the [`Jetpack Drag and Drop Library`](https://developer.android.com/jetpack/androidx/releases/draganddrop)
+  to demonstrate drag-and-drop.
+- [Drag and Drop in compose](src/main/java/com/example/platform/ui/draganddrop/DragAndDropUsingCompose.kt)
+  This sample showcase drag-and-drop implementation in compose.
+- [Accepting rich media](src/main/java/com/example/platform/ui/draganddrop/DragAndDropRichContentReceiverFragment.kt)
+  This sample showcase how rich media can be handled using RichContentReceiver unified Api which
+  works for drag-and-drop, keyboard and clipboard
 
-Utilizes [`androidx.core`](https://developer.android.com/jetpack/androidx/releases/core)'s
-[`DragStartHelper`](https://developer.android.com/reference/kotlin/androidx/core/view/DragStartHelper)
-and [`androidx.draganddrop`](https://developer.android.com/jetpack/androidx/releases/draganddrop)'s
-[`DropHelper`](https://developer.android.com/reference/kotlin/androidx/draganddrop/DropHelper) to
-simplify the process of implementing both dragging and dropping functionality.
+> **Important:** All samples run independent of each other.
 
 ## License
 

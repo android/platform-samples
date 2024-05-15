@@ -42,6 +42,8 @@ Drag and drop in Compose
 Drag and drop to another app visible in multiwindow mode
 - [Drag and Drop using the RichContentReceiver](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDropRichContentReceiverFragment.kt):
 Using RichContentReceiverInterface for implementing Drop for rich data types
+- [Drag and Drop using views](user-interface/draganddrop/src/main/java/com/example/platform/ui/draganddrop/DragAndDropWithViews.kt):
+Drag and Drop using the views
 - [Editing UltraHDR](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/edit/EditingUltraHDR.kt):
 This sample demonstrates editing an UltraHDR image and the resulting gainmap as well. Spatial edit operations like crop, rotate, scale are supported
 - [Find devices sample](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/FindBLEDevicesSample.kt):

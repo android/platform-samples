@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2021 Google LLC
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -22,14 +21,23 @@
     <string name="drop_image">Dropped image (sampled to %1$d x %2$d)</string>
     <string name="drop_error">Error: could not load file: %1$s</string>
     <string name="new_task">New task</string>
-    <string name="dnd_helper_greeting">Drag and Drop using Helper classes</string>
+    <string name="view_greeting">Drag and Drop using views</string>
+    <string name="helper_greeting">Drag and Drop using DragAndDropHelper </string>
+    <string name="rich_content_greeting"> Rich Content Receiver for Drag and Drop</string>
+    <string name="multiwindow_greeting">Drag and Drop across apps visible in multi-window mode</string>
+    <string name="compose_greeting">Drag and Drop in Compose</string>
     <string name="source_image"> Source Image</string>
     <string name="target_image"> Target Image</string>
     <string name="reset_btn_text">Reset</string>
-    <string name="dnd_multiwindow_greeting">Drag and Drop across apps visible in multi-window mode</string>
-    <string name="source_image_url">https://services.google.com/fh/files/misc/qq10.jpeg</string>
-    <string name="target_image_url">https://services.google.com/fh/files/misc/qq8.jpeg</string>
-    <string name="target_image_url1">https://services.google.com/fh/files/misc/qq9.jpeg</string>
-    <string name="greeting_rich_content"> Rich Content Receiver for Drag and Drop</string>
+    <string name="views_source_image_url">https://services.google.com/fh/files/misc/qq1.jpeg</string>
+    <string name="views_target_image_url">https://services.google.com/fh/files/misc/qq2.jpeg</string>
+    <string name="helper_source_image_url">https://services.google.com/fh/files/misc/qq3.jpeg</string>
+    <string name="helper_target_image_url">https://services.google.com/fh/files/misc/qq8.jpeg</string>
+    <string name="multi_source_image_url">https://services.google.com/fh/files/misc/qq9.jpeg</string>
+    <string name="multi_target_image_url">https://services.google.com/fh/files/misc/qq10.jpeg</string>
+    <string name="compose_source_image_url">https://developer.android.com/static/images/large-screens/gallery/media/immersive-mode_1440.png</string>
+    <string name="compose_target_image_url">https://developer.android.com/static/images/large-screens/gallery/media/easy-exploration_1440.png</string>
+    <string name="rich_source_image_url">https://developer.android.com/static/images/large-screens/gallery/shopping/Multi-window_1440.png</string>
+    <string name="rich_target_image_url">https://developer.android.com/static/images/large-screens/gallery/shopping/Drag-and-drop_1440.png</string>
     <string name="editable_drag_text">Editable Drag Text</string>
 </resources>

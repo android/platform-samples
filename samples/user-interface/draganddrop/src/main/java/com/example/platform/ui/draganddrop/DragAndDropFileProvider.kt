@@ -18,4 +18,5 @@ package com.example.platform.ui.draganddrop
 
 import androidx.core.content.FileProvider
 
+@Deprecated("Along with DragAndDropActivity")
 class DragAndDropFileProvider: FileProvider()

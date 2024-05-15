@@ -59,6 +59,7 @@ class DragAndDropRichContentReceiverFragment : Fragment(R.layout.fragment_dnd_ri
         binding = FragmentDndRichcontentBinding.bind(view)
         ConstraintSet().clone(binding.root)
         val items = mutableListOf<GridItem>()
+//        binding.tvGreeting.text = getString(R.string.rich_content_greeting)
         initViews(items)
         initDrag()
 
@@ -125,14 +126,14 @@ class DragAndDropRichContentReceiverFragment : Fragment(R.layout.fragment_dnd_ri
 
     @RequiresApi(Build.VERSION_CODES.N)
     fun initDrag() {
-        Glide.with(this).asBitmap().load(getString(R.string.target_image_url))
+        Glide.with(this).asBitmap().load(getString(R.string.rich_source_image_url))
             .into(binding.ivSource1)
         addDragStartHelperForImageView(binding.ivSource1)
-        Glide.with(this).asBitmap().load(getString(R.string.target_image_url1))
+        Glide.with(this).asBitmap().load(getString(R.string.rich_target_image_url))
             .into(binding.ivSource)
         addDragStartHelperForImageView(binding.ivSource)
 
-        binding.tvDrag.text = getString(R.string.dnd_helper_greeting)
+        binding.tvDrag.text = getString(R.string.rich_content_greeting)
         addDragStartHelperForTextView(binding.tvDrag)
 
     }
