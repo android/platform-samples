@@ -99,6 +99,8 @@
         <!-- Action List -->
         <activity android:name=".glance.layout.ActionDemonstrationActivity" />
 
+        <activity android:name=".glance.layout.CanonicalLayoutActivity"/>
+
         <receiver
             android:name=".glance.layout.collections.ActionListAppWidgetAppWidgetReceiver"
             android:enabled="@bool/glance_appwidget_available"
