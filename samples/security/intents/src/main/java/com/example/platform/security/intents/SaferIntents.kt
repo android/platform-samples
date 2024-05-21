@@ -18,15 +18,55 @@
 
 package com.example.platform.security.intents
 
+import android.annotation.SuppressLint
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
     name = "SaferIntents",
-    description = "TODO: Add description"
+    description = "Example on how can fix the miss use of intents"
 )
+@SuppressLint("IntentWithNullActionLaunch")
 @Composable
 fun SaferIntents() {
-    // TODO: implement your sample. 
-    // You can also use Activity or Fragment, simply tag them with the @Sample annotation
+    val context = LocalContext.current
+
+    Column (
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ){
+        Button(onClick = {
+            val intent = Intent()
+            try {
+                context.startActivity(intent)
+            } catch (e : ActivityNotFoundException) {
+                Toast.makeText(context, "Error: " + e.message, Toast.LENGTH_SHORT).show()
+            }
+        }) {
+            Text(text = "Send NULL Intent")
+        }
+        
+        Button(onClick = {
+            val intent = Intent("com.example.platform.security.intents.MY_ACTION")
+            context.startActivity(intent)
+        }) {
+            Text(text = "Send Intent")
+        }
+    }
 }

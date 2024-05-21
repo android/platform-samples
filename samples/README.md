@@ -90,6 +90,8 @@ Shows Predictive Back animations.
 Add your custom tile to the Quick Settings.
 - [Receive data shared by other apps](user-interface/share/src/main/java/com/example/platform/ui/share/receiver/ShareReceiverActivity.kt):
 Receive texts and images from other apps.
+- [SaferIntents](security/intents/src/main/java/com/example/platform/security/intents/SaferIntents.kt):
+Example on how can fix the miss use of intents
 - [Scan with BLE Intent](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/BLEScanIntentSample.kt):
 This samples shows how to use the BLE intent to scan for devices
 - [Screenshot Detection](privacy/transparency/src/main/java/com/example/platform/privacy/transparency/ScreenshotDetection.kt):
