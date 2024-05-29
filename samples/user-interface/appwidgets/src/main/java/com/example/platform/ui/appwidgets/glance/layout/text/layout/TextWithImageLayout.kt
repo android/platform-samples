@@ -121,6 +121,7 @@ fun TextWithImageLayout(
 
   Scaffold(
     titleBar = titleBar,
+    horizontalPadding = widgetPadding,
     backgroundColor = GlanceTheme.colors.widgetBackground,
     modifier = GlanceModifier
       .maybeClickable(action)
@@ -135,13 +136,27 @@ fun TextWithImageLayout(
         when (layoutSize) {
           VerticalSmall -> VerticalContent(
             data = data,
+            showImage = true,
+            showSecondaryText = false
+          )
+
+          VerticalLarge -> VerticalContent(
+            data = data,
+            showImage = true,
+            showSecondaryText = true
+          )
+
+          HorizontalSmall -> HorizontalContent(
+            data = data,
             showImage = false,
             showSecondaryText = false
           )
 
-          VerticalLarge -> VerticalContent(data = data, showImage = true, showSecondaryText = true)
-          HorizontalSmall -> HorizontalContent(data = data, showImage = false)
-          HorizontalLarge -> HorizontalContent(data = data, showImage = true)
+          HorizontalLarge -> HorizontalContent(
+            data = data,
+            showImage = true,
+            showSecondaryText = true
+          )
         }
       }
     }
@@ -164,9 +179,13 @@ private fun NoDataContent() {
 }
 
 @Composable
-private fun HorizontalContent(data: TextWithImageData, showImage: Boolean) {
+private fun HorizontalContent(
+  data: TextWithImageData,
+  showImage: Boolean,
+  showSecondaryText: Boolean,
+) {
   val contentWidth = contentSize.width - contentSpacing
-
+  val contentHeight = contentSize.height - (2 * verticalTextsSpacing)
   Row(
     verticalAlignment = Alignment.Vertical.Bottom,
     horizontalAlignment = Alignment.Horizontal.Start,
@@ -174,12 +193,13 @@ private fun HorizontalContent(data: TextWithImageData, showImage: Boolean) {
   ) {
     TextStack(
       data = data.textData,
+      showSecondaryText = showSecondaryText,
       modifier = GlanceModifier.fillMaxHeight().defaultWeight(),
       availableSize = DpSize(
         // Use 40% of available width for text area if showing image on side.
         width = (0.4 * contentWidth).takeIf { showImage } ?: contentWidth,
         // Use 80% of vertical space for text area.
-        height = 0.80 * (contentSize.height - (2 * verticalTextsSpacing))
+        height = (0.80 * contentHeight).takeIf { showImage } ?: contentHeight
       )
     )
     if (showImage) {
@@ -231,7 +251,7 @@ private fun TextStack(
   data: TextData,
   modifier: GlanceModifier,
   availableSize: DpSize,
-  showSecondaryText: Boolean = true,
+  showSecondaryText: Boolean,
 ) {
   val (primaryTextFontSize, primaryTextMaxLines) = primaryTextFontValues(
     text = data.primary,
@@ -343,10 +363,10 @@ data class ImageData(
 )
 
 private enum class TextWithImageLayoutSize {
-  // No title bar
+  // No title bar or secondary text
   HorizontalSmall,
 
-  // No title bar
+  // No title bar or secondary text
   VerticalSmall,
 
   // Text with Image on the side
@@ -361,7 +381,7 @@ private enum class TextWithImageLayoutSize {
       val size = LocalSize.current
       val isTall = size.height >= size.width
 
-      return if (isTall && size.height <= 165.dp) {
+      return if (isTall && size.height <= 300.dp) {
         VerticalSmall
       } else if (isTall) {
         VerticalLarge
@@ -401,8 +421,8 @@ private object TextWithImageLayoutTextStyles {
     showSecondaryText: Boolean,
   ): Pair<TextUnit, Int> {
     val availableHeight = if (showSecondaryText) {
-      // Within the text area, 35% space is used by primary text.
-      0.35 * availableSize.height
+      // Within the text area, 30% space is used by primary text.
+      0.30 * availableSize.height
     } else {
       0.60 * availableSize.height
     }
@@ -423,8 +443,8 @@ private object TextWithImageLayoutTextStyles {
       context = LocalContext.current,
       text = text,
       availableWidth = availableSize.width,
-      // Within the text area, 35% space is used by secondary text.
-      availableHeight = 0.35 * availableSize.height,
+      // Within the text area, 25% space is used by secondary text.
+      availableHeight = 0.25 * availableSize.height,
       maxFontSize = 24.sp,
       minFontSize = 12.sp
     )
@@ -433,7 +453,7 @@ private object TextWithImageLayoutTextStyles {
 
 private object TextWithImageLayoutDimensions {
   /** Padding that visually appears between the widget outline and anything inside. */
-  val widgetPadding = 12.dp
+  val widgetPadding = 16.dp
 
   /** Corner radius to be applied to an image. */
   val pictureRadius = 16.dp
