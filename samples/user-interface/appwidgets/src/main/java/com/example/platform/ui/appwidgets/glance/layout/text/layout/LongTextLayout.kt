@@ -40,7 +40,7 @@ import androidx.glance.layout.padding
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutDimensions.captionFontSizeAndMaxLines
-import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutDimensions.contentPadding
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutDimensions.widgetPadding
 import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutDimensions.primaryTextFontSizeAndMaxLines
 import com.example.platform.ui.appwidgets.glance.layout.utils.FontUtils.calculateFontSizeAndMaxLines
 
@@ -78,15 +78,16 @@ fun LongTextLayout(
   val scaffoldTopPadding = if (showTitleBar) {
     0.dp
   } else {
-    contentPadding
+    widgetPadding
   }
 
   Scaffold(
     backgroundColor = GlanceTheme.colors.widgetBackground,
+    horizontalPadding = widgetPadding,
     modifier = GlanceModifier
       .maybeClickable(action)
       .padding(
-        bottom = contentPadding,
+        bottom = widgetPadding,
         top = scaffoldTopPadding
       ),
     titleBar = {
@@ -217,7 +218,7 @@ data class LongTextLayoutData(
 )
 
 private object LongTextLayoutDimensions {
-  val contentPadding = 12.dp
+  val widgetPadding = 16.dp
   private val titleBarHeight: Dp
     @Composable get() = if (LongTextLayoutSize.fromLocalSize() == LongTextLayoutSize.XSmall) {
       0.dp
@@ -231,8 +232,8 @@ private object LongTextLayoutDimensions {
       val size = LocalSize.current
 
       return DpSize(
-        width = size.width - (2 * contentPadding),
-        height = size.height - contentPadding - titleBarHeight
+        width = size.width - (2 * widgetPadding),
+        height = size.height - widgetPadding - titleBarHeight
       )
     }
 
@@ -252,7 +253,7 @@ private object LongTextLayoutDimensions {
     // Primary text and caption share 70:30 height within the area available for texts.
     val availableHeightForPrimaryText = Dp(0.70f * contentSize.height.value)
     // In this layout, texts take up entire horizontal space except the paddings on the sides.
-    val availableWidthForPrimaryText = size.width - (contentPadding * 2)
+    val availableWidthForPrimaryText = size.width - (widgetPadding * 2)
 
     return calculateFontSizeAndMaxLines(
       context = LocalContext.current,

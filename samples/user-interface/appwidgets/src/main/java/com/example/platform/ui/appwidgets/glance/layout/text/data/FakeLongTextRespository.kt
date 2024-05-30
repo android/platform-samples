@@ -77,7 +77,7 @@ class FakeLongTextRepository {
       ),
       LongTextLayoutData(
         key = "item 3",
-        text = "Tellus orci ac auctor augue mauris augue neque gravida in fermentum et sollicitudin ac orci...",
+        text = "Tellus orci ac auctor augue mauris augue neque gravida in fermentum et sollicitudin ac orci",
         caption = "Amet cursus"
       ),
       LongTextLayoutData(
