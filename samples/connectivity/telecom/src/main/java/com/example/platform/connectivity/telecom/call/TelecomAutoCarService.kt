@@ -24,16 +24,17 @@ import androidx.car.app.CarAppService
 import androidx.car.app.CarContext
 import androidx.car.app.Screen
 import androidx.car.app.Session
-import androidx.car.app.model.Action
 import androidx.car.app.model.ItemList
 import androidx.car.app.model.ListTemplate
-import androidx.car.app.model.Pane
-import androidx.car.app.model.PaneTemplate
 import androidx.car.app.model.Row
 import androidx.car.app.model.Template
 import androidx.car.app.validation.HostValidator
 import com.example.platform.connectivity.telecom.launchCall
 
+/**
+ *  Service required for connecting to Android Auto
+ *  Used for displaying contacts and making an outgoing call.
+ */
 class TelecomAutoCarService :  CarAppService() {
     override fun createHostValidator(): HostValidator {
         return HostValidator.ALLOW_ALL_HOSTS_VALIDATOR
@@ -51,6 +52,10 @@ class TelecomAutoSession : Session(){
 }
 
 class TelecomAutoScreen(carContext: CarContext) : Screen(carContext) {
+    /**
+     * Create a screen for Android auto based on templates provides by car library
+     * Return the screen layout for contacts.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onGetTemplate(): Template {
 
@@ -67,6 +72,11 @@ class TelecomAutoScreen(carContext: CarContext) : Screen(carContext) {
             .build()
     }
 
+    /**
+     * Start an outgoing call from our TelecomCallService.
+     * Service information platform of call and then auto will display
+     * correct information on users auto screen for hanging up the call.
+     */
     @RequiresApi(Build.VERSION_CODES.O)
     fun startOutGoingCall(name: String){
         carContext.launchCall(
