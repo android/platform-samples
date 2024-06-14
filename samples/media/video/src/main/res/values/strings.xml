@@ -22,6 +22,7 @@
     <string name="add_background_audio">Add background audio</string>
     <string name="scale_video">Scale video</string>
     <string name="grayscale">Grayscale</string>
+    <string name="blur_letterbox">Blur Letterbox</string>
     <string name="image">Add intro image</string>
     <string-array name="composition_configuration">
         <item>Add background audio</item>

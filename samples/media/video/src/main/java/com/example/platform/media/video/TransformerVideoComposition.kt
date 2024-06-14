@@ -16,6 +16,7 @@
 
 package com.example.platform.media.video
 
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -24,11 +25,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.Effect
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
+import androidx.media3.effect.GaussianBlurWithFrameOverlaid
 import androidx.media3.effect.RgbFilter
 import androidx.media3.effect.ScaleAndRotateTransformation
 import androidx.media3.exoplayer.ExoPlayer
@@ -121,6 +124,7 @@ class TransformerVideoComposition : Fragment() {
         return binding.root
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.exportButton.setOnClickListener {
@@ -156,6 +160,7 @@ class TransformerVideoComposition : Fragment() {
      * Builds a [Composition] that contains 1 [EditedMediaItemSequence] with 2
      * video assets, and optionally an audio sequence with one audio track.
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun createComposition(): Composition {
         val video1 = EditedMediaItem.Builder(
             // apply effects only on the first item
@@ -223,6 +228,7 @@ class TransformerVideoComposition : Fragment() {
      * Sets up [Transformer] and [Composition] and starts the transcoding operation.
      * [Transformer] internal processing is done on separate thread.
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun exportComposition() {
         val composition = createComposition()
         // set up a Transformer instance and add a callback listener.
@@ -237,6 +243,7 @@ class TransformerVideoComposition : Fragment() {
     /**
      * Gets a list of [Effects].
      */
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun getSelectedEffects(): Effects {
         val selectedEffects = mutableListOf<Effect>()
         if (binding.grayscaleChip.isChecked) {
@@ -247,6 +254,12 @@ class TransformerVideoComposition : Fragment() {
                 ScaleAndRotateTransformation.Builder()
                     .setScale(.2f, .2f)
                     .build(),
+            )
+        }
+        if (binding.blurLetterboxChip.isChecked) {
+            selectedEffects.add(
+                GaussianBlurWithFrameOverlaid(
+                /* sigma= */ 5f, /* scaleSharpX= */ 0.9f, /* scaleSharpY= */ .9f)
             )
         }
         return Effects(
