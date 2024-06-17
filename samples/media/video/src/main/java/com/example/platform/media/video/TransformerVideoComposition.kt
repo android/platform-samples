@@ -140,6 +140,10 @@ class TransformerVideoComposition : Fragment() {
         } catch (e: IOException) {
             throw IllegalStateException(e)
         }
+
+        // Set aspect ratio of video player so that video is sized to fit when first displayed in
+        // player
+        binding.aspectRatioFrameLayout.setAspectRatio(16f/9f)
     }
 
     override fun onPause() {

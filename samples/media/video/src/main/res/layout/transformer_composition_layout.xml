@@ -73,10 +73,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <androidx.media3.ui.PlayerView
-        android:id="@+id/media_player"
-        android:layout_width="match_parent"
+    <androidx.media3.ui.AspectRatioFrameLayout
+        android:id="@+id/aspect_ratio_frame_layout"
         android:layout_height="wrap_content"
-        android:layout_gravity="center" />
+        android:layout_width="match_parent" >
+
+        <androidx.media3.ui.PlayerView
+            android:id="@+id/media_player"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </androidx.media3.ui.AspectRatioFrameLayout>
 
 </LinearLayout>
