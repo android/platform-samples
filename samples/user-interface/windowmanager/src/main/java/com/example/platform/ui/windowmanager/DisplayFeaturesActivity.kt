@@ -53,12 +53,7 @@ open class DisplayFeaturesActivity : AppCompatActivity() {
         recyclerView.adapter = infoLogAdapter
 
         lifecycleScope.launch(Dispatchers.Main) {
-            // The block passed to repeatOnLifecycle is executed when the lifecycle
-            // is at least STARTED and is cancelled when the lifecycle is STOPPED.
-            // It automatically restarts the block when the lifecycle is STARTED again.
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                // Safely collect from windowInfoRepo when the lifecycle is STARTED
-                // and stops collection when the lifecycle is STOPPED
                 WindowInfoTracker.getOrCreate(this@DisplayFeaturesActivity)
                     .windowLayoutInfo(this@DisplayFeaturesActivity)
                     .collect { newLayoutInfo ->
@@ -110,9 +105,6 @@ open class DisplayFeaturesActivity : AppCompatActivity() {
 
             val featureView = View(this)
             val foldFeature = displayFeature as? FoldingFeature
-            //TODO fix this with minAPI 21
-            //val color = getColor(R.color.colorFeatureFold)
-            //featureView.foreground = ColorDrawable(color)
 
             foldFeature?.let { feature ->
                 if (feature.isSeparating) {
