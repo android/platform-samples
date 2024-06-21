@@ -119,9 +119,6 @@ open class SplitDeviceStateActivityBase : AppCompatActivity(), View.OnClickListe
         }
 
         lifecycleScope.launch {
-            // The block passed to repeatOnLifecycle is executed when the lifecycle
-            // is at least STARTED and is cancelled when the lifecycle is STOPPED.
-            // It automatically restarts the block when the lifecycle is STARTED again.
             lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 splitController.splitInfoList(this@SplitDeviceStateActivityBase)
                     .collect { newSplitInfos ->

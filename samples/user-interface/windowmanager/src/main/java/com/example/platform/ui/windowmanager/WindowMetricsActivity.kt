@@ -45,11 +45,14 @@ class WindowMetricsActivity : AppCompatActivity() {
 
     private fun updateMetrics() {
         val windowMetrics = WindowMetricsCalculator.getOrCreate().computeCurrentWindowMetrics(this)
-        val width = windowMetrics.bounds.width()
-        val height = windowMetrics.bounds.height()
+        val widthPx = windowMetrics.bounds.width()
+        val heightPx = windowMetrics.bounds.height()
         val density = resources.displayMetrics.density
-        val windowSizeClass = WindowSizeClass.compute(width/density, height/density)
-        adapter.append("WindowMetrics update", "width: $width, height: $height")
+        val widthDp = widthPx/density
+        val heightDp = heightPx/density
+        val windowSizeClass = WindowSizeClass.compute(widthDp, heightDp)
+        adapter.append("WindowMetrics update", "width: $widthDp dp, height: $heightDp dp " +
+                "($widthPx x $heightPx px)")
         adapter.append("WindowSize Class", "" + windowSizeClass.windowHeightSizeClass + "\n" + windowSizeClass.windowWidthSizeClass)
         adapter.notifyDataSetChanged()
     }
