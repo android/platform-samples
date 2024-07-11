@@ -55,8 +55,8 @@ import java.util.concurrent.TimeUnit
 @UnstableApi
 @Sample(
     name = "Video Composition using Media3 Transformer",
-    description = "This sample demonstrates concatenation of two video assets using Media3 " +
-            "Transformer library.",
+    description = "This sample demonstrates concatenation of two video assets and an image using" +
+            " Media3 Transformer library.",
     documentation = "https://developer.android.com/guide/topics/media/transformer",
     tags = ["Transformer"],
 )
