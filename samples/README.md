@@ -123,7 +123,7 @@ This sample demonstrates converting a series of UltraHDR images into a HDR
 - [UltraHDR x OpenGLES SurfaceView](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/opengl/UltraHDRWithOpenGL.kt):
 This sample demonstrates displaying an UltraHDR image via and OpenGL Pipeline 
 - [Video Composition using Media3 Transformer](media/video/src/main/java/com/example/platform/media/video/TransformerVideoComposition.kt):
-This sample demonstrates concatenation of two video assets using Media3 
+This sample demonstrates concatenation of two video assets and an image using Media3.
 - [Visualizing an UltraHDR Gainmap](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/VisualizingAnUltraHDRGainmap.kt):
 This sample demonstrates visualizing the underlying gainmap of an UltraHDR 
 - [WindowInsetsAnimation](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/WindowInsetsAnimation.kt):
