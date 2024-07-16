@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 The Android Open Source Project
+ * Copyright 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,22 +29,19 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.Effect
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.effect.RgbFilter
-import androidx.media3.effect.ScaleAndRotateTransformation
+import androidx.media3.effect.GlEffect
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.transformer.Composition
 import androidx.media3.transformer.EditedMediaItem
-import androidx.media3.transformer.EditedMediaItemSequence
 import androidx.media3.transformer.Effects
 import androidx.media3.transformer.ExportException
 import androidx.media3.transformer.ExportResult
 import androidx.media3.transformer.ProgressHolder
 import androidx.media3.transformer.Transformer
-import com.example.platform.media.video.databinding.TransformerCompositionLayoutBinding
+import com.example.platform.media.video.databinding.TransformerTfliteLayoutBinding
 import com.google.android.catalog.framework.annotations.Sample
 import com.google.common.base.Stopwatch
 import com.google.common.base.Ticker
-import com.google.common.collect.ImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -54,16 +51,16 @@ import java.util.concurrent.TimeUnit
 
 @UnstableApi
 @Sample(
-    name = "Video Composition using Media3 Transformer",
-    description = "This sample demonstrates concatenation of two video assets and an image using Media3 Transformer library.",
+    name = "Transformer and TFLite",
+    description = "This sample demonstrates using Transformer with TFLite by applying a selected art style to a video.",
     documentation = "https://developer.android.com/guide/topics/media/transformer",
     tags = ["Transformer"],
 )
-class TransformerVideoComposition : Fragment() {
+class TransformerTFLite : Fragment() {
     /**
      *  Android ViewBinding.
      */
-    private var _binding: TransformerCompositionLayoutBinding? = null
+    private var _binding: TransformerTfliteLayoutBinding? = null
     private val binding get() = _binding!!
 
     /**
@@ -116,7 +113,7 @@ class TransformerVideoComposition : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
-        _binding = TransformerCompositionLayoutBinding.inflate(inflater, container, false)
+        _binding = TransformerTfliteLayoutBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -152,62 +149,6 @@ class TransformerVideoComposition : Fragment() {
     }
 
     /**
-     * Builds a [Composition] that contains 1 [EditedMediaItemSequence] with 2
-     * video assets, and optionally an audio sequence with one audio track.
-     */
-    private fun createComposition(): Composition {
-        val video1 = EditedMediaItem.Builder(
-            // apply effects only on the first item
-            MediaItem.fromUri(URI_VIDEO1),
-        )
-            .setEffects(getSelectedEffects())
-            .build()
-        val video2 = EditedMediaItem.Builder(
-            MediaItem.fromUri(URI_VIDEO2),
-        )
-            .build()
-
-        val compositionSequences = mutableListOf<EditedMediaItemSequence>()
-
-        val videoSequence = mutableListOf<EditedMediaItem>()
-
-        if (binding.imageChip.isChecked) {
-            val image = EditedMediaItem.Builder(
-                MediaItem.fromUri(URI_IMAGE),
-            )
-                .setDurationUs(3_000_000) // Show the image for 3 seconds in the composition
-                .setFrameRate(30)
-                .build()
-
-            // Add image as first item in video sequence
-            videoSequence.add(image)
-        }
-
-        videoSequence.addAll(listOf(video1, video2))
-
-        compositionSequences.add(EditedMediaItemSequence(videoSequence))
-
-        if (binding.backgroundAudioChip.isChecked) {
-            val backgroundAudio = EditedMediaItem.Builder(MediaItem.fromUri(URI_AUDIO)).build()
-            // create an audio sequence that will be looping over the duration of the first video
-            // sequence.
-            val audioSequence = EditedMediaItemSequence(
-                ImmutableList.of(backgroundAudio),
-                /* isLooping*/true,
-            )
-            compositionSequences.add(audioSequence)
-        }
-
-        return Composition.Builder(compositionSequences)
-            // Output file should always contain an audio track because the two video clips
-            // contain audio tracks. Setting this to true handles the case where if our video
-            // sequence doesn't produce any audio at timestamp 0 (ie: if the first item is an
-            // image), the export can still succeed.
-            .experimentalSetForceAudioTrack(true)
-            .build()
-    }
-
-    /**
      * Creates an external cache file that will be used to save the [Composition] output.
      */
     @Throws(IOException::class)
@@ -223,31 +164,44 @@ class TransformerVideoComposition : Fragment() {
      * [Transformer] internal processing is done on separate thread.
      */
     private fun exportComposition() {
-        val composition = createComposition()
+        val originalVideo = EditedMediaItem.Builder(
+            // apply effects only on the first item
+            MediaItem.fromUri(URI_VIDEO1),
+        )
+            .setEffects(getSelectedStyle())
+            .build()
         // set up a Transformer instance and add a callback listener.
         val transformer = Transformer.Builder(requireContext())
             .addListener(transformerListener)
             .build()
-        val filePath: String = externalCacheFile!!.getAbsolutePath()
-        transformer.start(composition, filePath)
+        val filePath: String = externalCacheFile!!.absolutePath
+        transformer.start(originalVideo, filePath)
         startTimer(transformer)
     }
 
-    /**
-     * Gets a list of [Effects].
-     */
-    private fun getSelectedEffects(): Effects {
+    private fun getSelectedStyle(): Effects {
         val selectedEffects = mutableListOf<Effect>()
-        if (binding.grayscaleChip.isChecked) {
-            selectedEffects.add(RgbFilter.createGrayscaleFilter())
+
+        val selectedStyle = binding.styleRadioGroup.checkedRadioButtonId
+        var selectedStyleAsset = ""
+        when (selectedStyle) {
+            R.id.style1 -> selectedStyleAsset = "style1.jpg"
+            R.id.style2 -> selectedStyleAsset = "style2.jpg"
+            R.id.style3 -> selectedStyleAsset = "style3.jpg"
+            else -> {
+                Log.e(TAG, "No style selected")
+            }
         }
-        if (binding.scaleChip.isChecked) {
-            selectedEffects.add(
-                ScaleAndRotateTransformation.Builder()
-                    .setScale(.2f, .2f)
-                    .build(),
-            )
-        }
+
+        selectedEffects.add(
+            GlEffect { context, _ ->
+                StyleTransferShaderProgram(
+                    context,
+                    selectedStyleAsset,
+                )
+            },
+        )
+
         return Effects(
             /* audioProcessors= */ listOf(),
             /* videoEffects= */ selectedEffects,
@@ -310,18 +264,12 @@ class TransformerVideoComposition : Fragment() {
         /**
          * Class Tag
          */
-        private val TAG = TransformerVideoComposition::class.java.simpleName
+        private val TAG = TransformerTFLite::class.java.simpleName
 
         /**
          * Video and audio assets
          */
         private const val URI_VIDEO1 =
             "https://storage.googleapis.com/exoplayer-test-media-1/mp4/android-screens-10s.mp4"
-        private const val URI_VIDEO2 =
-            "https://storage.googleapis.com/exoplayer-test-media-0/android-block-1080-hevc.mp4"
-        private const val URI_IMAGE =
-            "https://developer.android.com/static/images/media/overview/migrate-to-media3_1440.png"
-        private const val URI_AUDIO =
-            "https://storage.googleapis.com/exoplayer-test-media-0/play.mp3"
     }
 }
