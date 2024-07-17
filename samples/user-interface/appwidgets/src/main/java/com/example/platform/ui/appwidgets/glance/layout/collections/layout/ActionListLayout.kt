@@ -11,6 +11,7 @@ import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
 import androidx.glance.LocalSize
 import androidx.glance.action.Action
 import androidx.glance.action.clickable
@@ -24,11 +25,15 @@ import androidx.glance.layout.Box
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
+import androidx.glance.preview.ExperimentalGlancePreviewApi
+import androidx.glance.preview.Preview
 import androidx.glance.semantics.contentDescription
 import androidx.glance.semantics.semantics
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
+import com.example.platform.ui.appwidgets.R
+import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeActionListDataRepository.Companion.demoData
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutDimensions.circularCornerRadius
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutDimensions.filledItemCornerRadius
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutDimensions.filledItemPadding
@@ -42,6 +47,9 @@ import com.example.platform.ui.appwidgets.glance.layout.collections.layout.Actio
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutSize.Large
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ActionListLayoutSize.Small
 import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
+import com.example.platform.ui.appwidgets.glance.layout.utils.LargeWidgetPreview
+import com.example.platform.ui.appwidgets.glance.layout.utils.MediumWidgetPreview
+import com.example.platform.ui.appwidgets.glance.layout.utils.SmallWidgetPreview
 
 /**
  * A layout focused on presenting list of two-state actions represented by a title (1-2 words),
@@ -509,4 +517,44 @@ private object ActionListLayoutDimensions {
 
   /**  Corner radius to achieve circular shape. */
   val circularCornerRadius = 200.dp
+}
+
+/**
+ * Preview sizes for the widget covering the breakpoints.
+ *
+ * This allows verifying updates across multiple breakpoints.
+ */
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview(widthDp = 259, heightDp = 200)
+@Preview(widthDp = 438, heightDp = 200)
+@Preview(widthDp = 644, heightDp = 200)
+private annotation class ActionListBreakpointPreviews
+
+/**
+ * Previews for the action list layout.
+ *
+ * First we look at the previews at defined breakpoints, tweaking them as necessary. In addition,
+ * the previews at standard sizes allows us to quickly verify updates across min / max and common
+ * widget sizes without needing to run the app or manually place the widget.
+ */
+@ActionListBreakpointPreviews
+@SmallWidgetPreview
+@MediumWidgetPreview
+@LargeWidgetPreview
+@Composable
+private fun ActionListLayoutPreview() {
+  val context = LocalContext.current
+
+  ActionListLayout(
+    title = context.getString(R.string.sample_action_list_app_widget_name),
+    titleIconRes = R.drawable.sample_home_icon,
+    titleBarActionIconRes = R.drawable.sample_power_settings_icon,
+    titleBarActionIconContentDescription = context.getString(
+      R.string.sample_action_list_settings_label
+    ),
+    titleBarAction = actionStartDemoActivity("Power settings title bar action"),
+    items = demoData,
+    checkedItems = listOf("1", "3"),
+    actionButtonClick = {},
+  )
 }
