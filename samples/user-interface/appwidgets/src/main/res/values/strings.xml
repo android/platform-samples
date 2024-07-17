@@ -80,14 +80,12 @@
 
     <!-- appWidget names -->
     <string name="sample_long_text_app_widget_name">Long Text</string>
-    <string name="sample_short_text_app_widget_name">ShortText</string>
     <string name="sample_text_with_image_app_widget_name">Text &amp; Image</string>
     <string name="sample_text_and_image_app_widget_name">Text and Image</string>
     <string name="sample_text_and_image_list_app_widget_name">Image Text List</string>
     <string name="sample_check_list_app_widget_name">Checklist</string>
     <string name="sample_action_list_app_widget_name">Action List</string>
     <string name="sample_image_grid_app_widget_name">Image Grid</string>
-    <string name="sample_hero_style_image_grid_app_widget_name">Hero Image Grid</string>
 
     <!-- Button labels -->
     <string name="sample_add_button_text">Add</string>
