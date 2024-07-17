@@ -39,10 +39,14 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
+import com.example.platform.ui.appwidgets.R
 import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutDimensions.captionFontSizeAndMaxLines
 import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutDimensions.widgetPadding
 import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutDimensions.primaryTextFontSizeAndMaxLines
+import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
 import com.example.platform.ui.appwidgets.glance.layout.utils.FontUtils.calculateFontSizeAndMaxLines
+import com.example.platform.ui.appwidgets.glance.layout.utils.MediumWidgetPreview
+import com.example.platform.ui.appwidgets.glance.layout.utils.SmallWidgetPreview
 
 /**
  * A layout focused on presenting text only content.
@@ -270,4 +274,74 @@ private object LongTextLayoutDimensions {
     val captionMaxLines = 1 // Caption is always 1 line.
     return estimatedFontSize.coerceAtMost(maxCaptionFontSize.value).sp to captionMaxLines
   }
+}
+
+/**
+ * Previews of the long text layout with shorter caption and longer main text
+ *
+ * Previewing them at standard & min-max sizes allows us to adjust font sizes if needed. Use the
+ * Preview annotation to view the widget at specific width / height.
+ */
+@SmallWidgetPreview
+@MediumWidgetPreview
+@Composable
+private fun ShortCaptionSuperLongTextPreview() {
+  LongTextLayoutPreview(
+    text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Cursus mattis molestie a iaculis at erat pellentesque adipiscing commodo elit at imperdiet dui accumsan sit amet.",
+    caption = "Ut mollis",
+  )
+}
+
+
+/**
+ * Previews of the long text layout with longer caption and shorter main text
+ *
+ * Previewing them at standard & min-max sizes allows us to adjust font sizes if needed. Use the
+ * Preview annotation to view the widget at specific width / height.
+ */
+@SmallWidgetPreview
+@MediumWidgetPreview
+@Composable
+private fun LongCaptionShortTextPreview() {
+  LongTextLayoutPreview(
+    text = "Comparatively small text",
+    caption = "Ipsum faucibus ut mollis amet cursus",
+  )
+}
+
+/**
+ * Previews of the long text layout with medium sized caption and main text
+ *
+ * Previewing them at standard & min-max sizes allows us to adjust font sizes if needed. Use the
+ * Preview annotation to view the widget at specific width / height.
+ */
+@SmallWidgetPreview
+@MediumWidgetPreview
+@Composable
+private fun MediumTextPreview() {
+  LongTextLayoutPreview(
+    text = "This allows for a longer text string. Specifically because the focus in this, layout is on the primary text.",
+    caption = "Ut mollis amet cursus",
+  )
+}
+
+@Composable
+private fun LongTextLayoutPreview(text: String, caption: String) {
+  val context = LocalContext.current
+
+  LongTextLayout(
+    title = context.getString(R.string.sample_long_text_app_widget_name),
+    titleIconRes = R.drawable.sample_text_icon,
+    titleBarActionIconRes = R.drawable.sample_refresh_icon,
+    titleBarActionIconContentDescription = context.getString(
+      R.string.sample_refresh_icon_button_label
+    ),
+    titleBarAction = {},
+    data = LongTextLayoutData(
+      key = "1",
+      text = text,
+      caption = caption,
+    ),
+    action = actionStartDemoActivity("1"),
+  )
 }

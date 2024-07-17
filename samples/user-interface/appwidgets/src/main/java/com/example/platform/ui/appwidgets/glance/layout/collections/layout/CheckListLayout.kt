@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
 import androidx.glance.LocalSize
 import androidx.glance.action.Action
 import androidx.glance.appwidget.components.CircleIconButton
@@ -16,10 +17,13 @@ import androidx.glance.appwidget.components.TitleBar
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
+import androidx.glance.preview.ExperimentalGlancePreviewApi
+import androidx.glance.preview.Preview
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.example.platform.ui.appwidgets.R
+import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeCheckListDataRepository.Companion.demoData
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.checkListRowStartPadding
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.checkListRowEndPadding
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutDimensions.scaffoldHorizontalPadding
@@ -29,6 +33,9 @@ import com.example.platform.ui.appwidgets.glance.layout.collections.layout.Check
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutSize.Companion.showTitleBar
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.CheckListLayoutSize.Small
 import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
+import com.example.platform.ui.appwidgets.glance.layout.utils.LargeWidgetPreview
+import com.example.platform.ui.appwidgets.glance.layout.utils.MediumWidgetPreview
+import com.example.platform.ui.appwidgets.glance.layout.utils.SmallWidgetPreview
 
 /**
  * A layout focused on presenting list of items in a check list. Content is displayed in a
@@ -410,4 +417,46 @@ private object CheckListLayoutDimensions {
   val checkListRowStartPadding = 2.dp
   // Padding to be applied on right of each item if there isn't a icon button on right.
   val checkListRowEndPadding = widgetPadding
+}
+
+/**
+ * Preview sizes of layout at the configured width breakpoints.
+ */
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview(widthDp = 259, heightDp = 200)
+@Preview(widthDp = 303, heightDp = 200)
+@Preview(widthDp = 350, heightDp = 200)
+private annotation class CheckListBreakpointPreviews
+
+/**
+ * Previews for the check list layout.
+ *
+ * First we look at the previews at defined breakpoints, tweaking them as necessary. In addition,
+ * the previews at standard sizes allows us to quickly verify updates across min / max and common
+ * widget sizes without needing to run the app or manually place the widget.
+ */
+@CheckListBreakpointPreviews
+@SmallWidgetPreview
+@MediumWidgetPreview
+@LargeWidgetPreview
+@Composable
+private fun CheckListLayoutPreview() {
+  val context = LocalContext.current
+  CheckListLayout(
+    title = context.getString(R.string.sample_check_list_app_widget_name),
+    titleIconRes = R.drawable.sample_pin_icon,
+    titleBarActionIconRes = R.drawable.sample_add_icon,
+    titleBarActionIconContentDescription = context.getString(
+      R.string.sample_add_button_text,
+    ),
+    titleBarAction = actionStartDemoActivity("Add icon in title bar"),
+    items = demoData,
+    checkedItems = listOf("1"),
+    checkButtonContentDescription = context.getString(
+      R.string.sample_mark_done_button_content_description,
+    ),
+    checkedIconRes = R.drawable.sample_checked_circle_icon,
+    unCheckedIconRes = R.drawable.sample_circle_icon,
+    onCheck = {},
+  )
 }

@@ -50,6 +50,9 @@ import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImag
 import com.example.platform.ui.appwidgets.glance.layout.text.layout.TextWithImageLayoutTextStyles.secondaryTextFontValues
 import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
 import com.example.platform.ui.appwidgets.glance.layout.utils.FontUtils
+import com.example.platform.ui.appwidgets.glance.layout.utils.LargeWidgetPreview
+import com.example.platform.ui.appwidgets.glance.layout.utils.MediumWidgetPreview
+import com.example.platform.ui.appwidgets.glance.layout.utils.SmallWidgetPreview
 
 /**
  * A layout focused on presenting a long text (~65 characters), its one line caption, a supporting
@@ -487,4 +490,31 @@ private object TextWithImageLayoutDimensions {
         height = size.height - titleBarHeight - widgetPadding
       )
     }
+}
+
+@SmallWidgetPreview
+@MediumWidgetPreview
+@LargeWidgetPreview
+@Composable
+private fun TextWithImagePreview() {
+  val context = LocalContext.current
+
+  TextWithImageLayout(
+    title = context.getString(R.string.sample_text_and_image_app_widget_name),
+    titleIconRes = R.drawable.sample_text_icon,
+    titleBarActionIconRes = R.drawable.sample_refresh_icon,
+    titleBarActionIconContentDescription = context.getString(
+      R.string.sample_refresh_icon_button_label
+    ),
+    titleBarAction = {},
+    data = TextWithImageData(
+      textData = TextData(
+        key = "1",
+        primary = "This allows for a longer text string.",
+        secondary = "Specifically because the focus in this, layout is on the primary text.",
+        caption = "Ut mollis amet cursus",
+      ),
+      imageData = ImageData()
+    )
+  )
 }

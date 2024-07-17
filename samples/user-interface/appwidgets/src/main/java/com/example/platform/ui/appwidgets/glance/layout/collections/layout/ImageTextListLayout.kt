@@ -10,6 +10,7 @@ import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
 import androidx.glance.LocalSize
 import androidx.glance.action.Action
 import androidx.glance.appwidget.components.CircleIconButton
@@ -21,6 +22,8 @@ import androidx.glance.layout.ContentScale
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
+import androidx.glance.preview.ExperimentalGlancePreviewApi
+import androidx.glance.preview.Preview
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -37,6 +40,9 @@ import com.example.platform.ui.appwidgets.glance.layout.collections.layout.Image
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageTextListLayoutSize.Medium
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageTextListLayoutSize.Small
 import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
+import com.example.platform.ui.appwidgets.glance.layout.utils.LargeWidgetPreview
+import com.example.platform.ui.appwidgets.glance.layout.utils.MediumWidgetPreview
+import com.example.platform.ui.appwidgets.glance.layout.utils.SmallWidgetPreview
 
 /**
  * A layout focused on presenting a list of text with an image, and an optional icon button. The
@@ -422,4 +428,70 @@ private object Dimensions {
 
   /** Corner radius for image in each item. */
   val imageCornerRadius = 12.dp
+}
+
+/**
+ * Preview sizes for the widget covering the width based breakpoints of the image grid layout.
+ *
+ * This allows verifying updates across multiple breakpoints.
+ */
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview(widthDp = 259, heightDp = 200)
+@Preview(widthDp = 261, heightDp = 200)
+@Preview(widthDp = 480, heightDp = 200)
+@Preview(widthDp = 644, heightDp = 200)
+private annotation class ImageTextListBreakpointPreviews
+
+/**
+ * Previews for the image grid layout with both title and supporting text below the image
+ *
+ * First we look at the previews at defined breakpoints, tweaking them as necessary. In addition,
+ * the previews at standard sizes allows us to quickly verify updates across min / max and common
+ * widget sizes without needing to run the app or manually place the widget.
+ */
+@ImageTextListBreakpointPreviews
+@SmallWidgetPreview
+@MediumWidgetPreview
+@LargeWidgetPreview
+@Composable
+private fun ImageTextListLayoutPreview() {
+  val context = LocalContext.current
+
+  ImageTextListLayout(
+    items = listOf(
+      ImageTextListItemData(
+        key = "0",
+        title = "Blossom, petal, flower",
+        supportingText = "23,815 views",
+        supportingImageBitmap = null // placeholder
+      ),
+      ImageTextListItemData(
+        key = "1",
+        title = "Orchids at New York Botanical Garden",
+        supportingText = "205,481 views",
+        supportingImageBitmap = null // placeholder
+      ),
+      ImageTextListItemData(
+        key = "2",
+        title = "Tabletop composition with flower",
+        supportingText = "85,060 views",
+        supportingImageBitmap = null // placeholder
+      ),
+      ImageTextListItemData(
+        key = "3",
+        title = "Wild bee on flower",
+        supportingText = "6,692 views ",
+        supportingImageBitmap = null // placeholder
+      )
+    ),
+    title = context.getString(
+      R.string.sample_text_and_image_list_app_widget_name
+    ),
+    titleIconRes = R.drawable.sample_image_icon,
+    titleBarActionIconRes = R.drawable.sample_refresh_icon,
+    titleBarActionIconContentDescription = context.getString(
+      R.string.sample_refresh_icon_button_label
+    ),
+    titleBarAction = {},
+  )
 }
