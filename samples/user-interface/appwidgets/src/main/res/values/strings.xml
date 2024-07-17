@@ -97,5 +97,17 @@
 
     <!-- Content descriptions -->
     <string name="sample_mark_done_button_content_description">sample_mark_done</string>
+    <string name="cl_description_grid">Create visually impactful, scrollable image galleries using image-only grids. Rows and columns automatically adapt to various screen sizes for optimal presentation.</string>
+    <string name="cl_title_grid">Grid</string>
+    <string name="cl_title_text_and_image">Text and Image</string>
+    <string name="cl_description_text_and_image">Include an image for added visual impact. For more information, see Breakpoints to learn how to adapt this layout for different screen sizes.</string>
+    <string name="cl_description_image_text_list">Easily scannable text and image lists are perfect for showcasing multiple content types, such as news headlines, playlists with album art, or messages.</string>
+    <string name="cl_title_image_text_list">Image Text List</string>
+    <string name="cl_description_action_list">Provide intuitive control grouping with action lists, where visual on/off states offer immediate feedback on item statuses.</string>
+    <string name="cl_title_action_list">Action List</string>
+    <string name="cl_title_long_text">Long Text</string>
+    <string name="cl_description_long_text">Ideal for titles, status updates, short descriptions, or any scenario where a single line of text effectively conveys the message.</string>
+    <string name="cl_title_checklist">Checklist</string>
+    <string name="cl_description_checklist">The checklist layout is perfect for displaying tasks, providing clear tap targets for users to easily mark items as done.</string>
 
 </resources>

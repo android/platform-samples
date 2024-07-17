@@ -33,6 +33,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -43,13 +44,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.example.platform.ui.appwidgets.glance.layout.CanonicalLayoutActivity
 import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
     name = "App Widgets",
     description = "Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples",
     documentation = "https://developer.android.com/develop/ui/views/appwidgets/overview",
-    tags = ["App Widgets"]
+    tags = ["App Widgets"],
 )
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -59,7 +61,7 @@ fun AppWidgets() {
 
     // Get a list of our app widget providers to retrieve their info
     val widgetProviders = widgetManager.getInstalledProvidersForPackage(context.packageName, null)
-        .showCanonicalLayoutsFirst()
+        .removeCanonicalLayouts()
 
     AppWidgetsList(widgetProviders)
 }
@@ -69,9 +71,16 @@ fun AppWidgets() {
 fun AppWidgetsList(widgetProviders: List<AppWidgetProviderInfo>) {
     val context = LocalContext.current
     val widgetManager = AppWidgetManager.getInstance(context)
-    LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
         item {
             AppInfoText()
+        }
+
+        item {
+            CanonicalLayoutsRow()
         }
 
         // If the launcher does not support pinning request show a banner
@@ -87,14 +96,17 @@ fun AppWidgetsList(widgetProviders: List<AppWidgetProviderInfo>) {
     }
 }
 
-private fun MutableList<AppWidgetProviderInfo>.showCanonicalLayoutsFirst(): List<AppWidgetProviderInfo> {
-    return this.toMutableList().apply {
-        sortWith (
-            compareBy {
-                if (it.provider.className.startsWith("com.example.platform.ui.appwidgets.glance.layout")) -1 else 1
-            }
-        )
+@Composable
+private fun CanonicalLayoutsRow() {
+    val context = LocalContext.current
+    Button(onClick = { CanonicalLayoutActivity.start(context) }) {
+        Text("Canonical layout examples")
     }
+}
+
+private fun MutableList<AppWidgetProviderInfo>.removeCanonicalLayouts(): List<AppWidgetProviderInfo> {
+    return this.toMutableList()
+        .filter { !it.provider.className.startsWith("com.example.platform.ui.appwidgets.glance.layout") }
 }
 
 
@@ -111,7 +123,7 @@ private fun AppWidgetProviderInfo.pin(context: Context) {
         context,
         0,
         Intent(context, AppWidgetPinnedReceiver::class.java),
-        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+        PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
     )
 
     AppWidgetManager.getInstance(context).requestPinAppWidget(provider, null, successCallback)
@@ -121,7 +133,7 @@ private fun AppWidgetProviderInfo.pin(context: Context) {
 private fun PinUnavailableBanner() {
     Text(
         text = stringResource(
-            id = R.string.placeholder_app_widget_pin_unavailable
+            id = R.string.placeholder_app_widget_pin_unavailable,
         ),
         modifier = Modifier
             .fillMaxWidth()
@@ -134,7 +146,7 @@ private fun AppInfoText() {
     Text(
         text = stringResource(id = R.string.placeholder_app_widget),
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxWidth(),
     )
 }
 
@@ -150,7 +162,7 @@ private fun WidgetInfoCard(providerInfo: AppWidgetProviderInfo) {
     val context = LocalContext.current
     val label = providerInfo.loadLabel(context.packageManager)
     val description = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        (providerInfo.loadDescription(context)?:"").toString();
+        (providerInfo.loadDescription(context) ?: "").toString();
     } else {
         "Description not available"
     }
@@ -160,17 +172,22 @@ private fun WidgetInfoCard(providerInfo: AppWidgetProviderInfo) {
             .fillMaxWidth(),
         onClick = {
             providerInfo.pin(context)
-        }
+        },
     ) {
-        Row(modifier = Modifier.fillMaxWidth().padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
             Column(modifier = Modifier.padding(end = 8.dp)) {
                 Text(
                     text = label,
-                    style = MaterialTheme.typography.titleSmall
+                    style = MaterialTheme.typography.titleSmall,
                 )
                 Text(
                     text = description,
-                    style = MaterialTheme.typography.bodyMedium
+                    style = MaterialTheme.typography.bodyMedium,
                 )
             }
             Image(painter = preview, contentDescription = description)
