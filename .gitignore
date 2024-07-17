@@ -51,3 +51,6 @@ docs-gen
 site
 *.bak
 .idea/appInsightsSettings.xml
+
+#TFLite
+*.tflite
