@@ -36,4 +36,7 @@ dependencies {
     // Recommended to use WorkManager to load data for widgets
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.material)
+
+    debugImplementation(libs.androidx.glance.preview)
+    debugImplementation(libs.androidx.glance.appwidget.preview)
 }

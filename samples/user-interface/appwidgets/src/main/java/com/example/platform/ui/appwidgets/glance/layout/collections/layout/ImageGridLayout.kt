@@ -10,6 +10,7 @@ import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
 import androidx.glance.Image
 import androidx.glance.ImageProvider
+import androidx.glance.LocalContext
 import androidx.glance.LocalSize
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.components.CircleIconButton
@@ -22,6 +23,8 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
 import androidx.glance.layout.wrapContentHeight
+import androidx.glance.preview.ExperimentalGlancePreviewApi
+import androidx.glance.preview.Preview
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -36,6 +39,9 @@ import com.example.platform.ui.appwidgets.glance.layout.collections.layout.Image
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridLayoutSize.Medium
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridLayoutSize.Small
 import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils
+import com.example.platform.ui.appwidgets.glance.layout.utils.LargeWidgetPreview
+import com.example.platform.ui.appwidgets.glance.layout.utils.MediumWidgetPreview
+import com.example.platform.ui.appwidgets.glance.layout.utils.SmallWidgetPreview
 
 /**
  * A layout focused on presenting a grid of images (with optional title and supporting text). The
@@ -295,4 +301,105 @@ private object ImageGridLayoutDimensions {
         else -> 1
       }
     }
+}
+
+/**
+ * Preview sizes for the widget covering the width based breakpoints of the image grid layout.
+ *
+ * This allows verifying updates across multiple breakpoints.
+ */
+@OptIn(ExperimentalGlancePreviewApi::class)
+@Preview(widthDp = 319, heightDp = 200)
+@Preview(widthDp = 321, heightDp = 200)
+@Preview(widthDp = 518, heightDp = 200)
+@Preview(widthDp = 520, heightDp = 200)
+private annotation class ImageGridBreakpointPreviews
+
+/**
+ * Previews for the image grid layout with both title and supporting text below the image
+ *
+ * First we look at the previews at defined breakpoints, tweaking them as necessary. In addition,
+ * the previews at standard sizes allows us to quickly verify updates across min / max and common
+ * widget sizes without needing to run the app or manually place the widget.
+ */
+@ImageGridBreakpointPreviews
+@SmallWidgetPreview
+@MediumWidgetPreview
+@LargeWidgetPreview
+@Composable
+private fun ImageTextGridLayoutPreview() {
+  val context = LocalContext.current
+
+  ImageGridLayout(
+    title = context.getString(R.string.sample_image_grid_app_widget_name),
+    titleIconRes = R.drawable.sample_grid_icon,
+    titleBarActionIconRes = R.drawable.sample_refresh_icon,
+    titleBarActionIconContentDescription = context.getString(
+      R.string.sample_refresh_icon_button_label
+    ),
+    titleBarAction = {},
+    items = listOf(
+      ImageGridItemData(
+        key = "0",
+        image = null, // placeholder
+        imageContentDescription = "A single water droplet rests in a budding red pansy.",
+        title = "A single water droplet rests in a budding red pansy.",
+        supportingText = "193 views"
+      ),
+      ImageGridItemData(
+        key = "1",
+        image = null, // placeholder
+        imageContentDescription = "A single water droplet rests in a budding red pansy.",
+        title = "A single water droplet rests in a budding red pansy.",
+        supportingText = "193 views"
+      ),
+      ImageGridItemData(
+        key = "2",
+        image = null, // placeholder
+        imageContentDescription = "Green plant, sky and flowers",
+        title = "Green plant, sky and flowers",
+        supportingText = "99,467 views"
+      ),
+      ImageGridItemData(
+        key = "3",
+        image = null, // placeholder
+        imageContentDescription = "A snow-shoer walking up Strelapass",
+        title = "A snow-shoer walking up Strelapass",
+        supportingText = "3,033 views"
+      )
+    )
+  )
+}
+
+/**
+ * Previews for the image grid layout with only images
+ *
+ * First we look at the previews at defined breakpoints, tweaking them as necessary. In addition,
+ * the previews at standard sizes allows us to quickly verify updates across min / max and common
+ * widget sizes without needing to run the app or manually place the widget.
+ */
+@ImageGridBreakpointPreviews
+@SmallWidgetPreview
+@MediumWidgetPreview
+@LargeWidgetPreview
+@Composable
+private fun ImageOnlyGridLayoutPreview() {
+  val context = LocalContext.current
+
+  ImageGridLayout(
+    title = context.getString(R.string.sample_image_grid_app_widget_name),
+    titleIconRes = R.drawable.sample_grid_icon,
+    titleBarActionIconRes = R.drawable.sample_refresh_icon,
+    titleBarActionIconContentDescription = context.getString(
+      R.string.sample_refresh_icon_button_label
+    ),
+    titleBarAction = {},
+    items = (0..5).map { index ->
+      ImageGridItemData(
+        key = "$index",
+        image = null, // placeholder
+        imageContentDescription = null,
+      )
+    }
+  )
 }
