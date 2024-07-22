@@ -87,7 +87,8 @@ class TransformerTFLite : Fragment() {
                 Log.i(TAG, "Transformation is completed")
                 exportStopwatch?.stop()
                 playOutput()
-                binding.exportButton.isEnabled = true
+                // Don't re-enable options to export with another style, because the result looks
+                // glitchy on subsequent exports. Consider looking into why this is the case.
             }
 
             override fun onError(
@@ -96,7 +97,6 @@ class TransformerTFLite : Fragment() {
             ) {
                 exportStopwatch?.stop()
                 Log.i(TAG, "Error during transformation:" + exception.errorCodeName)
-                binding.exportButton.isEnabled = true
             }
         }
 
@@ -121,6 +121,9 @@ class TransformerTFLite : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.exportButton.setOnClickListener {
             binding.exportButton.isEnabled = false
+            for (i in 0..<binding.styleRadioGroup.childCount) {
+                binding.styleRadioGroup.getChildAt(i).isEnabled = false
+            }
             exportComposition()
         }
 

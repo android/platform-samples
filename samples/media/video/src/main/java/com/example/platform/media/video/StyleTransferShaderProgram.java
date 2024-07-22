@@ -52,9 +52,11 @@ import java.nio.ByteBuffer;
 
 import javax.microedition.khronos.opengles.GL10;
 
+// TODO: Migrate this class to Kotlin
 @UnstableApi
 final class StyleTransferShaderProgram extends BaseGlShaderProgram {
 
+    private static final String TAG = "StyleTransferSP";
     private static final String VERTEX_SHADER_PATH = "shaders/vertex_shader_transformation_es2.glsl";
     private static final String FRAGMENT_SHADER_PATH = "shaders/fragment_shader_copy_es2.glsl";
 
@@ -108,7 +110,7 @@ final class StyleTransferShaderProgram extends BaseGlShaderProgram {
             predictOutput = TensorBuffer.createFixedSize(outputPredictShape, DataType.FLOAT32);
             predictInterpeter.run(styleTensorImage.getBuffer(), predictOutput.getBuffer());
         } catch (IOException | GlUtil.GlException e) {
-            Log.w("DEBUG", "Error setting up TfShaderProgram", e);
+            Log.w(TAG, "Error setting up TfShaderProgram", e);
             throw new VideoFrameProcessingException(e);
         }
     }
@@ -145,11 +147,11 @@ final class StyleTransferShaderProgram extends BaseGlShaderProgram {
             bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
             bitmap.copyPixelsFromBuffer(pixelBuffer);
 
-            Log.w("DEBUG", "Process frame at " + (presentationTimeUs / 1000) + " ms");
+            Log.w(TAG, "Process frame at " + (presentationTimeUs / 1000) + " ms");
             long before = System.currentTimeMillis();
             TensorImage tensorImage =
                     getScaledTensorImage(bitmap, inputTransformTargetWidth, inputTransformTargetHeight);
-            Log.w("DEBUG", "- Scale " + (System.currentTimeMillis() - before) + " ms");
+            Log.w(TAG, "- Scale " + (System.currentTimeMillis() - before) + " ms");
             TensorBuffer outputImage =
                     TensorBuffer.createFixedSize(outputTransformShape, DataType.FLOAT32);
 
@@ -158,7 +160,7 @@ final class StyleTransferShaderProgram extends BaseGlShaderProgram {
                     new Object[] {tensorImage.getBuffer(), predictOutput.getBuffer()},
                     ImmutableMap.<Integer, Object>builder().put(0, outputImage.getBuffer()).build());
 
-            Log.w("DEBUG", "- Run " + (System.currentTimeMillis() - before) + " ms");
+            Log.w(TAG, "- Run " + (System.currentTimeMillis() - before) + " ms");
 
             before = System.currentTimeMillis();
             ImageProcessor imagePostProcessor =
@@ -167,11 +169,11 @@ final class StyleTransferShaderProgram extends BaseGlShaderProgram {
                             .build();
             TensorImage outputTensorImage = new TensorImage(DataType.FLOAT32);
             outputTensorImage.load(outputImage);
-            Log.w("DEBUG", "- Load output " + (System.currentTimeMillis() - before) + " ms");
+            Log.w(TAG, "- Load output " + (System.currentTimeMillis() - before) + " ms");
 
             before = System.currentTimeMillis();
             Bitmap outputBitmap = imagePostProcessor.process(outputTensorImage).getBitmap();
-            Log.w("DEBUG", "- Post process output " + (System.currentTimeMillis() - before) + " ms");
+            Log.w(TAG, "- Post process output " + (System.currentTimeMillis() - before) + " ms");
 
             texId =
                     GlUtil.createTexture(
@@ -193,7 +195,6 @@ final class StyleTransferShaderProgram extends BaseGlShaderProgram {
             float[] identityMatrix = GlUtil.create4x4IdentityMatrix();
             glProgram.setFloatsUniform("uTexTransformationMatrix", identityMatrix);
             glProgram.setFloatsUniform("uTransformationMatrix", identityMatrix);
-            // glProgram.setFloatsUniform("uRgbMatrix", identityMatrix);
             glProgram.setBufferAttribute(
                     "aFramePosition",
                     GlUtil.getNormalizedCoordinateBounds(),

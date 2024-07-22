@@ -116,7 +116,7 @@ The sample demonstrates the importance of having proper labels for
 A sample showcasing how to handle calls with the Jetpack Telecom API
 - [TextSpan](user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.
-- [Transformer and TFLite integration](media/video/src/main/java/com/example/platform/media/video/TransformerTFLite.kt):
+- [Transformer and TFLite](media/video/src/main/java/com/example/platform/media/video/TransformerTFLite.kt):
 This sample demonstrates using Transformer with TFLite by applying a selected art style to a video.
 - [UltraHDR Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2UltraHDRCapture.kt):
 This sample demonstrates how to capture a 10-bit compressed still image and 
