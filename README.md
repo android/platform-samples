@@ -17,6 +17,7 @@ Browse the samples inside each topic samples folder:
 - [Connectivity](https://github.com/android/platform-samples/tree/main/samples/connectivity)
 - [Graphics](https://github.com/android/platform-samples/tree/main/samples/graphics)
 - [Location](https://github.com/android/platform-samples/tree/main/samples/location)
+- [Media](https://github.com/android/platform-samples/tree/main/samples/media)
 - [Privacy](https://github.com/android/platform-samples/tree/main/samples/privacy)
 - [Storage](https://github.com/android/platform-samples/tree/main/samples/storage)
 - [User-interface](https://github.com/android/platform-samples/tree/main/samples/user-interface)
