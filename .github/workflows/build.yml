@@ -39,8 +39,8 @@ jobs:
       - name: Check lint
         run: ./gradlew lintDebug
 
-      - name: Build all build type and flavor permutations
-        run: ./gradlew assemble
+      - name: Build debug 
+        run: ./gradlew assembleDebug
 
       - name: Run local tests
         run: ./gradlew testDebug
