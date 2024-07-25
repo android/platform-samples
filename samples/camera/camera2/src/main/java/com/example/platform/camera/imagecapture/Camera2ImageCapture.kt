@@ -56,7 +56,7 @@ import kotlin.coroutines.suspendCoroutine
 
 @Sample(
     name = "Image Capture",
-    description = "This sample demonstrates how to capture and image using Camera2 and encode it " +
+    description = "This sample demonstrates how to capture an image using Camera2 and encode it " +
             "into a JPEG container.",
     documentation = "https://developer.android.com/training/camera2/capture-sessions-requests",
     tags = ["Camera2"]

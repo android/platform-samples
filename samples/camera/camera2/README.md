@@ -2,7 +2,14 @@
 
 This is a catalog of camera2-specific APIs to demonstrate the usage and capabilities of the API.
 
-> 🚧 **Work-in-Progress:** we are working on brining more existing and new samples for camera2
+- [Camera Preview]():
+  Demonstrates displaying processed pixel data directly from the camera sensor to the screen using Camera2.
+- [Image Capture]():
+  Demonstrates how to capture an image using Camera2 and encode it into a JPEG container.
+- [UltraHDR Image Capture]():
+  Demonstrates how to capture a 10-bit compressed still image and store it using the new UltraHDR image format using Camera2.
+
+> 🚧 **Work-in-Progress:** we are working on brining more existing and new samples for camera2, and soon, CameraX as well
 
 Check out our guides at https://developer.android.com/training/camera2
 
