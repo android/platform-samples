@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Validate Gradle Wrapper
         uses: gradle/wrapper-validation-action@v1
@@ -46,25 +46,25 @@ jobs:
         run: ./gradlew testDebug
 
       - name: Upload build outputs (APKs)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-outputs
           path: app/build/outputs
 
       - name: Upload build reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-reports
           path: app/build/reports
 
   androidTest:
     needs: build
-    runs-on: macOS-latest # enables hardware acceleration in the virtual machine
+    runs-on: macos-latest-large
     timeout-minutes: 55
     strategy:
       matrix:
-        api-level: [26, 30]
+        api-level: [31, 34]
 
     steps:
       - name: Checkout
@@ -94,7 +94,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports-${{ matrix.api-level }}
           path: '*/build/reports/androidTests'
