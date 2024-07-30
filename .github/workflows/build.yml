@@ -109,7 +109,7 @@ jobs:
           disk-size: 6000M
           heap-size: 600M
           script: ./gradlew connectedDebugAndroidTest --daemon
-          max_attempts: 3 # Accoun for flaky emulators
+          max_attempts: 3 # Account for flaky emulators
 
 
       - name: Upload test reports
