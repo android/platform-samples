@@ -13,6 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+buildscript {
+    dependencies {
+        classpath("de.undercouch:gradle-download-task:4.1.2")
+    }
+}
+
 @Suppress("DSL_SCOPE_VIOLATION")
 plugins {
     alias(libs.plugins.android.application) apply false
@@ -38,7 +44,7 @@ versionCatalogUpdate {
 affectedModuleDetector {
     baseDir = "${project.rootDir}"
     pathsAffectingAllModules = setOf(
-            "gradle/libs.versions.toml",
+        "gradle/libs.versions.toml",
     )
     excludedModules = setOf<String>()
 

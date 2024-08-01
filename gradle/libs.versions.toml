@@ -44,6 +44,9 @@ material = "1.12.0-beta01"
 constraintlayout = "2.1.4"
 glide-compose = "1.0.0-beta01"
 glance = "1.1.0-SNAPSHOT"
+tensorflowLite = "2.9.0"
+tensorflowLiteGpuDelegatePlugin = "0.4.4"
+tensorflowLiteSupport = "0.4.2"
 
 [libraries]
 
@@ -155,6 +158,11 @@ glide-compose = { group = "com.github.bumptech.glide", name = "compose", version
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
+tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tensorflowLite" }
+tensorflow-lite-gpu-delegate-plugin = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "tensorflowLiteGpuDelegatePlugin" }
+tensorflow-lite-select-tf-ops = { module = "org.tensorflow:tensorflow-lite-select-tf-ops", version.ref = "tensorflowLite" }
+tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
 
 [plugins]
 affectedmoduledetector = { id = "com.dropbox.affectedmoduledetector", version = "0.2.0" }

@@ -23,6 +23,10 @@
     <string name="scale_video">Scale video</string>
     <string name="grayscale">Grayscale</string>
     <string name="image">Add intro image</string>
+    <string name="export_with_style">Export with style transfer</string>
+    <string name="style1">Style 1</string>
+    <string name="style2">Style 2</string>
+    <string name="style3">Style 3</string>
     <string-array name="composition_configuration">
         <item>Add background audio</item>
         <item>Scale video</item>
