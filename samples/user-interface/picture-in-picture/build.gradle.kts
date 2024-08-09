@@ -23,6 +23,7 @@ plugins {
 android {
     namespace = "com.example.android.pip"
     viewBinding.isEnabled = true
+    compileSdk = 35
 }
 
 dependencies {

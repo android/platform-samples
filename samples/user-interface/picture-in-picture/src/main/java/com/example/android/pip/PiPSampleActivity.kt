@@ -18,6 +18,7 @@ package com.example.android.pip
 
 import android.app.PendingIntent
 import android.app.PictureInPictureParams
+import android.app.PictureInPictureUiState
 import android.app.RemoteAction
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -63,7 +64,7 @@ private const val REQUEST_START_OR_PAUSE = 4
     description = "Basic usage of Picture-in-Picture mode showcasing a stopwatch",
     documentation = "https://developer.android.com/develop/ui/views/picture-in-picture",
 )
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(26)
 class PiPSampleActivity : AppCompatActivity() {
 
     private val viewModel: PiPViewModel by viewModels()
@@ -128,14 +129,21 @@ class PiPSampleActivity : AppCompatActivity() {
         newConfig: Configuration,
     ) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        if (isInPictureInPictureMode) {
-            // Hide in-app buttons. They cannot be interacted in the picture-in-picture mode, and
-            // their features are provided as the action icons.
-            binding.clear.visibility = View.GONE
-            binding.startOrPause.visibility = View.GONE
-        } else {
-            binding.clear.visibility = View.VISIBLE
-            binding.startOrPause.visibility = View.VISIBLE
+        // Toggle visibility of in-app buttons. They cannot be interacted in the picture-in-picture
+        // mode, and their features are provided as the action icons.
+        toggleControls(if (isInPictureInPictureMode) View.GONE else View.VISIBLE)
+    }
+
+    private fun toggleControls(view: Int) {
+        binding.clear.visibility = view
+        binding.startOrPause.visibility = view
+    }
+
+    @RequiresApi(35)
+    override fun onPictureInPictureUiStateChanged(pipState: PictureInPictureUiState) {
+        super.onPictureInPictureUiStateChanged(pipState)
+        if (pipState.isTransitioningToPip) {
+            toggleControls(View.GONE)
         }
     }
 

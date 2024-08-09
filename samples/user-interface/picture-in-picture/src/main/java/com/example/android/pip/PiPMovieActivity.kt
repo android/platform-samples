@@ -17,6 +17,7 @@
 package com.example.android.pip
 
 import android.app.PictureInPictureParams
+import android.app.PictureInPictureUiState
 import android.content.res.Configuration
 import android.graphics.Rect
 import android.os.Build
@@ -194,6 +195,15 @@ class PiPMovieActivity : AppCompatActivity() {
             }
         }
     }
+
+    @RequiresApi(35)
+    override fun onPictureInPictureUiStateChanged(pipState: PictureInPictureUiState) {
+        super.onPictureInPictureUiStateChanged(pipState)
+        if (pipState.isTransitioningToPip) {
+            binding.movie.hideControls()
+        }
+    }
+
 
     private fun updatePictureInPictureParams(): PictureInPictureParams {
         // Calculate the aspect ratio of the PiP screen.
