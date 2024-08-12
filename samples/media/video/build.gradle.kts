@@ -37,4 +37,9 @@ dependencies {
     implementation(libs.androidx.media3.ui)
     implementation(libs.androidx.media3.effect)
     implementation(libs.material)
+
+    implementation ("com.google.mediapipe:tasks-vision:0.10.14")
+    implementation ("com.google.mediapipe:solution-core:0.10.14")
+
+
 }
