@@ -53,7 +53,7 @@ Shows various vibration effects.
 - [Hyphenation](user-interface/text/src/main/java/com/example/platform/ui/text/Hyphenation.kt):
 Demonstrates different options for the `android:hyphenationFrequency` attribute
 - [Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2ImageCapture.kt):
-This sample demonstrates how to capture and image using Camera2 and encode it 
+This sample demonstrates how to capture an image using Camera2 and encode it 
 - [Immersive mode](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/ImmersiveMode.kt):
 Immersive mode enables your app to display full-screen by hiding system bars.
 - [LineBreak](user-interface/text/src/main/java/com/example/platform/ui/text/LineBreak.kt):
@@ -116,6 +116,8 @@ The sample demonstrates the importance of having proper labels for
 A sample showcasing how to handle calls with the Jetpack Telecom API
 - [TextSpan](user-interface/text/src/main/java/com/example/platform/ui/text/TextSpan.kt):
 buildSpannedString is useful for quickly building a rich text.
+- [Transformer and MediaPipe Integration](media/video/src/main/java/com/example/platform/media/video/TransformerMediaPipeIntegration.kt):
+This sample demonstrates using Transformer and MediaPipe to show object detection in a video
 - [UltraHDR Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2UltraHDRCapture.kt):
 This sample demonstrates how to capture a 10-bit compressed still image and 
 - [UltraHDR to HDR Video](media/ultrahdr/src/main/java/com/example/platform/media/ultrahdr/video/UltraHDRToHDRVideo.kt):
@@ -123,7 +125,7 @@ This sample demonstrates converting a series of UltraHDR images into a HDR
 - [UltraHDR x OpenGLES SurfaceView](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/opengl/UltraHDRWithOpenGL.kt):
 This sample demonstrates displaying an UltraHDR image via and OpenGL Pipeline 
 - [Video Composition using Media3 Transformer](media/video/src/main/java/com/example/platform/media/video/TransformerVideoComposition.kt):
-This sample demonstrates concatenation of two video assets and an image using Media3.
+This sample demonstrates concatenation of two video assets and an image using
 - [Visualizing an UltraHDR Gainmap](graphics/ultrahdr/src/main/java/com/example/platform/graphics/ultrahdr/display/VisualizingAnUltraHDRGainmap.kt):
 This sample demonstrates visualizing the underlying gainmap of an UltraHDR 
 - [WindowInsetsAnimation](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/WindowInsetsAnimation.kt):

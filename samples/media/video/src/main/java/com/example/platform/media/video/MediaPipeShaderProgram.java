@@ -16,290 +16,195 @@
 
 package com.example.platform.media.video;
 
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.RectF;
+import android.opengl.GLES20;
+import android.opengl.Matrix;
+import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
+
 import androidx.annotation.OptIn;
 import androidx.media3.common.VideoFrameProcessingException;
-
-import android.content.Context;
-import android.opengl.EGL14;
-import androidx.annotation.Nullable;
-import androidx.media3.common.C;
-import androidx.media3.common.GlObjectsProvider;
-import androidx.media3.common.GlTextureInfo;
-import androidx.media3.common.VideoFrameProcessingException;
-import androidx.media3.common.util.LibraryLoader;
+import androidx.media3.common.util.GlUtil;
+import androidx.media3.common.util.Log;
+import androidx.media3.common.util.Size;
 import androidx.media3.common.util.UnstableApi;
-import androidx.media3.common.util.Util;
-import androidx.media3.effect.GlShaderProgram;
-import com.google.common.util.concurrent.MoreExecutors;
-import com.google.mediapipe.components.FrameProcessor;
-import com.google.mediapipe.framework.AppTextureFrame;
-import com.google.mediapipe.framework.TextureFrame;
-import com.google.mediapipe.glutil.EglManager;
-import java.util.ArrayDeque;
-import java.util.Queue;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
+import androidx.media3.effect.BaseGlShaderProgram;
+import androidx.media3.effect.OverlayEffect;
+import androidx.media3.effect.TextOverlay;
 
-/** Runs a MediaPipe graph on input frames. */
-/* package */ @UnstableApi
-final class MediaPipeShaderProgram implements GlShaderProgram {
+import com.google.common.collect.ImmutableList;
+import com.google.mediapipe.framework.image.BitmapImageBuilder;
+import com.google.mediapipe.framework.image.MPImage;
+import com.google.mediapipe.tasks.components.containers.Detection;
+import com.google.mediapipe.tasks.core.BaseOptions;
+import com.google.mediapipe.tasks.core.Delegate;
+import com.google.mediapipe.tasks.vision.core.ImageProcessingOptions;
+import com.google.mediapipe.tasks.vision.core.RunningMode;
+import com.google.mediapipe.tasks.vision.facedetector.FaceDetector;
+import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetector;
+import com.google.mediapipe.tasks.vision.objectdetector.ObjectDetectorResult;
 
-    private static final String THREAD_NAME = "Demo:MediaPipeShaderProgram";
-    private static final long RELEASE_WAIT_TIME_MS = 100;
-    private static final long RETRY_WAIT_TIME_MS = 1;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 
-    private static final LibraryLoader LOADER =
-            new LibraryLoader("mediapipe_jni") {
-                @Override
-                protected void loadLibrary(String name) {
-                    System.loadLibrary(name);
-                }
-            };
+/**
+ * Runs a MediaPipe graph on input frames.
+ */
+/* package */
+@UnstableApi
+final class MediaPipeShaderProgram extends BaseGlShaderProgram {
+
+    private static final String TAG = "MediaPipeShaderProgram";
+
+    private final ObjectDetector objectDetector;
+    private final BaseGlShaderProgram overlayShaderProgram;
 
     static {
-        // Not all build configurations require OpenCV to be loaded separately, so attempt to load the
-        // library but ignore the error if it's not present.
+        System.loadLibrary("mediapipe_tasks_vision_jni");
+    }
+
+    private int width;
+    private int height;
+
+    private static final class OverlayInfo {
+        public String description;
+        public float xOffset;
+        public float yOffset;
+        public float scale = 1;
+    }
+
+    private static final int MAX_OVERLAYS = 1;
+    private final OverlayInfo[] overlayInfos;
+
+    private Bitmap overlay;
+    private float overlayToInputScaleX = -1;
+    private float overlayToInputScaleY = -1;
+
+    @OptIn(markerClass = UnstableApi.class)
+    public MediaPipeShaderProgram(Context context) throws VideoFrameProcessingException {
+        super(/* useHighPrecisionColorComponents= */ false, /* texturePoolCapacity= */ 1);
+        BaseOptions baseOptions =
+                BaseOptions.builder()
+                        .setDelegate(Delegate.CPU)
+                        .setModelAssetPath("efficientdet_lite0.tflite")
+                        .build();
+
+        overlayInfos = new OverlayInfo[MAX_OVERLAYS];
+        for (int i = 0; i < MAX_OVERLAYS; i++) {
+            overlayInfos[i] = new OverlayInfo();
+        }
+        ObjectDetector.ObjectDetectorOptions objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder().setBaseOptions(baseOptions).setScoreThreshold(0.5f).setMaxResults(MAX_OVERLAYS).setRunningMode(RunningMode.VIDEO)
+                .setErrorListener(e -> Log.w("DEBUG", "Error from media pipe", e))
+                .build();
+        objectDetector = ObjectDetector.createFromOptions(context, objectDetectorOptions);
+
+
+        TextOverlay[] textOverlays = new TextOverlay[MAX_OVERLAYS];
+        for (int i = 0; i < MAX_OVERLAYS; i++) {
+            OverlayInfo overlayInfo = new OverlayInfo();
+            overlayInfos[i] = overlayInfo;
+            overlayInfo.description = " ";
+            textOverlays[i] = new TextOverlay() {
+                @Override
+                public SpannableString getText(long presentationTimeUs) {
+                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(overlayInfo.description);
+                    ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.WHITE);
+                    //RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(0.5f);
+                    spannableStringBuilder.setSpan(foregroundColorSpan, 0, spannableStringBuilder.length(), SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    //spannableStringBuilder.setSpan(relativeSizeSpan, 0, spannableStringBuilder.length(), SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    return SpannableString.valueOf(spannableStringBuilder);
+                }
+
+                @Override
+                public float[] getVertexTransformation(long presentationTimeUs) {
+                    float[] temp = GlUtil.create4x4IdentityMatrix();
+                    Matrix.translateM(temp, 0, overlayInfo.xOffset, overlayInfo.yOffset, 0);
+                    Matrix.scaleM(temp, /* offset */ 0, /* x= */ 1f, /* y= */ -1f, /* z= */ 1f);
+                    return temp;
+                }
+            };
+        }
+
+        overlayShaderProgram = new OverlayEffect(ImmutableList.copyOf(textOverlays)).toGlShaderProgram(context, false);
+    }
+
+
+    @OptIn(markerClass = UnstableApi.class)
+    @Override
+    public Size configure(int inputWidth, int inputHeight) throws VideoFrameProcessingException {
+        width = inputWidth;
+        height = inputHeight;
+        overlayShaderProgram.configure(inputWidth, inputHeight);
+        overlayToInputScaleX = (float) width / overlay.getWidth();
+        overlayToInputScaleY = (float) height / overlay.getHeight();
+        return new Size(inputWidth, inputHeight);
+    }
+
+    @Override
+    public void drawFrame(int inputTexId, long presentationTimeUs)
+            throws VideoFrameProcessingException {
+        ByteBuffer pixelBuffer = ByteBuffer.allocateDirect(width * height * 4);
+        Bitmap bitmap;
         try {
-            System.loadLibrary("opencv_java3");
-        } catch (UnsatisfiedLinkError e) {
-            // Do nothing.
-        }
-    }
+            int[] boundFramebuffer = new int[1];
+            GLES20.glGetIntegerv(GLES20.GL_FRAMEBUFFER_BINDING, boundFramebuffer, /* offset= */ 0);
+            int fboId = GlUtil.createFboForTexture(inputTexId);
+            GlUtil.focusFramebufferUsingCurrentContext(fboId, width, height);
+            GLES20.glReadPixels(
+                    /* x= */ 0,
+                    /* y= */ 0,
+                    width,
+                    height,
+                    GLES20.GL_RGBA,
+                    GLES20.GL_UNSIGNED_BYTE,
+                    pixelBuffer);
+            GlUtil.checkGlError();
+            bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888);
+            bitmap.copyPixelsFromBuffer(pixelBuffer);
 
-    private final FrameProcessor frameProcessor;
-    private final ConcurrentHashMap<GlTextureInfo, TextureFrame> outputFrames;
-    private final boolean isSingleFrameGraph;
-    @Nullable private final ExecutorService singleThreadExecutorService;
-    private final Queue<Future<?>> futures;
+            //Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 320, 320, true);
+            MPImage mpImage = new BitmapImageBuilder(bitmap).build();
 
-    private InputListener inputListener;
-    private OutputListener outputListener;
-    private ErrorListener errorListener;
-    private Executor errorListenerExecutor;
-    private boolean acceptedFrame;
+            //objectDetector.detectAsync(mpImage, ImageProcessingOptions.builder().setRotationDegrees(180).build(), presentationTimeUs / 1000);
+            ObjectDetectorResult result = objectDetector.detectForVideo(mpImage, ImageProcessingOptions.builder().setRotationDegrees(180).build(), presentationTimeUs / 1000);
+            updateObjectDetection(result);
+            //scaledBitmap.recycle();
+            bitmap.recycle();
 
-    /**
-     * Creates a new shader program that wraps a MediaPipe graph.
-     *
-     * <p>If {@code isSingleFrameGraph} is {@code false}, the {@code MediaPipeShaderProgram} may waste
-     * CPU time by continuously attempting to queue input frames to MediaPipe until they are accepted
-     * or waste memory if MediaPipe accepts and stores many frames internally.
-     *
-     * @param context The {@link Context}.
-     * @param useHdr Whether input textures come from an HDR source. If {@code true}, colors will be
-     *     in linear RGB BT.2020. If {@code false}, colors will be in linear RGB BT.709.
-     * @param graphName Name of a MediaPipe graph asset to load.
-     * @param isSingleFrameGraph Whether the MediaPipe graph will eventually produce one output frame
-     *     each time an input frame (and no other input) has been queued.
-     * @param inputStreamName Name of the input video stream in the graph.
-     * @param outputStreamName Name of the input video stream in the graph.
-     */
-    public MediaPipeShaderProgram(
-            Context context,
-            boolean useHdr,
-            String graphName,
-            boolean isSingleFrameGraph,
-            String inputStreamName,
-            String outputStreamName) {
-        checkState(LOADER.isAvailable());
-        // TODO(b/227624622): Confirm whether MediaPipeShaderProgram could support HDR colors.
-        checkArgument(!useHdr, "MediaPipeShaderProgram does not support HDR colors.");
-
-        this.isSingleFrameGraph = isSingleFrameGraph;
-        singleThreadExecutorService =
-                isSingleFrameGraph ? null : Util.newSingleThreadExecutor(THREAD_NAME);
-        futures = new ArrayDeque<>();
-        inputListener = new InputListener() {};
-        outputListener = new OutputListener() {};
-        errorListener = (videoFrameProcessingException) -> {};
-        errorListenerExecutor = MoreExecutors.directExecutor();
-        EglManager eglManager = new EglManager(EGL14.eglGetCurrentContext());
-        frameProcessor =
-                new FrameProcessor(
-                        context, eglManager.getNativeContext(), graphName, inputStreamName, outputStreamName);
-        outputFrames = new ConcurrentHashMap<>();
-        // OnWillAddFrameListener is called on the same thread as frameProcessor.onNewFrame(...), so no
-        // synchronization is needed for acceptedFrame.
-        frameProcessor.setOnWillAddFrameListener((long timestamp) -> acceptedFrame = true);
-    }
-
-    @Override
-    public void setInputListener(InputListener inputListener) {
-        this.inputListener = inputListener;
-        if (!isSingleFrameGraph || outputFrames.isEmpty()) {
-            inputListener.onReadyToAcceptInputFrame();
+            GlUtil.focusFramebufferUsingCurrentContext(boundFramebuffer[0], width, height);
+            overlayShaderProgram.drawFrame(inputTexId, presentationTimeUs);
+        } catch (GlUtil.GlException e) {
+            onError(e);
         }
     }
 
     @Override
-    public void setOutputListener(OutputListener outputListener) {
-        this.outputListener = outputListener;
-        frameProcessor.setConsumer(
-                frame -> {
-                    GlTextureInfo texture =
-                            new GlTextureInfo(
-                                    frame.getTextureName(),
-                                    /* fboId= */ C.INDEX_UNSET,
-                                    /* rboId= */ C.INDEX_UNSET,
-                                    frame.getWidth(),
-                                    frame.getHeight());
-                    outputFrames.put(texture, frame);
-                    outputListener.onOutputFrameAvailable(texture, frame.getTimestamp());
-                });
+    public void release() throws VideoFrameProcessingException {
+        overlayShaderProgram.release();
+        super.release();
     }
 
-    @Override
-    public void setErrorListener(Executor executor, ErrorListener errorListener) {
-        this.errorListenerExecutor = executor;
-        this.errorListener = errorListener;
-        frameProcessor.setAsynchronousErrorListener(
-                error ->
-                        errorListenerExecutor.execute(
-                                () -> errorListener.onError(new VideoFrameProcessingException(error))));
-    }
-
-    @Override
-    public void queueInputFrame(
-            GlObjectsProvider glObjectsProvider, GlTextureInfo inputTexture, long presentationTimeUs) {
-        AppTextureFrame appTextureFrame =
-                new AppTextureFrame(inputTexture.texId, inputTexture.width, inputTexture.height);
-        // TODO(b/238302213): Handle timestamps restarting from 0 when applying effects to a playlist.
-        //  MediaPipe will fail if the timestamps are not monotonically increasing.
-        //  Also make sure that a MediaPipe graph producing additional frames only starts producing
-        //  frames for the next MediaItem after receiving the first frame of that MediaItem as input
-        //  to avoid MediaPipe producing extra frames after the last MediaItem has ended.
-        appTextureFrame.setTimestamp(presentationTimeUs);
-        if (isSingleFrameGraph) {
-            boolean acceptedFrame = maybeQueueInputFrameSynchronous(appTextureFrame, inputTexture);
-            checkState(
-                    acceptedFrame,
-                    "queueInputFrame must only be called when a new input frame can be accepted");
-            return;
+    private void updateObjectDetection(ObjectDetectorResult result) {
+        Log.w("DEBUG", "Result " + result);
+        int index = 0;
+        for (Detection detection : result.detections()) {
+            RectF boundingBox = detection.boundingBox();
+            overlayInfos[index].xOffset = -7 * (boundingBox.centerX() - width / 2f) / (width / 2f);
+            overlayInfos[index].yOffset = 7 * (boundingBox.centerY() - height / 2f) / (height / 2f);
+            overlayInfos[index].description = detection.categories().get(0).categoryName();
+            index++;
         }
-
-        // TODO(b/241782273): Avoid retrying continuously until the frame is accepted by using a
-        //  currently non-existent MediaPipe API to be notified when MediaPipe has capacity to accept a
-        //  new frame.
-        queueInputFrameAsynchronous(appTextureFrame, inputTexture);
-    }
-
-    private boolean maybeQueueInputFrameSynchronous(
-            AppTextureFrame appTextureFrame, GlTextureInfo inputTexture) {
-        acceptedFrame = false;
-        frameProcessor.onNewFrame(appTextureFrame);
-        try {
-            appTextureFrame.waitUntilReleasedWithGpuSync();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            errorListenerExecutor.execute(
-                    () -> errorListener.onError(new VideoFrameProcessingException(e)));
-        }
-        if (acceptedFrame) {
-            inputListener.onInputFrameProcessed(inputTexture);
-        }
-        return acceptedFrame;
-    }
-
-    private void queueInputFrameAsynchronous(
-            AppTextureFrame appTextureFrame, GlTextureInfo inputTexture) {
-        removeFinishedFutures();
-        futures.add(
-                checkStateNotNull(singleThreadExecutorService)
-                        .submit(
-                                () -> {
-                                    while (!maybeQueueInputFrameSynchronous(appTextureFrame, inputTexture)) {
-                                        try {
-                                            Thread.sleep(RETRY_WAIT_TIME_MS);
-                                        } catch (InterruptedException e) {
-                                            Thread.currentThread().interrupt();
-                                            if (errorListener != null) {
-                                                errorListenerExecutor.execute(
-                                                        () -> errorListener.onError(new VideoFrameProcessingException(e)));
-                                            }
-                                        }
-                                    }
-                                    inputListener.onReadyToAcceptInputFrame();
-                                }));
-    }
-
-    @Override
-    public void releaseOutputFrame(GlTextureInfo outputTexture) {
-        checkStateNotNull(outputFrames.get(outputTexture)).release();
-        if (isSingleFrameGraph) {
-            inputListener.onReadyToAcceptInputFrame();
+        while (index < MAX_OVERLAYS) {
+            overlayInfos[index].description = " ";
+            index++;
         }
     }
 
-    @Override
-    public void flush() {
-        // TODO(b/238302341) Support seeking in MediaPipeShaderProgram.
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void release() {
-        if (isSingleFrameGraph) {
-            frameProcessor.close();
-            return;
-        }
-
-        Queue<Future<?>> futures = checkStateNotNull(this.futures);
-        while (!futures.isEmpty()) {
-            futures.remove().cancel(/* mayInterruptIfRunning= */ false);
-        }
-        ExecutorService singleThreadExecutorService =
-                checkStateNotNull(this.singleThreadExecutorService);
-        singleThreadExecutorService.shutdown();
-        try {
-            if (!singleThreadExecutorService.awaitTermination(RELEASE_WAIT_TIME_MS, MILLISECONDS)) {
-                errorListenerExecutor.execute(
-                        () -> errorListener.onError(new VideoFrameProcessingException("Release timed out")));
-            }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            errorListenerExecutor.execute(
-                    () -> errorListener.onError(new VideoFrameProcessingException(e)));
-        }
-
-        frameProcessor.close();
-    }
-
-    @Override
-    public final void signalEndOfCurrentInputStream() {
-        if (isSingleFrameGraph) {
-            frameProcessor.waitUntilIdle();
-            outputListener.onCurrentOutputStreamEnded();
-            return;
-        }
-
-        removeFinishedFutures();
-        futures.add(
-                checkStateNotNull(singleThreadExecutorService)
-                        .submit(
-                                () -> {
-                                    frameProcessor.waitUntilIdle();
-                                    outputListener.onCurrentOutputStreamEnded();
-                                }));
-    }
-
-    private void removeFinishedFutures() {
-        while (!futures.isEmpty()) {
-            if (!futures.element().isDone()) {
-                return;
-            }
-            try {
-                futures.remove().get();
-            } catch (ExecutionException e) {
-                errorListenerExecutor.execute(
-                        () -> errorListener.onError(new VideoFrameProcessingException(e)));
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-                errorListenerExecutor.execute(
-                        () -> errorListener.onError(new VideoFrameProcessingException(e)));
-            }
-        }
-    }
 }
