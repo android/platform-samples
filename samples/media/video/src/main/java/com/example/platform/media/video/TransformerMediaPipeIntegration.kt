@@ -20,6 +20,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
+import android.provider.MediaStore.Audio.Media
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -241,9 +242,7 @@ class TransformerMediaPipeIntegration : Fragment() {
         val selectedEffects = mutableListOf<Effect>()
         selectedEffects.add(
             GlEffect { context, _ ->
-                MediaPipeShaderProgram(
-                    context,
-                )
+                TestGLShaderProgram(context)
             },
         )
         return Effects(

@@ -102,6 +102,9 @@ final class MediaPipeShaderProgram extends BaseGlShaderProgram {
         }
         ObjectDetector.ObjectDetectorOptions objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder().setBaseOptions(baseOptions).setScoreThreshold(0.5f).setMaxResults(MAX_OVERLAYS).setRunningMode(RunningMode.VIDEO)
                 .setErrorListener(e -> Log.w("DEBUG", "Error from media pipe", e))
+                .setResultListener((result, inout) -> {
+                    Log.w("DEBUG", "Result: " + result);
+                })
                 .build();
         objectDetector = ObjectDetector.createFromOptions(context, objectDetectorOptions);
 
@@ -150,6 +153,9 @@ final class MediaPipeShaderProgram extends BaseGlShaderProgram {
     @Override
     public void drawFrame(int inputTexId, long presentationTimeUs)
             throws VideoFrameProcessingException {
+
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLE_STRIP, /* first= */ 0, /* count= */ 4);
+
         ByteBuffer pixelBuffer = ByteBuffer.allocateDirect(width * height * 4);
         Bitmap bitmap;
         try {
@@ -172,14 +178,14 @@ final class MediaPipeShaderProgram extends BaseGlShaderProgram {
             //Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 320, 320, true);
             MPImage mpImage = new BitmapImageBuilder(bitmap).build();
 
-            //objectDetector.detectAsync(mpImage, ImageProcessingOptions.builder().setRotationDegrees(180).build(), presentationTimeUs / 1000);
-            ObjectDetectorResult result = objectDetector.detectForVideo(mpImage, ImageProcessingOptions.builder().setRotationDegrees(180).build(), presentationTimeUs / 1000);
-            updateObjectDetection(result);
+            objectDetector.detectAsync(mpImage, ImageProcessingOptions.builder().setRotationDegrees(180).build(), presentationTimeUs / 1000);
+//            ObjectDetectorResult result = objectDetector.detectForVideo(mpImage, ImageProcessingOptions.builder().setRotationDegrees(180).build(), presentationTimeUs / 1000);
+//            updateObjectDetection(result);
             //scaledBitmap.recycle();
             bitmap.recycle();
 
             GlUtil.focusFramebufferUsingCurrentContext(boundFramebuffer[0], width, height);
-            overlayShaderProgram.drawFrame(inputTexId, presentationTimeUs);
+//            overlayShaderProgram.drawFrame(inputTexId, presentationTimeUs);
         } catch (GlUtil.GlException e) {
             onError(e);
         }
