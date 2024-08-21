@@ -113,33 +113,38 @@ final class MediaPipeShaderProgram extends BaseGlShaderProgram {
             Log.e("Caren", "Caught exception");
             e.printStackTrace();
         }
-
-
         TextOverlay[] textOverlays = new TextOverlay[MAX_OVERLAYS];
-        for (int i = 0; i < MAX_OVERLAYS; i++) {
-            OverlayInfo overlayInfo = new OverlayInfo();
-            overlayInfos[i] = overlayInfo;
-            overlayInfo.description = " ";
-            textOverlays[i] = new TextOverlay() {
-                @Override
-                public SpannableString getText(long presentationTimeUs) {
-                    SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(overlayInfo.description);
-                    ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.WHITE);
-                    //RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(0.5f);
-                    spannableStringBuilder.setSpan(foregroundColorSpan, 0, spannableStringBuilder.length(), SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    //spannableStringBuilder.setSpan(relativeSizeSpan, 0, spannableStringBuilder.length(), SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    return SpannableString.valueOf(spannableStringBuilder);
-                }
 
-                @Override
-                public float[] getVertexTransformation(long presentationTimeUs) {
-                    float[] temp = GlUtil.create4x4IdentityMatrix();
-                    Matrix.translateM(temp, 0, overlayInfo.xOffset, overlayInfo.yOffset, 0);
-                    Matrix.scaleM(temp, /* offset */ 0, /* x= */ 1f, /* y= */ -1f, /* z= */ 1f);
-                    return temp;
-                }
-            };
+        try {
+            for (int i = 0; i < MAX_OVERLAYS; i++) {
+                OverlayInfo overlayInfo = new OverlayInfo();
+                overlayInfos[i] = overlayInfo;
+                overlayInfo.description = " ";
+                textOverlays[i] = new TextOverlay() {
+                    @Override
+                    public SpannableString getText(long presentationTimeUs) {
+                        SpannableStringBuilder spannableStringBuilder = new SpannableStringBuilder(overlayInfo.description);
+                        ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(Color.WHITE);
+                        //RelativeSizeSpan relativeSizeSpan = new RelativeSizeSpan(0.5f);
+                        spannableStringBuilder.setSpan(foregroundColorSpan, 0, spannableStringBuilder.length(), SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        //spannableStringBuilder.setSpan(relativeSizeSpan, 0, spannableStringBuilder.length(), SpannableStringBuilder.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        return SpannableString.valueOf(spannableStringBuilder);
+                    }
+
+                    @Override
+                    public float[] getVertexTransformation(long presentationTimeUs) {
+                        float[] temp = GlUtil.create4x4IdentityMatrix();
+                        Matrix.translateM(temp, 0, overlayInfo.xOffset, overlayInfo.yOffset, 0);
+                        Matrix.scaleM(temp, /* offset */ 0, /* x= */ 1f, /* y= */ -1f, /* z= */ 1f);
+                        return temp;
+                    }
+                };
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
 
         overlayShaderProgram = new OverlayEffect(ImmutableList.copyOf(textOverlays)).toGlShaderProgram(context, false);
     }
@@ -148,11 +153,17 @@ final class MediaPipeShaderProgram extends BaseGlShaderProgram {
     @OptIn(markerClass = UnstableApi.class)
     @Override
     public Size configure(int inputWidth, int inputHeight) throws VideoFrameProcessingException {
-        width = inputWidth;
-        height = inputHeight;
-        overlayShaderProgram.configure(inputWidth, inputHeight);
-        overlayToInputScaleX = (float) width / overlay.getWidth();
-        overlayToInputScaleY = (float) height / overlay.getHeight();
+
+        try {
+            width = inputWidth;
+            height = inputHeight;
+            overlayShaderProgram.configure(inputWidth, inputHeight);
+            overlayToInputScaleX = (float) width / overlay.getWidth();
+            overlayToInputScaleY = (float) height / overlay.getHeight();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return new Size(inputWidth, inputHeight);
     }
 
@@ -192,8 +203,9 @@ final class MediaPipeShaderProgram extends BaseGlShaderProgram {
 
             GlUtil.focusFramebufferUsingCurrentContext(boundFramebuffer[0], width, height);
             overlayShaderProgram.drawFrame(inputTexId, presentationTimeUs);
-        } catch (GlUtil.GlException e) {
+        } catch (Exception e) {
             onError(e);
+            e.printStackTrace();
         }
     }
 
