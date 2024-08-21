@@ -63,12 +63,8 @@ final class MediaPipeShaderProgram extends BaseGlShaderProgram {
 
     private static final String TAG = "MediaPipeShaderProgram";
 
-    private final ObjectDetector objectDetector;
+    private ObjectDetector objectDetector;
     private final BaseGlShaderProgram overlayShaderProgram;
-
-    static {
-        System.loadLibrary("mediapipe_tasks_vision_jni");
-    }
 
     private int width;
     private int height;
@@ -100,13 +96,23 @@ final class MediaPipeShaderProgram extends BaseGlShaderProgram {
         for (int i = 0; i < MAX_OVERLAYS; i++) {
             overlayInfos[i] = new OverlayInfo();
         }
-        ObjectDetector.ObjectDetectorOptions objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder().setBaseOptions(baseOptions).setScoreThreshold(0.5f).setMaxResults(MAX_OVERLAYS).setRunningMode(RunningMode.VIDEO)
-                .setErrorListener(e -> Log.w("DEBUG", "Error from media pipe", e))
-                .setResultListener((result, inout) -> {
-                    Log.w("DEBUG", "Result: " + result);
-                })
-                .build();
-        objectDetector = ObjectDetector.createFromOptions(context, objectDetectorOptions);
+
+        try {
+            ObjectDetector.ObjectDetectorOptions objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder()
+                    .setBaseOptions(baseOptions)
+                    .setScoreThreshold(0.5f)
+                    .setMaxResults(MAX_OVERLAYS)
+                    .setRunningMode(RunningMode.VIDEO)
+                    .setErrorListener(e -> Log.w("DEBUG", "Error from media pipe", e))
+//                .setResultListener((result, inout) -> {
+//                    Log.w("DEBUG", "Result: " + result);
+//                })
+                    .build();
+            objectDetector = ObjectDetector.createFromOptions(context, objectDetectorOptions);
+        } catch (Exception e) {
+            Log.e("Caren", "Caught exception");
+            e.printStackTrace();
+        }
 
 
         TextOverlay[] textOverlays = new TextOverlay[MAX_OVERLAYS];
@@ -178,14 +184,14 @@ final class MediaPipeShaderProgram extends BaseGlShaderProgram {
             //Bitmap scaledBitmap = Bitmap.createScaledBitmap(bitmap, 320, 320, true);
             MPImage mpImage = new BitmapImageBuilder(bitmap).build();
 
-            objectDetector.detectAsync(mpImage, ImageProcessingOptions.builder().setRotationDegrees(180).build(), presentationTimeUs / 1000);
-//            ObjectDetectorResult result = objectDetector.detectForVideo(mpImage, ImageProcessingOptions.builder().setRotationDegrees(180).build(), presentationTimeUs / 1000);
-//            updateObjectDetection(result);
+//            objectDetector.detectAsync(mpImage, ImageProcessingOptions.builder().setRotationDegrees(180).build(), presentationTimeUs / 1000);
+            ObjectDetectorResult result = objectDetector.detectForVideo(mpImage, ImageProcessingOptions.builder().setRotationDegrees(180).build(), presentationTimeUs / 1000);
+            updateObjectDetection(result);
             //scaledBitmap.recycle();
             bitmap.recycle();
 
             GlUtil.focusFramebufferUsingCurrentContext(boundFramebuffer[0], width, height);
-//            overlayShaderProgram.drawFrame(inputTexId, presentationTimeUs);
+            overlayShaderProgram.drawFrame(inputTexId, presentationTimeUs);
         } catch (GlUtil.GlException e) {
             onError(e);
         }

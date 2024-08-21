@@ -41,37 +41,35 @@ import java.nio.ByteBuffer;
 @UnstableApi
 public class TestGLShaderProgram extends BaseGlShaderProgram {
 
-//    private final ObjectDetector objectDetector;
+    private ObjectDetector objectDetector;
 
     private int width;
     private int height;
 
-
-    static {
-        System.loadLibrary("mediapipe_tasks_vision_jni");
-    }
-
-
     public TestGLShaderProgram(Context context) {
         super(false, 1);
 
-        BaseOptions baseOptions =
-                BaseOptions.builder()
-                        .setDelegate(Delegate.CPU)
-                        .setModelAssetPath("efficientdet_lite0.tflite")
-                        .build();
+        try {
+            BaseOptions baseOptions =
+                    BaseOptions.builder()
+                            .setDelegate(Delegate.CPU)
+                            .setModelAssetPath("efficientdet_lite0.tflite")
+                            .build();
 
-//        ObjectDetector.ObjectDetectorOptions objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder()
-//                .setBaseOptions(baseOptions)
-//                .setScoreThreshold(0.5f)
-//                .setMaxResults(1)
-//                .setRunningMode(RunningMode.VIDEO)
-//                .setErrorListener(e -> Log.w("DEBUG", "Error from media pipe", e))
-//                .setResultListener((result, inout) -> {
-//                    Log.w("DEBUG", "Result: " + result);
-//                })
-//                .build();
-//        objectDetector = ObjectDetector.createFromOptions(context, objectDetectorOptions);
+            ObjectDetector.ObjectDetectorOptions objectDetectorOptions = ObjectDetector.ObjectDetectorOptions.builder()
+                    .setBaseOptions(baseOptions)
+                    .setScoreThreshold(0.5f)
+                    .setMaxResults(1)
+                    .setRunningMode(RunningMode.VIDEO)
+                    .setErrorListener(e -> Log.w("DEBUG", "Error from media pipe", e))
+//                    .setResultListener((result, inout) -> {
+//                        Log.w("DEBUG", "Result: " + result);
+//                    })
+                    .build();
+            objectDetector = ObjectDetector.createFromOptions(context, objectDetectorOptions);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @NonNull

@@ -40,5 +40,8 @@ dependencies {
 
     implementation ("com.google.mediapipe:tasks-vision:0.10.14")
 
+//    implementation 'com.google.mediapipe:tasks-vision:latest.release'
+
+
 
 }

@@ -242,7 +242,7 @@ class TransformerMediaPipeIntegration : Fragment() {
         val selectedEffects = mutableListOf<Effect>()
         selectedEffects.add(
             GlEffect { context, _ ->
-                TestGLShaderProgram(context)
+                MediaPipeShaderProgram(context)
             },
         )
         return Effects(
