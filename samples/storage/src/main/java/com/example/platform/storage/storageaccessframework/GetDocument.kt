@@ -60,7 +60,7 @@ import com.google.android.catalog.framework.annotations.Sample
 )
 @Composable
 fun GetDocument() {
-    var fileTypes by remember { mutableStateOf(emptySet<FileType>()) }
+    var selectedFilter by remember { mutableStateOf(FileType.Any) }
     var selectMultiple by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
     var selectedFiles by remember { mutableStateOf(emptyList<Uri>()) }
@@ -79,9 +79,9 @@ fun GetDocument() {
             ExtendedFloatingActionButton(
                 onClick = {
                     if (selectMultiple) {
-                        getMultipleDocuments.launch("*/*")
+                        getMultipleDocuments.launch(selectedFilter.mimeType)
                     } else {
-                        getSingleDocument.launch("*/*")
+                        getSingleDocument.launch(selectedFilter.mimeType)
                     }
                 },
             ) {
@@ -94,9 +94,7 @@ fun GetDocument() {
                 ListItem(
                     headlineContent = { Text("File type filter") },
                     supportingContent = {
-                        Text(
-                            if (fileTypes.isEmpty()) "Any" else fileTypes.joinToString { it.name },
-                        )
+                        Text(selectedFilter.name)
                     },
                     trailingContent = {
                         val scrollState = rememberScrollState()
@@ -118,9 +116,9 @@ fun GetDocument() {
                                 FileType.entries.forEach { fileType ->
                                     DropdownMenuItem(
                                         text = { Text(fileType.name) },
-                                        onClick = { fileTypes = fileTypes.toggle(fileType) },
+                                        onClick = { selectedFilter = fileType },
                                         leadingIcon = {
-                                            if (fileTypes.contains(fileType)) {
+                                            if (selectedFilter == fileType) {
                                                 Icon(
                                                     Icons.Outlined.Check,
                                                     contentDescription = "Selected",
@@ -143,7 +141,7 @@ fun GetDocument() {
             }
             item {
                 ListItem(
-                    headlineContent = { Text("File type filter") },
+                    headlineContent = { Text("Select multiple files?") },
                     trailingContent = {
                         Switch(
                             modifier = Modifier.semantics {
@@ -166,14 +164,5 @@ fun GetDocument() {
                 HorizontalDivider()
             }
         }
-    }
-}
-
-
-private fun <T> Set<T>.toggle(item: T): Set<T> {
-    return if (contains(item)) {
-        this - item
-    } else {
-        this + item
     }
 }
