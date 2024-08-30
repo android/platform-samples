@@ -16,7 +16,6 @@
 
 package com.example.platform.storage.storageaccessframework
 
-import android.net.Uri
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
@@ -25,6 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -46,12 +46,15 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import com.google.android.catalog.framework.annotations.Sample
+import kotlinx.coroutines.launch
 
 @Sample(
     name = "GetDocument",
@@ -60,18 +63,30 @@ import com.google.android.catalog.framework.annotations.Sample
 )
 @Composable
 fun GetDocument() {
+    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
     var selectedFilter by remember { mutableStateOf(FileType.Any) }
     var selectMultiple by remember { mutableStateOf(false) }
     var expanded by remember { mutableStateOf(false) }
-    var selectedFiles by remember { mutableStateOf(emptyList<Uri>()) }
+    var selectedFiles by remember { mutableStateOf(emptyList<FileRecord>()) }
 
-    val getSingleDocument = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        selectedFiles = uri?.let { listOf(it) } ?: emptyList()
-    }
+    val getSingleDocument =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            coroutineScope.launch {
+                selectedFiles = uri?.let { uri ->
+                    FileRecord.fromUri(uri, context)?.let { listOf(it) }
+                } ?: emptyList()
+            }
+        }
 
-    val getMultipleDocuments = rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
-        selectedFiles = uris
-    }
+    val getMultipleDocuments =
+        rememberLauncherForActivityResult(ActivityResultContracts.GetMultipleContents()) { uris ->
+            coroutineScope.launch {
+                selectedFiles = uris.mapNotNull { uri ->
+                    FileRecord.fromUri(uri, context)
+                }
+            }
+        }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -162,6 +177,14 @@ fun GetDocument() {
                     },
                 )
                 HorizontalDivider()
+            }
+            items(selectedFiles) { file ->
+                when (file.fileType) {
+                    FileType.Image -> ImageFileCard(file)
+                    FileType.Video -> VideoFileCard(file)
+                    FileType.Audio -> AudioFileCard(file)
+                    else -> BinaryFileCard(file)
+                }
             }
         }
     }

@@ -42,19 +42,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-
-internal enum class FileType(val mimeType: String) {
-    Image("image/*"),
-    Video("video/*"),
-    Audio("audio/*"),
-    Text("text/*"),
-    Pdf("application/pdf"),
-    Any("*/*");
-}
-
-data class FileRecord(val filename: String, val size: Long, val mimeType: String)
 
 @Composable
 fun FileCard(
@@ -82,7 +72,12 @@ fun FileCard(
             )
             Spacer(modifier = Modifier.width(16.dp))
             Column {
-                Text(file.filename, style = MaterialTheme.typography.headlineSmall, maxLines = 2)
+                Text(
+                    file.name,
+                    style = MaterialTheme.typography.headlineSmall,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text("$sizeLabel · ${file.mimeType}", style = MaterialTheme.typography.bodyMedium)
 
@@ -103,7 +98,7 @@ fun ImageFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = 
         } else {
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { /* Handle button click */ }) {
-                Text("Read first 10 bytes")
+                Text("Load image")
             }
         }
     }
@@ -118,7 +113,7 @@ fun VideoFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = 
         } else {
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { /* Handle button click */ }) {
-                Text("Read first 10 bytes")
+                Text("Load thumbnail")
             }
         }
     }
@@ -148,7 +143,7 @@ fun TextFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = n
         } else {
             Spacer(modifier = Modifier.height(16.dp))
             Button(onClick = { /* Handle button click */ }) {
-                Text("Read first 10 bytes")
+                Text("Load content")
             }
         }
     }
@@ -187,35 +182,56 @@ fun BinaryFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? =
 @Preview
 @Composable
 fun ImageFileCard_Preview() {
-    ImageFileCard(FileRecord("AmazingPhoto.png", 345_000, "image/png"))
+    ImageFileCard(FileRecord("AmazingPhoto.png", 345_000, "image/png", FileType.Image))
 }
 
 @Preview
 @Composable
 fun VideoFileCard_Preview() {
-    VideoFileCard(FileRecord("All hands - meeting recording.mp4", 1_234_567_890, "image/png"))
+    VideoFileCard(
+        FileRecord(
+            "All hands - meeting recording.mp4",
+            1_234_567_890,
+            "video/mp4",
+            FileType.Video,
+        ),
+    )
 }
 
 @Preview
 @Composable
 fun AudioFileCard_Preview() {
-    AudioFileCard(FileRecord("Queen - We will rock you.mp3", 5_432_100, "audio/mp3"))
+    AudioFileCard(
+        FileRecord(
+            "Queen - We will rock you.mp3",
+            5_432_100,
+            "audio/mp3",
+            FileType.Audio,
+        ),
+    )
 }
 
 @Preview
 @Composable
 fun TextFileCard_Preview() {
-    TextFileCard(FileRecord("Android Jetpack Compose.txt", 5_678, "text/plain"))
+    TextFileCard(FileRecord("Android Jetpack Compose.txt", 5_678, "text/plain", FileType.Text))
 }
 
 @Preview
 @Composable
 fun PdfFileCard_Preview() {
-    PdfFileCard(FileRecord("Android Jetpack Compose.pdf", 1_234_567, "application/pdf"))
+    PdfFileCard(
+        FileRecord(
+            "Android Jetpack Compose.pdf",
+            1_234_567,
+            "application/pdf",
+            FileType.Pdf,
+        ),
+    )
 }
 
 @Preview
 @Composable
 fun BinaryFileCard_Preview() {
-    BinaryFileCard(FileRecord("binary.bin", 78_420_968, "application/octet-stream"))
+    BinaryFileCard(FileRecord("binary.bin", 78_420_968, "application/octet-stream", FileType.Any))
 }
