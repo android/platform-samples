@@ -53,6 +53,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import com.example.platform.storage.storageaccessframework.shared.AudioFileCard
+import com.example.platform.storage.storageaccessframework.shared.BinaryFileCard
+import com.example.platform.storage.storageaccessframework.shared.FileRecord
+import com.example.platform.storage.storageaccessframework.shared.FileType
+import com.example.platform.storage.storageaccessframework.shared.ImageFileCard
+import com.example.platform.storage.storageaccessframework.shared.PdfFileCard
+import com.example.platform.storage.storageaccessframework.shared.TextFileCard
+import com.example.platform.storage.storageaccessframework.shared.VideoFileCard
 import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.launch
 
@@ -183,7 +191,9 @@ fun GetDocument() {
                     FileType.Image -> ImageFileCard(file)
                     FileType.Video -> VideoFileCard(file)
                     FileType.Audio -> AudioFileCard(file)
-                    else -> BinaryFileCard(file)
+                    FileType.Text -> TextFileCard(file)
+                    FileType.Pdf -> PdfFileCard(file)
+                    FileType.Any -> BinaryFileCard(file)
                 }
             }
         }

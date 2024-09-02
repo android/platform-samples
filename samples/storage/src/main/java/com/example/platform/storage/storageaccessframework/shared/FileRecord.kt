@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.platform.storage.storageaccessframework
+package com.example.platform.storage.storageaccessframework.shared
 
 import android.content.Context
 import android.net.Uri
@@ -22,7 +22,13 @@ import android.provider.OpenableColumns
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-data class FileRecord(val name: String, val size: Long, val mimeType: String, val fileType: FileType) {
+data class FileRecord(
+    val uri: Uri,
+    val name: String,
+    val size: Long,
+    val mimeType: String,
+    val fileType: FileType,
+) {
     companion object {
         suspend fun fromUri(uri: Uri, context: Context): FileRecord? = withContext(Dispatchers.IO) {
             val mimeType = context.contentResolver.getType(uri) ?: return@withContext null
@@ -54,6 +60,7 @@ data class FileRecord(val name: String, val size: Long, val mimeType: String, va
                 }
 
                 return@use FileRecord(
+                    uri = uri,
                     name = cursor.getString(cursor.getColumnIndexOrThrow(OpenableColumns.DISPLAY_NAME)),
                     size = cursor.getLong(cursor.getColumnIndexOrThrow(OpenableColumns.SIZE)),
                     mimeType = mimeType,
