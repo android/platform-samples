@@ -182,8 +182,11 @@ class UltraHDRWithOpenGL : Fragment(),
     }
 
     override fun onAttach(context: Context) {
-        requireActivity().display
-            ?.registerHdrSdrRatioChangedListener(Runnable::run, updateHdrSdrRatio)
+        requireActivity().display?.let { display ->
+            if (display.isHdrSdrRatioAvailable) {
+                display.registerHdrSdrRatioChangedListener(Runnable::run, updateHdrSdrRatio)
+            }
+        }
         super.onAttach(context)
     }
 
