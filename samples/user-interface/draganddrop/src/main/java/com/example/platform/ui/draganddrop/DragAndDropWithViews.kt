@@ -37,6 +37,7 @@ import com.google.android.catalog.framework.annotations.Sample
     description = "Drag and Drop using the views",
     documentation = "https://developer.android.com/develop/ui/views/touch-and-input/drag-drop/view",
 )
+@RequiresApi(Build.VERSION_CODES.N)
 class DragAndDropWithViews : Fragment(R.layout.fragment_drag_and_drop_with_views) {
 
     val TAG = "DragAndDropWithViews"
