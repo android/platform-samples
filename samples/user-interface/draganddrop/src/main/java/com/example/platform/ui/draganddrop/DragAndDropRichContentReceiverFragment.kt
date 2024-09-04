@@ -49,6 +49,7 @@ import java.io.FileOutputStream
     description = "Using RichContentReceiverInterface for implementing Drop for rich data types",
     documentation = "https://developer.android.com/develop/ui/views/receive-rich-content",
 )
+@RequiresApi(Build.VERSION_CODES.S)
 class DragAndDropRichContentReceiverFragment : Fragment(R.layout.fragment_dnd_richcontent) {
     private val TAG = DragAndDropRichContentReceiverFragment::class.java.simpleName
     private lateinit var binding: FragmentDndRichcontentBinding

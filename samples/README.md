@@ -53,7 +53,7 @@ Shows various vibration effects.
 - [Hyphenation](user-interface/text/src/main/java/com/example/platform/ui/text/Hyphenation.kt):
 Demonstrates different options for the `android:hyphenationFrequency` attribute
 - [Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2ImageCapture.kt):
-This sample demonstrates how to capture and image using Camera2 and encode it 
+This sample demonstrates how to capture an image using Camera2 and encode it 
 - [Immersive mode](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/ImmersiveMode.kt):
 Immersive mode enables your app to display full-screen by hiding system bars.
 - [LineBreak](user-interface/text/src/main/java/com/example/platform/ui/text/LineBreak.kt):
