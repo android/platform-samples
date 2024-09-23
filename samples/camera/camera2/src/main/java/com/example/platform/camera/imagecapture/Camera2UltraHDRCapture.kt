@@ -355,22 +355,17 @@ class Camera2UltraHDRCapture : Fragment() {
     /**
      * In order to capture and UltraHDR image, the camera device need to be capable of:
      *
-     * - 10-bit dynamic range capture
      * - Encoding the JPEG/R format (UltraHDR)
      *
      * This function will check for both to determine device support.
      */
     private fun canCaptureUltraHDR(c: CameraCharacteristics): Boolean {
-        // Query the available capabilities and output formats.
-        val abilities = c.get(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES)
+        // Query the available output formats.
         val formats = c.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)?.outputFormats
 
-        val isTenBit =
-            abilities?.contains(CameraCharacteristics.REQUEST_AVAILABLE_CAPABILITIES_DYNAMIC_RANGE_TEN_BIT)
-                ?: false
         val canEncodeUltraHDR = formats?.contains(ImageFormat.JPEG_R) ?: false
 
-        return isTenBit && canEncodeUltraHDR
+        return canEncodeUltraHDR
     }
 
     /**
