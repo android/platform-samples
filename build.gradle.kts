@@ -15,7 +15,7 @@
  */
 buildscript {
     dependencies {
-        classpath("de.undercouch:gradle-download-task:4.1.2")
+        classpath(libs.gradle.download.task)
     }
 }
 

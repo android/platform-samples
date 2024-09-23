@@ -70,7 +70,7 @@ class UltraHDRWithOpenGL : Fragment(),
         }
 
         companion object {
-            fun fromInt(value: Int) = ExtendedBrightnessValue.values().first { it.value == value }
+            fun fromInt(value: Int) = entries.first { it.value == value }
         }
     }
 
