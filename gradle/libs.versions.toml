@@ -21,6 +21,7 @@ androidx-window = "1.2.0"
 agp = "8.5.2"
 casa = "0.5.1"
 coil = "2.4.0"
+gradleDownloadTask = "4.1.2"
 ksp = "1.9.22-1.0.17"
 compose-bom = "2024.02.00"
 composeCompiler = "1.5.9"
@@ -96,6 +97,7 @@ coil-video = { module = "io.coil-kt:coil-video", version.ref = "coil" }
 
 google-ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 
+gradle-download-task = { module = "de.undercouch:gradle-download-task", version.ref = "gradleDownloadTask" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 hilt-testing = { group = "com.google.dagger", name = "hilt-android-testing", version.ref = "hilt" }
