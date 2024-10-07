@@ -173,9 +173,9 @@ class TransformerVideoComposition : Fragment() {
 
         if (binding.imageChip.isChecked) {
             val image = EditedMediaItem.Builder(
-                MediaItem.fromUri(URI_IMAGE),
+                // Show the image for 3 seconds in the composition
+                MediaItem.Builder().setUri(URI_IMAGE).setImageDurationMs(3_000).build(),
             )
-                .setDurationUs(3_000_000) // Show the image for 3 seconds in the composition
                 .setFrameRate(30)
                 .build()
 
