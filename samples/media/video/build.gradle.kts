@@ -22,7 +22,6 @@ plugins {
 android {
     namespace = "com.example.platform.media.video"
     viewBinding.isEnabled = true
-    compileSdk = 35
 
     androidResources {
         noCompress += "tflite"

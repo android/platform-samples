@@ -22,7 +22,6 @@ plugins {
 android {
     namespace = "com.example.platform.media.ultrahdr"
     viewBinding.isEnabled = true
-    compileSdk = 35
 }
 
 dependencies {
