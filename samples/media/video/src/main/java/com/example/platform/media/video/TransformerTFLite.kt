@@ -16,6 +16,7 @@
 
 package com.example.platform.media.video
 
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -29,7 +30,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.Effect
 import androidx.media3.common.MediaItem
 import androidx.media3.common.util.UnstableApi
-import androidx.media3.effect.GlEffect
+import androidx.media3.effect.ByteBufferGlEffect
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.transformer.Composition
 import androidx.media3.transformer.EditedMediaItem
@@ -52,7 +53,7 @@ import java.util.concurrent.TimeUnit
 @UnstableApi
 @Sample(
     name = "Transformer and TFLite",
-    description = "This sample demonstrates using Transformer with TFLite by applying a selected art style to a video.",
+    description = "This sample demonstrates using Transformer with TFLite/RTLite by applying a selected art style to a video.",
     documentation = "https://developer.android.com/guide/topics/media/transformer",
     tags = ["Transformer"],
 )
@@ -197,12 +198,7 @@ class TransformerTFLite : Fragment() {
         }
 
         selectedEffects.add(
-            GlEffect { context, _ ->
-                StyleTransferShaderProgram(
-                    context,
-                    selectedStyleAsset,
-                )
-            },
+            ByteBufferGlEffect<Bitmap>(StyleTransferEffect(requireContext(), selectedStyleAsset))
         )
 
         return Effects(
@@ -216,11 +212,10 @@ class TransformerTFLite : Fragment() {
      */
     private suspend fun playbackUsingExoPlayer() = withContext(Dispatchers.Main) {
         binding.mediaPlayer.useController = true
-
         val player = ExoPlayer.Builder(requireContext()).build()
         player.setMediaItem(MediaItem.fromUri("file://" + externalCacheFile!!.absolutePath))
-        player.prepare()
 
+        player.prepare()
         // Attaching player to player view
         binding.mediaPlayer.player = player
 
