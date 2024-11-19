@@ -48,6 +48,8 @@ Drag and Drop using the views
 This sample demonstrates editing an UltraHDR image and the resulting gainmap as well. Spatial edit operations like crop, rotate, scale are supported
 - [Find devices sample](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/FindBLEDevicesSample.kt):
 This example will demonstrate how to scanning for Low Energy Devices
+- [GetDocument](storage/src/main/java/com/example/platform/storage/storageaccessframework/GetDocument.kt):
+Open a document using the Storage Access Framework
 - [Haptics - 1. Vibration effects](user-interface/haptics/src/main/java/com/example/platform/ui/haptics/Haptics.kt):
 Shows various vibration effects.
 - [Hyphenation](user-interface/text/src/main/java/com/example/platform/ui/text/Hyphenation.kt):
