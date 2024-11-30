@@ -13,16 +13,39 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-tasks.register('downloadModelFile1', Download) {
+task downloadModelFile(type: Download) {
+    src 'https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/android/magenta_arbitrary-image-stylization-v1-256_int8_prediction_1.tflite'
+    dest project.ext.ASSET_DIR + '/predict_int8.tflite'
+    overwrite false
+}
+
+task downloadModelFile0(type: Download) {
+    src 'https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/android/magenta_arbitrary-image-stylization-v1-256_int8_transfer_1.tflite'
+    dest project.ext.ASSET_DIR + '/transfer_int8.tflite'
+    overwrite false
+}
+
+task downloadModelFile1(type: Download) {
     src 'https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/android/magenta_arbitrary-image-stylization-v1-256_fp16_prediction_1.tflite'
     dest project.ext.ASSET_DIR + '/predict_float16.tflite'
     overwrite false
 }
 
-tasks.register('downloadModelFile2', Download) {
+task downloadModelFile2(type: Download) {
     src 'https://storage.googleapis.com/download.tensorflow.org/models/tflite/task_library/style_transfer/android/magenta_arbitrary-image-stylization-v1-256_fp16_transfer_1.tflite'
     dest project.ext.ASSET_DIR + '/transfer_float16.tflite'
     overwrite false
 }
 
-preBuild.dependsOn downloadModelFile1, downloadModelFile2
+task copyTestModel(type: Copy, dependsOn: downloadModelFile1) {
+    from project.ext.ASSET_DIR + '/predict_float16.tflite'
+    into project.ext.TEST_ASSETS_DIR
+}
+
+task copyTestModel0(type: Copy, dependsOn: downloadModelFile2) {
+    from project.ext.ASSET_DIR + '/transfer_float16.tflite'
+    into project.ext.TEST_ASSETS_DIR
+}
+
+preBuild.dependsOn downloadModelFile, downloadModelFile1, downloadModelFile2,
+        copyTestModel, copyTestModel0
