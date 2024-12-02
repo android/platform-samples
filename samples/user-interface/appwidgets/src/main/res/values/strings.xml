@@ -109,5 +109,9 @@
     <string name="cl_description_long_text">Ideal for titles, status updates, short descriptions, or any scenario where a single line of text effectively conveys the message.</string>
     <string name="cl_title_checklist">Checklist</string>
     <string name="cl_description_checklist">The checklist layout is perfect for displaying tasks, providing clear tap targets for users to easily mark items as done.</string>
+    <string name="cl_title_toolbar">Toolbar</string>
+    <string name="cl_description_toolbar">Increase user engagement and streamline key workflows by providing instant access to your app\'s most important features with a toolbar widget.</string>
+    <string name="cl_title_search_toolbar">Search Toolbar</string>
+    <string name="cl_description_search_toolbar">Ideal for apps where search is paramount, this layout provides a dedicated search entry point while allowing for additional shortcuts based on available widget space.</string>
 
 </resources>
