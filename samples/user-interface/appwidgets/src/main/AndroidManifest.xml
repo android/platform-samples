@@ -38,6 +38,24 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
+
+        <!-- Toolbar variants -->
+
+        <!-- A search toolbar -->
+        <receiver
+            android:name=".glance.layout.toolbars.SearchToolBarAppWidgetReceiver"
+            android:enabled="@bool/glance_appwidget_available"
+            android:exported="false"
+            android:label="@string/sample_search_toolbar_app_widget_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/sample_search_toolbar_widget_info" />
+        </receiver>
+
         <!-- Long text variants -->
         <receiver
             android:name=".glance.layout.text.LongTextAppWidgetReceiver"
