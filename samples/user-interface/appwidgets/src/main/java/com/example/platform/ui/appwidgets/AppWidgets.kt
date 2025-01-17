@@ -88,7 +88,7 @@ fun AppWidgetsList(widgetProviders: List<AppWidgetProviderInfo>) {
         }
 
         item {
-            CanonicalLayoutPinActivityCard()
+            CanonicalLayoutsInfoCard()
         }
 
         // If the launcher does not support pinning request show a banner
@@ -112,7 +112,7 @@ fun AppWidgetsList(widgetProviders: List<AppWidgetProviderInfo>) {
 }
 
 @Composable
-private fun CanonicalLayoutPinActivityCard() {
+private fun CanonicalLayoutsInfoCard() {
     val context = LocalContext.current
     Card(
         modifier = Modifier
@@ -122,12 +122,12 @@ private fun CanonicalLayoutPinActivityCard() {
         val preview = painterResource(id = R.drawable.cl_activity_row_hero_image)
         Column(modifier = Modifier.padding(16.dp)) {
             Text(
-                text = "☆ Canonical widget layouts",
+                text = stringResource(R.string.canonical_layouts_info_card_title),
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold
             )
             Text(
-                text = "Explore and pin the recommended, intentionally designed widget samples",
+                text = stringResource(R.string.canonical_layouts_info_card_description),
                 style = MaterialTheme.typography.bodyMedium,
                 maxLines = 3,
             )
@@ -198,7 +198,7 @@ private fun WidgetInfoCard(providerInfo: AppWidgetProviderInfo) {
     val context = LocalContext.current
     val label = providerInfo.loadLabel(context.packageManager)
     val description = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        (providerInfo.loadDescription(context) ?: "").toString();
+        (providerInfo.loadDescription(context) ?: "").toString()
     } else {
         "Description not available"
     }
