@@ -1,7 +1,7 @@
 # Available Samples
 
 - [App Widgets](user-interface/appwidgets/src/main/java/com/example/platform/ui/appwidgets/AppWidgets.kt):
-Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples
+Showcases how to pin widgets within the app and provides a catalog of well-designed canonical widget layouts for inspiration.
 - [Call Notification Sample](connectivity/callnotification/src/main/java/com/example/platform/connectivity/callnotification/CallNotificationSample.kt):
 Sample demonstrating how to make incoming call notifications and in call notifications
 - [Camera Preview](camera/camera2/src/main/java/com/example/platform/camera/preview/Camera2Preview.kt):

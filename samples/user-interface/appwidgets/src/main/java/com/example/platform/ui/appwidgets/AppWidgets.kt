@@ -23,6 +23,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -33,7 +34,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -43,13 +43,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.platform.ui.appwidgets.glance.layout.CanonicalLayoutActivity
 import com.google.android.catalog.framework.annotations.Sample
 
 @Sample(
     name = "App Widgets",
-    description = "Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples",
+    description = "Showcases how to pin widgets within the app and provides a catalog of well-designed canonical widget layouts for inspiration.",
     documentation = "https://developer.android.com/develop/ui/views/appwidgets/overview",
     tags = ["App Widgets"],
 )
@@ -76,11 +77,18 @@ fun AppWidgetsList(widgetProviders: List<AppWidgetProviderInfo>) {
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         item {
-            AppInfoText()
+            InfoText(R.string.placeholder_pin_app_widget)
         }
 
         item {
-            CanonicalLayoutsRow()
+            InfoText(
+                resId = R.string.placeholder_tap_to_add_to_home,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+
+        item {
+            CanonicalLayoutPinActivityCard()
         }
 
         // If the launcher does not support pinning request show a banner
@@ -90,6 +98,13 @@ fun AppWidgetsList(widgetProviders: List<AppWidgetProviderInfo>) {
             }
         }
 
+        item {
+            InfoText(
+                resId = R.string.placeholder_tap_to_pin,
+                fontWeight = FontWeight.SemiBold
+            )
+        }
+
         items(widgetProviders) { providerInfo ->
             WidgetInfoCard(providerInfo)
         }
@@ -97,10 +112,27 @@ fun AppWidgetsList(widgetProviders: List<AppWidgetProviderInfo>) {
 }
 
 @Composable
-private fun CanonicalLayoutsRow() {
+private fun CanonicalLayoutPinActivityCard() {
     val context = LocalContext.current
-    Button(onClick = { CanonicalLayoutActivity.start(context) }) {
-        Text("Canonical layout examples")
+    Card(
+        modifier = Modifier
+            .fillMaxWidth(),
+        onClick = { CanonicalLayoutActivity.start(context) },
+    ) {
+        val preview = painterResource(id = R.drawable.cl_activity_row_hero_image)
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                text = "☆ Canonical widget layouts",
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.Bold
+            )
+            Text(
+                text = "Explore and pin the recommended, intentionally designed widget samples",
+                style = MaterialTheme.typography.bodyMedium,
+                maxLines = 3,
+            )
+            Image(painter = preview, contentDescription = null)
+        }
     }
 }
 
@@ -142,9 +174,13 @@ private fun PinUnavailableBanner() {
 }
 
 @Composable
-private fun AppInfoText() {
+private fun InfoText(
+    @StringRes resId: Int,
+    fontWeight: FontWeight = FontWeight.Normal
+) {
     Text(
-        text = stringResource(id = R.string.placeholder_app_widget),
+        text = stringResource(id = resId),
+        fontWeight = fontWeight,
         modifier = Modifier
             .fillMaxWidth(),
     )
@@ -183,7 +219,8 @@ private fun WidgetInfoCard(providerInfo: AppWidgetProviderInfo) {
             Column(modifier = Modifier.padding(end = 8.dp)) {
                 Text(
                     text = label,
-                    style = MaterialTheme.typography.titleSmall,
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
                 )
                 Text(
                     text = description,
