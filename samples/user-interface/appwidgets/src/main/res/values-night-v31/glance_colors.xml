@@ -47,6 +47,7 @@
     <color name="colorOnError">@color/m3_sys_color_dark_on_error</color>
     <color name="colorErrorContainer">@color/m3_sys_color_dark_error_container</color>
     <color name="colorOnErrorContainer">@color/m3_sys_color_dark_on_error_container</color>
+    <color name="colorAppWidgetBackground">@android:color/system_accent2_800</color>
 
     <color name="textColorPrimary">@color/m3_dynamic_dark_default_color_primary_text</color>
     <color name="textColorPrimaryInverse">@color/m3_dynamic_default_color_primary_text</color>
