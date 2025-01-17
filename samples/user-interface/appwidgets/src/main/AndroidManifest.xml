@@ -178,29 +178,6 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_weather_forecast_glance" />
         </receiver>
-        <receiver
-            android:name=".glance.image.ImageGlanceWidgetReceiver"
-            android:enabled="@bool/glance_appwidget_available"
-            android:exported="false"
-            android:label="@string/images">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/app_widget_image_glance" />
-        </receiver>
-
-        <provider
-            android:name=".glance.image.ImageFileProvider"
-            android:authorities="${applicationId}.provider"
-            android:exported="false"
-            android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/image_paths" />
-        </provider>
     </application>
 
 </manifest>
