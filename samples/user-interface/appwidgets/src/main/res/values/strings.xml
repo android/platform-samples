@@ -17,12 +17,12 @@
     <string name="app_name">AppWidget</string>
     <string name="placeholder_app_widget_pin">Pin an App Widget:</string>
     <string name="placeholder_app_widget_pin_unavailable">Pinning is not supported in the default launcher</string>
-    <string name="placeholder_app_widget">Sample to demonstrate how to get the app\'s appwidgets info and request the user to pin them in the launcher.\n\nTap any of the items below to request the launcher to pin them:</string>
-
-    <string name="weather">Weather</string>
+    <string name="placeholder_pin_app_widget">Sample to demonstrate how to get the app\'s appwidgets info and request the user to pin them in the launcher.</string>
+    <string name="placeholder_tap_to_add_to_home">Tap \"Add to home\" button on any of the items in the canonical widget layouts demo page to pin:</string>
+    <string name="placeholder_tap_to_pin">Or tap on any of the items below to request the launcher to pin them:</string>
+    <string name="remote_views_weather">RemoteViews Weather</string>
     <string name="glance_weather">Glance Weather</string>
     <string name="app_widget_weather_description">Widget for weather forecast</string>
-    <string name="glance_widget_weather_description">Glance Widget for weather forecast</string>
     <string name="icon_for_weather_content_description">Icon for weather</string>
     <string name="city_tokyo">Tokyo</string>
     <string name="mostly_cloudy">Mostly cloudy</string>
