@@ -81,17 +81,19 @@ fun GlanceModifier.appWidgetBackgroundModifier(): GlanceModifier {
 }
 
 fun GlanceModifier.appWidgetBackgroundCornerRadius(): GlanceModifier {
-    if (Build.VERSION.SDK_INT >= 31) {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
         cornerRadius(android.R.dimen.system_app_widget_background_radius)
+    } else {
+        this
     }
-    return cornerRadius(16.dp)
 }
 
 fun GlanceModifier.appWidgetInnerCornerRadius(): GlanceModifier {
-    if (Build.VERSION.SDK_INT >= 31) {
-        return cornerRadius(android.R.dimen.system_app_widget_inner_radius)
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        cornerRadius(android.R.dimen.system_app_widget_inner_radius)
+    } else {
+        this
     }
-    return cornerRadius(8.dp)
 }
 
 @Composable
