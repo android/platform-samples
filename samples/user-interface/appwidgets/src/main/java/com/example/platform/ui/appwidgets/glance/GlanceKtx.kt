@@ -46,6 +46,7 @@ fun AppWidgetBox(
     content: @Composable () -> Unit,
 ) {
     Scaffold(
+        horizontalPadding = widgetPadding,
         modifier = GlanceModifier
             .padding(vertical = widgetPadding)
     ) {
@@ -72,6 +73,7 @@ fun AppWidgetColumn(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     Scaffold(
+        horizontalPadding = widgetPadding,
         modifier = GlanceModifier
             .padding(vertical = widgetPadding)
     ) {
@@ -108,4 +110,5 @@ fun stringResource(@StringRes id: Int, vararg args: Any): String {
     return LocalContext.current.getString(id, args)
 }
 
+// Padding around the widget
 val widgetPadding = 12.dp
