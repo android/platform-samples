@@ -21,40 +21,49 @@ sample together with the
 
 # Getting Started
 
-## Widget Samples
+## Canonical Widget Layout Samples
 
-The sample contains 3 type of widgets:
+These [layouts](./src/main/java/com/example/platform/ui/appwidgets/glance/layout) demonstrate how
+to write responsive, high-quality layouts for use with your Glance widgets.
 
-- ToDo list: showcasing how to create a list of items
-- Buttons: showcasing how to use the new CompoundedButtons and handle click events
-- Weather: showcasing a "real-life" weather widget.
+The `layouts` directory contains following layout categories:
 
-Those are implemented in two packages:
+* [collections](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/collections)
+  * [Action list](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/collections/ActionListAppWidget.kt)
+  * [Check list](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/collections/CheckListAppWidget.kt)
+  * [Image grid](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/collections/ImageGridAppWidget.kt)
+  * [Image text list](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/collections/ImageTextListAppWidget.kt)
 
-- [rv](src/main/java/com/example/platform/ui/appwidgets/rv) for RemoteViews implementation
-- [glance](src/main/java/com/example/platform/ui/appwidgets/glance) for Glance implementation
+* [text](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/text)
+  * [Long Text](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/text/LongTextAppWidget.kt)
+  * [Text with image](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/text/TextWithImageAppWidget.kt)
+
+* [toolbars](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/toolbars)
+  * [Toolbar with app name](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/toolbars/ToolBarAppWidget.kt)
+  * [Toolbar with search bar](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/toolbars/SearchToolBarAppWidget.kt)
+
+Each of these layout categories contains a `layout` sub-directory that can be copied to your project
+to reuse the layouts in your code.
+
+The `{layoutType}Layout` file e.g. `ToolBarLayout` contains:
+* A top level composable e.g. `ToolBarLayout`, 
+* Sub components,
+* A breakpoints definition e.g. `ToolBarLayoutSize`,
+* Constants / dimensions e.g. `ToolBarLayoutDimens`,
+* Followed by Android Studio Preview for the layout.
+
+Read more about the layouts: https://developer.android.com/design/ui/mobile/guides/widgets/layouts
+
+<img src="**screenshots**/CanonicalLayouts.png" width="256px"
+alt="Canonical Widget Layouts Showcase"
+title="Showcase of canonical widget layouts" />
+
+> More showcasing resources in the [screenshots folder](screenshots)
 
 ## Widget Pinning
 
 In addition, the [AppWidgets.kt](src/main/java/com/example/platform/ui/appwidgets/AppWidgets.kt)
 showcases how to request the launcher to "pin" an appwidget.
-
-<img src="screenshots/todo-gif.gif" width="256px"
-alt="TODO widget showcase"
-title="Showcase of the TODO widget implementation" />
-<img src="screenshots/weather-gif.gif" width="256px"
-alt="Weather widget showcase"
-title="Showcase of the Weather widget implementation" />
-<img src="screenshots/images-gif.gif" width="256px"
-alt="Images widget showcase"
-title="Showcase of the Images widget implementation" />
-
-> More showcasing resources in the [screenshots folder](screenshots)
-
-## Canonical Layouts
-
-These [layouts](./src/main/java/com/example/platform/ui/appwidgets/glance/layout) demonstrate how to write responsive, high-quality layouts for use with your 
-Glance widgets. 
 
 ## Run a new configuration
 
