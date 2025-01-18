@@ -54,7 +54,7 @@ The `{layoutType}Layout` file e.g. `ToolBarLayout` contains:
 
 Read more about the layouts: https://developer.android.com/design/ui/mobile/guides/widgets/layouts
 
-<img src="**screenshots**/CanonicalLayouts.png" width="256px"
+<img src="screenshots/CanonicalLayouts.png" width="256px"
 alt="Canonical Widget Layouts Showcase"
 title="Showcase of canonical widget layouts" />
 
