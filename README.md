@@ -6,7 +6,7 @@ This repository contains a collection of samples that demonstrate the use of dif
 
 > **Note:** These samples are intended to showcase specific functionality in isolation, and they may use
 > simplified code. They are not intended to be used as production-ready code. The project uses the
-> [casa-android](https://github.com/google/casa-android) (intended only for demo projects).
+> [casa-android](https://github.com/google/casa-android)
 > For best practices follow our documentation and check
 > [Now In Android](https://github.com/android/nowinandroid)
 
