@@ -48,12 +48,14 @@ Drag and Drop using the views
 This sample demonstrates editing an UltraHDR image and the resulting gainmap as well. Spatial edit operations like crop, rotate, scale are supported
 - [Find devices sample](connectivity/bluetooth/ble/src/main/java/com/example/platform/connectivity/bluetooth/ble/FindBLEDevicesSample.kt):
 This example will demonstrate how to scanning for Low Energy Devices
+- [HEIC UltraHDR Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2HeicUltraHDRCapture.kt):
+This sample demonstrates how to capture a HEIF compressed still image and 
 - [Haptics - 1. Vibration effects](user-interface/haptics/src/main/java/com/example/platform/ui/haptics/Haptics.kt):
 Shows various vibration effects.
 - [Hyphenation](user-interface/text/src/main/java/com/example/platform/ui/text/Hyphenation.kt):
 Demonstrates different options for the `android:hyphenationFrequency` attribute
 - [Image Capture](camera/camera2/src/main/java/com/example/platform/camera/imagecapture/Camera2ImageCapture.kt):
-This sample demonstrates how to capture and image using Camera2 and encode it 
+This sample demonstrates how to capture an image using Camera2 and encode it 
 - [Immersive mode](user-interface/window-insets/src/main/java/com/example/platform/ui/insets/ImmersiveMode.kt):
 Immersive mode enables your app to display full-screen by hiding system bars.
 - [LineBreak](user-interface/text/src/main/java/com/example/platform/ui/text/LineBreak.kt):
