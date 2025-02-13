@@ -70,7 +70,7 @@ class UltraHDRWithOpenGL : Fragment(),
         }
 
         companion object {
-            fun fromInt(value: Int) = ExtendedBrightnessValue.values().first { it.value == value }
+            fun fromInt(value: Int) = entries.first { it.value == value }
         }
     }
 
@@ -182,8 +182,11 @@ class UltraHDRWithOpenGL : Fragment(),
     }
 
     override fun onAttach(context: Context) {
-        requireActivity().display
-            ?.registerHdrSdrRatioChangedListener(Runnable::run, updateHdrSdrRatio)
+        requireActivity().display?.let { display ->
+            if (display.isHdrSdrRatioAvailable) {
+                display.registerHdrSdrRatioChangedListener(Runnable::run, updateHdrSdrRatio)
+            }
+        }
         super.onAttach(context)
     }
 
