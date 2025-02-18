@@ -64,8 +64,8 @@ jobs:
     timeout-minutes: 55
     strategy:
       matrix:
-        api-level: [21, 26, 35]
-        target: [default]
+        api-level: [21, 26, 34]
+        target: [google_apis]
 
     steps:
       - name: Delete unnecessary tools 🔧
