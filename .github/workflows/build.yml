@@ -64,7 +64,8 @@ jobs:
     timeout-minutes: 55
     strategy:
       matrix:
-        api-level: [34]
+        api-level: [21, 26, 35]
+        target: [default]
 
     steps:
       - name: Delete unnecessary tools 🔧
@@ -100,14 +101,42 @@ jobs:
       - name: Setup Gradle
         uses: gradle/gradle-build-action@v3
 
+      - name: Gradle cache
+        uses: gradle/actions/setup-gradle@v3
+
+      - name: AVD cache
+        uses: actions/cache@v4
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
+          disable-animations: false
+          ram-size: 4096M
+          disk-size: 8192M
+          heap-size: 1024M
+          script: echo "Generated AVD snapshot for caching."
+
       - name: Run instrumentation tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           arch: x86_64
           disable-animations: true
-          disk-size: 6000M
-          heap-size: 600M
+          ram-size: 4096M
+          disk-size: 8192M
+          heap-size: 1024M
           script: ./gradlew connectedDebugAndroidTest --daemon
 
       - name: Upload test reports
