@@ -23,7 +23,7 @@ group = "com.example.platform.plugin.buildlogic"
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
+        languageVersion.set(JavaLanguageVersion.of(21))
     }
 }
 

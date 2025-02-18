@@ -14,60 +14,64 @@
 # limitations under the License.
 #
 [versions]
-accompanist = "0.32.0"
-androidx-datastore = "1.0.0"
-androidx-navigation = "2.7.7"
-androidx-window = "1.2.0"
-agp = "8.5.2"
+accompanist = "0.37.0"
+androidx-datastore = "1.1.2"
+androidx-navigation = "2.8.7"
+androidx-window = "1.3.0"
+agp = "8.8.1"
 casa = "0.5.1"
-coil = "2.4.0"
-gradleDownloadTask = "4.1.2"
-ksp = "1.9.22-1.0.17"
-compose-bom = "2024.02.00"
+coil = "2.7.0"
+coreTelecom = "1.0.0-beta01"
+gradleDownloadTask = "5.6.0"
+ksp = "2.1.10-1.0.30"
+compose-bom = "2025.02.00"
 composeCompiler = "1.5.9"
-hilt = "2.48.1"
-kotlin = "1.9.22"
-kotlin-serialization = "1.6.0"
+hilt = "2.55"
+kotlin = "2.1.10"
+kotlin-serialization = "1.8.0"
 ktlint = "0.48.1"
-coroutines = "1.7.3"
-play-services-location = "21.1.0"
+coroutines = "1.10.1"
+play-services-location = "21.3.0"
 junit4 = "4.13.2"
-androidxEspresso = "3.5.1"
-androidxTestCore = "1.5.0"
-androidxTestExtJunit = "1.1.5"
-androidxTestExtTruth = "1.5.0"
-androidxTestRules = "1.5.0"
-androidxTestRunner = "1.5.2"
-androidxUiAutomator = "2.2.0"
-media3 = "1.5.0"
-appcompat = "1.6.1"
-material = "1.12.0-beta01"
-constraintlayout = "2.1.4"
+androidxEspresso = "3.6.1"
+androidxTestCore = "1.6.1"
+androidxTestExtJunit = "1.2.1"
+androidxTestExtTruth = "1.6.0"
+androidxTestRules = "1.6.1"
+androidxTestRunner = "1.6.2"
+androidxUiAutomator = "2.3.0"
+media3 = "1.5.1"
+appcompat = "1.7.0"
+material = "1.12.0"
+constraintlayout = "2.2.0"
 glide-compose = "1.0.0-beta01"
-glance = "1.1.0-SNAPSHOT"
-tensorflowLite = "2.9.0"
+glance = "1.1.1"
+tensorflowLite = "2.17.0"
+tensorflowLiteTFops = "2.16.1"
 tensorflowLiteGpuDelegatePlugin = "0.4.4"
-tensorflowLiteSupport = "0.4.2"
+tensorflowLiteSupport = "0.5.0"
+litertGpuApi = "1.1.2"
 
 [libraries]
 
 # Core dependencies
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 
-androidx-activity = "androidx.activity:activity:1.8.2"
-androidx-core = "androidx.core:core-ktx:1.12.0"
-androidx-appcompat = "androidx.appcompat:appcompat:1.6.1"
+androidx-activity = "androidx.activity:activity:1.10.0"
+androidx-core = "androidx.core:core-ktx:1.15.0"
+androidx-appcompat = "androidx.appcompat:appcompat:1.7.0"
+androidx-core-telecom = { module = "androidx.core:core-telecom", version.ref = "coreTelecom" }
 androidx-exifinterface = "androidx.exifinterface:exifinterface:1.3.7"
 # Fragment 1.7.0 alpha and Transition 1.5.0 alpha are required for predictive back to work with Fragments and transitions
-androidx-fragment = "androidx.fragment:fragment-ktx:1.7.0-alpha10"
-androidx-transition = "androidx.transition:transition-ktx:1.5.0-alpha06"
-androidx-activity-compose = "androidx.activity:activity-compose:1.8.2"
+androidx-fragment = "androidx.fragment:fragment-ktx:1.8.6"
+androidx-transition = "androidx.transition:transition-ktx:1.5.1"
+androidx-activity-compose = "androidx.activity:activity-compose:1.10.0"
 androidx-navigation-fragment = { module = "androidx.navigation:navigation-fragment", version.ref = "androidx-navigation" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "androidx-navigation" }
 androidx-navigation-testing = { module = "androidx.navigation:navigation-testing", version.ref = "androidx-navigation" }
 androidx-navigation-ui = { module = "androidx.navigation:navigation-ui", version.ref = "androidx-navigation" }
-androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0"
-androidx-viewpager2 = "androidx.viewpager2:viewpager2:1.0.0"
+androidx-lifecycle-viewmodel-compose = "androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7"
+androidx-viewpager2 = "androidx.viewpager2:viewpager2:1.1.0"
 
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanist" }
 
@@ -121,27 +125,27 @@ androidx-test-uiautomator = { group = "androidx.test.uiautomator", name = "uiaut
 junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 
 # Sample specific dependencies
-lottie = "com.airbnb.android:lottie:6.0.0"
+lottie = "com.airbnb.android:lottie:6.6.2"
 
 rxjava2-android = 'io.reactivex.rxjava2:rxandroid:2.1.1'
 
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
 
 
-androidx-work-runtime-ktx = "androidx.work:work-runtime-ktx:2.9.0"
-androidx-core-remoteviews = "androidx.core:core-remoteviews:1.0.0"
+androidx-work-runtime-ktx = "androidx.work:work-runtime-ktx:2.10.0"
+androidx-core-remoteviews = "androidx.core:core-remoteviews:1.1.0"
 androidx-glance-appwidget = {group = "androidx.glance", name = "glance-appwidget", version.ref = "glance"}
 androidx-glance-preview = {group = "androidx.glance", name = "glance-preview", version.ref = "glance"}
 androidx-glance-appwidget-preview = {group = "androidx.glance", name = "glance-appwidget-preview", version.ref = "glance"}
 androidx-glance-material3 = {group = "androidx.glance", name = "glance-material3", version.ref = "glance"}
-androidx-graphics-core = { group = "androidx.graphics", name = "graphics-core", version = "1.0.0-beta01" }
-androidx-startup = 'androidx.startup:startup-runtime:1.1.1'
+androidx-graphics-core = { group = "androidx.graphics", name = "graphics-core", version = "1.0.2" }
+androidx-startup = 'androidx.startup:startup-runtime:1.2.0'
 androidx-window = { module = "androidx.window:window", version.ref = "androidx-window" }
 androidx-window-java = { module = "androidx.window:window-java", version.ref = "androidx-window" }
 androidx-window-rxjava2 = { module = "androidx.window:window-rxjava2", version.ref = "androidx-window" }
 androidx-window-core = { module = "androidx.window:window-core", version.ref = "androidx-window" }
 androidx-media = "androidx.media:media:1.7.0"
-androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
+androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.2.0"
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
 androidx-draganddrop = "androidx.draganddrop:draganddrop:1.0.0"
 androidx-dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
@@ -151,9 +155,9 @@ androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", versi
 androidx-media3-transformer = { module = "androidx.media3:media3-transformer", version.ref = "media3" }
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3" }
 
-fresco = "com.facebook.fresco:fresco:3.0.0"
+fresco = "com.facebook.fresco:fresco:3.6.0"
 fresco-nativeimagetranscoder = "com.facebook.fresco:nativeimagetranscoder:2.6.0!!"
-glide = "com.github.bumptech.glide:glide:4.15.1"
+glide = "com.github.bumptech.glide:glide:4.16.0"
 glide-compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide-compose" }
 
 
@@ -163,18 +167,20 @@ constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayo
 tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
 tensorflow-lite-gpu = { module = "org.tensorflow:tensorflow-lite-gpu", version.ref = "tensorflowLite" }
 tensorflow-lite-gpu-delegate-plugin = { module = "org.tensorflow:tensorflow-lite-gpu-delegate-plugin", version.ref = "tensorflowLiteGpuDelegatePlugin" }
-tensorflow-lite-select-tf-ops = { module = "org.tensorflow:tensorflow-lite-select-tf-ops", version.ref = "tensorflowLite" }
+tensorflow-lite-select-tf-ops = { module = "org.tensorflow:tensorflow-lite-select-tf-ops", version.ref = "tensorflowLiteTFops" }
 tensorflow-lite-support = { module = "org.tensorflow:tensorflow-lite-support", version.ref = "tensorflowLiteSupport" }
+litert-gpu-api = { group = "com.google.ai.edge.litert", name = "litert-gpu-api", version.ref = "litertGpuApi" }
 
 [plugins]
-affectedmoduledetector = { id = "com.dropbox.affectedmoduledetector", version = "0.2.0" }
-versionCatalogUpdate = { id = "nl.littlerobots.version-catalog-update", version = "0.7.0" }
-benManesVersions = { id = "com.github.ben-manes.versions", version = "0.44.0" }
+affectedmoduledetector = { id = "com.dropbox.affectedmoduledetector", version = "0.3.1" }
+versionCatalogUpdate = { id = "nl.littlerobots.version-catalog-update", version = "0.8.5" }
+benManesVersions = { id = "com.github.ben-manes.versions", version = "0.52.0" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 android-test = { id = "com.android.test", version.ref = "agp" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

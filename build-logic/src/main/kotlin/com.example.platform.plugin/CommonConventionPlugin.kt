@@ -46,7 +46,7 @@ class CommonConventionPlugin : Plugin<Project> {
             pluginManager.withPlugin("java") {
                 extensions.configure<JavaPluginExtension> {
                     toolchain {
-                        it.languageVersion.set(JavaLanguageVersion.of(17))
+                        it.languageVersion.set(JavaLanguageVersion.of(21))
                     }
                 }
             }

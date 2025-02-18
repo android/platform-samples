@@ -17,6 +17,7 @@
 plugins {
     id("com.example.platform.sample")
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
