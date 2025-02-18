@@ -46,14 +46,14 @@ jobs:
         run: ./gradlew testDebug
 
       - name: Upload build outputs (APKs)
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-outputs
           path: app/build/outputs
 
       - name: Upload build reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-reports
           path: app/build/reports
@@ -112,7 +112,7 @@ jobs:
 
       - name: Upload test reports
         if: always()
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: test-reports-${{ matrix.api-level }}
           path: '*/build/reports/androidTests'
