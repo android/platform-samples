@@ -14,7 +14,8 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Define that the app uses CDM -->
     <uses-feature android:name="android.software.companion_device_setup" />
@@ -33,7 +34,8 @@
         <service
             android:name="com.example.platform.connectivity.bluetooth.cdm.CompanionDeviceSampleService"
             android:exported="true"
-            android:permission="android.permission.BIND_COMPANION_DEVICE_SERVICE">
+            android:permission="android.permission.BIND_COMPANION_DEVICE_SERVICE"
+            tools:targetApi="s">
             <intent-filter>
                 <action android:name="android.companion.CompanionDeviceService" />
             </intent-filter>
