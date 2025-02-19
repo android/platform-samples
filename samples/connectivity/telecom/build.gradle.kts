@@ -19,6 +19,7 @@
 plugins {
     id("com.example.platform.sample")
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.compose.compiler)
 }
 
 android {
@@ -26,7 +27,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-telecom:1.0.0-alpha02")
+    implementation(libs.androidx.core.telecom)
     implementation(project(mapOf("path" to ":samples:connectivity:audio")))
 
     androidTestImplementation(platform(libs.compose.bom))

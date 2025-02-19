@@ -17,6 +17,7 @@
 package com.example.platform.ui.insets
 
 import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -115,17 +116,17 @@ private fun ImmersiveModeContent(
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         // WindowInsetsController can hide or show specified system bars.
-        val window = (LocalContext.current as Activity).window
+        val window = LocalActivity.current?.window
         val view = LocalView.current
         val controller = remember(key1 = window, key2 = view) {
-            WindowInsetsControllerCompat(window, view)
+            window?.let { WindowInsetsControllerCompat(it, view) }
         }
 
         // The behavior of the immersive mode.
         var behavior by rememberSaveable { mutableStateOf(BehaviorOption.Default) }
         RadioGroup(
             title = "Behavior",
-            options = BehaviorOption.values().toList(),
+            options = BehaviorOption.entries,
             selected = behavior,
             onSelected = { behavior = it as BehaviorOption }
         )
@@ -134,7 +135,7 @@ private fun ImmersiveModeContent(
         var type by rememberSaveable { mutableStateOf(TypeOption.SystemBars) }
         RadioGroup(
             title = "Type",
-            options = TypeOption.values().toList(),
+            options = TypeOption.entries,
             selected = type,
             onSelected = { type = it as TypeOption }
         )
@@ -145,17 +146,17 @@ private fun ImmersiveModeContent(
         ) {
             Button(onClick = {
                 // Set the behavior.
-                controller.systemBarsBehavior = behavior.value
+                controller?.systemBarsBehavior = behavior.value
                 // Hide the selected type.
-                controller.hide(type.value)
+                controller?.hide(type.value)
             }) {
                 Text(text = "HIDE")
             }
             Button(onClick = {
                 // Set the behavior.
-                controller.systemBarsBehavior = behavior.value
+                controller?.systemBarsBehavior = behavior.value
                 // Show the selected type.
-                controller.show(type.value)
+                controller?.show(type.value)
             }) {
                 Text(text = "SHOW")
             }
@@ -164,7 +165,7 @@ private fun ImmersiveModeContent(
         // Reset
         DisposableEffect(key1 = Unit) {
             onDispose {
-                controller.show(WindowInsetsCompat.Type.systemBars())
+                controller?.show(WindowInsetsCompat.Type.systemBars())
             }
         }
     }

@@ -41,6 +41,7 @@ class SamplePlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.android.library")
                 apply("org.jetbrains.kotlin.android")
+                apply("org.jetbrains.kotlin.plugin.compose")
                 apply("com.google.devtools.ksp")
                 apply("dagger.hilt.android.plugin")
                 apply("kotlin-parcelize")
@@ -50,7 +51,7 @@ class SamplePlugin : Plugin<Project> {
             pluginManager.withPlugin("java") {
                 extensions.configure<JavaPluginExtension> {
                     toolchain {
-                        it.languageVersion.set(JavaLanguageVersion.of(17))
+                        it.languageVersion.set(JavaLanguageVersion.of(21))
                     }
                 }
             }
@@ -58,7 +59,7 @@ class SamplePlugin : Plugin<Project> {
             // TODO: remove when KSP starts respecting the Java/Kotlin toolchain
             tasks.withType(KotlinCompile::class.java).configureEach {
                 it.kotlinOptions {
-                    jvmTarget = "17"
+                    jvmTarget = "21"
                 }
             }
 
@@ -73,8 +74,8 @@ class SamplePlugin : Plugin<Project> {
                     }
 
                     compileOptions {
-                        sourceCompatibility = JavaVersion.VERSION_17
-                        targetCompatibility = JavaVersion.VERSION_17
+                        sourceCompatibility = JavaVersion.VERSION_21
+                        targetCompatibility = JavaVersion.VERSION_21
                     }
 
                     buildFeatures {
