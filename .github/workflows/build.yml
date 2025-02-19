@@ -129,6 +129,8 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           arch: x86_64
           disable-animations: true
+          disk-size: 8192M
+          heap-size: 1024M
           script: ./gradlew connectedDebugAndroidTest --daemon
 
       - name: Upload test reports
