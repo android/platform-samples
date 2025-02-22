@@ -29,13 +29,7 @@
         <activity
             android:name=".demos.WindowDemosActivity"
             android:exported="true"
-            android:label="@string/windowManagerDemos">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:label="@string/windowManagerDemos" />
         <activity
             android:name=".DualScreenActivity"
             android:exported="false"
