@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 
-package com.example.platform.base
+package com.example.platform.shared
+
 
 import android.content.Intent
 import android.net.Uri
