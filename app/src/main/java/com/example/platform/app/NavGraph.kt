@@ -29,14 +29,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.fragment.compose.AndroidFragment
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.navigation.toRoute
-import com.example.platform.privacy.transparency.ScreenshotDetectionSample
 import kotlinx.serialization.Serializable
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,7 +74,7 @@ fun NavGraph() {
         ) { backStackEntry ->
             val arguments = requireNotNull(backStackEntry.arguments)
             val sampleDemoId = requireNotNull(arguments.getString(SAMPLE_DEMO_ID))
-            val sampleDemo = SAMPLE_DEMOS.getValue(sampleDemoId)
+            val sampleDemo = SAMPLE_DEMOS.getValue(sampleDemoId) as ComposableSampleDemo
 
             Scaffold(
                 topBar = { TopAppBar(title = { Text(sampleDemo.name) }) },

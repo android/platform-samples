@@ -21,10 +21,35 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class Area(override val id: String, override val name: String, override val description: String? = null) : CatalogItem
 
-val StorageArea = Area(
-    "storage",
-    "Storage",
-    "Android photo library access capabilities.\nPhoto Picker for unified device and cloud photo access, and MediaStore for detailed local media querying",
+val AccessiblityArea = Area(
+    "accessiblity",
+    "Accessibility",
+    null,
+)
+
+val CameraCamera2Area = Area(
+    "camera-camera2",
+    "Camera2",
+    null,
+)
+
+val ConnectivityCallNotificationArea = Area(
+    "connectivity-call-notification",
+    "Connectivity Call Notification",
+    null,
+)
+
+
+val GraphicsPdf = Area(
+    "graphics-pdf",
+    "Graphics PDF",
+    null,
+)
+
+val GraphicsUltraHdr = Area(
+    "graphics-ultrahdr",
+    "Graphics UltraHDR",
+    null,
 )
 
 val PrivacyTransparencyArea = Area(
@@ -33,17 +58,18 @@ val PrivacyTransparencyArea = Area(
     null,
 )
 
+val StorageArea = Area(
+    "storage",
+    "Storage",
+    "Android photo library access capabilities.\nPhoto Picker for unified device and cloud photo access, and MediaStore for detailed local media querying",
+)
+
 val AREAS = listOf(
-    StorageArea,
+    AccessiblityArea,
+    CameraCamera2Area,
+    ConnectivityCallNotificationArea,
+    GraphicsPdf,
+    GraphicsUltraHdr,
     PrivacyTransparencyArea,
+    StorageArea,
 ).associateBy { it.id }
-
-
-//val areasSamples = mapOf(
-//    StorageArea to listOf(
-//        PhotoPickerSampleDemo,
-//        MediaStoreQuerySampleDemo,
-//        SelectedPhotosAccessSampleDemo,
-//    ),
-//    PrivacyTransparencyArea to listOf(DataAccessSampleDemo, ScreenshotDetectionSampleDemo),
-//)

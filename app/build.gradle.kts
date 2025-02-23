@@ -72,8 +72,13 @@ dependencies {
     implementation(libs.androidx.fragment.compose)
 
     implementation(project(":shared"))
-    implementation(project(":samples:storage"))
+    implementation(project(":samples:accessibility"))
+    implementation(project(":samples:camera:camera2"))
+    implementation(project(":samples:connectivity:callnotification"))
+    implementation(project(":samples:graphics:pdf"))
+    implementation(project(":samples:graphics:ultrahdr"))
     implementation(project(":samples:privacy:transparency"))
+    implementation(project(":samples:storage"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
