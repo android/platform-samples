@@ -35,14 +35,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
-import com.google.android.catalog.framework.annotations.Sample
+//import com.google.android.catalog.framework.annotations.Sample
 import java.text.DateFormat
 import java.util.Date
 
-@Sample(
-    name = "Screenshot Detection",
-    description = "This sample shows how to detect that the user capture the screen in Android 14 onwards",
-)
+//@Sample(
+//    name = "Screenshot Detection",
+//    description = "This sample shows how to detect that the user capture the screen in Android 14 onwards",
+//)
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class ScreenshotDetectionSample : Fragment() {
 
