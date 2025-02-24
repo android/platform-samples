@@ -38,8 +38,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-import com.example.platform.base.PermissionBox
-import com.google.android.catalog.framework.annotations.Sample
+import com.example.platform.shared.PermissionBox
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationResult
@@ -49,11 +48,6 @@ import java.util.concurrent.TimeUnit
 
 
 @SuppressLint("MissingPermission")
-@Sample(
-    name = "Location - Updates",
-    description = "This Sample demonstrate how to get location updates",
-    documentation = "https://developer.android.com/training/location/request-updates",
-)
 @Composable
 fun LocationUpdatesScreen() {
     val permissions = listOf(

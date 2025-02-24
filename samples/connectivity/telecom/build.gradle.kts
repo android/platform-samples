@@ -15,29 +15,47 @@
  * limitations under the License.
  */
 
-@Suppress("DSL_SCOPE_VIOLATION")
+//@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.example.platform.sample")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
     namespace = "com.example.platform.connectivity.telecom"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 21
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
     implementation("androidx.core:core-telecom:1.0.0-alpha02")
     implementation(project(mapOf("path" to ":samples:connectivity:audio")))
 
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.compose.ui.test.manifest)
-    debugImplementation(libs.compose.ui.test.manifest)
-    androidTestImplementation(libs.compose.ui.test.junit4)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.androidx.core)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(project(":shared"))
+
+    implementation(libs.accompanist.permissions)
+
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.test.rules)
     androidTestImplementation(libs.androidx.test.runner)
     androidTestImplementation(libs.hilt.testing)
     androidTestImplementation(libs.junit4)
+
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
 }

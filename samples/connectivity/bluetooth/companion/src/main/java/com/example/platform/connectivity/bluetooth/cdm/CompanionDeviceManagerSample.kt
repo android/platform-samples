@@ -62,20 +62,13 @@ import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.getSystemService
-import com.example.platform.base.PermissionBox
 import com.example.platform.connectivity.bluetooth.ble.ConnectDeviceScreen
 import com.example.platform.connectivity.bluetooth.ble.server.GATTServerSampleService.Companion.SERVICE_UUID
-import com.google.android.catalog.framework.annotations.Sample
+import com.example.platform.shared.PermissionBox
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.launch
 import java.util.concurrent.Executor
 
-@Sample(
-    name = "Companion Device Manager Sample",
-    description = "This samples shows how to use the CDM to pair and connect with BLE devices",
-    documentation = "https://developer.android.com/guide/topics/connectivity/companion-device-pairing",
-    tags = ["bluetooth"],
-)
 @SuppressLint("InlinedApi", "MissingPermission")
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable

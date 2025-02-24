@@ -40,7 +40,6 @@ import androidx.media3.transformer.ExportResult
 import androidx.media3.transformer.ProgressHolder
 import androidx.media3.transformer.Transformer
 import com.example.platform.media.video.databinding.TransformerTfliteLayoutBinding
-import com.google.android.catalog.framework.annotations.Sample
 import com.google.common.base.Stopwatch
 import com.google.common.base.Ticker
 import kotlinx.coroutines.Dispatchers
@@ -51,12 +50,6 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 @UnstableApi
-@Sample(
-    name = "Transformer and TFLite",
-    description = "This sample demonstrates using Transformer with TFLite/RTLite by applying a selected art style to a video.",
-    documentation = "https://developer.android.com/guide/topics/media/transformer",
-    tags = ["Transformer"],
-)
 class TransformerTFLite : Fragment() {
     /**
      *  Android ViewBinding.

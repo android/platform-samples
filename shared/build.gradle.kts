@@ -47,5 +47,5 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
 
-    implementation("com.google.accompanist:accompanist-permissions:0.37.1")
+    implementation(libs.accompanist.permissions)
 }

@@ -15,12 +15,23 @@
  */
 
 plugins {
-    id("com.example.platform.sample")
-    id("de.undercouch.download")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.android)
+    id("de.undercouch.download") version "5.6.0"
 }
 
 android {
     namespace = "com.example.platform.media.video"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 21
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     viewBinding.isEnabled = true
 
     androidResources {
