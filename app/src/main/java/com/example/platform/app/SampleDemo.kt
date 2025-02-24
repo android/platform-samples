@@ -54,6 +54,7 @@ import com.example.platform.privacy.data.PackageVisibility
 import com.example.platform.privacy.permissions.ComposePermissions
 import com.example.platform.privacy.permissions.MultiplePermissions
 import com.example.platform.privacy.permissions.Permissionless
+import com.example.platform.privacy.permissions.SinglePermission
 import com.example.platform.privacy.transparency.DataAccessSample
 import com.example.platform.privacy.transparency.ScreenshotDetectionSample
 import com.example.platform.storage.mediastore.MediaStoreQuerySample
@@ -406,6 +407,15 @@ val SAMPLE_DEMOS by lazy {
             area = PrivacyPermissions,
             tags = listOf("Permissions"),
             content = { Permissionless() },
+        ),
+        ComposableSampleDemo(
+            id = "single-permission",
+            name = "Single Permission",
+            description = "Shows the recommended flow to request single runtime permissions",
+            documentation = "https://developer.android.com/training/permissions/requesting",
+            area = PrivacyPermissions,
+            tags = listOf("Permissions"),
+            content = { AndroidFragment<SinglePermission>() },
         ),
         ComposableSampleDemo(
             id = "data-access",
