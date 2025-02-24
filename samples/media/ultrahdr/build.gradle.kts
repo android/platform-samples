@@ -16,11 +16,22 @@
 
 
 plugins {
-    id("com.example.platform.sample")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace = "com.example.platform.media.ultrahdr"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 21
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     viewBinding.isEnabled = true
 }
 

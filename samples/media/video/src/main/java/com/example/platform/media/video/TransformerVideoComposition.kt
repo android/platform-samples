@@ -41,7 +41,6 @@ import androidx.media3.transformer.ExportResult
 import androidx.media3.transformer.ProgressHolder
 import androidx.media3.transformer.Transformer
 import com.example.platform.media.video.databinding.TransformerCompositionLayoutBinding
-import com.google.android.catalog.framework.annotations.Sample
 import com.google.common.base.Stopwatch
 import com.google.common.base.Ticker
 import com.google.common.collect.ImmutableList
@@ -53,12 +52,6 @@ import java.io.IOException
 import java.util.concurrent.TimeUnit
 
 @UnstableApi
-@Sample(
-    name = "Video Composition using Media3 Transformer",
-    description = "This sample demonstrates concatenation of two video assets and an image using Media3 Transformer library.",
-    documentation = "https://developer.android.com/guide/topics/media/transformer",
-    tags = ["Transformer"],
-)
 class TransformerVideoComposition : Fragment() {
     /**
      *  Android ViewBinding.

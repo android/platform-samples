@@ -33,12 +33,35 @@ val CameraCamera2Area = Area(
     null,
 )
 
+val ConnectivityAudioArea = Area(
+    "connectivity-audio",
+    "Connectivity Audio",
+    null,
+)
+
+val ConnectivityBluetoothBleArea = Area(
+    "connectivity-bluetooth-ble",
+    "Connectivity Bluetooth BLE",
+    null,
+)
+
+val ConnectivityBluetoothCompanionArea = Area(
+    "connectivity-bluetooth-companion",
+    "Connectivity Bluetooth Companion",
+    null,
+)
+
 val ConnectivityCallNotificationArea = Area(
     "connectivity-call-notification",
     "Connectivity Call Notification",
     null,
 )
 
+val ConnectivityTelecomArea = Area(
+    "connectivity-telecom",
+    "Connectivity Telecom",
+    null,
+)
 
 val GraphicsPdf = Area(
     "graphics-pdf",
@@ -49,6 +72,36 @@ val GraphicsPdf = Area(
 val GraphicsUltraHdr = Area(
     "graphics-ultrahdr",
     "Graphics UltraHDR",
+    null,
+)
+
+val LocationArea = Area(
+    "location",
+    "Location",
+    null,
+)
+
+val MediaUltraHdrArea = Area(
+    "media-ultrahdr",
+    "Media UltraHDR",
+    null,
+)
+
+val MediaVideo = Area(
+    "media-video",
+    "Media Video",
+    null,
+)
+
+val PrivacyData = Area(
+    "privacy-data",
+    "Privacy Data",
+    null,
+)
+
+val PrivacyPermissions = Area(
+    "privacy-permissions",
+    "Privacy Permissions",
     null,
 )
 
@@ -67,9 +120,18 @@ val StorageArea = Area(
 val AREAS = listOf(
     AccessiblityArea,
     CameraCamera2Area,
+    ConnectivityAudioArea,
+    ConnectivityBluetoothBleArea,
+    ConnectivityBluetoothCompanionArea,
     ConnectivityCallNotificationArea,
+    ConnectivityTelecomArea,
     GraphicsPdf,
     GraphicsUltraHdr,
+    LocationArea,
+    MediaUltraHdrArea,
+    MediaVideo,
+    PrivacyData,
+    PrivacyPermissions,
     PrivacyTransparencyArea,
     StorageArea,
 ).associateBy { it.id }

@@ -25,7 +25,14 @@ import com.example.platform.accessibility.SpeakableText
 import com.example.platform.camera.imagecapture.Camera2ImageCapture
 import com.example.platform.camera.imagecapture.Camera2UltraHDRCapture
 import com.example.platform.camera.preview.Camera2Preview
+import com.example.platform.connectivity.audio.AudioCommsSample
+import com.example.platform.connectivity.bluetooth.ble.BLEScanIntentSample
+import com.example.platform.connectivity.bluetooth.ble.ConnectGATTSample
+import com.example.platform.connectivity.bluetooth.ble.FindBLEDevicesSample
+import com.example.platform.connectivity.bluetooth.ble.server.GATTServerSample
+import com.example.platform.connectivity.bluetooth.cdm.CompanionDeviceManagerSample
 import com.example.platform.connectivity.callnotification.CallNotificationSample
+import com.example.platform.connectivity.telecom.TelecomCallSample
 import com.example.platform.graphics.pdf.PdfRendererScreen
 import com.example.platform.graphics.ultrahdr.display.CompressingUltraHDRImages
 import com.example.platform.graphics.ultrahdr.display.DisplayUltraHDRScreen
@@ -34,6 +41,19 @@ import com.example.platform.graphics.ultrahdr.display.DisplayingUltraHDRUsing3PL
 import com.example.platform.graphics.ultrahdr.display.VisualizingAnUltraHDRGainmap
 import com.example.platform.graphics.ultrahdr.edit.EditingUltraHDR
 import com.example.platform.graphics.ultrahdr.opengl.UltraHDRWithOpenGL
+import com.example.platform.location.bglocationaccess.BgLocationAccessScreen
+import com.example.platform.location.currentLocation.CurrentLocationScreen
+import com.example.platform.location.geofencing.GeofencingScreen
+import com.example.platform.location.locationupdates.LocationUpdatesScreen
+import com.example.platform.location.permission.LocationPermissionScreen
+import com.example.platform.location.useractivityrecog.UserActivityRecognitionScreen
+import com.example.platform.media.ultrahdr.video.UltraHDRToHDRVideo
+import com.example.platform.media.video.TransformerTFLite
+import com.example.platform.media.video.TransformerVideoComposition
+import com.example.platform.privacy.data.PackageVisibility
+import com.example.platform.privacy.permissions.ComposePermissions
+import com.example.platform.privacy.permissions.MultiplePermissions
+import com.example.platform.privacy.permissions.Permissionless
 import com.example.platform.privacy.transparency.DataAccessSample
 import com.example.platform.privacy.transparency.ScreenshotDetectionSample
 import com.example.platform.storage.mediastore.MediaStoreQuerySample
@@ -130,6 +150,60 @@ val SAMPLE_DEMOS by lazy {
             tags = listOf("Camera2"),
             content = { AndroidFragment<Camera2Preview>() },
         ),
+        ComposableSampleDemo(
+            id = "communication-audio-manager",
+            name = "Communication Audio Manager",
+            description = "This sample shows how to use audio manager to for Communication application that self-manage the call.",
+            documentation = "https://developer.android.com/guide/topics/connectivity/ble-audio/audio-manager",
+            area = ConnectivityAudioArea,
+            tags = listOf("Audio"),
+            content = { AudioCommsSample() },
+        ),
+        ComposableSampleDemo(
+            id = "create-gatt-server",
+            name = "Create a GATT server",
+            description = "Shows how to create a GATT server and communicate with the GATT client",
+            documentation = "https://developer.android.com/reference/android/bluetooth/BluetoothGattServer",
+            area = ConnectivityBluetoothBleArea,
+            tags = listOf("Bluetooth"),
+            content = { GATTServerSample() },
+        ),
+        ComposableSampleDemo(
+            id = "scan-with-ble-intent",
+            name = "Scan with BLE Intent",
+            description = "This samples shows how to use the BLE intent to scan for devices",
+            documentation = "https://developer.android.com/reference/android/bluetooth/le/BluetoothLeScanner#startScan(java.util.List%3Candroid.bluetooth.le.ScanFilter%3E,%20android.bluetooth.le.ScanSettings,%20android.app.PendingIntent)",
+            area = ConnectivityBluetoothBleArea,
+            tags = listOf("Bluetooth"),
+            content = { BLEScanIntentSample() },
+        ),
+        ComposableSampleDemo(
+            id = "connect-gatt-server",
+            name = "Connect to a GATT server",
+            description = "Shows how to connect to a GATT server hosted by the BLE device and perform simple operations",
+            documentation = "https://developer.android.com/guide/topics/connectivity/bluetooth/connect-gatt-server",
+            area = ConnectivityBluetoothBleArea,
+            tags = listOf("Bluetooth"),
+            content = { ConnectGATTSample() },
+        ),
+        ComposableSampleDemo(
+            id = "find-devices",
+            name = "Find devices",
+            description = "This example will demonstrate how to scanning for Low Energy Devices",
+            documentation = "https://developer.android.com/guide/topics/connectivity/bluetooth",
+            area = ConnectivityBluetoothBleArea,
+            tags = listOf("Bluetooth"),
+            content = { FindBLEDevicesSample() },
+        ),
+        ComposableSampleDemo(
+            id = "companion-device-manager",
+            name = "Companion Device Manager",
+            description = "This samples shows how to use the CDM to pair and connect with BLE devices",
+            documentation = "https://developer.android.com/guide/topics/connectivity/companion-device-pairing",
+            area = ConnectivityBluetoothCompanionArea,
+            tags = listOf("Bluetooth"),
+            content = { CompanionDeviceManagerSample() },
+        ),
         ActivitySampleDemo(
             id = "call-notification",
             name = "Call Notification",
@@ -137,6 +211,14 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/reference/android/app/Notification.CallStyle",
             area = ConnectivityCallNotificationArea,
             content = CallNotificationSample::class.java,
+        ),
+        ComposableSampleDemo(
+            id = "telecom-call",
+            name = "Telecom Call",
+            description = "A sample showcasing how to handle calls with the Jetpack Telecom API",
+            documentation = "https://developer.android.com/guide/topics/connectivity/telecom",
+            area = ConnectivityTelecomArea,
+            content = { TelecomCallSample() },
         ),
         ComposableSampleDemo(
             id = "pdf-renderer",
@@ -211,6 +293,119 @@ val SAMPLE_DEMOS by lazy {
             area = GraphicsUltraHdr,
             tags = listOf("UltraHDR"),
             content = { AndroidFragment<UltraHDRWithOpenGL>() },
+        ),
+        ComposableSampleDemo(
+            id = "location-background-location-updates",
+            name = "Location - Background Location updates",
+            description = "This Sample demonstrate how to access location and get location updates when app is in background",
+            documentation = "https://developer.android.com/training/location/background",
+            area = LocationArea,
+            content = { BgLocationAccessScreen() },
+        ),
+        ComposableSampleDemo(
+            id = "location-getting-current-location",
+            name = "Location - Getting Current Location",
+            description = "This Sample demonstrate how to request of current location",
+            documentation = "https://developer.android.com/training/location/retrieve-current",
+            area = LocationArea,
+            content = { CurrentLocationScreen() },
+        ),
+        ComposableSampleDemo(
+            id = "location-create-monitor-geofence",
+            name = "Location - Create and monitor Geofence",
+            description = "This Sample demonstrate best practices for Creating and monitoring geofence",
+            documentation = "https://developer.android.com/training/location/geofencing",
+            area = LocationArea,
+            content = { GeofencingScreen() },
+        ),
+        ComposableSampleDemo(
+            id = "location-updates",
+            name = "Location - Updates",
+            description = "This Sample demonstrate how to get location updates",
+            documentation = "https://developer.android.com/training/location/request-updates",
+            area = LocationArea,
+            content = { LocationUpdatesScreen() },
+        ),
+        ComposableSampleDemo(
+            id = "location-permissions",
+            name = "Location - Permissions",
+            description = "This Sample demonstrate best practices for Location Permission",
+            documentation = "https://developer.android.com/training/location/permissions",
+            area = LocationArea,
+            tags = listOf("permissions"),
+            content = { LocationPermissionScreen() },
+        ),
+        ComposableSampleDemo(
+            id = "location-user-activity-recognition",
+            name = "Location - User Activity Recognition",
+            description = "This Sample demonstrate detection of user activity like walking, driving, etc.",
+            documentation = "https://developer.android.com/training/location/transitions",
+            area = LocationArea,
+            content = { UserActivityRecognitionScreen() },
+        ),
+        ComposableSampleDemo(
+            id = "ultrahdr-to-hdr-video",
+            name = "UltraHDR to HDR Video",
+            description = "This sample demonstrates converting a series of UltraHDR images into a HDR " +
+                    "video." + "The sample leverages GPU hardware acceleration to render and encode the " +
+                    "images.",
+            documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
+            area = MediaUltraHdrArea,
+            tags = listOf("UltraHDR"),
+            content = { AndroidFragment<UltraHDRToHDRVideo>() },
+        ),
+        ComposableSampleDemo(
+            id = "transformer-tflite",
+            name = "Transformer and TFLite",
+            description = "This sample demonstrates using Transformer with TFLite/RTLite by applying a selected art style to a video.",
+            documentation = "https://developer.android.com/guide/topics/media/transformer",
+            area = MediaVideo,
+            tags = listOf("Transformer"),
+            content = { AndroidFragment<TransformerTFLite>() },
+        ),
+        ComposableSampleDemo(
+            id = "video-composition-using-media3-transformer",
+            name = "Video Composition using Media3 Transformer",
+            description = "This sample demonstrates concatenation of two video assets and an image using Media3 Transformer library.",
+            documentation = "https://developer.android.com/guide/topics/media/transformer",
+            area = MediaVideo,
+            tags = listOf("Transformer"),
+            content = { AndroidFragment<TransformerVideoComposition>() },
+        ),
+        ComposableSampleDemo(
+            id = "package-visibility",
+            name = "Package Visibility",
+            description = "A sample that showcase how the package visibility queries affects the available packages",
+            documentation = "https://developer.android.com/training/package-visibility",
+            area = PrivacyData,
+            content = { PackageVisibility() },
+        ),
+        ComposableSampleDemo(
+            id = "permissions-compose",
+            name = "Permissions using Compose",
+            description = "This sample showcases how to request permission using Accompanist in Compose",
+            documentation = "https://google.github.io/accompanist/permissions/",
+            area = PrivacyPermissions,
+            tags = listOf("Permissions"),
+            content = { ComposePermissions() },
+        ),
+        ComposableSampleDemo(
+            id = "permissions-compose",
+            name = "Multiple Permissions",
+            description = "Shows the recommended flow to request multiple RELATED runtime permissions",
+            documentation = "https://developer.android.com/training/permissions/requesting",
+            area = PrivacyPermissions,
+            tags = listOf("Permissions"),
+            content = { AndroidFragment<MultiplePermissions>() },
+        ),
+        ComposableSampleDemo(
+            id = "permissionless",
+            name = "Permissionless",
+            description = "This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs",
+            documentation = "https://developer.android.com/training/permissions/evaluating",
+            area = PrivacyPermissions,
+            tags = listOf("Permissions"),
+            content = { Permissionless() },
         ),
         ComposableSampleDemo(
             id = "data-access",

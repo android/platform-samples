@@ -44,19 +44,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import com.example.platform.base.PermissionBox
 import com.example.platform.location.utils.CUSTOM_INTENT_GEOFENCE
-import com.google.android.catalog.framework.annotations.Sample
+import com.example.platform.shared.PermissionBox
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 @SuppressLint("InlinedApi")
-@Sample(
-    name = "Location - Create and monitor Geofence",
-    description = "This Sample demonstrate best practices for Creating and monitoring geofence",
-    documentation = "https://developer.android.com/training/location/geofencing",
-)
 @Composable
 fun GeofencingScreen() {
     val permissions = listOf(

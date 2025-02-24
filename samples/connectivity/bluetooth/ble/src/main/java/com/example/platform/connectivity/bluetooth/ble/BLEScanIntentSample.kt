@@ -55,19 +55,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.getSystemService
-import com.example.platform.base.PermissionBox
 import com.example.platform.connectivity.bluetooth.ble.server.GATTServerSampleService.Companion.SERVICE_UUID
-import com.google.android.catalog.framework.annotations.Sample
+import com.example.platform.shared.PermissionBox
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update
 
-@Sample(
-    name = "Scan with BLE Intent",
-    description = "This samples shows how to use the BLE intent to scan for devices",
-    documentation = "https://developer.android.com/reference/android/bluetooth/le/BluetoothLeScanner#startScan(java.util.List%3Candroid.bluetooth.le.ScanFilter%3E,%20android.bluetooth.le.ScanSettings,%20android.app.PendingIntent)",
-    tags = ["bluetooth"],
-)
 @SuppressLint("InlinedApi")
 @RequiresApi(Build.VERSION_CODES.O)
 @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
@@ -88,7 +80,7 @@ fun BLEScanIntentSample() {
 @Composable
 private fun BLEScanIntentScreen() {
     val context = LocalContext.current
-    val scanner = context.getSystemService<BluetoothManager>()?.adapter?.bluetoothLeScanner
+    val scanner = context.getSystemService(BluetoothManager::class.java).adapter?.bluetoothLeScanner
     if (scanner != null) {
         Column(
             Modifier
