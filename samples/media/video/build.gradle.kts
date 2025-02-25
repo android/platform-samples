@@ -63,6 +63,12 @@ dependencies {
     implementation(libs.androidx.media3.effect)
     implementation(libs.material)
 
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+
     // Tensorflow lite dependencies
     implementation(libs.tensorflow.lite)
     implementation(libs.tensorflow.lite.gpu)

@@ -117,6 +117,72 @@ val StorageArea = Area(
     "Android photo library access capabilities.\nPhoto Picker for unified device and cloud photo access, and MediaStore for detailed local media querying",
 )
 
+val UserInterfaceAppWidgets = Area(
+    "user-interface-app-widgets",
+    "User Interface - App Widgets",
+    null,
+)
+
+val UserInterfaceConstraintLayout = Area(
+    "user-interface-constraint-layout",
+    "User Interface - Constraint Layout",
+    null,
+)
+
+val UserInterfaceDragAndDrop = Area(
+    "user-interface-draganddrop",
+    "User Interface - Drag and Drop",
+    null,
+)
+
+val UserInterfaceHaptics = Area(
+    "user-interface-haptics",
+    "User Interface - Haptics",
+    null,
+)
+
+val UserInterfacePiP = Area(
+    "user-interface-pip",
+    "User Interface - Picture In Picture",
+    null,
+)
+
+val UserInterfacePredictiveBack = Area(
+    "user-interface-predictive-back",
+    "User Interface - Predictive Back",
+    null,
+)
+
+val UserInterfaceQuickSettings = Area(
+    "user-interface-quick-settings",
+    "User Interface - Quick Settings",
+    null,
+)
+
+val UserInterfaceShare = Area(
+    "user-interface-share",
+    "User Interface - Share",
+    null,
+)
+
+val UserInterfaceText = Area(
+    "user-interface-text",
+    "User Interface - Text",
+    null,
+)
+
+val UserInterfaceWindowInsets = Area(
+    "user-interface-window-insets",
+    "User Interface - Window Insets",
+    null,
+)
+
+val UserInterfaceWindowManager = Area(
+    "user-interface-window-manager",
+    "User Interface - Window Manager",
+    null,
+)
+
 val AREAS = listOf(
     AccessiblityArea,
     CameraCamera2Area,
@@ -134,4 +200,15 @@ val AREAS = listOf(
     PrivacyPermissions,
     PrivacyTransparencyArea,
     StorageArea,
+    UserInterfaceAppWidgets,
+    UserInterfaceConstraintLayout,
+    UserInterfaceDragAndDrop,
+    UserInterfaceHaptics,
+    UserInterfacePiP,
+    UserInterfacePredictiveBack,
+    UserInterfaceQuickSettings,
+    UserInterfaceShare,
+    UserInterfaceText,
+    UserInterfaceWindowInsets,
+    UserInterfaceWindowManager
 ).associateBy { it.id }

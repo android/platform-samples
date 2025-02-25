@@ -60,6 +60,42 @@ import com.example.platform.privacy.transparency.ScreenshotDetectionSample
 import com.example.platform.storage.mediastore.MediaStoreQuerySample
 import com.example.platform.storage.mediastore.SelectedPhotosAccessSample
 import com.example.platform.storage.photopicker.PhotoPickerSample
+import com.example.platform.ui.appwidgets.AppWidgets
+import com.example.platform.ui.constraintlayout.AdvancedArrangementFragment
+import com.example.platform.ui.constraintlayout.AdvancedChainsFragment
+import com.example.platform.ui.constraintlayout.AspectRatioFragment
+import com.example.platform.ui.constraintlayout.BasicArrangementFragment
+import com.example.platform.ui.constraintlayout.BasicChainFragment
+import com.example.platform.ui.constraintlayout.CenteringViewsFragment
+import com.example.platform.ui.constraintlayout.ComplexMotion1Fragment
+import com.example.platform.ui.constraintlayout.ComplexMotion2Fragment
+import com.example.platform.ui.constraintlayout.ComplexMotion3Fragment
+import com.example.platform.ui.constraintlayout.ComplexMotion4Fragment
+import com.example.platform.ui.constraintlayout.ConstraintSetFragment
+import com.example.platform.ui.constraintlayout.Coordinator1Fragment
+import com.example.platform.ui.constraintlayout.Coordinator2Fragment
+import com.example.platform.ui.constraintlayout.Coordinator3Fragment
+import com.example.platform.ui.constraintlayout.CustomAttributeFragment
+import com.example.platform.ui.constraintlayout.Drawer1Fragment
+import com.example.platform.ui.constraintlayout.Drawer2Fragment
+import com.example.platform.ui.constraintlayout.FragmentTransition2Fragment
+import com.example.platform.ui.constraintlayout.FragmentTransitionFragment
+import com.example.platform.ui.constraintlayout.GuidelinesFragment
+import com.example.platform.ui.constraintlayout.ImageFilter1Fragment
+import com.example.platform.ui.constraintlayout.ImageFilter2Fragment
+import com.example.platform.ui.constraintlayout.KeyTriggerFragment
+import com.example.platform.ui.constraintlayout.KeyframeCycleFragment
+import com.example.platform.ui.constraintlayout.KeyframeInterpolationFragment
+import com.example.platform.ui.constraintlayout.KeyframePositionFragment
+import com.example.platform.ui.constraintlayout.LottieFragment
+import com.example.platform.ui.constraintlayout.MotionBasic01Fragment
+import com.example.platform.ui.constraintlayout.MotionBasic02Fragment
+import com.example.platform.ui.constraintlayout.MotionBasic02NoAutoCompleteFragment
+import com.example.platform.ui.constraintlayout.MultiStateFragment
+import com.example.platform.ui.constraintlayout.ParallaxFragment
+import com.example.platform.ui.constraintlayout.SidePanelFragment
+import com.example.platform.ui.constraintlayout.ViewPagerFragment
+import com.example.platform.ui.constraintlayout.YoutubeFragment
 
 interface SampleDemo : CatalogItem {
     override val id: String
@@ -457,6 +493,330 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/about/versions/14/changes/partial-photo-video-access",
             area = StorageArea,
             content = { SelectedPhotosAccessSample() },
+        ),
+        ComposableSampleDemo(
+            id = "app-widgets",
+            name = "App Widgets",
+            description = "Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples",
+            documentation = "https://developer.android.com/develop/ui/views/appwidgets/overview",
+            area = UserInterfaceAppWidgets,
+            tags = listOf("App Widgets"),
+            content = { AppWidgets() },
+        ),
+        ComposableSampleDemo(
+            id = "constraintlayout-centering-views",
+            name = "ConstraintLayout - 1. Centering Views",
+            description = "Center child views horizontally or vertically.",
+            documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("ConstraintLayout"),
+            content = { AndroidFragment<CenteringViewsFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "constraintlayout-basic-arrangement",
+            name = "ConstraintLayout - 2. Basic arrangement",
+            description = "Arrange positions of child views relative to other views.",
+            documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("ConstraintLayout"),
+            content = { AndroidFragment<BasicArrangementFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "constraintlayout-advanced-arrangement",
+            name = "ConstraintLayout - 3. Advanced arrangement",
+            description = "More arrangement options.",
+            documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("ConstraintLayout"),
+            content = { AndroidFragment<AdvancedArrangementFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "constraintlayout-aspect-ratio",
+            name = "ConstraintLayout - 4. Aspect ratio",
+            description = "Specify aspect ratio for the dimensions of the child views.",
+            documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("ConstraintLayout"),
+            content = { AndroidFragment<AspectRatioFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "constraintlayout-basic-chains",
+            name = "ConstraintLayout - 5. Basic chains",
+            description = "Use chains to arrange multiple child views horizontally or vertically.",
+            documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("ConstraintLayout"),
+            content = { AndroidFragment<BasicChainFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "constraintlayout-advanced-chains",
+            name = "ConstraintLayout - 5. Advanced chains",
+            description = "Use chains to arrange multiple child views horizontally or vertically.",
+            documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("ConstraintLayout"),
+            content = { AndroidFragment<AdvancedChainsFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "constraintlayout-constraintset",
+            name = "ConstraintLayout - 7. ConstraintSet",
+            description = "Use ConstraintSet to specify multiple constraints to all the child views.",
+            documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("ConstraintLayout"),
+            content = { AndroidFragment<ConstraintSetFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "constraintlayout-guidelines",
+            name = "ConstraintLayout - 8. Guidelines",
+            description = "Use a horizontal or vertical guideline to apply constraints to child views.",
+            documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("ConstraintLayout"),
+            content = { AndroidFragment<GuidelinesFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-01-basic",
+            name = "MotionLayout - 01. Basic",
+            description = "Basic motion example using referenced ConstraintLayout files",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<MotionBasic01Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-02-basic",
+            name = "MotionLayout - 02. Basic",
+            description = "Basic motion example using ConstraintSets defined in the MotionScene file",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<MotionBasic02Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-02-basic-no-auto-complete",
+            name = "MotionLayout - 02. Basic, no auto complete",
+            description = "Basic motion example same as 2, but autoComplete is set to false in onSwipe",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<MotionBasic02NoAutoCompleteFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-03-custom-attribute",
+            name = "MotionLayout - 03. Custom attribute",
+            description = "Show color interpolation (custom attribute)",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<CustomAttributeFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-04-imagefilterview-1",
+            name = "MotionLayout - 04. ImageFilterView 1",
+            description = "Show image cross-fade (using ML's ImageFilterView + custom attribute)",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<ImageFilter1Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-05-imagefilterview-2",
+            name = "MotionLayout - 05. ImageFilterView 2",
+            description = "Show image saturation transition (using ML's ImageFilterView + custom attribute)",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<ImageFilter2Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-06-keyframe-position",
+            name = "MotionLayout - 06. Keyframe position",
+            description = "Use a simple keyframe to change the interpolated motion",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<KeyframePositionFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-07-keyframe-interpolation",
+            name = "MotionLayout - 07. Keyframe interpolation",
+            description = "More complex keyframe, adding rotation interpolation",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<KeyframeInterpolationFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-08-keyframe-cycle",
+            name = "MotionLayout - 08. Keyframe cycle",
+            description = "Basic example of using a keyframe cycle",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<KeyframeCycleFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-09-coordinatorlayout-1",
+            name = "MotionLayout - 09. CoordinatorLayout 1",
+            description = "Basic example of using MotionLayout instead of AppBarLayout",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<Coordinator1Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-10-coordinatorlayout-2",
+            name = "MotionLayout - 10. CoordinatorLayout 2",
+            description = "Slightly more complex example of MotionLayout replacing AppBarLayout, with multiple elements and parallax background",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<Coordinator2Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-11-coordinatorlayout-3",
+            name = "MotionLayout - 11. CoordinatorLayout 3",
+            description = "Another AppBarLayout replacement example",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<Coordinator3Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-12-drawerlayout-1",
+            name = "MotionLayout - 12. DrawerLayout 1",
+            description = "Basic DrawerLayout with motionlayout",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<Drawer1Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-13-drawerlayout-2",
+            name = "MotionLayout - 13. DrawerLayout 2",
+            description = "Advanced DrawerLayout with motionlayout",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<Drawer2Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-14-sidepanel",
+            name = "MotionLayout - 14. SidePanel",
+            description = "Side Panel, implemented with MotionLayout only",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<SidePanelFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-15-parallax",
+            name = "MotionLayout - 15. Parallax",
+            description = "Parallax background. Drag the car.",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<ParallaxFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-16-viewpager",
+            name = "MotionLayout - 16. ViewPager",
+            description = "Using MotionLayout with ViewPager",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<ViewPagerFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-17-complex-motion-1",
+            name = "MotionLayout - 17. Complex Motion 1",
+            description = "Basic CoordinatorLayout-like behavior. Implemented with MotionLayout only, using a moving guideline. Note the view isn't resized.",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<ComplexMotion1Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-18-complex-motion-2",
+            name = "MotionLayout - 18. Complex Motion 2",
+            description = "Advanced CoordinatorLayout-like behavior (adding a FAB). Implemented with MotionLayout only, using a moving guideline. Note the view isn't resized.",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<ComplexMotion2Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-19-complex-motion-3",
+            name = "MotionLayout - 19. Complex Motion 3",
+            description = "Advanced CoordinatorLayout-like behavior (adding a FAB). Implemented with MotionLayout only, using direct resizing of the view.",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<ComplexMotion3Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-20-complex-motion-4",
+            name = "MotionLayout - 20. Complex Motion 4",
+            description = "Advanced Synchronized reveal motion + helper (bounce). Implemented with MotionLayout only.",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<ComplexMotion4Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-21-fragment-transition-1",
+            name = "MotionLayout - 21. Fragment transition 1",
+            description = "Using MotionLayout with ViewPager",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<FragmentTransitionFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-22-fragment-transition-2",
+            name = "MotionLayout - 22. Fragment transition 2",
+            description = "Using MotionLayout with ViewPager",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<FragmentTransition2Fragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-23-lottie",
+            name = "MotionLayout - 23. Lottie",
+            description = "Using MotionLayout and Lottie with ViewPager",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<LottieFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-24-youtube-like-motion",
+            name = "MotionLayout - 24. YouTube-like motion",
+            description = "Example showing a transition like YouTube",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<YoutubeFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-25-keytrigger",
+            name = "MotionLayout - 25. KeyTrigger",
+            description = "Example that calls a method using KeyTrigger",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<KeyTriggerFragment>() },
+        ),
+        ComposableSampleDemo(
+            id = "motionlayout-26-multi-state",
+            name = "MotionLayout - 26. Multi-state",
+            description = "Example that transitions between multiple states",
+            documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
+            area = UserInterfaceConstraintLayout,
+            tags = listOf("MotionLayout"),
+            content = { AndroidFragment<MultiStateFragment>() },
         ),
     ).associateBy { it.id }
 }
