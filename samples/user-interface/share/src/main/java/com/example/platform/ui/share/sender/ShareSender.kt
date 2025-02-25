@@ -42,12 +42,7 @@ import androidx.core.text.bold
 import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import com.example.platform.ui.share.R
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "Send data with sharesheet",
-    description = "Send texts and images to other apps using the Android Sharesheet.",
-)
 @Composable
 fun ShareSender() {
     Column(

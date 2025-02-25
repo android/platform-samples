@@ -90,6 +90,12 @@ dependencies {
     implementation(project(":samples:storage"))
     implementation(project(":samples:user-interface:appwidgets"))
     implementation(project(":samples:user-interface:constraintlayout"))
+    implementation(project(":samples:user-interface:draganddrop"))
+    implementation(project(":samples:user-interface:haptics"))
+    implementation(project(":samples:user-interface:picture-in-picture"))
+    implementation(project(":samples:user-interface:predictiveback"))
+    implementation(project(":samples:user-interface:quicksettings"))
+    implementation(project(":samples:user-interface:share"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

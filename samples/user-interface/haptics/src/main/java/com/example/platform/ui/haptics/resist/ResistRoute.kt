@@ -40,7 +40,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowDownward
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -54,6 +53,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -223,7 +223,7 @@ private fun ResistIndicator(indicator: IndicatorData, dragOffset: DragOffsetData
                 exit = fadeOut()
             ) {
                 Icon(
-                    Icons.Rounded.ArrowDownward,
+                    painter = painterResource(R.drawable.round_arrow_downward_24),
                     null,
                     tint = MaterialTheme.colorScheme.primary,
                     modifier = Modifier

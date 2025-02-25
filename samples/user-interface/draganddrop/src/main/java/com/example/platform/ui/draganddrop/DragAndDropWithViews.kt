@@ -30,13 +30,7 @@ import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.platform.ui.draganddrop.databinding.FragmentDragAndDropWithViewsBinding
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "Drag and Drop using views",
-    description = "Drag and Drop using the views",
-    documentation = "https://developer.android.com/develop/ui/views/touch-and-input/drag-drop/view",
-)
 @RequiresApi(Build.VERSION_CODES.N)
 class DragAndDropWithViews : Fragment(R.layout.fragment_drag_and_drop_with_views) {
 
