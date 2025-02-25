@@ -49,13 +49,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "Drag and Drop in Compose",
-    description = "Drag and drop in Compose",
-    documentation = "",
-)
 @Composable
 fun DragAndDropCompose() {
     Column(

@@ -19,12 +19,7 @@ package com.example.platform.ui.share.receiver
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "Receive data shared by other apps",
-    description = "Receive texts and images from other apps.",
-)
 class ShareReceiverActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {

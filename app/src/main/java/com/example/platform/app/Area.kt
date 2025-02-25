@@ -63,13 +63,13 @@ val ConnectivityTelecomArea = Area(
     null,
 )
 
-val GraphicsPdf = Area(
+val GraphicsPdfArea = Area(
     "graphics-pdf",
     "Graphics PDF",
     null,
 )
 
-val GraphicsUltraHdr = Area(
+val GraphicsUltraHdrArea = Area(
     "graphics-ultrahdr",
     "Graphics UltraHDR",
     null,
@@ -87,19 +87,19 @@ val MediaUltraHdrArea = Area(
     null,
 )
 
-val MediaVideo = Area(
+val MediaVideoArea = Area(
     "media-video",
     "Media Video",
     null,
 )
 
-val PrivacyData = Area(
+val PrivacyDataArea = Area(
     "privacy-data",
     "Privacy Data",
     null,
 )
 
-val PrivacyPermissions = Area(
+val PrivacyPermissionsArea = Area(
     "privacy-permissions",
     "Privacy Permissions",
     null,
@@ -117,67 +117,67 @@ val StorageArea = Area(
     "Android photo library access capabilities.\nPhoto Picker for unified device and cloud photo access, and MediaStore for detailed local media querying",
 )
 
-val UserInterfaceAppWidgets = Area(
+val UserInterfaceAppWidgetsArea = Area(
     "user-interface-app-widgets",
     "User Interface - App Widgets",
     null,
 )
 
-val UserInterfaceConstraintLayout = Area(
+val UserInterfaceConstraintLayoutArea = Area(
     "user-interface-constraint-layout",
     "User Interface - Constraint Layout",
     null,
 )
 
-val UserInterfaceDragAndDrop = Area(
+val UserInterfaceDragAndDropArea = Area(
     "user-interface-draganddrop",
     "User Interface - Drag and Drop",
     null,
 )
 
-val UserInterfaceHaptics = Area(
+val UserInterfaceHapticsArea = Area(
     "user-interface-haptics",
     "User Interface - Haptics",
     null,
 )
 
-val UserInterfacePiP = Area(
-    "user-interface-pip",
+val UserInterfacePictureInPictureArea = Area(
+    "user-interface-picture-in-picture",
     "User Interface - Picture In Picture",
     null,
 )
 
-val UserInterfacePredictiveBack = Area(
+val UserInterfacePredictiveBackArea = Area(
     "user-interface-predictive-back",
     "User Interface - Predictive Back",
     null,
 )
 
-val UserInterfaceQuickSettings = Area(
+val UserInterfaceQuickSettingsArea = Area(
     "user-interface-quick-settings",
     "User Interface - Quick Settings",
     null,
 )
 
-val UserInterfaceShare = Area(
+val UserInterfaceShareArea = Area(
     "user-interface-share",
     "User Interface - Share",
     null,
 )
 
-val UserInterfaceText = Area(
+val UserInterfaceTextArea = Area(
     "user-interface-text",
     "User Interface - Text",
     null,
 )
 
-val UserInterfaceWindowInsets = Area(
+val UserInterfaceWindowInsetsArea = Area(
     "user-interface-window-insets",
     "User Interface - Window Insets",
     null,
 )
 
-val UserInterfaceWindowManager = Area(
+val UserInterfaceWindowManagerArea = Area(
     "user-interface-window-manager",
     "User Interface - Window Manager",
     null,
@@ -191,24 +191,24 @@ val AREAS = listOf(
     ConnectivityBluetoothCompanionArea,
     ConnectivityCallNotificationArea,
     ConnectivityTelecomArea,
-    GraphicsPdf,
-    GraphicsUltraHdr,
+    GraphicsPdfArea,
+    GraphicsUltraHdrArea,
     LocationArea,
     MediaUltraHdrArea,
-    MediaVideo,
-    PrivacyData,
-    PrivacyPermissions,
+    MediaVideoArea,
+    PrivacyDataArea,
+    PrivacyPermissionsArea,
     PrivacyTransparencyArea,
     StorageArea,
-    UserInterfaceAppWidgets,
-    UserInterfaceConstraintLayout,
-    UserInterfaceDragAndDrop,
-    UserInterfaceHaptics,
-    UserInterfacePiP,
-    UserInterfacePredictiveBack,
-    UserInterfaceQuickSettings,
-    UserInterfaceShare,
-    UserInterfaceText,
-    UserInterfaceWindowInsets,
-    UserInterfaceWindowManager
+    UserInterfaceAppWidgetsArea,
+    UserInterfaceConstraintLayoutArea,
+    UserInterfaceDragAndDropArea,
+    UserInterfaceHapticsArea,
+    UserInterfacePictureInPictureArea,
+    UserInterfacePredictiveBackArea,
+    UserInterfaceQuickSettingsArea,
+    UserInterfaceShareArea,
+    UserInterfaceTextArea,
+    UserInterfaceWindowInsetsArea,
+    UserInterfaceWindowManagerArea
 ).associateBy { it.id }

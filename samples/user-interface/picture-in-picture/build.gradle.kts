@@ -17,23 +17,33 @@
 
 
 plugins {
-    id("com.example.platform.sample")
+    alias(libs.plugins.android.library)
+//    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace = "com.example.android.pip"
-    viewBinding.isEnabled = true
     compileSdk = 35
+
+    defaultConfig {
+        minSdk = 21
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
+    viewBinding.isEnabled = true
 }
 
 dependencies {
     // Add samples specific dependencies
+    implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.media)
     implementation(libs.androidx.constraintlayout)
 
     // Testing
-    androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.test.rules)

@@ -39,7 +39,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.datastore.preferences.core.edit
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
@@ -47,11 +46,6 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
 @RequiresApi(24)
-@Sample(
-    name = "Quick Settings",
-    description = "Add your custom tile to the Quick Settings.",
-    documentation = "https://developer.android.com/develop/ui/views/quicksettings-tiles",
-)
 @Composable
 fun QuickSettings() {
     Column(
