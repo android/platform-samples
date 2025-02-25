@@ -88,6 +88,8 @@ dependencies {
     implementation(project(":samples:privacy:permissions"))
     implementation(project(":samples:privacy:transparency"))
     implementation(project(":samples:storage"))
+    implementation(project(":samples:user-interface:appwidgets"))
+    implementation(project(":samples:user-interface:constraintlayout"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
