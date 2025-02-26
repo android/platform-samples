@@ -96,6 +96,9 @@ dependencies {
     implementation(project(":samples:user-interface:predictiveback"))
     implementation(project(":samples:user-interface:quicksettings"))
     implementation(project(":samples:user-interface:share"))
+    implementation(project(":samples:user-interface:text"))
+    implementation(project(":samples:user-interface:window-insets"))
+    implementation(project(":samples:user-interface:windowmanager"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

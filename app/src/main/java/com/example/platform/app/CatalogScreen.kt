@@ -98,10 +98,12 @@ fun CatalogScreenItem(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Text(text = item.name, style = MaterialTheme.typography.titleSmall)
-                Text(
-                    text = item.description ?: "",
-                    style = MaterialTheme.typography.bodySmall,
-                )
+                if (item.description != null) {
+                    Text(
+                        text = item.description!!,
+                        style = MaterialTheme.typography.bodySmall,
+                    )
+                }
             }
             Icon(
                 imageVector = Icons.AutoMirrored.Default.KeyboardArrowRight,
