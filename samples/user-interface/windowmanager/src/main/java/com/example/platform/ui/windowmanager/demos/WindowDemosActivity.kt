@@ -17,6 +17,7 @@
 package com.example.platform.ui.windowmanager.demos
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
@@ -30,16 +31,11 @@ import com.example.platform.ui.windowmanager.WindowMetricsActivity
 import com.example.platform.ui.windowmanager.embedding.SplitActivityList
 import com.example.platform.ui.windowmanager.embedding.SplitAttributesToggleMainActivity
 import com.example.platform.ui.windowmanager.embedding.SplitDeviceStateActivityA
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "WindowManager",
-    description = "Demonstrates how to use the Jetpack WindowManager library.",
-    documentation = "https://developer.android.com/jetpack/androidx/releases/window",
-)
 @UnstableApi class WindowDemosActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_window_demos)
         val demoItems = listOf(

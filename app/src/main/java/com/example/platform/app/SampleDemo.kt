@@ -108,10 +108,19 @@ import com.example.platform.ui.haptics.Expand
 import com.example.platform.ui.haptics.HapticsBasic
 import com.example.platform.ui.haptics.Resist
 import com.example.platform.ui.haptics.Wobble
+import com.example.platform.ui.insets.ImmersiveMode
+import com.example.platform.ui.insets.WindowInsetsAnimationActivity
 import com.example.platform.ui.predictiveback.PBHostingActivity
 import com.example.platform.ui.quicksettings.QuickSettings
 import com.example.platform.ui.share.receiver.ShareReceiverActivity
 import com.example.platform.ui.share.sender.ShareSender
+import com.example.platform.ui.text.ConversionSuggestions
+import com.example.platform.ui.text.DownloadableFontsFragment
+import com.example.platform.ui.text.Hyphenation
+import com.example.platform.ui.text.LineBreak
+import com.example.platform.ui.text.Linkify
+import com.example.platform.ui.text.TextSpanFragment
+import com.example.platform.ui.windowmanager.demos.WindowDemosActivity
 
 interface SampleDemo : CatalogItem {
     override val id: String
@@ -140,7 +149,7 @@ data class ActivitySampleDemo(
     override val documentation: String? = null,
     override val area: Area,
     override val tags: List<String> = emptyList(),
-    override val content: Class<out Activity>,
+    override val content: Class<*>,
 ) : SampleDemo
 
 val SAMPLE_DEMOS by lazy {
@@ -971,6 +980,84 @@ val SAMPLE_DEMOS by lazy {
             documentation = null,
             area = UserInterfaceShareArea,
             content = { ShareSender() }
+        ),
+        ComposableSampleDemo(
+            id = "conversion-suggestions",
+            name = "Conversion suggestions",
+            description = "Demonstrates how to implement the incremental search feature for non-alphabet languages with the Conversion Suggestions API.",
+            documentation = "https://developer.android.com/about/versions/13/features#text-conversion",
+            area = UserInterfaceTextArea,
+            tags = listOf("Text"),
+            content = { AndroidFragment<ConversionSuggestions>() }
+        ),
+        ComposableSampleDemo(
+            id = "downloadable-fonts",
+            name = "Downloadable Fonts",
+            description = "Download fonts instead of bundling them in the app resources.",
+            documentation = "https://developer.android.com/develop/ui/views/text-and-emoji/downloadable-fonts",
+            area = UserInterfaceTextArea,
+            tags = listOf("Text"),
+            content = { AndroidFragment<DownloadableFontsFragment>() }
+        ),
+        ComposableSampleDemo(
+            id = "hyphenation",
+            name = "Hyphenation",
+            description = "Demonstrates different options for the `android:hyphenationFrequency` attribute",
+            documentation = "https://developer.android.com/reference/android/widget/TextView#attr_android:hyphenationFrequency",
+            area = UserInterfaceTextArea,
+            tags = listOf("Text"),
+            content = { AndroidFragment<Hyphenation>() }
+        ),
+        ComposableSampleDemo(
+            id = "line-break",
+            name = "LineBreak",
+            description = "Demonstrates different options for the `android:lineBreakWordStyle` attribute.",
+            documentation = "https://developer.android.com/about/versions/13/features#japanese-wrapping",
+            area = UserInterfaceTextArea,
+            tags = listOf("Text"),
+            content = { AndroidFragment<LineBreak>() }
+        ),
+        ComposableSampleDemo(
+            id = "linkify",
+            name = "Linkify",
+            description = "Linkify is useful for creating links in TextViews.",
+            documentation = "https://developer.android.com/reference/kotlin/androidx/core/text/util/LinkifyCompat",
+            area = UserInterfaceTextArea,
+            tags = listOf("Text"),
+            content = { AndroidFragment<Linkify>() }
+        ),
+        ComposableSampleDemo(
+            id = "text-span",
+            name = "TextSpan",
+            description = "buildSpannedString is useful for quickly building a rich text.",
+            documentation = "https://developer.android.com/kotlin/ktx#core",
+            area = UserInterfaceTextArea,
+            tags = listOf("Text"),
+            content = { AndroidFragment<TextSpanFragment>() }
+        ),
+        ComposableSampleDemo(
+            id = "immersive-mode",
+            name = "Immersive mode",
+            description = "Immersive mode enables your app to display full-screen by hiding system bars.",
+            documentation = "https://developer.android.com/develop/ui/views/layout/immersive",
+            area = UserInterfaceWindowInsetsArea,
+            content = { ImmersiveMode() }
+        ),
+        ActivitySampleDemo(
+            id = "window-insets-animation",
+            name = "WindowInsetsAnimation",
+            description = "Shows how to react to the on-screen keyboard (IME) changing visibility, and also controlling the IME's visibility.",
+            documentation = "https://developer.android.com/develop/ui/views/layout/sw-keyboard",
+            area = UserInterfaceWindowInsetsArea,
+            content = WindowInsetsAnimationActivity::class.java
+        ),
+        ActivitySampleDemo(
+            id = "window-manager",
+            name = "WindowManager",
+            description = "Demonstrates how to use the Jetpack WindowManager library.",
+            documentation = "https://developer.android.com/jetpack/androidx/releases/window",
+            area = UserInterfaceWindowManagerArea,
+            content = WindowDemosActivity::class.java
         ),
     ).associateBy { it.id }
 }

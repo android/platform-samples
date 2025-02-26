@@ -17,17 +17,12 @@
 package com.example.platform.ui.insets
 
 import android.os.Bundle
+import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.example.platform.ui.insets.databinding.ActivityMainBinding
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "WindowInsetsAnimation",
-    description = "Shows how to react to the on-screen keyboard (IME) changing visibility, and also controlling the IME's visibility.",
-    documentation = "https://developer.android.com/develop/ui/views/layout/sw-keyboard",
-)
-class WindowInsetsAnimationActivity : AppCompatActivity() {
+class WindowInsetsAnimationActivity : ComponentActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
