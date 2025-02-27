@@ -18,6 +18,7 @@ package com.example.platform.ui.windowmanager.demos
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
@@ -32,8 +33,9 @@ import com.example.platform.ui.windowmanager.embedding.SplitActivityList
 import com.example.platform.ui.windowmanager.embedding.SplitAttributesToggleMainActivity
 import com.example.platform.ui.windowmanager.embedding.SplitDeviceStateActivityA
 
-@UnstableApi class WindowDemosActivity : AppCompatActivity() {
+class WindowDemosActivity : AppCompatActivity() {
 
+    @OptIn(UnstableApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
@@ -42,47 +44,47 @@ import com.example.platform.ui.windowmanager.embedding.SplitDeviceStateActivityA
             DemoItem(
                 buttonTitle = getString(R.string.activity_embedding),
                 description = getString(R.string.activity_embedding_description),
-                clazz = SplitActivityList::class.java
+                clazz = SplitActivityList::class.java,
             ),
             DemoItem(
                 buttonTitle = getString(R.string.display_features),
                 description = getString(R.string.show_all_display_features_config_change_description),
-                clazz = DisplayFeaturesActivity::class.java
+                clazz = DisplayFeaturesActivity::class.java,
             ),
             DemoItem(
                 buttonTitle = getString(R.string.window_metrics),
                 description = getString(R.string.window_metrics_description),
-                clazz = WindowMetricsActivity::class.java
+                clazz = WindowMetricsActivity::class.java,
             ),
             DemoItem(
                 buttonTitle = getString(R.string.split_layout),
                 description = getString(R.string.split_layout_demo_description),
-                clazz = SplitLayoutActivity::class.java
+                clazz = SplitLayoutActivity::class.java,
             ),
             DemoItem(
                 buttonTitle = getString(R.string.split_layout_with_attributes),
                 description = getString(R.string.split_layout_attributes_demo_description),
-                clazz = SplitAttributesToggleMainActivity::class.java
+                clazz = SplitAttributesToggleMainActivity::class.java,
             ),
             DemoItem(
                 buttonTitle = getString(R.string.split_layout_with_state),
                 description = getString(R.string.split_layout_with_state_demo_description),
-                clazz = SplitDeviceStateActivityA::class.java
+                clazz = SplitDeviceStateActivityA::class.java,
             ),
             DemoItem(
                 buttonTitle = getString(R.string.media_player_activity),
                 description = getString(R.string.media_player_activity_demo_description),
-                clazz = MediaPlayerActivity::class.java
+                clazz = MediaPlayerActivity::class.java,
             ),
             DemoItem(
                 buttonTitle = getString(R.string.rear_display_activity),
                 description = getString(R.string.rear_display_activity_demo_description),
-                clazz = RearDisplayModeActivity::class.java
+                clazz = RearDisplayModeActivity::class.java,
             ),
             DemoItem(
                 buttonTitle = getString(R.string.dual_screen_activity),
                 description = getString(R.string.dual_screen_activity_demo_description),
-                clazz = DualScreenActivity::class.java
+                clazz = DualScreenActivity::class.java,
             ),
         )
         val recyclerView = findViewById<RecyclerView>(R.id.demo_recycler_view)

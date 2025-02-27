@@ -16,7 +16,7 @@
 
 package com.example.platform.app
 
-import android.app.Activity
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.fragment.compose.AndroidFragment
 import com.example.android.pip.PiPMovieActivity
@@ -59,6 +59,7 @@ import com.example.platform.privacy.permissions.Permissionless
 import com.example.platform.privacy.permissions.SinglePermission
 import com.example.platform.privacy.transparency.DataAccessSample
 import com.example.platform.privacy.transparency.ScreenshotDetectionSample
+import com.example.platform.shared.MinSdkBox
 import com.example.platform.storage.mediastore.MediaStoreQuerySample
 import com.example.platform.storage.mediastore.SelectedPhotosAccessSample
 import com.example.platform.storage.photopicker.PhotoPickerSample
@@ -127,6 +128,7 @@ interface SampleDemo : CatalogItem {
     override val name: String
     override val description: String?
     val documentation: String?
+    val minSdk: Int
     val tags: List<String>
     val area: Area
     val content: Any
@@ -137,6 +139,7 @@ data class ComposableSampleDemo(
     override val name: String,
     override val description: String? = null,
     override val documentation: String? = null,
+    override val minSdk: Int = Build.VERSION_CODES.LOLLIPOP,
     override val area: Area,
     override val tags: List<String> = emptyList(),
     override val content: @Composable () -> Unit,
@@ -147,6 +150,7 @@ data class ActivitySampleDemo(
     override val name: String,
     override val description: String? = null,
     override val documentation: String? = null,
+    override val minSdk: Int = Build.VERSION_CODES.LOLLIPOP,
     override val area: Area,
     override val tags: List<String> = emptyList(),
     override val content: Class<*>,
@@ -217,9 +221,14 @@ val SAMPLE_DEMOS by lazy {
             name = "Communication Audio Manager",
             description = "This sample shows how to use audio manager to for Communication application that self-manage the call.",
             documentation = "https://developer.android.com/guide/topics/connectivity/ble-audio/audio-manager",
+            minSdk = Build.VERSION_CODES.S,
             area = ConnectivityAudioArea,
             tags = listOf("Audio"),
-            content = { AudioCommsSample() },
+            content = {
+                MinSdkBox(minSdk = 55) {
+                    AudioCommsSample()
+                }
+            },
         ),
         ComposableSampleDemo(
             id = "create-gatt-server",
@@ -228,7 +237,11 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/reference/android/bluetooth/BluetoothGattServer",
             area = ConnectivityBluetoothBleArea,
             tags = listOf("Bluetooth"),
-            content = { GATTServerSample() },
+            content = {
+                MinSdkBox(minSdk = Build.VERSION_CODES.M) {
+                    GATTServerSample()
+                }
+            },
         ),
         ComposableSampleDemo(
             id = "scan-with-ble-intent",
@@ -237,7 +250,11 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/reference/android/bluetooth/le/BluetoothLeScanner#startScan(java.util.List%3Candroid.bluetooth.le.ScanFilter%3E,%20android.bluetooth.le.ScanSettings,%20android.app.PendingIntent)",
             area = ConnectivityBluetoothBleArea,
             tags = listOf("Bluetooth"),
-            content = { BLEScanIntentSample() },
+            content = {
+                MinSdkBox(minSdk = Build.VERSION_CODES.O) {
+                    BLEScanIntentSample()
+                }
+            },
         ),
         ComposableSampleDemo(
             id = "connect-gatt-server",
@@ -246,7 +263,11 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/guide/topics/connectivity/bluetooth/connect-gatt-server",
             area = ConnectivityBluetoothBleArea,
             tags = listOf("Bluetooth"),
-            content = { ConnectGATTSample() },
+            content = {
+                MinSdkBox(minSdk = Build.VERSION_CODES.M) {
+                    ConnectGATTSample()
+                }
+            },
         ),
         ComposableSampleDemo(
             id = "find-devices",
@@ -255,7 +276,11 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/guide/topics/connectivity/bluetooth",
             area = ConnectivityBluetoothBleArea,
             tags = listOf("Bluetooth"),
-            content = { FindBLEDevicesSample() },
+            content = {
+                MinSdkBox(minSdk = Build.VERSION_CODES.M) {
+                    FindBLEDevicesSample()
+                }
+            },
         ),
         ComposableSampleDemo(
             id = "companion-device-manager",
@@ -264,7 +289,11 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/guide/topics/connectivity/companion-device-pairing",
             area = ConnectivityBluetoothCompanionArea,
             tags = listOf("Bluetooth"),
-            content = { CompanionDeviceManagerSample() },
+            content = {
+                MinSdkBox(minSdk = Build.VERSION_CODES.O) {
+                    CompanionDeviceManagerSample()
+                }
+            },
         ),
         ActivitySampleDemo(
             id = "call-notification",
@@ -280,7 +309,11 @@ val SAMPLE_DEMOS by lazy {
             description = "A sample showcasing how to handle calls with the Jetpack Telecom API",
             documentation = "https://developer.android.com/guide/topics/connectivity/telecom",
             area = ConnectivityTelecomArea,
-            content = { TelecomCallSample() },
+            content = {
+                MinSdkBox(minSdk = Build.VERSION_CODES.O) {
+                    TelecomCallSample()
+                }
+            },
         ),
         ComposableSampleDemo(
             id = "pdf-renderer",
@@ -325,7 +358,11 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
             area = GraphicsUltraHdrArea,
             tags = listOf("UltraHDR", "Compose"),
-            content = { DisplayUltraHDRScreen() },
+            content = {
+                MinSdkBox(minSdk = Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    DisplayUltraHDRScreen()
+                }
+            },
         ),
         ComposableSampleDemo(
             id = "visualizing-ultrahdr-gainmap",
@@ -395,7 +432,11 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/training/location/permissions",
             area = LocationArea,
             tags = listOf("permissions"),
-            content = { LocationPermissionScreen() },
+            content = {
+                MinSdkBox(minSdk = Build.VERSION_CODES.Q) {
+                    LocationPermissionScreen()
+                }
+            },
         ),
         ComposableSampleDemo(
             id = "location-user-activity-recognition",
@@ -485,7 +526,11 @@ val SAMPLE_DEMOS by lazy {
                     "unexpected data access, even from third-party SDKs and libraries.",
             documentation = "https://developer.android.com/guide/topics/data/audit-access",
             area = PrivacyTransparencyArea,
-            content = { DataAccessSample() },
+            content = {
+                MinSdkBox(minSdk = Build.VERSION_CODES.R) {
+                    DataAccessSample()
+                }
+            },
         ),
         ComposableSampleDemo(
             id = "screenshot-detection",
@@ -526,7 +571,11 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/develop/ui/views/appwidgets/overview",
             area = UserInterfaceAppWidgetsArea,
             tags = listOf("App Widgets"),
-            content = { AppWidgets() },
+            content = {
+                MinSdkBox(minSdk = Build.VERSION_CODES.O) {
+                    AppWidgets()
+                }
+            },
         ),
         ComposableSampleDemo(
             id = "constraintlayout-centering-views",
@@ -963,7 +1012,11 @@ val SAMPLE_DEMOS by lazy {
             description = "Add your custom tile to the Quick Settings.",
             documentation = "https://developer.android.com/develop/ui/views/quicksettings-tiles",
             area = UserInterfaceQuickSettingsArea,
-            content = { QuickSettings() }
+            content = {
+                MinSdkBox(minSdk = Build.VERSION_CODES.N) {
+                    QuickSettings()
+                }
+            },
         ),
         ActivitySampleDemo(
             id = "receive-data-shared-by-other-apps",
