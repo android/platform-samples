@@ -18,6 +18,7 @@ package com.example.platform.ui.windowmanager.demos
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.platform.ui.windowmanager.DualScreenActivity
@@ -42,6 +43,8 @@ import com.google.android.catalog.framework.annotations.Sample
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_window_demos)
+        WindowCompat.getInsetsController(window, window.decorView)
+            .isAppearanceLightStatusBars = true
         val demoItems = listOf(
             DemoItem(
                 buttonTitle = getString(R.string.activity_embedding),
