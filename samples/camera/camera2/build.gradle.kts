@@ -21,6 +21,10 @@ plugins {
 android {
     namespace = "com.example.platform.camera"
     viewBinding.isEnabled = true
+    compileSdkPreview = "Baklava"
+    defaultConfig {
+        targetSdkPreview = "Baklava"
+    }
 }
 
 dependencies {
