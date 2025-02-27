@@ -62,7 +62,6 @@ import kotlinx.coroutines.flow.update
 
 @SuppressLint("InlinedApi")
 @RequiresApi(Build.VERSION_CODES.O)
-@RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
 @Composable
 fun BLEScanIntentSample() {
     val permissions = mutableListOf(Manifest.permission.ACCESS_FINE_LOCATION)

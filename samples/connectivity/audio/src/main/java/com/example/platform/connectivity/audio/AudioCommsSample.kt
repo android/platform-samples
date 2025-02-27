@@ -17,6 +17,7 @@
 package com.example.platform.connectivity.audio
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.media.AudioDeviceInfo
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -53,8 +54,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
+@SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.S)
-@RequiresPermission(Manifest.permission.RECORD_AUDIO)
 @Composable
 fun AudioCommsSample() {
     // The record permission is only needed for looping the audio not for the AudioManager
