@@ -28,6 +28,9 @@ android {
 
     defaultConfig {
         minSdk = 21
+        targetSdk = 35
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     kotlinOptions {
         jvmTarget = "1.8"
