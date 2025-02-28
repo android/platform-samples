@@ -69,6 +69,7 @@ fun BLEScanIntentSample() {
         permissions.add(Manifest.permission.BLUETOOTH_SCAN)
     }
     PermissionBox(permissions = permissions) {
+        // noinspection MissingPermission
         BLEScanIntentScreen()
     }
 }

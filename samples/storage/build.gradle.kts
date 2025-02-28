@@ -28,6 +28,7 @@ android {
 
     defaultConfig {
         minSdk = 21
+        targetSdk = 35
     }
     kotlinOptions {
         jvmTarget = "1.8"

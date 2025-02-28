@@ -225,7 +225,8 @@ val SAMPLE_DEMOS by lazy {
             area = ConnectivityAudioArea,
             tags = listOf("Audio"),
             content = {
-                MinSdkBox(minSdk = 55) {
+                MinSdkBox(minSdk = Build.VERSION_CODES.S) {
+                    //noinspection NewApi
                     AudioCommsSample()
                 }
             },
@@ -239,6 +240,7 @@ val SAMPLE_DEMOS by lazy {
             tags = listOf("Bluetooth"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.M) {
+                    //noinspection NewApi
                     GATTServerSample()
                 }
             },
@@ -252,6 +254,7 @@ val SAMPLE_DEMOS by lazy {
             tags = listOf("Bluetooth"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.O) {
+                    //noinspection NewApi
                     BLEScanIntentSample()
                 }
             },
@@ -265,6 +268,7 @@ val SAMPLE_DEMOS by lazy {
             tags = listOf("Bluetooth"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.M) {
+                    //noinspection NewApi
                     ConnectGATTSample()
                 }
             },
@@ -278,6 +282,7 @@ val SAMPLE_DEMOS by lazy {
             tags = listOf("Bluetooth"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.M) {
+                    //noinspection NewApi
                     FindBLEDevicesSample()
                 }
             },
@@ -291,6 +296,7 @@ val SAMPLE_DEMOS by lazy {
             tags = listOf("Bluetooth"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.O) {
+                    //noinspection NewApi
                     CompanionDeviceManagerSample()
                 }
             },
@@ -311,6 +317,7 @@ val SAMPLE_DEMOS by lazy {
             area = ConnectivityTelecomArea,
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.O) {
+                    //noinspection NewApi
                     TelecomCallSample()
                 }
             },
@@ -360,6 +367,7 @@ val SAMPLE_DEMOS by lazy {
             tags = listOf("UltraHDR", "Compose"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                    //noinspection NewApi
                     DisplayUltraHDRScreen()
                 }
             },
@@ -434,6 +442,7 @@ val SAMPLE_DEMOS by lazy {
             tags = listOf("permissions"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.Q) {
+                    //noinspection NewApi
                     LocationPermissionScreen()
                 }
             },
@@ -528,6 +537,7 @@ val SAMPLE_DEMOS by lazy {
             area = PrivacyTransparencyArea,
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.R) {
+                    //noinspection NewApi
                     DataAccessSample()
                 }
             },
@@ -573,6 +583,7 @@ val SAMPLE_DEMOS by lazy {
             tags = listOf("App Widgets"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.O) {
+                    //noinspection NewApi
                     AppWidgets()
                 }
             },
@@ -1014,6 +1025,7 @@ val SAMPLE_DEMOS by lazy {
             area = UserInterfaceQuickSettingsArea,
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.N) {
+                    //noinspection NewApi
                     QuickSettings()
                 }
             },

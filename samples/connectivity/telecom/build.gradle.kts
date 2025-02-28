@@ -29,6 +29,9 @@ android {
 
     defaultConfig {
         minSdk = 21
+        targetSdk = 35
+
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     kotlinOptions {
         jvmTarget = "1.8"
@@ -53,6 +56,8 @@ dependencies {
     androidTestImplementation(libs.androidx.test.espresso.core)
     androidTestImplementation(libs.androidx.test.rules)
     androidTestImplementation(libs.androidx.test.runner)
+    debugImplementation(libs.androidx.ui.test.manifest)
+
     androidTestImplementation(libs.hilt.testing)
     androidTestImplementation(libs.junit4)
 
