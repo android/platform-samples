@@ -53,7 +53,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.google.android.catalog.framework.annotations.Sample
 
 /**
  * This sample showcases how to select images/videos in a privacy-friendly way using the photo
@@ -61,13 +60,13 @@ import com.google.android.catalog.framework.annotations.Sample
  * that enables backport support on Android KitKat onwards using Google Play Services
  */
 @OptIn(ExperimentalMaterial3Api::class)
-@Sample(
-    name = "PhotoPicker",
-    description = "Select images/videos in a privacy-friendly way using the photo picker",
-    documentation = "https://developer.android.com/training/data-storage/shared/photopicker",
-)
+//@Sample(
+//    name = "PhotoPicker",
+//    description = "Select images/videos in a privacy-friendly way using the photo picker",
+//    documentation = "https://developer.android.com/training/data-storage/shared/photopicker",
+//)
 @Composable
-fun PhotoPicker() {
+fun PhotoPickerSample() {
     var selectedMedia by remember { mutableStateOf(emptyList<Uri>()) }
     // Keep track of the media type filter for the photo picker
     var filter by remember { mutableStateOf<VisualMediaType>(ImageAndVideo) }

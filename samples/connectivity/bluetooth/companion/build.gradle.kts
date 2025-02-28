@@ -15,14 +15,31 @@
  */
 
 plugins {
-    id("com.example.platform.sample")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.android)
 }
     
 
 android {
     namespace = "com.example.platform.connectivity.bluetooth.companion"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 21
+        targetSdk = 35
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 dependencies {
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(project(":shared"))
     implementation(project(":samples:connectivity:bluetooth:ble"))
 }

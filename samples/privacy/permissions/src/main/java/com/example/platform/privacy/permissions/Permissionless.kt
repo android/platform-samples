@@ -64,18 +64,12 @@ import coil.compose.AsyncImage
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
 
-@Sample(
-    name = "Permissionless",
-    description = "This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs",
-    documentation = "https://developer.android.com/training/permissions/evaluating"
-)
 @Composable
 fun Permissionless() {
     LazyColumn(

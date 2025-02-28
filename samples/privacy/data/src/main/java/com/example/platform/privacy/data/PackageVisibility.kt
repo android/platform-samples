@@ -36,13 +36,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "Package Visibility",
-    description = "A sample that showcase how the package visibility queries affects the available packages",
-    documentation = "https://developer.android.com/training/package-visibility"
-)
 @Composable
 fun PackageVisibility() {
     val context = LocalContext.current

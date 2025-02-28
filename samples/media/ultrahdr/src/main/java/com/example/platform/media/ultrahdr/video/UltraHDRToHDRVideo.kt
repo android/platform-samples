@@ -51,7 +51,6 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.platform.media.ultrahdr.databinding.UltrahdrToHdrVideoBinding
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -60,14 +59,6 @@ import java.util.UUID
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
 
-@Sample(
-    name = "UltraHDR to HDR Video",
-    description = "This sample demonstrates converting a series of UltraHDR images into a HDR " +
-            "video." + "The sample leverages GPU hardware acceleration to render and encode the " +
-            "images.",
-    documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-    tags = ["UltraHDR"],
-)
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class UltraHDRToHDRVideo : Fragment() {
     /**

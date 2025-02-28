@@ -43,19 +43,19 @@ import androidx.core.content.ContextCompat.checkSelfPermission
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import coil.compose.AsyncImage
-import com.google.android.catalog.framework.annotations.Sample
+//import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@Sample(
-    name = "Selected Photos Access",
-    description = "Check and request storage permissions",
-    documentation = "https://developer.android.com/about/versions/14/changes/partial-photo-video-access",
-)
-@RequiresPermission(anyOf = [READ_MEDIA_IMAGES, READ_MEDIA_VIDEO, READ_EXTERNAL_STORAGE])
+//@Sample(
+//    name = "Selected Photos Access",
+//    description = "Check and request storage permissions",
+//    documentation = "https://developer.android.com/about/versions/14/changes/partial-photo-video-access",
+//)
+//@RequiresPermission(anyOf = [READ_MEDIA_IMAGES, READ_MEDIA_VIDEO, READ_EXTERNAL_STORAGE])
 @Composable
-fun SelectedPhotosAccessScreen() {
+fun SelectedPhotosAccessSample() {
     val context = LocalContext.current
     val lifecycleOwner = LocalLifecycleOwner.current
     val coroutineScope = rememberCoroutineScope()

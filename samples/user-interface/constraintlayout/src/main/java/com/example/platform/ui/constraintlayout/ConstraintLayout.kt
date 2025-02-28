@@ -21,63 +21,19 @@ import android.view.View
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.fragment.app.Fragment
 import com.example.platform.ui.constraintlayout.databinding.ConstraintSetMainBinding
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "ConstraintLayout - 1. Centering Views",
-    description = "Center child views horizontally or vertically.",
-    documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-    tags = ["constraint-layout"],
-)
 class CenteringViewsFragment : Fragment(R.layout.centering_views)
 
-@Sample(
-    name = "ConstraintLayout - 2. Basic arrangement",
-    description = "Arrange positions of child views relative to other views.",
-    documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-    tags = ["constraint-layout"],
-)
 class BasicArrangementFragment : Fragment(R.layout.basic_arrangement)
 
-@Sample(
-    name = "ConstraintLayout - 3. Advanced arrangement",
-    description = "More arrangement options.",
-    documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-    tags = ["constraint-layout"],
-)
 class AdvancedArrangementFragment : Fragment(R.layout.advanced_arrangement)
-
-@Sample(
-    name = "ConstraintLayout - 4. Aspect ratio",
-    description = "Specify aspect ratio for the dimensions of the child views.",
-    documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-    tags = ["constraint-layout"],
-)
 
 class AspectRatioFragment : Fragment(R.layout.aspect_ratio)
 
-@Sample(
-    name = "ConstraintLayout - 5. Basic chains",
-    description = "Use chains to arrange multiple child views horizontally or vertically.",
-    documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-    tags = ["constraint-layout"],
-)
 class BasicChainFragment : Fragment(R.layout.basic_chains)
 
-@Sample(
-    name = "ConstraintLayout - 6. Advanced chains",
-    description = "Use chains to arrange multiple child views horizontally or vertically.",
-    documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-    tags = ["constraint-layout"],
-)
 class AdvancedChainsFragment : Fragment(R.layout.advanced_chains)
 
-@Sample(
-    name = "ConstraintLayout - 7. ConstraintSet",
-    description = "Use ConstraintSet to specify multiple constraints to all the child views.",
-    documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-    tags = ["constraint-layout"],
-)
 class ConstraintSetFragment : Fragment(R.layout.constraint_set_main) {
 
     private lateinit var binding: ConstraintSetMainBinding
@@ -109,10 +65,4 @@ class ConstraintSetFragment : Fragment(R.layout.constraint_set_main) {
     }
 }
 
-@Sample(
-    name = "ConstraintLayout - 8. Guidelines",
-    description = "Use a horizontal or vertical guideline to apply constraints to child views.",
-    documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-    tags = ["constraint-layout"],
-)
 class GuidelinesFragment : Fragment(R.layout.guidelines)

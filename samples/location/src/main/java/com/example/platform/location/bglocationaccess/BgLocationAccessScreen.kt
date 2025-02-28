@@ -35,16 +35,10 @@ import androidx.compose.ui.unit.dp
 import androidx.work.ExistingPeriodicWorkPolicy
 import androidx.work.PeriodicWorkRequestBuilder
 import androidx.work.WorkManager
-import com.example.platform.base.PermissionBox
-import com.google.android.catalog.framework.annotations.Sample
+import com.example.platform.shared.PermissionBox
 import java.util.concurrent.TimeUnit
 
 
-@Sample(
-    name = "Location - Background Location updates",
-    description = "This Sample demonstrate how to access location and get location updates when app is in background",
-    documentation = "https://developer.android.com/training/location/background",
-)
 @Composable
 fun BgLocationAccessScreen() {
     // Request for foreground permissions first

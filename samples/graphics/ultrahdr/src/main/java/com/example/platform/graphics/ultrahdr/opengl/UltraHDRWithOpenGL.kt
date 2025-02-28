@@ -39,16 +39,8 @@ import androidx.graphics.surface.SurfaceControlCompat
 import androidx.hardware.SyncFenceCompat
 import com.example.platform.graphics.ultrahdr.R
 import com.example.platform.graphics.ultrahdr.databinding.UltrahdrWithGraphicsBinding
-import com.google.android.catalog.framework.annotations.Sample
 import java.util.function.Consumer
 
-@Sample(
-    name = "UltraHDR x OpenGLES SurfaceView",
-    description = "This sample demonstrates displaying an UltraHDR image via and OpenGL Pipeline " +
-            "and control the SurfaceView's rendering brightness.",
-    documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-    tags = ["UltraHDR"],
-)
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class UltraHDRWithOpenGL : Fragment(),
     GLRenderer.EGLContextCallback,
