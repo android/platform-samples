@@ -32,13 +32,7 @@ import androidx.draganddrop.DropHelper
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.platform.ui.draganddrop.databinding.FragmentDndMultiwindowBinding
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "Drag and Drop in MultiWindow mode",
-    description = "Drag and drop to another app visible in multiwindow mode",
-    documentation = "https://developer.android.com/develop/ui/views/touch-and-input/drag-drop/multi-window",
-)
 class DragAndDropMultiWindow : Fragment(R.layout.fragment_dnd_multiwindow) {
     lateinit var binding: FragmentDndMultiwindowBinding
 

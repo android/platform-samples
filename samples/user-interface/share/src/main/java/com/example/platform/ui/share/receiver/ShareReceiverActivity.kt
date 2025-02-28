@@ -19,16 +19,14 @@ package com.example.platform.ui.share.receiver
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.google.android.catalog.framework.annotations.Sample
+import androidx.core.view.WindowCompat
 
-@Sample(
-    name = "Receive data shared by other apps",
-    description = "Receive texts and images from other apps.",
-)
 class ShareReceiverActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.getInsetsController(window, window.decorView)
+            .isAppearanceLightStatusBars = true
         setContent { ShareReceiver(intent) }
     }
 }

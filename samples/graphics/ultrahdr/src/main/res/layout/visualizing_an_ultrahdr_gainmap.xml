@@ -14,9 +14,11 @@
   ~ limitations under the License.
   -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:targetApi="upside_down_cake">
 
     <com.example.platform.graphics.ultrahdr.common.ColorModeControls
         android:id="@+id/color_mode_controls"

@@ -34,14 +34,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.map
 import androidx.lifecycle.switchMap
 import com.example.platform.ui.text.databinding.DownloadableFontsFragmentBinding
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "Downloadable Fonts",
-    description = "Download fonts instead of bundling them in the app resources.",
-    documentation = "https://developer.android.com/develop/ui/views/text-and-emoji/downloadable-fonts",
-    tags = ["text"],
-)
 class DownloadableFontsFragment : Fragment(R.layout.downloadable_fonts_fragment) {
 
     private val viewModel: DownloadableFontsViewModel by viewModels()

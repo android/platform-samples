@@ -19,6 +19,7 @@ package com.example.platform.connectivity.bluetooth.ble.server
 import android.Manifest
 import android.content.Intent
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -41,15 +42,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.example.platform.connectivity.bluetooth.ble.BluetoothSampleBox
-import com.google.android.catalog.framework.annotations.Sample
 
 
-@Sample(
-    name = "Create a GATT server",
-    description = "Shows how to create a GATT server and communicate with the GATT client",
-    documentation = "https://developer.android.com/reference/android/bluetooth/BluetoothGattServer",
-    tags = ["bluetooth"],
-)
+@RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun GATTServerSample() {
     // In addition to the Bluetooth permissions we also need the BLUETOOTH_ADVERTISE from Android 12
@@ -67,6 +62,7 @@ fun GATTServerSample() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.M)
 @Composable
 internal fun GATTServerScreen() {
     val context = LocalContext.current

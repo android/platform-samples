@@ -43,18 +43,10 @@ import com.facebook.drawee.backends.pipeline.Fresco
 import com.facebook.imagepipeline.datasource.BaseBitmapDataSubscriber
 import com.facebook.imagepipeline.image.CloseableImage
 import com.facebook.imagepipeline.request.ImageRequestBuilder
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-@Sample(
-    name = "Displaying UltraHDR (3P Libraries)",
-    description = "This sample demonstrates using the various popular image loading library to" +
-            " detect the presence of a gainmap to enable HDR mode when displaying an UltraHDR image",
-    documentation = "https://github.com/bumptech/glide",
-    tags = ["UltraHDR"],
-)
 @RequiresApi(VERSION_CODES.UPSIDE_DOWN_CAKE)
 class DisplayingUltraHDRUsing3PLibrary : Fragment() {
     private enum class Library(val value: Int) {

@@ -45,14 +45,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.platform.ui.appwidgets.glance.layout.CanonicalLayoutActivity
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "App Widgets",
-    description = "Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples",
-    documentation = "https://developer.android.com/develop/ui/views/appwidgets/overview",
-    tags = ["App Widgets"],
-)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppWidgets() {

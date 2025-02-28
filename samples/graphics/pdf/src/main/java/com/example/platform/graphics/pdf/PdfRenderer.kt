@@ -34,12 +34,7 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "PdfRenderer",
-    description = "Demonstrates how to use PdfRenderer to display PDF documents on the screen."
-)
 @Composable
 fun PdfRendererScreen() {
     val viewModel: PdfRendererViewModel = viewModel()

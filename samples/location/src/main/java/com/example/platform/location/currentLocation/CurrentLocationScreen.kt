@@ -36,8 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.platform.base.PermissionBox
-import com.google.android.catalog.framework.annotations.Sample
+import com.example.platform.shared.PermissionBox
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
@@ -46,11 +45,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @SuppressLint("MissingPermission")
-@Sample(
-    name = "Location - Getting Current Location",
-    description = "This Sample demonstrate how to request of current location",
-    documentation = "https://developer.android.com/training/location/retrieve-current",
-)
 @Composable
 fun CurrentLocationScreen() {
     val permissions = listOf(

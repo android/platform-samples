@@ -15,18 +15,29 @@
  */
 
 plugins {
-    id("com.example.platform.sample")
+    alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace = "com.example.platform.ui.windowmanager"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 21
+        targetSdk = 35
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     buildFeatures {
         viewBinding = true
     }
 }
 
 dependencies {
+    implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.material)
     implementation(libs.androidx.window)
     implementation(libs.androidx.window.java)
