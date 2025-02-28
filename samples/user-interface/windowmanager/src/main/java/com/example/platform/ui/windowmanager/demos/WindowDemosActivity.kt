@@ -20,6 +20,7 @@ import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.WindowCompat
 import androidx.media3.common.util.UnstableApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.platform.ui.windowmanager.DualScreenActivity
@@ -40,6 +41,10 @@ class WindowDemosActivity : AppCompatActivity() {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_window_demos)
+
+        WindowCompat.getInsetsController(window, window.decorView)
+            .isAppearanceLightStatusBars = true
+
         val demoItems = listOf(
             DemoItem(
                 buttonTitle = getString(R.string.activity_embedding),

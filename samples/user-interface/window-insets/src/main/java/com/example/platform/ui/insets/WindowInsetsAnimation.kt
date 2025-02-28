@@ -17,12 +17,11 @@
 package com.example.platform.ui.insets
 
 import android.os.Bundle
-import androidx.activity.ComponentActivity
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import com.example.platform.ui.insets.databinding.ActivityMainBinding
 
-class WindowInsetsAnimationActivity : ComponentActivity() {
+class WindowInsetsAnimationActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {

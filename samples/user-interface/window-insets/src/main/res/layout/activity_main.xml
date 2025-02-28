@@ -21,7 +21,7 @@
     android:layout_height="match_parent"
     tools:context=".WindowInsetsAnimationActivity">
 
-    <fragment
+    <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_conversation"
         android:name="com.example.platform.ui.insets.animation.ConversationFragment"
         android:layout_width="match_parent"
