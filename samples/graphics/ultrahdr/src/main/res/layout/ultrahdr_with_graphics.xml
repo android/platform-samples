@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -8,7 +9,8 @@
         android:id="@+id/color_mode_controls"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="@dimen/ultrahdr_color_mode_current_mode_padding" />
+        android:layout_marginBottom="@dimen/ultrahdr_color_mode_current_mode_padding"
+        tools:targetApi="upside_down_cake" />
 
     <TextView
         android:id="@+id/opengl_surface_view_extended_brightness"
