@@ -30,7 +30,7 @@ java {
 
 android {
     namespace = "com.example.platform.app"
-    compileSdk = 35
+    compileSdkPreview = "Baklava"
 
     defaultConfig {
         applicationId = "com.example.platform.app"

@@ -17,6 +17,7 @@
 package com.example.platform.camera.imagecapture
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
@@ -84,13 +85,15 @@ import kotlin.coroutines.suspendCoroutine
     documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
     tags = ["UltraHDR", "Camera2"],
 )
-@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
-class Camera2UltraHDRCapture : Fragment() {
+@RequiresApi(Build.VERSION_CODES.BAKLAVA)
+open class Camera2UltraHDRCapture : Fragment() {
     /**
      *  Android ViewBinding.
      */
     private var _binding: Camera2UltrahdrCaptureBinding? = null
     private val binding get() = _binding!!
+
+    protected open val ULTRAHDR_FORMAT = ImageFormat.JPEG_R
 
     /**
      *  Detects, characterizes, and connects to a CameraDevice (used for all camera operations).
@@ -309,15 +312,16 @@ class Camera2UltraHDRCapture : Fragment() {
         }
     }
 
+    @SuppressLint("WrongConstant")
     private fun setUpImageReader() {
         // Initialize an image reader which will be used to capture still photos
-        val pixelFormat = ImageFormat.JPEG_R
+        val pixelFormat = ULTRAHDR_FORMAT
         val configMap = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)
         configMap?.let { config ->
             config.getOutputSizes(pixelFormat).maxByOrNull { it.height * it.width }
                 ?.let { size ->
                     imageReader = ImageReader.newInstance(
-                        size.width, size.height, pixelFormat, IMAGE_BUFFER_SIZE,
+                        size.width, size.height, ULTRAHDR_FORMAT, IMAGE_BUFFER_SIZE,
                     )
                 }
         }
@@ -332,13 +336,9 @@ class Camera2UltraHDRCapture : Fragment() {
                 takePhoto().use { result ->
                     Log.d(TAG, "Result received: $result")
 
-                    // Save the result to disk, update EXIF metadata with orientation info
+                    // Save the result to disk
                     val output = saveResult(result)
                     Log.d(TAG, "Image saved: ${output.absolutePath}")
-                    val exif = ExifInterface(output.absolutePath)
-                    exif.setAttribute(ExifInterface.TAG_ORIENTATION, result.orientation.toString())
-                    exif.saveAttributes()
-                    Log.d(TAG, "EXIF metadata saved: ${output.absolutePath}")
 
                     // Display the photo taken to user
                     lifecycleScope.launch(Dispatchers.Main) {
@@ -363,7 +363,7 @@ class Camera2UltraHDRCapture : Fragment() {
         // Query the available output formats.
         val formats = c.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)?.outputFormats
 
-        val canEncodeUltraHDR = formats?.contains(ImageFormat.JPEG_R) ?: false
+        val canEncodeUltraHDR = formats?.contains(ULTRAHDR_FORMAT) ?: false
 
         return canEncodeUltraHDR
     }
@@ -507,6 +507,7 @@ class Camera2UltraHDRCapture : Fragment() {
 
         val request = session.device.createCaptureRequest(CameraDevice.TEMPLATE_STILL_CAPTURE)
             .apply { addTarget(imageReader.surface) }
+        request.set(CaptureRequest.JPEG_ORIENTATION, relativeOrientation.value ?: 0)
 
         session.capture(
             request.build(),
@@ -592,7 +593,7 @@ class Camera2UltraHDRCapture : Fragment() {
         val buffer = result.image.planes[0].buffer
         val bytes = ByteArray(buffer.remaining()).apply { buffer.get(this) }
         try {
-            val output = createFile(requireContext())
+            val output = createFile(requireContext(), ULTRAHDR_FORMAT)
             FileOutputStream(output).use { it.write(bytes) }
             cont.resume(output)
         } catch (exc: IOException) {
@@ -643,9 +644,13 @@ class Camera2UltraHDRCapture : Fragment() {
          *
          * @return [File] created.
          */
-        private fun createFile(context: Context): File {
+        private fun createFile(context: Context, format: Int): File {
             val sdf = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS", Locale.US)
-            return File(context.filesDir, "IMG_${sdf.format(Date())}.jpg")
+            var fileType = ".jpg"
+            if (format != ImageFormat.JPEG_R) {
+                fileType = ".heic"
+            }
+            return File(context.filesDir, "IMG_${sdf.format(Date())}" + fileType)
         }
     }
 }
