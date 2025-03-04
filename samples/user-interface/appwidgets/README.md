@@ -41,6 +41,7 @@ The `layouts` directory contains following layout categories:
 * [toolbars](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/toolbars)
   * [Toolbar with app name](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/toolbars/ToolBarAppWidget.kt)
   * [Toolbar with search bar](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/toolbars/SearchToolBarAppWidget.kt)
+  * [Toolbar with expressive shape](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/toolbars/ExpressiveToolbarAppWidget.kt)
 
 Each of these layout categories contains a `layout` sub-directory that can be copied to your project
 to reuse the layouts in your code.
