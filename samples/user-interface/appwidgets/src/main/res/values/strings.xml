@@ -58,6 +58,7 @@
     <string name="sample_check_list_app_widget_name">Checklist</string>
     <string name="sample_action_list_app_widget_name">Action List</string>
     <string name="sample_image_grid_app_widget_name">Image Grid</string>
+    <string name="sample_expressive_toolbar_app_widget_name">Expressive Toolbar</string>
     <string name="sample_toolbar_app_widget_name">Toolbar</string>
     <string name="sample_search_toolbar_app_widget_name">Search Toolbar</string>
 
