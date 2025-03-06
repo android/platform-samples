@@ -33,10 +33,9 @@ open class SplitActivityDetail : AppCompatActivity() {
         findViewById<TextView>(R.id.item_detail_text).text = intent.getStringExtra(EXTRA_SELECTED_ITEM)
     }
 
-    override fun onNewIntent(intent: Intent?) {
+    override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-
-        findViewById<TextView>(R.id.item_detail_text).text = intent?.getStringExtra(EXTRA_SELECTED_ITEM)
+        findViewById<TextView>(R.id.item_detail_text).text = intent.getStringExtra(EXTRA_SELECTED_ITEM)
     }
 
     companion object {

@@ -58,4 +58,5 @@ dependencies {
     implementation(libs.tensorflow.lite.gpu.delegate.plugin)
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.select.tf.ops)
+    implementation(libs.litert.gpu.api)
 }
