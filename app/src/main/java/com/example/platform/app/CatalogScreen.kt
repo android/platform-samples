@@ -40,12 +40,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
+
+/**
+ * Represents an API surface or sample.
+ */
 interface CatalogItem {
     val id: String
     val name: String
     val description: String?
 }
 
+/**
+ * Screen rendering list of items with their descriptions (API surfaces or samples)
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatalogScreen(

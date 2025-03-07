@@ -47,16 +47,16 @@ fun NavGraph() {
         composable<MainScreen> {
             CatalogScreen(
                 item = MainScreen,
-                subItems = AREAS,
-                onNavigateToSubItem = { area -> navController.navigate(area as Area) },
+                subItems = API_SURFACES,
+                onNavigateToSubItem = { apiSurface -> navController.navigate(apiSurface as ApiSurface) },
             )
         }
-        composable<Area> { backStackEntry ->
-            val area = backStackEntry.toRoute<Area>()
-            val subItems = remember { SAMPLE_DEMOS.filter { it.value.area == area } }
+        composable<ApiSurface> { backStackEntry ->
+            val apiSurface = backStackEntry.toRoute<ApiSurface>()
+            val subItems = remember { SAMPLE_DEMOS.filter { it.value.apiSurface == apiSurface } }
 
             CatalogScreen(
-                item = area,
+                item = apiSurface,
                 subItems = subItems,
                 onNavigateToSubItem = { sampleDemo ->
                     if (sampleDemo is ActivitySampleDemo) {
