@@ -577,7 +577,7 @@ val SAMPLE_DEMOS by lazy {
         ComposableSampleDemo(
             id = "app-widgets",
             name = "App Widgets",
-            description = "Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples",
+            description = "Showcases how to pin widgets within the app and provides a catalog of well-designed canonical widget layouts for inspiration.",
             documentation = "https://developer.android.com/develop/ui/views/appwidgets/overview",
             apiSurface = UserInterfaceAppWidgetsApiSurface,
             tags = listOf("App Widgets"),
