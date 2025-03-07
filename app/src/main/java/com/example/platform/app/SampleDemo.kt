@@ -130,7 +130,7 @@ interface SampleDemo : CatalogItem {
     val documentation: String?
     val minSdk: Int
     val tags: List<String>
-    val area: Area
+    val apiSurface: ApiSurface
     val content: Any
 }
 
@@ -140,7 +140,7 @@ data class ComposableSampleDemo(
     override val description: String? = null,
     override val documentation: String? = null,
     override val minSdk: Int = Build.VERSION_CODES.LOLLIPOP,
-    override val area: Area,
+    override val apiSurface: ApiSurface,
     override val tags: List<String> = emptyList(),
     override val content: @Composable () -> Unit,
 ) : SampleDemo
@@ -151,7 +151,7 @@ data class ActivitySampleDemo(
     override val description: String? = null,
     override val documentation: String? = null,
     override val minSdk: Int = Build.VERSION_CODES.LOLLIPOP,
-    override val area: Area,
+    override val apiSurface: ApiSurface,
     override val tags: List<String> = emptyList(),
     override val content: Class<*>,
 ) : SampleDemo
@@ -164,7 +164,7 @@ val SAMPLE_DEMOS by lazy {
             description = "This sample demonstrates the importance of proper color contrast and how to " +
                     "audit your app to ensure proper color contrast.",
             documentation = "https://support.google.com/accessibility/android/answer/7158390",
-            area = AccessiblityArea,
+            apiSurface = AccessiblityApiSurface,
             content = { ColorContrast() },
         ),
         ComposableSampleDemo(
@@ -173,7 +173,7 @@ val SAMPLE_DEMOS by lazy {
             description = "Utilize LiveRegion to automatically notify users of accessibility services" +
                     " about changes to a view",
             documentation = "https://developer.android.com/reference/android/view/View#attr_android:accessibilityLiveRegion",
-            area = AccessiblityArea,
+            apiSurface = AccessiblityApiSurface,
             content = { AndroidFragment<LiveRegionView>() },
         ),
         ComposableSampleDemo(
@@ -183,7 +183,7 @@ val SAMPLE_DEMOS by lazy {
                     " interactive elements and how to audit your app for content label related " +
                     "improvements.",
             documentation = "https://developer.android.com/guide/topics/ui/accessibility/apps#describe-ui-element",
-            area = AccessiblityArea,
+            apiSurface = AccessiblityApiSurface,
             content = { SpeakableText() },
         ),
         ComposableSampleDemo(
@@ -192,7 +192,7 @@ val SAMPLE_DEMOS by lazy {
             description = "This sample demonstrates how to capture an image using Camera2 and encode it " +
                     "into a JPEG container.",
             documentation = "https://developer.android.com/training/camera2/capture-sessions-requests",
-            area = CameraCamera2Area,
+            apiSurface = CameraCamera2ApiSurface,
             tags = listOf("Camera2"),
             content = { AndroidFragment<Camera2ImageCapture>() },
         ),
@@ -202,7 +202,7 @@ val SAMPLE_DEMOS by lazy {
             description = "This sample demonstrates how to capture a 10-bit compressed still image and " +
                     "store it using the new UltraHDR image format using Camera2.",
             documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-            area = CameraCamera2Area,
+            apiSurface = CameraCamera2ApiSurface,
             tags = listOf("UltraHDR", "Camera2"),
             content = { AndroidFragment<Camera2UltraHDRCapture>() },
         ),
@@ -212,7 +212,7 @@ val SAMPLE_DEMOS by lazy {
             description = "Demonstrates displaying processed pixel data directly from the camera sensor "
                     + "to the screen using Camera2.",
             documentation = "https://developer.android.com/training/camera2",
-            area = CameraCamera2Area,
+            apiSurface = CameraCamera2ApiSurface,
             tags = listOf("Camera2"),
             content = { AndroidFragment<Camera2Preview>() },
         ),
@@ -222,7 +222,7 @@ val SAMPLE_DEMOS by lazy {
             description = "This sample shows how to use audio manager to for Communication application that self-manage the call.",
             documentation = "https://developer.android.com/guide/topics/connectivity/ble-audio/audio-manager",
             minSdk = Build.VERSION_CODES.S,
-            area = ConnectivityAudioArea,
+            apiSurface = ConnectivityAudioApiSurface,
             tags = listOf("Audio"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.S) {
@@ -236,7 +236,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Create a GATT server",
             description = "Shows how to create a GATT server and communicate with the GATT client",
             documentation = "https://developer.android.com/reference/android/bluetooth/BluetoothGattServer",
-            area = ConnectivityBluetoothBleArea,
+            apiSurface = ConnectivityBluetoothBleApiSurface,
             tags = listOf("Bluetooth"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.M) {
@@ -250,7 +250,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Scan with BLE Intent",
             description = "This samples shows how to use the BLE intent to scan for devices",
             documentation = "https://developer.android.com/reference/android/bluetooth/le/BluetoothLeScanner#startScan(java.util.List%3Candroid.bluetooth.le.ScanFilter%3E,%20android.bluetooth.le.ScanSettings,%20android.app.PendingIntent)",
-            area = ConnectivityBluetoothBleArea,
+            apiSurface = ConnectivityBluetoothBleApiSurface,
             tags = listOf("Bluetooth"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.O) {
@@ -264,7 +264,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Connect to a GATT server",
             description = "Shows how to connect to a GATT server hosted by the BLE device and perform simple operations",
             documentation = "https://developer.android.com/guide/topics/connectivity/bluetooth/connect-gatt-server",
-            area = ConnectivityBluetoothBleArea,
+            apiSurface = ConnectivityBluetoothBleApiSurface,
             tags = listOf("Bluetooth"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.M) {
@@ -278,7 +278,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Find devices",
             description = "This example will demonstrate how to scanning for Low Energy Devices",
             documentation = "https://developer.android.com/guide/topics/connectivity/bluetooth",
-            area = ConnectivityBluetoothBleArea,
+            apiSurface = ConnectivityBluetoothBleApiSurface,
             tags = listOf("Bluetooth"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.M) {
@@ -292,7 +292,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Companion Device Manager",
             description = "This samples shows how to use the CDM to pair and connect with BLE devices",
             documentation = "https://developer.android.com/guide/topics/connectivity/companion-device-pairing",
-            area = ConnectivityBluetoothCompanionArea,
+            apiSurface = ConnectivityBluetoothCompanionApiSurface,
             tags = listOf("Bluetooth"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.O) {
@@ -306,7 +306,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Call Notification",
             description = "Sample demonstrating how to make incoming call notifications and in call notifications",
             documentation = "https://developer.android.com/reference/android/app/Notification.CallStyle",
-            area = ConnectivityCallNotificationArea,
+            apiSurface = ConnectivityCallNotificationApiSurface,
             content = CallNotificationSample::class.java,
         ),
         ComposableSampleDemo(
@@ -314,7 +314,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Telecom Call",
             description = "A sample showcasing how to handle calls with the Jetpack Telecom API",
             documentation = "https://developer.android.com/guide/topics/connectivity/telecom",
-            area = ConnectivityTelecomArea,
+            apiSurface = ConnectivityTelecomApiSurface,
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.O) {
                     //noinspection NewApi
@@ -327,7 +327,7 @@ val SAMPLE_DEMOS by lazy {
             name = "PDF Renderer",
             description = "Demonstrates how to use PdfRenderer to display PDF documents on the screen.",
             documentation = null,
-            area = GraphicsPdfArea,
+            apiSurface = GraphicsPdfApiSurface,
             content = { PdfRendererScreen() },
         ),
         ComposableSampleDemo(
@@ -335,7 +335,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Compressing UltraHDR Images",
             description = "This sample demonstrates displaying an UltraHDR image in a Compose View and an Android View",
             documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-            area = GraphicsUltraHdrArea,
+            apiSurface = GraphicsUltraHdrApiSurface,
             tags = listOf("UltraHDR"),
             content = { AndroidFragment<CompressingUltraHDRImages>() },
         ),
@@ -344,7 +344,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Displaying UltraHDR",
             description = "This sample demonstrates displaying an UltraHDR image.",
             documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-            area = GraphicsUltraHdrArea,
+            apiSurface = GraphicsUltraHdrApiSurface,
             tags = listOf("UltraHDR"),
             content = { AndroidFragment<DisplayingUltraHDR>() },
         ),
@@ -354,7 +354,7 @@ val SAMPLE_DEMOS by lazy {
             description = "This sample demonstrates using the various popular image loading library to" +
                     " detect the presence of a gainmap to enable HDR mode when displaying an UltraHDR image",
             documentation = "https://github.com/bumptech/glide",
-            area = GraphicsUltraHdrArea,
+            apiSurface = GraphicsUltraHdrApiSurface,
             tags = listOf("UltraHDR"),
             content = { AndroidFragment<DisplayingUltraHDRUsing3PLibrary>() },
         ),
@@ -363,7 +363,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Displaying UltraHDR (Compose)",
             description = "This sample demonstrates displaying an UltraHDR image in a Compose View and an Android View",
             documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-            area = GraphicsUltraHdrArea,
+            apiSurface = GraphicsUltraHdrApiSurface,
             tags = listOf("UltraHDR", "Compose"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -378,7 +378,7 @@ val SAMPLE_DEMOS by lazy {
             description = "This sample demonstrates visualizing the underlying gainmap of an UltraHDR " +
                     "image, which reveals which parts of the image are enhanced by the gainmap.",
             documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-            area = GraphicsUltraHdrArea,
+            apiSurface = GraphicsUltraHdrApiSurface,
             tags = listOf("UltraHDR"),
             content = { AndroidFragment<VisualizingAnUltraHDRGainmap>() },
         ),
@@ -387,7 +387,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Editing UltraHDR",
             description = "This sample demonstrates editing an UltraHDR image and the resulting gainmap as well. Spatial edit operations like crop, rotate, scale are supported",
             documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-            area = GraphicsUltraHdrArea,
+            apiSurface = GraphicsUltraHdrApiSurface,
             tags = listOf("UltraHDR"),
             content = { AndroidFragment<EditingUltraHDR>() },
         ),
@@ -397,7 +397,7 @@ val SAMPLE_DEMOS by lazy {
             description = "This sample demonstrates displaying an UltraHDR image via and OpenGL Pipeline " +
                     "and control the SurfaceView's rendering brightness.",
             documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-            area = GraphicsUltraHdrArea,
+            apiSurface = GraphicsUltraHdrApiSurface,
             tags = listOf("UltraHDR"),
             content = { AndroidFragment<UltraHDRWithOpenGL>() },
         ),
@@ -406,7 +406,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Location - Background Location updates",
             description = "This Sample demonstrate how to access location and get location updates when app is in background",
             documentation = "https://developer.android.com/training/location/background",
-            area = LocationArea,
+            apiSurface = LocationApiSurface,
             content = { BgLocationAccessScreen() },
         ),
         ComposableSampleDemo(
@@ -414,7 +414,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Location - Getting Current Location",
             description = "This Sample demonstrate how to request of current location",
             documentation = "https://developer.android.com/training/location/retrieve-current",
-            area = LocationArea,
+            apiSurface = LocationApiSurface,
             content = { CurrentLocationScreen() },
         ),
         ComposableSampleDemo(
@@ -422,7 +422,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Location - Create and monitor Geofence",
             description = "This Sample demonstrate best practices for Creating and monitoring geofence",
             documentation = "https://developer.android.com/training/location/geofencing",
-            area = LocationArea,
+            apiSurface = LocationApiSurface,
             content = { GeofencingScreen() },
         ),
         ComposableSampleDemo(
@@ -430,7 +430,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Location - Updates",
             description = "This Sample demonstrate how to get location updates",
             documentation = "https://developer.android.com/training/location/request-updates",
-            area = LocationArea,
+            apiSurface = LocationApiSurface,
             content = { LocationUpdatesScreen() },
         ),
         ComposableSampleDemo(
@@ -438,7 +438,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Location - Permissions",
             description = "This Sample demonstrate best practices for Location Permission",
             documentation = "https://developer.android.com/training/location/permissions",
-            area = LocationArea,
+            apiSurface = LocationApiSurface,
             tags = listOf("permissions"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.Q) {
@@ -452,7 +452,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Location - User Activity Recognition",
             description = "This Sample demonstrate detection of user activity like walking, driving, etc.",
             documentation = "https://developer.android.com/training/location/transitions",
-            area = LocationArea,
+            apiSurface = LocationApiSurface,
             content = { UserActivityRecognitionScreen() },
         ),
         ComposableSampleDemo(
@@ -462,7 +462,7 @@ val SAMPLE_DEMOS by lazy {
                     "video." + "The sample leverages GPU hardware acceleration to render and encode the " +
                     "images.",
             documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-            area = MediaUltraHdrArea,
+            apiSurface = MediaUltraHdrApiSurface,
             tags = listOf("UltraHDR"),
             content = { AndroidFragment<UltraHDRToHDRVideo>() },
         ),
@@ -471,7 +471,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Transformer and TFLite",
             description = "This sample demonstrates using Transformer with TFLite/RTLite by applying a selected art style to a video.",
             documentation = "https://developer.android.com/guide/topics/media/transformer",
-            area = MediaVideoArea,
+            apiSurface = MediaVideoApiSurface,
             tags = listOf("Transformer"),
             content = { AndroidFragment<TransformerTFLite>() },
         ),
@@ -480,7 +480,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Video Composition using Media3 Transformer",
             description = "This sample demonstrates concatenation of two video assets and an image using Media3 Transformer library.",
             documentation = "https://developer.android.com/guide/topics/media/transformer",
-            area = MediaVideoArea,
+            apiSurface = MediaVideoApiSurface,
             tags = listOf("Transformer"),
             content = { AndroidFragment<TransformerVideoComposition>() },
         ),
@@ -489,7 +489,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Package Visibility",
             description = "A sample that showcase how the package visibility queries affects the available packages",
             documentation = "https://developer.android.com/training/package-visibility",
-            area = PrivacyDataArea,
+            apiSurface = PrivacyDataApiSurface,
             content = { PackageVisibility() },
         ),
         ComposableSampleDemo(
@@ -497,7 +497,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Permissions using Compose",
             description = "This sample showcases how to request permission using Accompanist in Compose",
             documentation = "https://google.github.io/accompanist/permissions/",
-            area = PrivacyPermissionsArea,
+            apiSurface = PrivacyPermissionsApiSurface,
             tags = listOf("Permissions"),
             content = { ComposePermissions() },
         ),
@@ -506,7 +506,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Multiple Permissions",
             description = "Shows the recommended flow to request multiple RELATED runtime permissions",
             documentation = "https://developer.android.com/training/permissions/requesting",
-            area = PrivacyPermissionsArea,
+            apiSurface = PrivacyPermissionsApiSurface,
             tags = listOf("Permissions"),
             content = { AndroidFragment<MultiplePermissions>() },
         ),
@@ -515,7 +515,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Permissionless",
             description = "This sample demonstrate how you can avoid requesting permission for certain actions by leveraging System APIs",
             documentation = "https://developer.android.com/training/permissions/evaluating",
-            area = PrivacyPermissionsArea,
+            apiSurface = PrivacyPermissionsApiSurface,
             tags = listOf("Permissions"),
             content = { Permissionless() },
         ),
@@ -524,7 +524,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Single Permission",
             description = "Shows the recommended flow to request single runtime permissions",
             documentation = "https://developer.android.com/training/permissions/requesting",
-            area = PrivacyPermissionsArea,
+            apiSurface = PrivacyPermissionsApiSurface,
             tags = listOf("Permissions"),
             content = { AndroidFragment<SinglePermission>() },
         ),
@@ -534,7 +534,7 @@ val SAMPLE_DEMOS by lazy {
             description = "Demonstrates how to implement data access auditing for your app to identify " +
                     "unexpected data access, even from third-party SDKs and libraries.",
             documentation = "https://developer.android.com/guide/topics/data/audit-access",
-            area = PrivacyTransparencyArea,
+            apiSurface = PrivacyTransparencyApiSurface,
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.R) {
                     //noinspection NewApi
@@ -547,7 +547,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Screenshot Detection",
             description = "This sample shows how to detect that the user capture the screen in Android 14 onwards",
             documentation = null,
-            area = PrivacyTransparencyArea,
+            apiSurface = PrivacyTransparencyApiSurface,
             content = { AndroidFragment<ScreenshotDetectionSample>() },
         ),
         ComposableSampleDemo(
@@ -555,7 +555,7 @@ val SAMPLE_DEMOS by lazy {
             name = "PhotoPicker",
             description = "Select images/videos in a privacy-friendly way using the photo picker",
             documentation = "https://developer.android.com/training/data-storage/shared/photopicker",
-            area = StorageArea,
+            apiSurface = StorageApiSurface,
             content = { PhotoPickerSample() },
         ),
         ComposableSampleDemo(
@@ -563,7 +563,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MediaStore - Query",
             description = "Query files indexed by MediaStore",
             documentation = "https://developer.android.com/training/data-storage/shared/media#media_store",
-            area = StorageArea,
+            apiSurface = StorageApiSurface,
             content = { MediaStoreQuerySample() },
         ),
         ComposableSampleDemo(
@@ -571,7 +571,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Selected Photos Access",
             description = "Check and request storage permissions",
             documentation = "https://developer.android.com/about/versions/14/changes/partial-photo-video-access",
-            area = StorageArea,
+            apiSurface = StorageApiSurface,
             content = { SelectedPhotosAccessSample() },
         ),
         ComposableSampleDemo(
@@ -579,7 +579,7 @@ val SAMPLE_DEMOS by lazy {
             name = "App Widgets",
             description = "Showcases how to pin widget within the app. Check the launcher widget menu for all the app widgets samples",
             documentation = "https://developer.android.com/develop/ui/views/appwidgets/overview",
-            area = UserInterfaceAppWidgetsArea,
+            apiSurface = UserInterfaceAppWidgetsApiSurface,
             tags = listOf("App Widgets"),
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.O) {
@@ -593,7 +593,7 @@ val SAMPLE_DEMOS by lazy {
             name = "ConstraintLayout - 1. Centering Views",
             description = "Center child views horizontally or vertically.",
             documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("ConstraintLayout"),
             content = { AndroidFragment<CenteringViewsFragment>() },
         ),
@@ -602,7 +602,7 @@ val SAMPLE_DEMOS by lazy {
             name = "ConstraintLayout - 2. Basic arrangement",
             description = "Arrange positions of child views relative to other views.",
             documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("ConstraintLayout"),
             content = { AndroidFragment<BasicArrangementFragment>() },
         ),
@@ -611,7 +611,7 @@ val SAMPLE_DEMOS by lazy {
             name = "ConstraintLayout - 3. Advanced arrangement",
             description = "More arrangement options.",
             documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("ConstraintLayout"),
             content = { AndroidFragment<AdvancedArrangementFragment>() },
         ),
@@ -620,7 +620,7 @@ val SAMPLE_DEMOS by lazy {
             name = "ConstraintLayout - 4. Aspect ratio",
             description = "Specify aspect ratio for the dimensions of the child views.",
             documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("ConstraintLayout"),
             content = { AndroidFragment<AspectRatioFragment>() },
         ),
@@ -629,7 +629,7 @@ val SAMPLE_DEMOS by lazy {
             name = "ConstraintLayout - 5. Basic chains",
             description = "Use chains to arrange multiple child views horizontally or vertically.",
             documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("ConstraintLayout"),
             content = { AndroidFragment<BasicChainFragment>() },
         ),
@@ -638,7 +638,7 @@ val SAMPLE_DEMOS by lazy {
             name = "ConstraintLayout - 5. Advanced chains",
             description = "Use chains to arrange multiple child views horizontally or vertically.",
             documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("ConstraintLayout"),
             content = { AndroidFragment<AdvancedChainsFragment>() },
         ),
@@ -647,7 +647,7 @@ val SAMPLE_DEMOS by lazy {
             name = "ConstraintLayout - 7. ConstraintSet",
             description = "Use ConstraintSet to specify multiple constraints to all the child views.",
             documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("ConstraintLayout"),
             content = { AndroidFragment<ConstraintSetFragment>() },
         ),
@@ -656,7 +656,7 @@ val SAMPLE_DEMOS by lazy {
             name = "ConstraintLayout - 8. Guidelines",
             description = "Use a horizontal or vertical guideline to apply constraints to child views.",
             documentation = "https://developer.android.com/develop/ui/views/layout/constraint-layout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("ConstraintLayout"),
             content = { AndroidFragment<GuidelinesFragment>() },
         ),
@@ -665,7 +665,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 01. Basic",
             description = "Basic motion example using referenced ConstraintLayout files",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<MotionBasic01Fragment>() },
         ),
@@ -674,7 +674,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 02. Basic",
             description = "Basic motion example using ConstraintSets defined in the MotionScene file",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<MotionBasic02Fragment>() },
         ),
@@ -683,7 +683,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 02. Basic, no auto complete",
             description = "Basic motion example same as 2, but autoComplete is set to false in onSwipe",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<MotionBasic02NoAutoCompleteFragment>() },
         ),
@@ -692,7 +692,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 03. Custom attribute",
             description = "Show color interpolation (custom attribute)",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<CustomAttributeFragment>() },
         ),
@@ -701,7 +701,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 04. ImageFilterView 1",
             description = "Show image cross-fade (using ML's ImageFilterView + custom attribute)",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<ImageFilter1Fragment>() },
         ),
@@ -710,7 +710,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 05. ImageFilterView 2",
             description = "Show image saturation transition (using ML's ImageFilterView + custom attribute)",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<ImageFilter2Fragment>() },
         ),
@@ -719,7 +719,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 06. Keyframe position",
             description = "Use a simple keyframe to change the interpolated motion",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<KeyframePositionFragment>() },
         ),
@@ -728,7 +728,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 07. Keyframe interpolation",
             description = "More complex keyframe, adding rotation interpolation",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<KeyframeInterpolationFragment>() },
         ),
@@ -737,7 +737,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 08. Keyframe cycle",
             description = "Basic example of using a keyframe cycle",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<KeyframeCycleFragment>() },
         ),
@@ -746,7 +746,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 09. CoordinatorLayout 1",
             description = "Basic example of using MotionLayout instead of AppBarLayout",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<Coordinator1Fragment>() },
         ),
@@ -755,7 +755,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 10. CoordinatorLayout 2",
             description = "Slightly more complex example of MotionLayout replacing AppBarLayout, with multiple elements and parallax background",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<Coordinator2Fragment>() },
         ),
@@ -764,7 +764,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 11. CoordinatorLayout 3",
             description = "Another AppBarLayout replacement example",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<Coordinator3Fragment>() },
         ),
@@ -773,7 +773,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 12. DrawerLayout 1",
             description = "Basic DrawerLayout with motionlayout",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<Drawer1Fragment>() },
         ),
@@ -782,7 +782,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 13. DrawerLayout 2",
             description = "Advanced DrawerLayout with motionlayout",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<Drawer2Fragment>() },
         ),
@@ -791,7 +791,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 14. SidePanel",
             description = "Side Panel, implemented with MotionLayout only",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<SidePanelFragment>() },
         ),
@@ -800,7 +800,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 15. Parallax",
             description = "Parallax background. Drag the car.",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<ParallaxFragment>() },
         ),
@@ -809,7 +809,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 16. ViewPager",
             description = "Using MotionLayout with ViewPager",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<ViewPagerFragment>() },
         ),
@@ -818,7 +818,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 17. Complex Motion 1",
             description = "Basic CoordinatorLayout-like behavior. Implemented with MotionLayout only, using a moving guideline. Note the view isn't resized.",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<ComplexMotion1Fragment>() },
         ),
@@ -827,7 +827,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 18. Complex Motion 2",
             description = "Advanced CoordinatorLayout-like behavior (adding a FAB). Implemented with MotionLayout only, using a moving guideline. Note the view isn't resized.",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<ComplexMotion2Fragment>() },
         ),
@@ -836,7 +836,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 19. Complex Motion 3",
             description = "Advanced CoordinatorLayout-like behavior (adding a FAB). Implemented with MotionLayout only, using direct resizing of the view.",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<ComplexMotion3Fragment>() },
         ),
@@ -845,7 +845,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 20. Complex Motion 4",
             description = "Advanced Synchronized reveal motion + helper (bounce). Implemented with MotionLayout only.",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<ComplexMotion4Fragment>() },
         ),
@@ -854,7 +854,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 21. Fragment transition 1",
             description = "Using MotionLayout with ViewPager",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<FragmentTransitionFragment>() },
         ),
@@ -863,7 +863,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 22. Fragment transition 2",
             description = "Using MotionLayout with ViewPager",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<FragmentTransition2Fragment>() },
         ),
@@ -872,7 +872,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 23. Lottie",
             description = "Using MotionLayout and Lottie with ViewPager",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<LottieFragment>() },
         ),
@@ -881,7 +881,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 24. YouTube-like motion",
             description = "Example showing a transition like YouTube",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<YoutubeFragment>() },
         ),
@@ -890,7 +890,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 25. KeyTrigger",
             description = "Example that calls a method using KeyTrigger",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<KeyTriggerFragment>() },
         ),
@@ -899,7 +899,7 @@ val SAMPLE_DEMOS by lazy {
             name = "MotionLayout - 26. Multi-state",
             description = "Example that transitions between multiple states",
             documentation = "https://developer.android.com/develop/ui/views/animations/motionlayout",
-            area = UserInterfaceConstraintLayoutArea,
+            apiSurface = UserInterfaceConstraintLayoutApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<MultiStateFragment>() },
         ),
@@ -908,7 +908,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Drag and Drop in MultiWindow mode",
             description = "Drag and drop to another app visible in multiwindow mode",
             documentation = "https://developer.android.com/develop/ui/views/touch-and-input/drag-drop/multi-window",
-            area = UserInterfaceDragAndDropArea,
+            apiSurface = UserInterfaceDragAndDropApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<DragAndDropMultiWindow>() },
         ),
@@ -917,7 +917,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Drag and Drop using the RichContentReceiver",
             description = "Using RichContentReceiverInterface for implementing Drop for rich data types",
             documentation = "https://developer.android.com/develop/ui/views/receive-rich-content",
-            area = UserInterfaceDragAndDropArea,
+            apiSurface = UserInterfaceDragAndDropApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<DragAndDropRichContentReceiverFragment>() },
         ),
@@ -926,7 +926,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Drag and Drop in Compose",
             description = "Drag and drop in Compose",
             documentation = null,
-            area = UserInterfaceDragAndDropArea,
+            apiSurface = UserInterfaceDragAndDropApiSurface,
             tags = listOf("MotionLayout"),
             content = { DragAndDropCompose() },
         ),
@@ -935,7 +935,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Drag and Drop - Helper",
             description = "Drag and Drop using the DragHelper and DropHelper from DragAndDropHelper library",
             documentation = "https://developer.android.com/develop/ui/views/touch-and-input/drag-drop#drophelper",
-            area = UserInterfaceDragAndDropArea,
+            apiSurface = UserInterfaceDragAndDropApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<DragAndDropWithHelper>() },
         ),
@@ -944,7 +944,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Drag and Drop using views",
             description = "Drag and Drop using the views",
             documentation = "https://developer.android.com/develop/ui/views/touch-and-input/drag-drop/view",
-            area = UserInterfaceDragAndDropArea,
+            apiSurface = UserInterfaceDragAndDropApiSurface,
             tags = listOf("MotionLayout"),
             content = { AndroidFragment<DragAndDropWithViews>() },
         ),
@@ -953,7 +953,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Haptics - 1. Vibration effects",
             description = "Shows various vibration effects.",
             documentation = "https://source.android.com/docs/core/interaction/haptics",
-            area = UserInterfaceHapticsArea,
+            apiSurface = UserInterfaceHapticsApiSurface,
             tags = listOf("Haptics"),
             content = { HapticsBasic() }
         ),
@@ -962,7 +962,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Haptics - 2. Resist",
             description = "Simulates resistance by increasing the intensity and reducing the duration between vibration effects.",
             documentation = "https://source.android.com/docs/core/interaction/haptics",
-            area = UserInterfaceHapticsArea,
+            apiSurface = UserInterfaceHapticsApiSurface,
             tags = listOf("Haptics"),
             content = { Resist() }
         ),
@@ -971,7 +971,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Haptics - 3. Expand",
             description = "Expands and collapses a circle with haptics with an added tick to sharpen that the animation has ended.",
             documentation = "https://source.android.com/docs/core/interaction/haptics",
-            area = UserInterfaceHapticsArea,
+            apiSurface = UserInterfaceHapticsApiSurface,
             tags = listOf("Haptics"),
             content = { Expand() }
         ),
@@ -980,7 +980,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Haptics - 4. Bounce",
             description = "Play primitive effects to simulate physical interactions.",
             documentation = "https://source.android.com/docs/core/interaction/haptics",
-            area = UserInterfaceHapticsArea,
+            apiSurface = UserInterfaceHapticsApiSurface,
             tags = listOf("Haptics"),
             content = { Bounce() }
         ),
@@ -989,7 +989,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Haptics - 5. Wobble",
             description = "Play primitive effects to simulate physical interactions.",
             documentation = "https://source.android.com/docs/core/interaction/haptics",
-            area = UserInterfaceHapticsArea,
+            apiSurface = UserInterfaceHapticsApiSurface,
             tags = listOf("Haptics"),
             content = { Wobble() }
         ),
@@ -998,7 +998,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Picture in Picture (PiP) - Video playback",
             description = "Basic usage of Picture-in-Picture mode showcasing video playback",
             documentation = "https://developer.android.com/develop/ui/views/picture-in-picture",
-            area = UserInterfacePictureInPictureArea,
+            apiSurface = UserInterfacePictureInPictureApiSurface,
             content = PiPMovieActivity::class.java
         ),
         ActivitySampleDemo(
@@ -1006,7 +1006,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Picture in Picture (PiP) - Stopwatch",
             description = "Basic usage of Picture-in-Picture mode showcasing a stopwatch",
             documentation = "https://developer.android.com/develop/ui/views/picture-in-picture",
-            area = UserInterfacePictureInPictureArea,
+            apiSurface = UserInterfacePictureInPictureApiSurface,
             content = PiPSampleActivity::class.java
         ),
         ActivitySampleDemo(
@@ -1014,7 +1014,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Predictive Back",
             description = "Shows Predictive Back animations.",
             documentation = "https://developer.android.com/about/versions/14/features/predictive-back",
-            area = UserInterfacePredictiveBackArea,
+            apiSurface = UserInterfacePredictiveBackApiSurface,
             content = PBHostingActivity::class.java
         ),
         ComposableSampleDemo(
@@ -1022,7 +1022,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Quick Settings",
             description = "Add your custom tile to the Quick Settings.",
             documentation = "https://developer.android.com/develop/ui/views/quicksettings-tiles",
-            area = UserInterfaceQuickSettingsArea,
+            apiSurface = UserInterfaceQuickSettingsApiSurface,
             content = {
                 MinSdkBox(minSdk = Build.VERSION_CODES.N) {
                     //noinspection NewApi
@@ -1035,7 +1035,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Receive data shared by other apps",
             description = "Receive texts and images from other apps.",
             documentation = null,
-            area = UserInterfaceShareArea,
+            apiSurface = UserInterfaceShareApiSurface,
             content = ShareReceiverActivity::class.java
         ),
         ComposableSampleDemo(
@@ -1043,7 +1043,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Send data with sharesheet",
             description = "Send texts and images to other apps using the Android Sharesheet.",
             documentation = null,
-            area = UserInterfaceShareArea,
+            apiSurface = UserInterfaceShareApiSurface,
             content = { ShareSender() }
         ),
         ComposableSampleDemo(
@@ -1051,7 +1051,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Conversion suggestions",
             description = "Demonstrates how to implement the incremental search feature for non-alphabet languages with the Conversion Suggestions API.",
             documentation = "https://developer.android.com/about/versions/13/features#text-conversion",
-            area = UserInterfaceTextArea,
+            apiSurface = UserInterfaceTextApiSurface,
             tags = listOf("Text"),
             content = { AndroidFragment<ConversionSuggestions>() }
         ),
@@ -1060,7 +1060,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Downloadable Fonts",
             description = "Download fonts instead of bundling them in the app resources.",
             documentation = "https://developer.android.com/develop/ui/views/text-and-emoji/downloadable-fonts",
-            area = UserInterfaceTextArea,
+            apiSurface = UserInterfaceTextApiSurface,
             tags = listOf("Text"),
             content = { AndroidFragment<DownloadableFontsFragment>() }
         ),
@@ -1069,7 +1069,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Hyphenation",
             description = "Demonstrates different options for the `android:hyphenationFrequency` attribute",
             documentation = "https://developer.android.com/reference/android/widget/TextView#attr_android:hyphenationFrequency",
-            area = UserInterfaceTextArea,
+            apiSurface = UserInterfaceTextApiSurface,
             tags = listOf("Text"),
             content = { AndroidFragment<Hyphenation>() }
         ),
@@ -1078,7 +1078,7 @@ val SAMPLE_DEMOS by lazy {
             name = "LineBreak",
             description = "Demonstrates different options for the `android:lineBreakWordStyle` attribute.",
             documentation = "https://developer.android.com/about/versions/13/features#japanese-wrapping",
-            area = UserInterfaceTextArea,
+            apiSurface = UserInterfaceTextApiSurface,
             tags = listOf("Text"),
             content = { AndroidFragment<LineBreak>() }
         ),
@@ -1087,7 +1087,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Linkify",
             description = "Linkify is useful for creating links in TextViews.",
             documentation = "https://developer.android.com/reference/kotlin/androidx/core/text/util/LinkifyCompat",
-            area = UserInterfaceTextArea,
+            apiSurface = UserInterfaceTextApiSurface,
             tags = listOf("Text"),
             content = { AndroidFragment<Linkify>() }
         ),
@@ -1096,7 +1096,7 @@ val SAMPLE_DEMOS by lazy {
             name = "TextSpan",
             description = "buildSpannedString is useful for quickly building a rich text.",
             documentation = "https://developer.android.com/kotlin/ktx#core",
-            area = UserInterfaceTextArea,
+            apiSurface = UserInterfaceTextApiSurface,
             tags = listOf("Text"),
             content = { AndroidFragment<TextSpanFragment>() }
         ),
@@ -1105,7 +1105,7 @@ val SAMPLE_DEMOS by lazy {
             name = "Immersive mode",
             description = "Immersive mode enables your app to display full-screen by hiding system bars.",
             documentation = "https://developer.android.com/develop/ui/views/layout/immersive",
-            area = UserInterfaceWindowInsetsArea,
+            apiSurface = UserInterfaceWindowInsetsApiSurface,
             content = { ImmersiveMode() }
         ),
         ActivitySampleDemo(
@@ -1113,7 +1113,7 @@ val SAMPLE_DEMOS by lazy {
             name = "WindowInsetsAnimation",
             description = "Shows how to react to the on-screen keyboard (IME) changing visibility, and also controlling the IME's visibility.",
             documentation = "https://developer.android.com/develop/ui/views/layout/sw-keyboard",
-            area = UserInterfaceWindowInsetsArea,
+            apiSurface = UserInterfaceWindowInsetsApiSurface,
             content = WindowInsetsAnimationActivity::class.java
         ),
         ActivitySampleDemo(
@@ -1121,7 +1121,7 @@ val SAMPLE_DEMOS by lazy {
             name = "WindowManager",
             description = "Demonstrates how to use the Jetpack WindowManager library.",
             documentation = "https://developer.android.com/jetpack/androidx/releases/window",
-            area = UserInterfaceWindowManagerArea,
+            apiSurface = UserInterfaceWindowManagerApiSurface,
             content = WindowDemosActivity::class.java
         ),
     ).associateBy { it.id }

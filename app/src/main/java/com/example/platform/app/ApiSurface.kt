@@ -19,196 +19,196 @@ package com.example.platform.app
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Area(override val id: String, override val name: String, override val description: String? = null) : CatalogItem
+data class ApiSurface(override val id: String, override val name: String, override val description: String? = null) : CatalogItem
 
-val AccessiblityArea = Area(
+val AccessiblityApiSurface = ApiSurface(
     "accessiblity",
     "Accessibility",
     null,
 )
 
-val CameraCamera2Area = Area(
+val CameraCamera2ApiSurface = ApiSurface(
     "camera-camera2",
     "Camera2",
     null,
 )
 
-val ConnectivityAudioArea = Area(
+val ConnectivityAudioApiSurface = ApiSurface(
     "connectivity-audio",
     "Connectivity Audio",
     null,
 )
 
-val ConnectivityBluetoothBleArea = Area(
+val ConnectivityBluetoothBleApiSurface = ApiSurface(
     "connectivity-bluetooth-ble",
     "Connectivity Bluetooth BLE",
     null,
 )
 
-val ConnectivityBluetoothCompanionArea = Area(
+val ConnectivityBluetoothCompanionApiSurface = ApiSurface(
     "connectivity-bluetooth-companion",
     "Connectivity Bluetooth Companion",
     null,
 )
 
-val ConnectivityCallNotificationArea = Area(
+val ConnectivityCallNotificationApiSurface = ApiSurface(
     "connectivity-call-notification",
     "Connectivity Call Notification",
     null,
 )
 
-val ConnectivityTelecomArea = Area(
+val ConnectivityTelecomApiSurface = ApiSurface(
     "connectivity-telecom",
     "Connectivity Telecom",
     null,
 )
 
-val GraphicsPdfArea = Area(
+val GraphicsPdfApiSurface = ApiSurface(
     "graphics-pdf",
     "Graphics PDF",
     null,
 )
 
-val GraphicsUltraHdrArea = Area(
+val GraphicsUltraHdrApiSurface = ApiSurface(
     "graphics-ultrahdr",
     "Graphics UltraHDR",
     null,
 )
 
-val LocationArea = Area(
+val LocationApiSurface = ApiSurface(
     "location",
     "Location",
     null,
 )
 
-val MediaUltraHdrArea = Area(
+val MediaUltraHdrApiSurface = ApiSurface(
     "media-ultrahdr",
     "Media UltraHDR",
     null,
 )
 
-val MediaVideoArea = Area(
+val MediaVideoApiSurface = ApiSurface(
     "media-video",
     "Media Video",
     null,
 )
 
-val PrivacyDataArea = Area(
+val PrivacyDataApiSurface = ApiSurface(
     "privacy-data",
     "Privacy Data",
     null,
 )
 
-val PrivacyPermissionsArea = Area(
+val PrivacyPermissionsApiSurface = ApiSurface(
     "privacy-permissions",
     "Privacy Permissions",
     null,
 )
 
-val PrivacyTransparencyArea = Area(
+val PrivacyTransparencyApiSurface = ApiSurface(
     "privacy-transparency",
     "Privacy Transparency",
     null,
 )
 
-val StorageArea = Area(
+val StorageApiSurface = ApiSurface(
     "storage",
     "Storage",
     "Android photo library access capabilities.\nPhoto Picker for unified device and cloud photo access, and MediaStore for detailed local media querying",
 )
 
-val UserInterfaceAppWidgetsArea = Area(
+val UserInterfaceAppWidgetsApiSurface = ApiSurface(
     "user-interface-app-widgets",
     "User Interface - App Widgets",
     null,
 )
 
-val UserInterfaceConstraintLayoutArea = Area(
+val UserInterfaceConstraintLayoutApiSurface = ApiSurface(
     "user-interface-constraint-layout",
     "User Interface - Constraint Layout",
     null,
 )
 
-val UserInterfaceDragAndDropArea = Area(
+val UserInterfaceDragAndDropApiSurface = ApiSurface(
     "user-interface-draganddrop",
     "User Interface - Drag and Drop",
     null,
 )
 
-val UserInterfaceHapticsArea = Area(
+val UserInterfaceHapticsApiSurface = ApiSurface(
     "user-interface-haptics",
     "User Interface - Haptics",
     null,
 )
 
-val UserInterfacePictureInPictureArea = Area(
+val UserInterfacePictureInPictureApiSurface = ApiSurface(
     "user-interface-picture-in-picture",
     "User Interface - Picture In Picture",
     null,
 )
 
-val UserInterfacePredictiveBackArea = Area(
+val UserInterfacePredictiveBackApiSurface = ApiSurface(
     "user-interface-predictive-back",
     "User Interface - Predictive Back",
     null,
 )
 
-val UserInterfaceQuickSettingsArea = Area(
+val UserInterfaceQuickSettingsApiSurface = ApiSurface(
     "user-interface-quick-settings",
     "User Interface - Quick Settings",
     null,
 )
 
-val UserInterfaceShareArea = Area(
+val UserInterfaceShareApiSurface = ApiSurface(
     "user-interface-share",
     "User Interface - Share",
     null,
 )
 
-val UserInterfaceTextArea = Area(
+val UserInterfaceTextApiSurface = ApiSurface(
     "user-interface-text",
     "User Interface - Text",
     null,
 )
 
-val UserInterfaceWindowInsetsArea = Area(
+val UserInterfaceWindowInsetsApiSurface = ApiSurface(
     "user-interface-window-insets",
     "User Interface - Window Insets",
     null,
 )
 
-val UserInterfaceWindowManagerArea = Area(
+val UserInterfaceWindowManagerApiSurface = ApiSurface(
     "user-interface-window-manager",
     "User Interface - Window Manager",
     null,
 )
 
-val AREAS = listOf(
-    AccessiblityArea,
-    CameraCamera2Area,
-    ConnectivityAudioArea,
-    ConnectivityBluetoothBleArea,
-    ConnectivityBluetoothCompanionArea,
-    ConnectivityCallNotificationArea,
-    ConnectivityTelecomArea,
-    GraphicsPdfArea,
-    GraphicsUltraHdrArea,
-    LocationArea,
-    MediaUltraHdrArea,
-    MediaVideoArea,
-    PrivacyDataArea,
-    PrivacyPermissionsArea,
-    PrivacyTransparencyArea,
-    StorageArea,
-    UserInterfaceAppWidgetsArea,
-    UserInterfaceConstraintLayoutArea,
-    UserInterfaceDragAndDropArea,
-    UserInterfaceHapticsArea,
-    UserInterfacePictureInPictureArea,
-    UserInterfacePredictiveBackArea,
-    UserInterfaceQuickSettingsArea,
-    UserInterfaceShareArea,
-    UserInterfaceTextArea,
-    UserInterfaceWindowInsetsArea,
-    UserInterfaceWindowManagerArea
+val API_SURFACES = listOf(
+    AccessiblityApiSurface,
+    CameraCamera2ApiSurface,
+    ConnectivityAudioApiSurface,
+    ConnectivityBluetoothBleApiSurface,
+    ConnectivityBluetoothCompanionApiSurface,
+    ConnectivityCallNotificationApiSurface,
+    ConnectivityTelecomApiSurface,
+    GraphicsPdfApiSurface,
+    GraphicsUltraHdrApiSurface,
+    LocationApiSurface,
+    MediaUltraHdrApiSurface,
+    MediaVideoApiSurface,
+    PrivacyDataApiSurface,
+    PrivacyPermissionsApiSurface,
+    PrivacyTransparencyApiSurface,
+    StorageApiSurface,
+    UserInterfaceAppWidgetsApiSurface,
+    UserInterfaceConstraintLayoutApiSurface,
+    UserInterfaceDragAndDropApiSurface,
+    UserInterfaceHapticsApiSurface,
+    UserInterfacePictureInPictureApiSurface,
+    UserInterfacePredictiveBackApiSurface,
+    UserInterfaceQuickSettingsApiSurface,
+    UserInterfaceShareApiSurface,
+    UserInterfaceTextApiSurface,
+    UserInterfaceWindowInsetsApiSurface,
+    UserInterfaceWindowManagerApiSurface
 ).associateBy { it.id }
