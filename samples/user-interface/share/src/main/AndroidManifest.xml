@@ -35,6 +35,11 @@
             android:exported="true"
             android:label="@string/receive_share">
 
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
             <!--
                 Handle ACTION_SEND intents to receive data shared by other apps.
             -->
