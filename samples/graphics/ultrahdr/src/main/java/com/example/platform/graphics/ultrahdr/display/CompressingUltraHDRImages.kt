@@ -25,18 +25,10 @@ import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.platform.graphics.ultrahdr.databinding.CompressUltrahdrBinding
-import com.google.android.catalog.framework.annotations.Sample
 import java.io.ByteArrayOutputStream
 
 
 @RequiresApi(34)
-@Sample(
-    name = "Compressing UltraHDR Images",
-    description = "This sample demonstrates displaying an UltraHDR image in a Compose View and an Android View",
-    documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-    tags = ["UltraHDR"],
-)
-
 class CompressingUltraHDRImages : Fragment() {
     /**
      *  Android ViewBinding.

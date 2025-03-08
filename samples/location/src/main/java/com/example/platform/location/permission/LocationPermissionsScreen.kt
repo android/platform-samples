@@ -47,15 +47,8 @@ import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
-import com.google.android.catalog.framework.annotations.Sample
 
 @RequiresApi(Build.VERSION_CODES.Q)
-@Sample(
-    name = "Location - Permissions",
-    description = "This Sample demonstrate best practices for Location Permission",
-    documentation = "https://developer.android.com/training/location/permissions",
-    tags = ["permissions"],
-)
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun LocationPermissionScreen() {

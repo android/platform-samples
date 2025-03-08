@@ -31,7 +31,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
-import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -50,7 +49,7 @@ import kotlin.coroutines.resume
 @Composable
 internal fun rememberAudioDeviceState(): AudioDeviceState {
     val context = LocalContext.current
-    val audioManager = context.getSystemService<AudioManager>()!!
+    val audioManager = context.getSystemService(AudioManager::class.java)
     val state = remember {
         AudioDeviceState(audioManager)
     }

@@ -17,6 +17,7 @@
 package com.example.platform.connectivity.audio
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.media.AudioDeviceInfo
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -48,20 +49,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import com.example.platform.base.PermissionBox
-import com.google.android.catalog.framework.annotations.Sample
+import com.example.platform.shared.PermissionBox
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-@Sample(
-    name = "Communication Audio Manager Sample",
-    description = "This sample shows how to use audio manager to for Communication application that self-manage the call.",
-    documentation = "https://developer.android.com/guide/topics/connectivity/ble-audio/audio-manager",
-    tags = ["audio"],
-)
+@SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.S)
-@RequiresPermission(Manifest.permission.RECORD_AUDIO)
 @Composable
 fun AudioCommsSample() {
     // The record permission is only needed for looping the audio not for the AudioManager

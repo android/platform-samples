@@ -50,13 +50,7 @@ import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "Immersive mode",
-    description = "Immersive mode enables your app to display full-screen by hiding system bars.",
-    documentation = "https://developer.android.com/develop/ui/views/layout/immersive"
-)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ImmersiveMode() {

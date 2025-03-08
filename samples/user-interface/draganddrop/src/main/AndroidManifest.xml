@@ -23,7 +23,8 @@
         <activity
             android:name=".DragAndDropActivity"
             android:exported="true"
-            android:theme="@style/Theme.Material3.DayNight" />
+            android:theme="@style/Theme.Material3.DayNight"
+            tools:targetApi="n" />
 
         <provider
             android:name="com.example.platform.ui.draganddrop.DragAndDropFileProvider"

@@ -30,19 +30,18 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Rational
 import android.view.View
+import androidx.activity.ComponentActivity
 import androidx.activity.trackPipAnimationHintView
 import androidx.activity.viewModels
 import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.example.android.pip.databinding.PipActivityBinding
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.launch
 
 /** Intent action for stopwatch controls from Picture-in-Picture mode.  */
@@ -59,13 +58,8 @@ private const val REQUEST_START_OR_PAUSE = 4
 /**
  * Demonstrates usage of Picture-in-Picture mode on phones and tablets.
  */
-@Sample(
-    name = "Picture in Picture (PiP) - Stopwatch",
-    description = "Basic usage of Picture-in-Picture mode showcasing a stopwatch",
-    documentation = "https://developer.android.com/develop/ui/views/picture-in-picture",
-)
 @RequiresApi(26)
-class PiPSampleActivity : AppCompatActivity() {
+class PiPSampleActivity : ComponentActivity() {
 
     private val viewModel: PiPViewModel by viewModels()
     private lateinit var binding: PipActivityBinding
