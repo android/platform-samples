@@ -5,8 +5,7 @@
 This repository contains a collection of samples that demonstrate the use of different Android OS platform APIs. The samples are organized into folders by topic, and each folder contains a README file that provides more information about the samples in that folder.
 
 > **Note:** These samples are intended to showcase specific functionality in isolation, and they may use
-> simplified code. They are not intended to be used as production-ready code. The project uses the
-> [casa-android](https://github.com/google/casa-android) (intended only for demo projects).
+> simplified code. They are not intended to be used as production-ready code.
 > For best practices follow our documentation and check
 > [Now In Android](https://github.com/android/nowinandroid)
 
@@ -22,9 +21,7 @@ Browse the samples inside each topic samples folder:
 - [User-interface](https://github.com/android/platform-samples/tree/main/samples/user-interface)
 - More to come...
 
-We are constantly adding new samples to this repository. You can find a list of all the available samples [here](https://github.com/android/platform-samples/tree/main/samples/README.md).
-
-> 🚧 **Work-in-Progress:** we are working on bringing more existing and new samples into this format.
+We are constantly adding new samples to this repository. You can find a list of all the available samples [here](https://github.com/android/platform-samples/tree/main/samples).
 
 ## How to run
 
@@ -38,17 +35,6 @@ categories and available samples.
 > **Note:** the `app` module is required to bring together all the samples but it's not relevant
 > for their functionality, you can simply ignore it. The wiring is done under the hood and an
 > implementation detail not needed to understand any sample functionality.
-
-### Deeplink to sample
-
-To open a specific sample directly you can use one of the auto-generated configurations.
-
-1. Build the project at least once
-2. Open `Run Configuration` dropdown
-3. Select sample name
-4. Run
-
-> **Tip:** use `⌃⌥R` or `Alt+Shift+F10` shortcut to open the full list and launch the selected one. 
 
 ## Reporting Issues
 

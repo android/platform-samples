@@ -23,15 +23,8 @@ import android.os.CountDownTimer
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.example.platform.accessibility.databinding.LiveregionFragmentBinding
-import com.google.android.catalog.framework.annotations.Sample
 import java.util.concurrent.TimeUnit
 
-@Sample(
-    name = "Live Region (View)",
-    description = "Utilize LiveRegion to automatically notify users of accessibility services" +
-            " about changes to a view",
-    documentation = "https://developer.android.com/reference/android/view/View#attr_android:accessibilityLiveRegion"
-)
 class LiveRegionView : Fragment(R.layout.liveregion_fragment) {
 
     @SuppressLint("SetTextI18n")

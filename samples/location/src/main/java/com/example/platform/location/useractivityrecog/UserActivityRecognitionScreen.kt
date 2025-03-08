@@ -32,18 +32,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import com.example.platform.base.PermissionBox
 import com.example.platform.location.utils.CUSTOM_INTENT_USER_ACTION
-import com.google.android.catalog.framework.annotations.Sample
+import com.example.platform.shared.PermissionBox
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 @SuppressLint("MissingPermission")
-@Sample(
-    name = "Location - User Activity Recognition",
-    description = "This Sample demonstrate detection of user activity like walking, driving, etc.",
-    documentation = "https://developer.android.com/training/location/transitions",
-)
 @Composable
 fun UserActivityRecognitionScreen() {
     val activityPermission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {

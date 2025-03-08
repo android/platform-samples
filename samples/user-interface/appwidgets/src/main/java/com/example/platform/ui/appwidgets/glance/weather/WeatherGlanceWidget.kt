@@ -335,15 +335,11 @@ fun HourForecast(
 }
 
 @Composable
-fun DailyForecast(
-    weatherInfo: WeatherInfo.Available,
-    modifier: GlanceModifier = GlanceModifier,
-) {
+fun DailyForecast(weatherInfo: WeatherInfo.Available) {
     LazyColumn(
         modifier = GlanceModifier
             .background(GlanceTheme.colors.surfaceVariant)
-            .appWidgetInnerCornerRadius()
-            .then(modifier),
+            .appWidgetInnerCornerRadius(),
     ) {
         items(weatherInfo.dailyForecast) { dayForecast ->
             Row(

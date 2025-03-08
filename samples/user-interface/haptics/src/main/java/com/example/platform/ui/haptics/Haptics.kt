@@ -37,15 +37,8 @@ import com.example.platform.ui.haptics.resist.ResistRoute
 import com.example.platform.ui.haptics.resist.ResistViewModel
 import com.example.platform.ui.haptics.wobble.WobbleRoute
 import com.example.platform.ui.haptics.wobble.WobbleViewModel
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.launch
 
-@Sample(
-    name = "Haptics - 1. Vibration effects",
-    description = "Shows various vibration effects.",
-    documentation = "https://source.android.com/docs/core/interaction/haptics",
-    tags = ["haptics"],
-)
 @Composable
 fun HapticsBasic() {
     val context = LocalContext.current
@@ -71,12 +64,6 @@ fun HapticsBasic() {
     }
 }
 
-@Sample(
-    name = "Haptics - 2. Resist",
-    description = "Simulates resistance by increasing the intensity and reducing the duration between vibration effects.",
-    documentation = "https://source.android.com/docs/core/interaction/haptics",
-    tags = ["haptics"],
-)
 @Composable
 fun Resist() {
     val context = LocalContext.current
@@ -87,12 +74,6 @@ fun Resist() {
     ResistRoute(viewModel = viewModel)
 }
 
-@Sample(
-    name = "Haptics - 3. Expand",
-    description = "Expands and collapses a circle with haptics with an added tick to sharpen that the animation has ended.",
-    documentation = "https://source.android.com/docs/core/interaction/haptics",
-    tags = ["haptics"],
-)
 @Composable
 fun Expand() {
     val context = LocalContext.current
@@ -103,12 +84,6 @@ fun Expand() {
     ExpandRoute(viewModel)
 }
 
-@Sample(
-    name = "Haptics - 4. Bounce",
-    description = "Play primitive effects to simulate physical interactions.",
-    documentation = "https://source.android.com/docs/core/interaction/haptics",
-    tags = ["haptics"],
-)
 @Composable
 fun Bounce() {
     val context = LocalContext.current
@@ -119,12 +94,6 @@ fun Bounce() {
     BounceRoute(viewModel)
 }
 
-@Sample(
-    name = "Haptics - 5. Wobble",
-    description = "Play primitive effects to simulate physical interactions.",
-    documentation = "https://source.android.com/docs/core/interaction/haptics",
-    tags = ["haptics"],
-)
 @Composable
 fun Wobble() {
     val context = LocalContext.current
