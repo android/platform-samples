@@ -33,19 +33,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.platform.graphics.ultrahdr.R
 import com.example.platform.graphics.ultrahdr.databinding.VisualizingAnUltrahdrGainmapBinding
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
 
-@Sample(
-    name = "Visualizing an UltraHDR Gainmap",
-    description = "This sample demonstrates visualizing the underlying gainmap of an UltraHDR " +
-            "image, which reveals which parts of the image are enhanced by the gainmap.",
-    documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-    tags = ["UltraHDR"],
-)
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 
 class VisualizingAnUltraHDRGainmap : Fragment() {

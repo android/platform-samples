@@ -31,18 +31,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.ArrowDropDown
-import androidx.compose.material.icons.rounded.ArrowDropUp
-import androidx.compose.material.icons.rounded.BluetoothAudio
 import androidx.compose.material.icons.rounded.Call
-import androidx.compose.material.icons.rounded.Headphones
-import androidx.compose.material.icons.rounded.Mic
-import androidx.compose.material.icons.rounded.MicOff
 import androidx.compose.material.icons.rounded.Person
-import androidx.compose.material.icons.rounded.Phone
-import androidx.compose.material.icons.rounded.PhonePaused
-import androidx.compose.material.icons.rounded.SendToMobile
-import androidx.compose.material.icons.rounded.SpeakerPhone
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -64,14 +54,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.core.telecom.CallEndpointCompat
 import androidx.core.telecom.CallEndpointCompat.Companion.TYPE_BLUETOOTH
 import androidx.core.telecom.CallEndpointCompat.Companion.TYPE_SPEAKER
 import androidx.core.telecom.CallEndpointCompat.Companion.TYPE_STREAMING
 import androidx.core.telecom.CallEndpointCompat.Companion.TYPE_WIRED_HEADSET
+import com.example.platform.connectivity.telecom.R
 import com.example.platform.connectivity.telecom.model.TelecomCall
 import com.example.platform.connectivity.telecom.model.TelecomCallAction
 import com.example.platform.connectivity.telecom.model.TelecomCallRepository
@@ -320,9 +311,9 @@ private fun CallControls(
                 },
             ) {
                 if (isMuted) {
-                    Icon(imageVector = Icons.Rounded.MicOff, contentDescription = "Mic on")
+                    Icon(painter = painterResource(R.drawable.ic_mic_off_24), contentDescription = "Mic on")
                 } else {
-                    Icon(imageVector = Icons.Rounded.Mic, contentDescription = "Mic off")
+                    Icon(painter = painterResource(R.drawable.ic_mic_24), contentDescription = "Mic off")
                 }
             }
         } else {
@@ -336,7 +327,7 @@ private fun CallControls(
                 },
             ) {
                 Icon(
-                    imageVector = Icons.Rounded.MicOff,
+                    painter = painterResource(R.drawable.ic_mic_off_24),
                     contentDescription = "Missing mic permission",
                     tint = MaterialTheme.colorScheme.error,
                 )
@@ -345,15 +336,15 @@ private fun CallControls(
         Box {
             IconButton(onClick = { showEndPoints = !showEndPoints }) {
                 Icon(
-                    getEndpointIcon(endpointType),
+                    painter = painterResource(getEndpointIcon(endpointType)),
                     contentDescription = "Toggle Endpoints",
                 )
                 Icon(
-                    if (showEndPoints) {
-                        Icons.Rounded.ArrowDropUp
+                    painter = painterResource(if (showEndPoints) {
+                        R.drawable.round_arrow_drop_up_24
                     } else {
-                        Icons.Rounded.ArrowDropDown
-                    },
+                        R.drawable.round_arrow_drop_down_24
+                    }),
                     contentDescription = "Localized description",
                     modifier = Modifier.align(Alignment.TopEnd),
                 )
@@ -386,7 +377,7 @@ private fun CallControls(
             },
         ) {
             Icon(
-                imageVector = Icons.Rounded.PhonePaused,
+                painter = painterResource(R.drawable.round_phone_paused_24),
                 contentDescription = "Pause or resume call",
             )
         }
@@ -416,20 +407,20 @@ private fun CallEndPointItem(
         onClick = { onDeviceSelected(endPoint) },
         leadingIcon = {
             Icon(
-                getEndpointIcon(endPoint.type),
+                painter = painterResource(getEndpointIcon(endPoint.type)),
                 contentDescription = endPoint.name.toString(),
             )
         },
     )
 }
 
-private fun getEndpointIcon(type: @CallEndpointCompat.Companion.EndpointType Int): ImageVector {
+private fun getEndpointIcon(type: @CallEndpointCompat.Companion.EndpointType Int): Int {
     return when (type) {
-        TYPE_BLUETOOTH -> Icons.Rounded.BluetoothAudio
-        TYPE_SPEAKER -> Icons.Rounded.SpeakerPhone
-        TYPE_STREAMING -> Icons.Rounded.SendToMobile
-        TYPE_WIRED_HEADSET -> Icons.Rounded.Headphones
-        else -> Icons.Rounded.Phone
+        TYPE_BLUETOOTH -> R.drawable.round_bluetooth_audio_24
+        TYPE_SPEAKER -> R.drawable.round_speaker_phone_24
+        TYPE_STREAMING -> R.drawable.round_send_to_mobile_24
+        TYPE_WIRED_HEADSET -> R.drawable.round_headphones_24
+        else -> R.drawable.round_smartphone_24
     }
 }
 

@@ -1,5 +1,3 @@
-import java.util.Properties
-
 /*
  * Copyright 2022 The Android Open Source Project
  *
@@ -17,74 +15,54 @@ import java.util.Properties
  */
 
 pluginManagement {
-    includeBuild("build-logic")
     repositories {
-        google()
+        google {
+            content {
+                includeGroupByRegex("com\\.android.*")
+                includeGroupByRegex("com\\.google.*")
+                includeGroupByRegex("androidx.*")
+            }
+        }
         mavenCentral()
         gradlePluginPortal()
-        // Uncomment this to use a snapshot version of casa-android.
-        // maven("https://oss.sonatype.org/content/repositories/snapshots/")
     }
 }
-
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
         google()
         mavenCentral()
-        // Uncomment this to use a snapshot version of casa-android.
-        // maven("https://oss.sonatype.org/content/repositories/snapshots/")
-        maven {
-            url = uri("https://androidx.dev/snapshots/builds/11809947/artifacts/repository")
-        }
     }
 }
 
 rootProject.name = "Platform Samples"
 include(":app")
 
-// Define the samples to load
-var samples = emptyList<String>()
-
-// If the local.properties define specific samples use those only
-val propertiesFile = file("local.properties")
-if (propertiesFile.exists()) {
-    val properties = Properties()
-    properties.load(propertiesFile.inputStream())
-    if (properties.containsKey("target.samples")) {
-        // Specify the sample module name (e.g :samples:privacy:permissions) or comma separated ones
-        samples = listOf(":samples:base") + properties["target.samples"].toString().split(",")
-    }
-}
-
-// Dynamically include samples under /app-catalog/samples/ folder if no target.samples were defined
-if (samples.isEmpty()) {
-    samples = buildList {
-        val separator = File.separator
-        // Find all build.gradle files under samples folder
-        settingsDir.walk()
-            .filter { it.name == "build.gradle" || it.name == "build.gradle.kts" }
-            .filter {
-                val relativePath = if (it.isAbsolute) {
-                    it.path.substring(settingsDir.path.length)
-                } else {
-                    it.path
-                }
-                relativePath.contains("${separator}samples${separator}")
-            }
-            .map { it.parent.substring(rootDir.path.length) }
-            .forEach {
-                add(it.replace(separator, ":"))
-            }
-    }
-}
-
-
-// include all available samples and store it in :app project extras.
-println("Included samples: $samples")
-include(*samples.toTypedArray())
-gradle.beforeProject {
-    if (name == "app") {
-        extra["samples"] = samples
-    }
-}
+include(":shared")
+include(":samples:accessibility")
+include(":samples:camera:camera2")
+include(":samples:connectivity:audio")
+include(":samples:connectivity:bluetooth:ble")
+include(":samples:connectivity:bluetooth:companion")
+include(":samples:connectivity:callnotification")
+include(":samples:connectivity:telecom")
+include(":samples:graphics:pdf")
+include(":samples:graphics:ultrahdr")
+include(":samples:location")
+include(":samples:media:ultrahdr")
+include(":samples:media:video")
+include(":samples:privacy:data")
+include(":samples:privacy:permissions")
+include(":samples:privacy:transparency")
+include(":samples:storage")
+include(":samples:user-interface:appwidgets")
+include(":samples:user-interface:constraintlayout")
+include(":samples:user-interface:draganddrop")
+include(":samples:user-interface:haptics")
+include(":samples:user-interface:picture-in-picture")
+include(":samples:user-interface:predictiveback")
+include(":samples:user-interface:quicksettings")
+include(":samples:user-interface:share")
+include(":samples:user-interface:text")
+include(":samples:user-interface:window-insets")
+include(":samples:user-interface:windowmanager")

@@ -29,7 +29,8 @@
         android:layout_height="match_parent"
         android:adjustViewBounds="true"
         android:src="@raw/vid_bigbuckbunny"
-        android:title="@string/title_bigbuckbunny" />
+        android:title="@string/title_bigbuckbunny"
+        tools:targetApi="n" />
 
     <ScrollView
         android:id="@+id/scroll"

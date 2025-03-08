@@ -26,7 +26,7 @@
             android:supportsPictureInPicture="true"
             android:launchMode="singleTask"
             android:theme="@style/PiPAppTheme"
-            tools:targetApi="24" />
+            tools:targetApi="26" />
 
         <activity
             android:name=".PiPMovieActivity"
@@ -34,7 +34,7 @@
             android:supportsPictureInPicture="true"
             android:launchMode="singleTask"
             android:theme="@style/PiPAppTheme"
-            tools:targetApi="24" />
+            tools:targetApi="o" />
 
     </application>
 

@@ -25,14 +25,7 @@ import androidx.core.text.buildSpannedString
 import androidx.core.text.color
 import androidx.fragment.app.Fragment
 import com.example.platform.ui.text.databinding.TextSpanFragmentBinding
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "TextSpan",
-    description = "buildSpannedString is useful for quickly building a rich text.",
-    documentation = "https://developer.android.com/kotlin/ktx#core",
-    tags = ["text"]
-)
 class TextSpanFragment : Fragment(R.layout.text_span_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

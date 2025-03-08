@@ -31,14 +31,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.platform.privacy.permissions.common.PermissionScreen
 import com.example.platform.privacy.permissions.common.PermissionScreenState
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "Multiple Permissions",
-    description = "Shows the recommended flow to request multiple RELATED runtime permissions",
-    documentation = "https://developer.android.com/training/permissions/requesting",
-    tags = ["permissions"]
-)
 class MultiplePermissions : Fragment() {
 
     companion object {

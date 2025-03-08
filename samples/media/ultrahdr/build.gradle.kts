@@ -16,15 +16,38 @@
 
 
 plugins {
-    id("com.example.platform.sample")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
     namespace = "com.example.platform.media.ultrahdr"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 21
+        targetSdk = 35
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     viewBinding.isEnabled = true
 }
 
 dependencies {
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.fragment.compose)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+
     // Media3 Common
     implementation(libs.androidx.media3.common)
 
@@ -36,6 +59,7 @@ dependencies {
 
     // Glide
     implementation(libs.glide)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
 
     // Link to UltraHDR Graphics Samples
     implementation(project(mapOf("path" to ":samples:graphics:ultrahdr")))

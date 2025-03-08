@@ -39,19 +39,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.platform.base.PermissionBox
 import com.example.platform.connectivity.telecom.call.TelecomCallActivity
 import com.example.platform.connectivity.telecom.call.TelecomCallService
 import com.example.platform.connectivity.telecom.model.TelecomCall
 import com.example.platform.connectivity.telecom.model.TelecomCallRepository
-import com.google.android.catalog.framework.annotations.Sample
+import com.example.platform.shared.PermissionBox
 
-@Sample(
-    name = "Telecom Call Sample",
-    description = "A sample showcasing how to handle calls with the Jetpack Telecom API",
-    documentation = "https://developer.android.com/guide/topics/connectivity/telecom",
-    tags = ["telecom"]
-)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun TelecomCallSample() {

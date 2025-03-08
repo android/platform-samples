@@ -38,17 +38,11 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.platform.ui.draganddrop.databinding.FragmentDndRichcontentBinding
-import com.google.android.catalog.framework.annotations.Sample
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 
 
-@Sample(
-    name = "Drag and Drop using the RichContentReceiver",
-    description = "Using RichContentReceiverInterface for implementing Drop for rich data types",
-    documentation = "https://developer.android.com/develop/ui/views/receive-rich-content",
-)
 @RequiresApi(Build.VERSION_CODES.S)
 class DragAndDropRichContentReceiverFragment : Fragment(R.layout.fragment_dnd_richcontent) {
     private val TAG = DragAndDropRichContentReceiverFragment::class.java.simpleName

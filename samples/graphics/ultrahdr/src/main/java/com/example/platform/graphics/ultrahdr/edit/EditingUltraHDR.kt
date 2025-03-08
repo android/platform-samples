@@ -31,19 +31,11 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import com.example.platform.graphics.ultrahdr.databinding.EditingUltrahdrBinding
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.math.roundToInt
 
-
-@Sample(
-    name = "Editing UltraHDR",
-    description = "This sample demonstrates editing an UltraHDR image and the resulting gainmap as well. Spatial edit operations like crop, rotate, scale are supported",
-    documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-    tags = ["UltraHDR"],
-)
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class EditingUltraHDR : Fragment() {
 

@@ -25,6 +25,7 @@ import android.content.pm.PackageManager
 import android.os.Build
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
@@ -39,13 +40,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.core.content.getSystemService
-import com.example.platform.base.PermissionBox
+import com.example.platform.shared.PermissionBox
 
 
 /**
  * This composable wraps the permission logic and checks if bluetooth it's available and enabled
  */
+@RequiresApi(Build.VERSION_CODES.M)
 @Composable
 fun BluetoothSampleBox(
     extraPermissions: Set<String> = emptySet(),
@@ -53,7 +54,7 @@ fun BluetoothSampleBox(
 ) {
     val context = LocalContext.current
     val packageManager = context.packageManager
-    val bluetoothAdapter = context.getSystemService<BluetoothManager>()?.adapter
+    val bluetoothAdapter = context.getSystemService(BluetoothManager::class.java).adapter
 
     // If we derive physical location from BT devices or if the device runs on Android 11 or below
     // we need location permissions otherwise we don't need to request them (see AndroidManifest).

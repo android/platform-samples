@@ -32,13 +32,7 @@ import androidx.draganddrop.DropHelper
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
 import com.example.platform.ui.draganddrop.databinding.FragmentDragAndDropWithHelperBinding
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "Drag and Drop - Helper",
-    description = "Drag and Drop using the DragHelper and DropHelper from DragAndDropHelper library",
-    documentation = "https://developer.android.com/develop/ui/views/touch-and-input/drag-drop#drophelper",
-)
 @RequiresApi(Build.VERSION_CODES.N)
 class DragAndDropWithHelper : Fragment(R.layout.fragment_drag_and_drop_with_helper) {
 

@@ -21,15 +21,8 @@ import android.view.View
 import androidx.core.text.util.LinkifyCompat
 import androidx.fragment.app.Fragment
 import com.example.platform.ui.text.databinding.LinkifyFragmentBinding
-import com.google.android.catalog.framework.annotations.Sample
 import java.util.regex.Pattern
 
-@Sample(
-    name = "Linkify",
-    description = "Linkify is useful for creating links in TextViews.",
-    documentation = "https://developer.android.com/reference/kotlin/androidx/core/text/util/LinkifyCompat",
-    tags = ["text"]
-)
 class Linkify: Fragment(R.layout.linkify_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

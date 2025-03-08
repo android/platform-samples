@@ -13,21 +13,43 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@Suppress("DSL_SCOPE_VIOLATION")
+//@Suppress("DSL_SCOPE_VIOLATION")
 plugins {
-    id("com.example.platform.sample")
+    alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.serialization)
 }
     
 android {
     namespace = "com.example.platform.ui.appwidgets"
+    compileSdk = 35
+
+    defaultConfig {
+        minSdk = 21
+        targetSdk = 35
+    }
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+
     buildFeatures {
         viewBinding = true
     }
 }
 
 dependencies {
-    implementation(libs.kotlin.serialization.json)
+    implementation(libs.androidx.activity.compose)
+
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
+
+    implementation(libs.kotlinx.serialization.json)
     // For traditional RemoteViews
     implementation(libs.androidx.core.remoteviews)
     // For building appwidgets with Glance

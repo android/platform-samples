@@ -23,7 +23,6 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.glance.action.ActionParameters
-import com.google.android.catalog.framework.ui.CatalogActivity
 
 internal val ActionSourceMessageKey = ActionParameters.Key<String>("actionSourceMessageKey")
 
@@ -31,7 +30,7 @@ internal val ActionSourceMessageKey = ActionParameters.Key<String>("actionSource
  * Activity that is launched on clicks from different parts of sample widgets. Displays string
  * describing source of the click.
  */
-class ActionDemonstrationActivity : CatalogActivity() {
+class ActionDemonstrationActivity : ComponentActivity() {
 
   override fun onResume() {
     super.onResume()

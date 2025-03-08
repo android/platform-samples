@@ -56,7 +56,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import com.example.platform.connectivity.bluetooth.ble.server.GATTServerSampleService.Companion.CHARACTERISTIC_UUID
 import com.example.platform.connectivity.bluetooth.ble.server.GATTServerSampleService.Companion.SERVICE_UUID
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlin.random.Random
@@ -64,12 +63,6 @@ import kotlin.random.Random
 @OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.M)
-@Sample(
-    name = "Connect to a GATT server",
-    description = "Shows how to connect to a GATT server hosted by the BLE device and perform simple operations",
-    documentation = "https://developer.android.com/guide/topics/connectivity/bluetooth/connect-gatt-server",
-    tags = ["bluetooth"],
-)
 @Composable
 fun ConnectGATTSample() {
     var selectedDevice by remember {

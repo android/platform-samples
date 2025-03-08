@@ -30,26 +30,20 @@ import android.text.util.Linkify
 import android.util.Log
 import android.util.Rational
 import android.view.View
+import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
 import androidx.core.view.doOnLayout
 import com.example.android.pip.databinding.PipMovieActivityBinding
 import com.example.android.pip.widget.MovieView
-import com.google.android.catalog.framework.annotations.Sample
 
 /**
  * Demonstrates usage of Picture-in-Picture when using [MediaSessionCompat].
  */
-@Sample(
-    name = "Picture in Picture (PiP) - Video playback",
-    description = "Basic usage of Picture-in-Picture mode showcasing video playback",
-    documentation = "https://developer.android.com/develop/ui/views/picture-in-picture",
-)
 @RequiresApi(Build.VERSION_CODES.O)
-class PiPMovieActivity : AppCompatActivity() {
+class PiPMovieActivity : ComponentActivity() {
 
     companion object {
 
