@@ -21,7 +21,7 @@ Browse the samples inside each topic samples folder:
 - [User-interface](https://github.com/android/platform-samples/tree/main/samples/user-interface)
 - More to come...
 
-We are constantly adding new samples to this repository. You can find a list of all the available samples [here](https://github.com/android/platform-samples/tree/main/samples/README.md).
+We are constantly adding new samples to this repository. You can find a list of all the available samples [here](https://github.com/android/platform-samples/tree/main/samples).
 
 ## How to run
 
@@ -35,17 +35,6 @@ categories and available samples.
 > **Note:** the `app` module is required to bring together all the samples but it's not relevant
 > for their functionality, you can simply ignore it. The wiring is done under the hood and an
 > implementation detail not needed to understand any sample functionality.
-
-### Deeplink to sample
-
-To open a specific sample directly you can use one of the auto-generated configurations.
-
-1. Build the project at least once
-2. Open `Run Configuration` dropdown
-3. Select sample name
-4. Run
-
-> **Tip:** use `⌃⌥R` or `Alt+Shift+F10` shortcut to open the full list and launch the selected one. 
 
 ## Reporting Issues
 
