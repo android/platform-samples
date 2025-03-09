@@ -58,6 +58,7 @@
     <string name="sample_check_list_app_widget_name">Checklist</string>
     <string name="sample_action_list_app_widget_name">Action List</string>
     <string name="sample_image_grid_app_widget_name">Image Grid</string>
+    <string name="sample_expressive_toolbar_app_widget_name">Expressive Toolbar</string>
     <string name="sample_toolbar_app_widget_name">Toolbar</string>
     <string name="sample_search_toolbar_app_widget_name">Search Toolbar</string>
 
@@ -83,6 +84,8 @@
     <string name="cl_description_checklist">The checklist layout is perfect for displaying tasks, providing clear tap targets for users to easily mark items as done.</string>
     <string name="cl_title_toolbar">Toolbar</string>
     <string name="cl_description_toolbar">Increase user engagement and streamline key workflows by providing instant access to your app\'s most important features with a toolbar widget.</string>
+    <string name="cl_title_expressive_toolbar">Expressive Toolbar</string>
+    <string name="cl_description_expressive_toolbar">Increase user engagement and streamline key workflows by providing instant access to your app\'s most important features with an expressive shaped toolbar widget.</string>
     <string name="cl_title_search_toolbar">Search Toolbar</string>
     <string name="cl_description_search_toolbar">Ideal for apps where search is paramount, this layout provides a dedicated search entry point while allowing for additional shortcuts based on available widget space.</string>
 

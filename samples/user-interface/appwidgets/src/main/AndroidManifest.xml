@@ -33,6 +33,21 @@
 
         <!-- Toolbar variants -->
 
+        <!-- Expressive Toolbar with a 4-sided cookie cut shape -->
+        <receiver
+            android:name=".glance.layout.toolbars.ExpressiveToolbarAppWidgetReceiver"
+            android:enabled="@bool/glance_appwidget_available"
+            android:exported="false"
+            android:label="@string/sample_expressive_toolbar_app_widget_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/sample_expressive_toolbar_widget_info" />
+        </receiver>
+
         <!-- Toolbar with header -->
         <receiver
             android:name=".glance.layout.toolbars.ToolBarAppWidgetReceiver"
