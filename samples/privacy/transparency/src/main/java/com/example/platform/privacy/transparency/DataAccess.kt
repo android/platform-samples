@@ -47,13 +47,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.core.app.AppOpsManagerCompat
-//import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
-//import com.example.platform.base.PermissionBox
 import com.example.platform.shared.PermissionBox
-//import com.google.android.catalog.framework.annotations.Sample
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.location.Priority
 import com.google.android.gms.tasks.CancellationTokenSource
@@ -62,13 +59,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 
 @SuppressLint("MissingPermission")
-//@Sample(
-//    name = "Data Access",
-//    description = "Demonstrates how to implement data access auditing for your app to identify " +
-//            "unexpected data access, even from third-party SDKs and libraries.",
-//    documentation = "https://developer.android.com/guide/topics/data/audit-access",
-//)
-
 @RequiresApi(Build.VERSION_CODES.R)
 @Composable
 fun DataAccessSample() {
