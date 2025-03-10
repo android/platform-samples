@@ -28,7 +28,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -51,8 +50,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import com.example.platform.storage.R
 import com.example.platform.storage.storageaccessframework.shared.AudioFileCard
 import com.example.platform.storage.storageaccessframework.shared.BinaryFileCard
 import com.example.platform.storage.storageaccessframework.shared.FileRecord
@@ -61,16 +62,10 @@ import com.example.platform.storage.storageaccessframework.shared.ImageFileCard
 import com.example.platform.storage.storageaccessframework.shared.PdfFileCard
 import com.example.platform.storage.storageaccessframework.shared.TextFileCard
 import com.example.platform.storage.storageaccessframework.shared.VideoFileCard
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.launch
 
-@Sample(
-    name = "GetDocument",
-    description = "Open a document using the Storage Access Framework",
-    documentation = "https://developer.android.com/training/data-storage/shared/documents-files#open-file",
-)
 @Composable
-fun GetDocument() {
+fun GetContentSample() {
     val coroutineScope = rememberCoroutineScope()
     val context = LocalContext.current
     var selectedFilter by remember { mutableStateOf(FileType.Any) }
@@ -127,7 +122,7 @@ fun GetDocument() {
                         ) {
                             IconButton(onClick = { expanded = true }) {
                                 Icon(
-                                    Icons.Default.FilterAlt,
+                                    painter = painterResource(R.drawable.ic_filter_alt_24),
                                     contentDescription = "Localized description",
                                 )
                             }

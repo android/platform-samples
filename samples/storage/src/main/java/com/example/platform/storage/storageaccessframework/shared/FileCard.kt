@@ -19,6 +19,7 @@ package com.example.platform.storage.storageaccessframework.shared
 import android.content.Context
 import android.net.Uri
 import android.text.format.Formatter
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -28,13 +29,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.InsertDriveFile
-import androidx.compose.material.icons.filled.AudioFile
-import androidx.compose.material.icons.filled.Description
-import androidx.compose.material.icons.filled.Image
-import androidx.compose.material.icons.filled.PictureAsPdf
-import androidx.compose.material.icons.filled.VideoFile
 import androidx.compose.material3.Button
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.Icon
@@ -49,13 +43,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.example.platform.storage.R
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.io.BufferedReader
@@ -64,7 +59,7 @@ import java.io.InputStreamReader
 @Composable
 fun FileCard(
     file: FileRecord,
-    icon: ImageVector,
+    @DrawableRes iconResourceId: Int,
     contentPreview: @Composable (() -> Unit)? = null,
 ) {
     val sizeLabel = Formatter.formatShortFileSize(LocalContext.current, file.size)
@@ -81,7 +76,7 @@ fun FileCard(
             verticalAlignment = Alignment.Top,
         ) {
             Icon(
-                imageVector = icon,
+                painter = painterResource(iconResourceId),
                 contentDescription = null,
                 modifier = Modifier.size(42.dp),
             )
@@ -106,7 +101,7 @@ fun FileCard(
 
 @Composable
 fun ImageFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = null) {
-    FileCard(file, Icons.Default.Image) {
+    FileCard(file, R.drawable.ic_image_24) {
         if (contentPreview != null) {
             Spacer(modifier = Modifier.height(16.dp))
             contentPreview()
@@ -132,7 +127,7 @@ fun ImageFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = 
 
 @Composable
 fun VideoFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = null) {
-    FileCard(file, Icons.Default.VideoFile) {
+    FileCard(file, R.drawable.ic_video_file_24) {
         if (contentPreview != null) {
             Spacer(modifier = Modifier.height(16.dp))
             contentPreview()
@@ -158,7 +153,7 @@ fun VideoFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = 
 
 @Composable
 fun AudioFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = null) {
-    FileCard(file, Icons.Default.AudioFile) {
+    FileCard(file, R.drawable.ic_audio_file_24) {
         if (contentPreview != null) {
             Spacer(modifier = Modifier.height(16.dp))
             contentPreview()
@@ -194,7 +189,7 @@ fun AudioFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = 
 
 @Composable
 fun TextFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = null) {
-    FileCard(file, Icons.Default.Description) {
+    FileCard(file, R.drawable.ic_description_24) {
         if (contentPreview != null) {
             Spacer(modifier = Modifier.height(16.dp))
             contentPreview()
@@ -230,7 +225,7 @@ fun TextFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = n
 
 @Composable
 fun PdfFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = null) {
-    FileCard(file, Icons.Default.PictureAsPdf) {
+    FileCard(file, R.drawable.ic_picture_as_pdf_24) {
         if (contentPreview != null) {
             Spacer(modifier = Modifier.height(16.dp))
             contentPreview()
@@ -266,7 +261,7 @@ fun PdfFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = nu
 
 @Composable
 fun BinaryFileCard(file: FileRecord, contentPreview: @Composable (() -> Unit)? = null) {
-    FileCard(file, Icons.AutoMirrored.Filled.InsertDriveFile) {
+    FileCard(file, R.drawable.ic_insert_drive_file_24) {
         if (contentPreview != null) {
             Spacer(modifier = Modifier.height(16.dp))
             contentPreview()
