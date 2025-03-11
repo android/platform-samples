@@ -634,9 +634,9 @@ open class Camera2UltraHDRCapture : Fragment() {
          */
         private fun createFile(context: Context, format: Int): File {
             val sdf = SimpleDateFormat("yyyy_MM_dd_HH_mm_ss_SSS", Locale.US)
-            var fileType = ".jpg"
-            if (format != ImageFormat.JPEG_R) {
-                fileType = ".heic"
+            fileType = when (format) {
+                ImageFormat.JPEG_R -> ".jpg"
+                else -> ".heic"
             }
             return File(context.filesDir, "IMG_${sdf.format(Date())}" + fileType)
         }
