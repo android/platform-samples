@@ -45,17 +45,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-//import com.example.platform.base.PermissionBox
 import com.example.platform.shared.PermissionBox
-//import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-//@Sample(
-//    name = "MediaStore - Query",
-//    description = "Query files indexed by MediaStore",
-//    documentation = "https://developer.android.com/training/data-storage/shared/media#media_store",
-//)
 @SuppressLint("MissingPermission")
 @Composable
 fun MediaStoreQuerySample() {
