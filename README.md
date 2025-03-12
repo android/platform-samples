@@ -21,7 +21,7 @@ Browse the samples inside each topic samples folder:
 - [User-interface](https://github.com/android/platform-samples/tree/main/samples/user-interface)
 - More to come...
 
-We are constantly adding new samples to this repository. You can find a list of all the available samples [here](https://github.com/android/platform-samples/tree/main/samples).
+We regularly add new samples to this repository. You can find a list of all the available samples [here](https://github.com/android/platform-samples/tree/main/samples).
 
 ## How to run
 
