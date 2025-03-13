@@ -18,6 +18,7 @@ package com.example.platform.ui.predictiveback
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.fragment.app.commit
 import com.example.platform.ui.predictiveback.databinding.ActivitySetCustomAnimationsBinding
 
@@ -26,6 +27,8 @@ class PBSetCustomAnimationsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
 
         binding = ActivitySetCustomAnimationsBinding.inflate(layoutInflater)
         setContentView(binding.root)

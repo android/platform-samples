@@ -17,6 +17,7 @@
 package com.example.platform.ui.predictiveback
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import com.example.platform.ui.predictiveback.databinding.HostingActivityBinding
 import com.google.android.catalog.framework.annotations.Sample
@@ -33,6 +34,8 @@ class PBHostingActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
 
         binding = HostingActivityBinding.inflate(layoutInflater)
         setContentView(binding.root)
