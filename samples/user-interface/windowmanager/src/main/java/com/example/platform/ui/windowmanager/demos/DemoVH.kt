@@ -24,13 +24,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.platform.ui.windowmanager.R
 
 class DemoVH(view: View) : RecyclerView.ViewHolder(view) {
+    private val container = view.findViewById<View>(R.id.demo_container)
     private val description = view.findViewById<TextView>(R.id.demo_description)
-    private val launchButton = view.findViewById<Button>(R.id.start_demo_button)
+    private val title = view.findViewById<TextView>(R.id.demo_title)
 
     fun bind(item: DemoItem) {
         description.text = item.description
-        launchButton.text = item.buttonTitle
-        launchButton.setOnClickListener { view ->
+        title.text = item.title
+        container.setOnClickListener { view ->
             val context = view.context
             val intent = Intent(context, item.clazz)
             view.context.startActivity(intent)
