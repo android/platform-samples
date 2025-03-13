@@ -33,6 +33,10 @@ android {
     }
 
     viewBinding.isEnabled = true
+    compileSdkPreview = "Baklava"
+    defaultConfig {
+        targetSdkPreview = "Baklava"
+    }
 }
 
 dependencies {
