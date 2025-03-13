@@ -57,19 +57,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.compose.ui.window.DialogWindowProvider
 import com.example.platform.graphics.ultrahdr.R
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.util.function.Consumer
 
-@RequiresApi(34)
-@Sample(
-    name = "Displaying UltraHDR (Compose)",
-    description = "This sample demonstrates displaying an UltraHDR image in a Compose View and an Android View",
-    documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-    tags = ["UltraHDR", "Compose"],
-)
-
+@RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 @Composable
 fun DisplayUltraHDRScreen() {
     var bitmap by remember { mutableStateOf<Bitmap?>(null) }

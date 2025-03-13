@@ -21,15 +21,8 @@ import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.platform.ui.text.databinding.ConversionSuggestionsFragmentBinding
-import com.google.android.catalog.framework.annotations.Sample
 
 @RequiresApi(33)
-@Sample(
-    name = "Conversion suggestions",
-    description = "Demonstrates how to implement the incremental search feature for non-alphabet languages with the Conversion Suggestions API.",
-    documentation = "https://developer.android.com/about/versions/13/features#text-conversion",
-    tags = ["text"]
-)
 class ConversionSuggestions : Fragment(R.layout.conversion_suggestions_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

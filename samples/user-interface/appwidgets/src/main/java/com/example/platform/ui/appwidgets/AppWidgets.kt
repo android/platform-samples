@@ -46,14 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.platform.ui.appwidgets.glance.layout.CanonicalLayoutActivity
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "App Widgets",
-    description = "Showcases how to pin widgets within the app and provides a catalog of well-designed canonical widget layouts for inspiration.",
-    documentation = "https://developer.android.com/develop/ui/views/appwidgets/overview",
-    tags = ["App Widgets"],
-)
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppWidgets() {

@@ -36,12 +36,12 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import android.os.ParcelUuid
+import androidx.annotation.RequiresApi
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.core.content.getSystemService
 import com.example.platform.connectivity.bluetooth.ble.toConnectionStateString
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
@@ -56,6 +56,7 @@ import java.util.UUID
  * @see com.example.platform.connectivity.bluetooth.ble.server.GATTServerSample
  * @see com.example.platform.connectivity.bluetooth.ble.ConnectGATTSample
  */
+@RequiresApi(Build.VERSION_CODES.M)
 class GATTServerSampleService : Service() {
 
     companion object {
@@ -78,7 +79,7 @@ class GATTServerSampleService : Service() {
     }
 
     private val manager: BluetoothManager by lazy {
-        applicationContext.getSystemService()!!
+        applicationContext.getSystemService(BluetoothManager::class.java)
     }
     private val advertiser: BluetoothLeAdvertiser
         get() = manager.adapter.bluetoothLeAdvertiser

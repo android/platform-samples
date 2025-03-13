@@ -26,15 +26,8 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import com.example.platform.ui.text.databinding.HyphenationFragmentBinding
 import com.example.platform.ui.text.utils.doOnItemSelected
-import com.google.android.catalog.framework.annotations.Sample
 
 @RequiresApi(Build.VERSION_CODES.M)
-@Sample(
-    name = "Hyphenation",
-    description = "Demonstrates different options for the `android:hyphenationFrequency` attribute",
-    documentation = "https://developer.android.com/reference/android/widget/TextView#attr_android:hyphenationFrequency",
-    tags = ["text"]
-)
 class Hyphenation : Fragment(R.layout.hyphenation_fragment) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {

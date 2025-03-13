@@ -44,7 +44,6 @@ import com.example.platform.camera.common.OrientationLiveData
 import com.example.platform.camera.common.SIZE_720P
 import com.example.platform.camera.common.getPreviewOutputSize
 import com.example.platform.camera.databinding.Camera2PreviewBinding
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -52,13 +51,6 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-@Sample(
-    name = "Camera Preview",
-    description = "Demonstrates displaying processed pixel data directly from the camera sensor "
-            + "to the screen using Camera2.",
-    documentation = "https://developer.android.com/training/camera2",
-    tags = ["Camera2"],
-)
 class Camera2Preview : Fragment() {
     /**
      *  Android ViewBinding.

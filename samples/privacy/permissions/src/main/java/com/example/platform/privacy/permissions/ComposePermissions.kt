@@ -30,15 +30,8 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.PermissionStatus
 import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
-import com.google.android.catalog.framework.annotations.Sample
 
 @OptIn(ExperimentalPermissionsApi::class)
-@Sample(
-    name = "Permissions using Compose",
-    description = "This sample showcases how to request permission using Accompanist in Compose",
-    documentation = "https://google.github.io/accompanist/permissions/",
-    tags = ["permissions"]
-)
 @Composable
 fun ComposePermissions() {
     val context = LocalContext.current

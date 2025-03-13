@@ -13,36 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-@Suppress("DSL_SCOPE_VIOLATION")
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
-    id("com.example.platform.convention")
-}
-
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
+    alias(libs.plugins.kotlin.compose)
+    kotlin("plugin.serialization") version "2.1.10"
 }
 
 android {
-    namespace = "com.example.platform.app"
+    namespace = "com.example.platform"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.platform.app"
+        applicationId = "com.example.platform"
         minSdk = 21
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
-        testInstrumentationRunner = "com.example.platform.app.AppTestRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -50,66 +40,71 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
-
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
-
+    kotlinOptions {
+        jvmTarget = "11"
+    }
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get()
-    }
-    packagingOptions {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 }
 
 dependencies {
-    implementation(platform(libs.compose.bom))
-    implementation(libs.casa.ui)
-    implementation(libs.androidx.appcompat)
 
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.lifecycle.runtime.ktx)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui)
+    implementation(libs.androidx.ui.graphics)
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose)
 
-    implementation(libs.coil.base)
-    implementation(libs.coil.video)
+    implementation(libs.kotlinx.serialization.json)
+    implementation(libs.androidx.fragment.compose)
 
-    // include all available samples.
-    val samples: List<String> by project.extra
-    samples.forEach {
-        implementation(project(it))
-    }
+    implementation(project(":shared"))
+    implementation(project(":samples:accessibility"))
+    implementation(project(":samples:camera:camera2"))
+    implementation(project(":samples:connectivity:audio"))
+    implementation(project(":samples:connectivity:bluetooth:ble"))
+    implementation(project(":samples:connectivity:bluetooth:companion"))
+    implementation(project(":samples:connectivity:callnotification"))
+    implementation(project(":samples:connectivity:telecom"))
+    implementation(project(":samples:graphics:pdf"))
+    implementation(project(":samples:graphics:ultrahdr"))
+    implementation(project(":samples:location"))
+    implementation(project(":samples:media:ultrahdr"))
+    implementation(project(":samples:media:video"))
+    implementation(project(":samples:privacy:data"))
+    implementation(project(":samples:privacy:permissions"))
+    implementation(project(":samples:privacy:transparency"))
+    implementation(project(":samples:storage"))
+    implementation(project(":samples:user-interface:appwidgets"))
+    implementation(project(":samples:user-interface:constraintlayout"))
+    implementation(project(":samples:user-interface:draganddrop"))
+    implementation(project(":samples:user-interface:haptics"))
+    implementation(project(":samples:user-interface:picture-in-picture"))
+    implementation(project(":samples:user-interface:predictiveback"))
+    implementation(project(":samples:user-interface:quicksettings"))
+    implementation(project(":samples:user-interface:share"))
+    implementation(project(":samples:user-interface:text"))
+    implementation(project(":samples:user-interface:window-insets"))
+    implementation(project(":samples:user-interface:windowmanager"))
 
-    // Testing
-    kspAndroidTest(libs.hilt.compiler)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.androidx.navigation.testing)
-    androidTestImplementation(libs.compose.ui.test.manifest)
-    debugImplementation(libs.compose.ui.test.manifest)
-    androidTestImplementation(libs.compose.ui.test.junit4)
-    androidTestImplementation(libs.androidx.test.core)
-    androidTestImplementation(libs.androidx.test.espresso.core)
-    androidTestImplementation(libs.androidx.test.rules)
-    androidTestImplementation(libs.androidx.test.runner)
-    androidTestImplementation(libs.hilt.testing)
-    androidTestImplementation(libs.junit4)
-}
-
-tasks.register("syncSamplesInfo", com.example.platform.plugin.SyncSamplesInfo::class.java) {
-    projectDir.set(project.rootDir)
-}
-// Link the assemble task to the sync task.
-// TODO: move syncSamplesInfo task here, as this can break isolated projects
-afterEvaluate {
-    tasks.findByName("assembleDebug")?.finalizedBy(tasks.findByName("syncSamplesInfo"))
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(platform(libs.androidx.compose.bom))
+    androidTestImplementation(libs.androidx.ui.test.junit4)
+    debugImplementation(libs.androidx.ui.tooling)
+    debugImplementation(libs.androidx.ui.test.manifest)
 }

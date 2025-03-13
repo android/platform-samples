@@ -37,15 +37,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.platform.base.PermissionBox
-import com.google.android.catalog.framework.annotations.Sample
-import com.google.android.catalog.framework.ui.theme.CatalogTheme
+import com.example.platform.shared.PermissionBox
+import com.example.platform.shared.theme.CatalogTheme
 
-@Sample(
-    name = "Call Notification Sample",
-    description = "Sample demonstrating how to make incoming call notifications and in call notifications",
-    documentation = "https://developer.android.com/reference/android/app/Notification.CallStyle",
-)
 class CallNotificationSample : ComponentActivity() {
 
     private lateinit var notificationSource: NotificationSource<NotificationReceiver>

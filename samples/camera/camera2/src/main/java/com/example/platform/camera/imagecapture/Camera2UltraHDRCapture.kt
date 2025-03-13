@@ -61,7 +61,6 @@ import com.example.platform.camera.common.computeExifOrientation
 import com.example.platform.camera.common.getPreviewOutputSize
 import com.example.platform.camera.databinding.Camera2UltrahdrCaptureBinding
 import com.example.platform.graphics.ultrahdr.display.VisualizingAnUltraHDRGainmap
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.suspendCancellableCoroutine
@@ -77,13 +76,6 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-@Sample(
-    name = "UltraHDR Image Capture",
-    description = "This sample demonstrates how to capture a 10-bit compressed still image and " +
-            "store it using the new UltraHDR image format using Camera2.",
-    documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
-    tags = ["UltraHDR", "Camera2"],
-)
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class Camera2UltraHDRCapture : Fragment() {
     /**

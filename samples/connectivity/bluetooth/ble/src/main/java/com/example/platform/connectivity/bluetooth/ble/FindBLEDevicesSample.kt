@@ -62,22 +62,14 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.core.content.getSystemService
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.LifecycleOwner
 import com.example.platform.connectivity.bluetooth.ble.server.GATTServerSampleService.Companion.SERVICE_UUID
-import com.google.android.catalog.framework.annotations.Sample
 import kotlinx.coroutines.delay
 
 @SuppressLint("MissingPermission")
 @RequiresApi(Build.VERSION_CODES.M)
-@Sample(
-    name = "Find devices sample",
-    description = "This example will demonstrate how to scanning for Low Energy Devices",
-    documentation = "https://developer.android.com/guide/topics/connectivity/bluetooth",
-    tags = ["bluetooth"],
-)
 @Composable
 fun FindBLEDevicesSample() {
     BluetoothSampleBox {
@@ -93,7 +85,7 @@ fun FindBLEDevicesSample() {
 @Composable
 internal fun FindDevicesScreen(onConnect: (BluetoothDevice) -> Unit) {
     val context = LocalContext.current
-    val adapter = checkNotNull(context.getSystemService<BluetoothManager>()?.adapter)
+    val adapter = checkNotNull(context.getSystemService(BluetoothManager::class.java).adapter)
     var scanning by remember {
         mutableStateOf(true)
     }
@@ -246,7 +238,7 @@ private fun BluetoothScanEffect(
     onDeviceFound: (device: ScanResult) -> Unit,
 ) {
     val context = LocalContext.current
-    val adapter = context.getSystemService<BluetoothManager>()?.adapter
+    val adapter = context.getSystemService(BluetoothManager::class.java).adapter
 
     if (adapter == null) {
         onScanFailed(ScanCallback.SCAN_FAILED_INTERNAL_ERROR)

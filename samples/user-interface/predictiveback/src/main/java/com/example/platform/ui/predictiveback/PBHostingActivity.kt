@@ -19,16 +19,10 @@ package com.example.platform.ui.predictiveback
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.FragmentActivity
 import com.example.platform.ui.predictiveback.databinding.HostingActivityBinding
-import com.google.android.catalog.framework.annotations.Sample
 
-@Sample(
-    name = "Predictive Back Sample",
-    description = "Shows Predictive Back animations.",
-    documentation = "https://developer.android.com/about/versions/14/features/predictive-back",
-    tags = ["predictive"]
-)
-class PBHostingActivity : AppCompatActivity() {
+class PBHostingActivity : FragmentActivity() {
 
     private lateinit var binding: HostingActivityBinding
 
