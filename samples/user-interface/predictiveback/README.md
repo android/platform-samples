@@ -1,6 +1,6 @@
 # Predictive Back Samples
 
-Shows different types of predictive back animations, including:
+Shows different types of predictive back animations for a Views based app, including:
 
 + Back-to-home
 + Cross-activity
@@ -11,6 +11,9 @@ Shows different types of predictive back animations, including:
 + Custom AndroidX Transition
 + Cross-fragment animation with MaterialSharedAxis
 + setCustomAnimations
+
+For predictive back on Compose, see [Predictive back in Compose](https://developer.android.com/develop/ui/compose/system/predictive-back)
+and [Predictive back Compose snippets](https://github.com/android/snippets/blob/030dddb8f6f319ffb1b3809fe71add6417531fe2/compose/snippets/src/main/java/com/example/compose/snippets/predictiveback/PredictiveBackSnippets.kt)
 
 ## Custom cross-activity
 
