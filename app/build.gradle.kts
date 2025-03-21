@@ -23,7 +23,8 @@ plugins {
 
 android {
     namespace = "com.example.platform"
-    compileSdk = 35
+    compileSdkPreview = "Baklava"
+
 
     defaultConfig {
         applicationId = "com.example.platform"
