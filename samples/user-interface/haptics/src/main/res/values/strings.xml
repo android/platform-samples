@@ -43,4 +43,10 @@
     <string name="message_not_supported">Not supported by your current device.</string>
     <string name="wobble">Wobble</string>
     <string name="wobble_drag_and_release">Drag and release</string>
+    <string name="spring">Spring</string>
+    <string name="spring_tap_to_reset">Tap to reset</string>
+    <string name="spring_tap_to_drop">Tap to drop spring</string>
+    <string name="rocket">Rocket</string>
+    <string name="rocket_tap_to_launch">Tap to launch</string>
+
 </resources>
