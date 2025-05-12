@@ -52,6 +52,9 @@ dependencies {
     implementation(libs.androidx.camerax.mlkit.vision)
     implementation(libs.androidx.camerax.extensions)
 
+    // Exoplayer
+
+
     // Image loading
     implementation(libs.coil)
     implementation(libs.coil.compose)
