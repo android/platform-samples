@@ -27,6 +27,7 @@ import com.example.platform.accessibility.SpeakableText
 import com.example.platform.camera.imagecapture.Camera2ImageCapture
 import com.example.platform.camera.imagecapture.Camera2UltraHDRCapture
 import com.example.platform.camera.preview.Camera2Preview
+import com.example.platform.camerax.CameraXMlKitScreen
 import com.example.platform.connectivity.audio.AudioCommsSample
 import com.example.platform.connectivity.bluetooth.ble.BLEScanIntentSample
 import com.example.platform.connectivity.bluetooth.ble.ConnectGATTSample
@@ -217,6 +218,18 @@ val SAMPLE_DEMOS by lazy {
             tags = listOf("Camera2"),
             content = { AndroidFragment<Camera2Preview>() },
         ),
+
+        // CameraX Samples
+        ComposableSampleDemo(
+            id = "camerax-mlkit",
+            name = "CameraX • MLKit Sample",
+            description = "TBD",
+            documentation = "https://developer.android.com/training/camerax",
+            apiSurface = CameraCameraXApiSurface,
+            tags = listOf("CameraX"),
+            content = { CameraXMlKitScreen() },
+        ),
+
         ComposableSampleDemo(
             id = "communication-audio-manager",
             name = "Communication Audio Manager",
@@ -956,7 +969,7 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://source.android.com/docs/core/interaction/haptics",
             apiSurface = UserInterfaceHapticsApiSurface,
             tags = listOf("Haptics"),
-            content = { HapticsBasic() }
+            content = { HapticsBasic() },
         ),
         ComposableSampleDemo(
             id = "haptics-2-resist",
@@ -965,7 +978,7 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://source.android.com/docs/core/interaction/haptics",
             apiSurface = UserInterfaceHapticsApiSurface,
             tags = listOf("Haptics"),
-            content = { Resist() }
+            content = { Resist() },
         ),
         ComposableSampleDemo(
             id = "haptics-3-expand",
@@ -974,7 +987,7 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://source.android.com/docs/core/interaction/haptics",
             apiSurface = UserInterfaceHapticsApiSurface,
             tags = listOf("Haptics"),
-            content = { Expand() }
+            content = { Expand() },
         ),
         ComposableSampleDemo(
             id = "haptics-4-bounce",
@@ -983,7 +996,7 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://source.android.com/docs/core/interaction/haptics",
             apiSurface = UserInterfaceHapticsApiSurface,
             tags = listOf("Haptics"),
-            content = { Bounce() }
+            content = { Bounce() },
         ),
         ComposableSampleDemo(
             id = "haptics-5-wobble",
@@ -992,7 +1005,7 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://source.android.com/docs/core/interaction/haptics",
             apiSurface = UserInterfaceHapticsApiSurface,
             tags = listOf("Haptics"),
-            content = { Wobble() }
+            content = { Wobble() },
         ),
         ComposableSampleDemo(
             id = "live-updates",
@@ -1014,7 +1027,7 @@ val SAMPLE_DEMOS by lazy {
             description = "Basic usage of Picture-in-Picture mode showcasing video playback",
             documentation = "https://developer.android.com/develop/ui/views/picture-in-picture",
             apiSurface = UserInterfacePictureInPictureApiSurface,
-            content = PiPMovieActivity::class.java
+            content = PiPMovieActivity::class.java,
         ),
         ActivitySampleDemo(
             id = "picture-in-picture-stopwatch",
@@ -1022,7 +1035,7 @@ val SAMPLE_DEMOS by lazy {
             description = "Basic usage of Picture-in-Picture mode showcasing a stopwatch",
             documentation = "https://developer.android.com/develop/ui/views/picture-in-picture",
             apiSurface = UserInterfacePictureInPictureApiSurface,
-            content = PiPSampleActivity::class.java
+            content = PiPSampleActivity::class.java,
         ),
         ActivitySampleDemo(
             id = "predictive-back",
@@ -1030,7 +1043,7 @@ val SAMPLE_DEMOS by lazy {
             description = "Shows Predictive Back animations.",
             documentation = "https://developer.android.com/about/versions/14/features/predictive-back",
             apiSurface = UserInterfacePredictiveBackApiSurface,
-            content = PBHostingActivity::class.java
+            content = PBHostingActivity::class.java,
         ),
         ComposableSampleDemo(
             id = "quick-settings",
@@ -1051,7 +1064,7 @@ val SAMPLE_DEMOS by lazy {
             description = "Receive texts and images from other apps.",
             documentation = null,
             apiSurface = UserInterfaceShareApiSurface,
-            content = ShareReceiverActivity::class.java
+            content = ShareReceiverActivity::class.java,
         ),
         ComposableSampleDemo(
             id = "send-data-with-sharesheet",
@@ -1059,7 +1072,7 @@ val SAMPLE_DEMOS by lazy {
             description = "Send texts and images to other apps using the Android Sharesheet.",
             documentation = null,
             apiSurface = UserInterfaceShareApiSurface,
-            content = { ShareSender() }
+            content = { ShareSender() },
         ),
         ComposableSampleDemo(
             id = "conversion-suggestions",
@@ -1068,7 +1081,7 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/about/versions/13/features#text-conversion",
             apiSurface = UserInterfaceTextApiSurface,
             tags = listOf("Text"),
-            content = { AndroidFragment<ConversionSuggestions>() }
+            content = { AndroidFragment<ConversionSuggestions>() },
         ),
         ComposableSampleDemo(
             id = "downloadable-fonts",
@@ -1077,7 +1090,7 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/develop/ui/views/text-and-emoji/downloadable-fonts",
             apiSurface = UserInterfaceTextApiSurface,
             tags = listOf("Text"),
-            content = { AndroidFragment<DownloadableFontsFragment>() }
+            content = { AndroidFragment<DownloadableFontsFragment>() },
         ),
         ComposableSampleDemo(
             id = "hyphenation",
@@ -1086,7 +1099,7 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/reference/android/widget/TextView#attr_android:hyphenationFrequency",
             apiSurface = UserInterfaceTextApiSurface,
             tags = listOf("Text"),
-            content = { AndroidFragment<Hyphenation>() }
+            content = { AndroidFragment<Hyphenation>() },
         ),
         ComposableSampleDemo(
             id = "line-break",
@@ -1095,7 +1108,7 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/about/versions/13/features#japanese-wrapping",
             apiSurface = UserInterfaceTextApiSurface,
             tags = listOf("Text"),
-            content = { AndroidFragment<LineBreak>() }
+            content = { AndroidFragment<LineBreak>() },
         ),
         ComposableSampleDemo(
             id = "linkify",
@@ -1104,7 +1117,7 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/reference/kotlin/androidx/core/text/util/LinkifyCompat",
             apiSurface = UserInterfaceTextApiSurface,
             tags = listOf("Text"),
-            content = { AndroidFragment<Linkify>() }
+            content = { AndroidFragment<Linkify>() },
         ),
         ComposableSampleDemo(
             id = "text-span",
@@ -1113,7 +1126,7 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/kotlin/ktx#core",
             apiSurface = UserInterfaceTextApiSurface,
             tags = listOf("Text"),
-            content = { AndroidFragment<TextSpanFragment>() }
+            content = { AndroidFragment<TextSpanFragment>() },
         ),
         ComposableSampleDemo(
             id = "immersive-mode",
@@ -1121,7 +1134,7 @@ val SAMPLE_DEMOS by lazy {
             description = "Immersive mode enables your app to display full-screen by hiding system bars.",
             documentation = "https://developer.android.com/develop/ui/views/layout/immersive",
             apiSurface = UserInterfaceWindowInsetsApiSurface,
-            content = { ImmersiveMode() }
+            content = { ImmersiveMode() },
         ),
         ActivitySampleDemo(
             id = "window-insets-animation",
@@ -1129,7 +1142,7 @@ val SAMPLE_DEMOS by lazy {
             description = "Shows how to react to the on-screen keyboard (IME) changing visibility, and also controlling the IME's visibility.",
             documentation = "https://developer.android.com/develop/ui/views/layout/sw-keyboard",
             apiSurface = UserInterfaceWindowInsetsApiSurface,
-            content = WindowInsetsAnimationActivity::class.java
+            content = WindowInsetsAnimationActivity::class.java,
         ),
         ActivitySampleDemo(
             id = "window-manager",
@@ -1137,7 +1150,7 @@ val SAMPLE_DEMOS by lazy {
             description = "Demonstrates how to use the Jetpack WindowManager library.",
             documentation = "https://developer.android.com/jetpack/androidx/releases/window",
             apiSurface = UserInterfaceWindowManagerApiSurface,
-            content = WindowDemosActivity::class.java
+            content = WindowDemosActivity::class.java,
         ),
     ).associateBy { it.id }
 }

@@ -33,6 +33,12 @@ val CameraCamera2ApiSurface = ApiSurface(
     null,
 )
 
+val CameraCameraXApiSurface = ApiSurface(
+    "camera-camerax",
+    "CameraX",
+    null,
+)
+
 val ConnectivityAudioApiSurface = ApiSurface(
     "connectivity-audio",
     "Connectivity Audio",
@@ -192,6 +198,7 @@ val UserInterfaceWindowManagerApiSurface = ApiSurface(
 val API_SURFACES = listOf(
     AccessiblityApiSurface,
     CameraCamera2ApiSurface,
+    CameraCameraXApiSurface,
     ConnectivityAudioApiSurface,
     ConnectivityBluetoothBleApiSurface,
     ConnectivityBluetoothCompanionApiSurface,
