@@ -28,6 +28,7 @@ import com.example.platform.camera.imagecapture.Camera2ImageCapture
 import com.example.platform.camera.imagecapture.Camera2UltraHDRCapture
 import com.example.platform.camera.preview.Camera2Preview
 import com.example.platform.camerax.CameraXBasic
+import com.example.platform.camerax.CameraXExtensions
 import com.example.platform.camerax.CameraXMlKitScreen
 import com.example.platform.connectivity.audio.AudioCommsSample
 import com.example.platform.connectivity.bluetooth.ble.BLEScanIntentSample
@@ -230,6 +231,16 @@ val SAMPLE_DEMOS by lazy {
             tags = listOf("CameraX"),
             content = { CameraXBasic() },
         ),
+        ComposableSampleDemo(
+            id = "camerax-extensions",
+            name = "CameraX • Extensions",
+            description = "TBD",
+            documentation = "https://developer.android.com/training/camerax",
+            apiSurface = CameraCameraXApiSurface,
+            tags = listOf("CameraX"),
+            content = { CameraXExtensions() },
+        ),
+
         ComposableSampleDemo(
             id = "camerax-mlkit",
             name = "CameraX • MLKit Sample",

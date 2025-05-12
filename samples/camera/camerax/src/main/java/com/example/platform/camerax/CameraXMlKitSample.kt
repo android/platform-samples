@@ -62,8 +62,6 @@ import com.google.mlkit.vision.barcode.common.Barcode
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun CameraXMlKitScreen() {
-
-    val context = LocalContext.current
     var qrCodeDetected by remember { mutableStateOf(false) }
     var qrCodeContent by remember { mutableStateOf("") }
 
