@@ -226,7 +226,7 @@ val SAMPLE_DEMOS by lazy {
         ComposableSampleDemo(
             id = "camerax-basic",
             name = "CameraX • Basic Image Capture",
-            description = "TBD",
+            description = "This sample demonstrates how to capture an image using CameraX",
             documentation = "https://developer.android.com/training/camerax",
             apiSurface = CameraCameraXApiSurface,
             tags = listOf("CameraX"),
@@ -235,7 +235,7 @@ val SAMPLE_DEMOS by lazy {
         ComposableSampleDemo(
             id = "camerax-video",
             name = "CameraX • Basic Video Capture",
-            description = "TBD",
+            description = "This sample demonstrates how to capture an video using CameraX",
             documentation = "https://developer.android.com/training/camerax",
             apiSurface = CameraCameraXApiSurface,
             tags = listOf("CameraX"),
@@ -244,7 +244,7 @@ val SAMPLE_DEMOS by lazy {
         ComposableSampleDemo(
             id = "camerax-extensions",
             name = "CameraX • Extensions",
-            description = "TBD",
+            description = "This sample demonstrates how to check for and utilize CameraX Extensions",
             documentation = "https://developer.android.com/training/camerax",
             apiSurface = CameraCameraXApiSurface,
             tags = listOf("CameraX"),
@@ -253,7 +253,7 @@ val SAMPLE_DEMOS by lazy {
         ComposableSampleDemo(
             id = "camerax-mlkit",
             name = "CameraX • MLKit Sample",
-            description = "TBD",
+            description = "This sample demonstrates using CameraX in conjunction with MLKit",
             documentation = "https://developer.android.com/training/camerax",
             apiSurface = CameraCameraXApiSurface,
             tags = listOf("CameraX"),
