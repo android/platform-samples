@@ -51,10 +51,14 @@ dependencies {
     implementation(libs.androidx.camerax.mlkit.vision)
     implementation(libs.androidx.camerax.extensions)
 
-    // Permissions
-    implementation(libs.accompanist.permissions)
+    // Image loading
+    implementation(libs.coil)
+    implementation(libs.coil.compose)
+
+    // Barcode Scanning
     implementation(libs.barcode.scanning.common)
     implementation(libs.play.services.mlkit.barcode.scanning)
 
-    // Barcode Scanning
+    // Permissions
+    implementation(libs.accompanist.permissions)
 }

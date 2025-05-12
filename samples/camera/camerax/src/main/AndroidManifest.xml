@@ -16,12 +16,16 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.RECORD_AUDIO" />
-
-    <uses-feature android:name="android.hardware.telephony" android:required="false"/>
-    <uses-feature android:name="android.hardware.camera" android:required="false"/>
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
 
     <application>
 
@@ -31,9 +35,7 @@
             android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
-            <meta-data
-                android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/image_paths" />
+            <meta-data android:name="android.support.FILE_PROVIDER_PATHS" />
         </provider>
     </application>
 </manifest>
