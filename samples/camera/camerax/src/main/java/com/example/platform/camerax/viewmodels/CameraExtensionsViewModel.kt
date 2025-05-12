@@ -21,6 +21,7 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.extensions.ExtensionMode
 import androidx.camera.extensions.ExtensionsManager
@@ -55,8 +56,8 @@ class CameraExtensionsViewModel : ViewModel() {
     private val _uiState = MutableStateFlow(CameraExtensionsState())
     val uiState: StateFlow<CameraExtensionsState> = _uiState.asStateFlow()
 
-    private var cameraProvider: ProcessCameraProvider? = null
-    private var extensionsManager: ExtensionsManager? = null
+    internal var cameraProvider: ProcessCameraProvider? = null
+    internal var extensionsManager: ExtensionsManager? = null
     private var imageCapture: ImageCapture? = null
     private var preview: Preview? = null
     private var camera: Camera? = null
@@ -387,6 +388,14 @@ class CameraExtensionsViewModel : ViewModel() {
                     val savedUri = output.savedUri
                     Log.d(TAG, "Photo capture succeeded: $savedUri")
                     _uiState.update { it.copy(isTakingPicture = false, lastCapturedUri = savedUri) }
+
+                    // Show a Toast with the saved image location
+                    Toast.makeText(
+                        context,
+                        "Photo saved to: $savedUri",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
                     // Optionally trigger flash animation or sound here via state update
                 }
             },

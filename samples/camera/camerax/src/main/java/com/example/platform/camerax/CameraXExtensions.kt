@@ -1,5 +1,5 @@
 /*
- * Copyright 2025 The Android Open Source Project
+ * Copyright 2023 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -150,12 +150,14 @@ private fun CameraView(
 
     // Effect to bind use cases when permission, lens, extension, or rotation changes
     LaunchedEffect(
+        viewModel.cameraProvider, // Add dependency on cameraProvider
+        viewModel.extensionsManager, // Add dependency on extensionsManager
         uiState.lensFacing,
         uiState.selectedExtension,
         targetRotation, // Rebind if rotation changes significantly for targetRotation setting
     ) {
-        // Check if camera is initialized in the ViewModel before binding
-        if (!uiState.isLoading && uiState.errorMessage == null) {
+        // Trigger binding once cameraProvider and extensionsManager are ready
+        if (viewModel.cameraProvider != null && viewModel.extensionsManager != null && uiState.errorMessage == null) {
             Log.d(
                 "CameraExtScreen",
                 "Triggering bindUseCases: Lens=${uiState.lensFacing}, Ext=${
@@ -290,12 +292,6 @@ fun CaptureButton(isTakingPicture: Boolean, onClick: () -> Unit) {
             .background(Color.White.copy(alpha = 0.3f), CircleShape),
 
         ) {
-        Icon(
-            Icons.Filled.Create,
-            contentDescription = "Capture photo",
-            tint = Color.White,
-            modifier = Modifier.size(40.dp),
-        )
         if (isTakingPicture) {
             CircularProgressIndicator(
                 modifier = Modifier.size(64.dp), // Slightly smaller than button
