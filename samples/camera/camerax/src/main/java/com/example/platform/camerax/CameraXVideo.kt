@@ -239,11 +239,11 @@ private fun PermissionRationale(
 fun CameraPreview(
     modifier: Modifier = Modifier,
     lifecycleOwner: LifecycleOwner,
-    // cameraExecutor: ExecutorService, // This was passed but not used in the original snippet
     onVideoCaptureCreated: (VideoCapture<Recorder>) -> Unit,
 ) {
     val context = LocalContext.current
     val previewView = remember { PreviewView(context) }
+
     // If CameraX binding needs a specific executor, it should be sourced or passed here.
     // Using ContextCompat.getMainExecutor(context) is common for listeners.
     // The original 'cameraExecutor' from CameraXVideo could be passed if needed for binding.
@@ -302,9 +302,7 @@ fun CameraPreview(
                 }
 
             },
-            ContextCompat.getMainExecutor(context), // For the listener itself
-            // If ProcessCameraProvider.getInstance needs a specific executor, it's handled internally
-            // or via its other getInstance method. The addListener's executor is for the callback.
+            ContextCompat.getMainExecutor(context),
         )
         Log.d(TAG, "CameraProvider listener added.")
     }
@@ -358,27 +356,12 @@ fun VideoPlaybackScreen(
         videoView.setMediaController(mediaController)
         videoView.requestFocus()
 
-        // --- MODIFICATION FOR LOOPING ---
         videoView.setOnPreparedListener { mp ->
             mp.isLooping = true // Enable looping
             Log.d(TAG, "VideoView prepared, looping enabled.")
         }
-        // Start playback after preparing. If setOnPreparedListener is used,
-        // starting playback there is also an option, but start() here is fine.
         videoView.start()
         Log.d(TAG, "VideoView playback started with URI: $videoUri")
-
-
-        // Alternative looping mechanism using OnCompletionListener:
-        /*
-        videoView.setOnCompletionListener {
-            Log.d(TAG, "VideoView playback completed, restarting for loop.")
-            videoView.start() // Restart video when it completes
-        }
-        videoView.start() // Initial start
-        */
-        // --- END MODIFICATION ---
-
         onDispose {
             Log.d(TAG, "Disposing VideoView, stopping playback.")
             videoView.stopPlayback()
@@ -415,7 +398,7 @@ enum class RecordingState {
 private fun startRecording(
     context: Context,
     videoCapture: VideoCapture<Recorder>,
-    executor: ExecutorService, // This executor is for CameraX recording operations
+    executor: ExecutorService,
     onRecordingStarted: (Recording) -> Unit,
     onRecordingError: (VideoRecordEvent.Finalize) -> Unit,
     onRecordingComplete: (Uri) -> Unit,
@@ -440,7 +423,7 @@ private fun startRecording(
         }
 
     val activeRecording =
-        pendingRecording.start(executor) { recordEvent -> // Uses the passed executor
+        pendingRecording.start(executor) { recordEvent ->
             when (recordEvent) {
                 is VideoRecordEvent.Start -> {
                     Log.d(TAG, "Recording started successfully.")
@@ -475,7 +458,8 @@ private fun startRecording(
                     }
                 }
 
-                is VideoRecordEvent.Status -> { /* Log.v(TAG, "Status: ${recordEvent.recordingStats}") */
+                is VideoRecordEvent.Status -> {
+                    Log.v(TAG, "Status: ${recordEvent.recordingStats}")
                 }
 
                 is VideoRecordEvent.Pause -> Log.d(TAG, "Recording paused")
