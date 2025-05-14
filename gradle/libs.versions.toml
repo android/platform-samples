@@ -51,7 +51,7 @@ androidxTestExtTruth = "1.5.0"
 androidxTestRules = "1.5.0"
 androidxTestRunner = "1.5.2"
 androidxUiAutomator = "2.2.0"
-camerax = "1.4.2"
+camerax = "1.5.0-beta01"
 material3Android = "1.3.2"
 media3 = "1.5.0"
 constraintlayout = "2.1.4"
@@ -175,6 +175,7 @@ androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "medi
 
 # CameraX
 androidx-camerax-core = { module = "androidx.camera:camera-core", version.ref = "camerax" }
+androidx-camerax-compose = { module = "androidx.camera:camera-compose", version.ref = "camerax" }
 androidx-camerax-camera2 = { module = "androidx.camera:camera-camera2", version.ref = "camerax" }
 androidx-camerax-lifecycle = { module = "androidx.camera:camera-lifecycle", version.ref = "camerax" }
 androidx-camerax-video = { module = "androidx.camera:camera-video", version.ref = "camerax" }

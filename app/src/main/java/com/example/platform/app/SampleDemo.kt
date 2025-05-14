@@ -27,7 +27,7 @@ import com.example.platform.accessibility.SpeakableText
 import com.example.platform.camera.imagecapture.Camera2ImageCapture
 import com.example.platform.camera.imagecapture.Camera2UltraHDRCapture
 import com.example.platform.camera.preview.Camera2Preview
-import com.example.platform.camerax.CameraXBasic
+import com.example.platform.camerax.basic.CameraXBasic
 import com.example.platform.camerax.CameraXExtensions
 import com.example.platform.camerax.CameraXMlKitScreen
 import com.example.platform.camerax.CameraXVideo

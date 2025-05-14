@@ -45,12 +45,12 @@ dependencies {
     // CameraX
     implementation(libs.androidx.camerax.core)
     implementation(libs.androidx.camerax.camera2)
+    implementation(libs.androidx.camerax.compose)
+    implementation(libs.androidx.camerax.extensions)
     implementation(libs.androidx.camerax.lifecycle)
+    implementation(libs.androidx.camerax.mlkit.vision)
     implementation(libs.androidx.camerax.video)
     implementation(libs.androidx.camerax.view)
-    implementation(libs.androidx.camerax.mlkit.vision)
-    implementation(libs.androidx.camerax.mlkit.vision)
-    implementation(libs.androidx.camerax.extensions)
 
     // Image loading
     implementation(libs.coil)
