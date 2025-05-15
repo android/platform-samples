@@ -111,7 +111,7 @@ import com.example.platform.ui.haptics.Resist
 import com.example.platform.ui.haptics.Wobble
 import com.example.platform.ui.insets.ImmersiveMode
 import com.example.platform.ui.insets.WindowInsetsAnimationActivity
-import com.example.platform.ui.live_updates.LiveUpdateActivity
+import com.example.platform.ui.live_updates.LiveUpdateSample
 import com.example.platform.ui.predictiveback.PBHostingActivity
 import com.example.platform.ui.quicksettings.QuickSettings
 import com.example.platform.ui.share.receiver.ShareReceiverActivity
@@ -994,13 +994,19 @@ val SAMPLE_DEMOS by lazy {
             tags = listOf("Haptics"),
             content = { Wobble() }
         ),
-        ActivitySampleDemo(
+        ComposableSampleDemo(
             id = "live-updates",
             name = "Live Updates - ProgressStyle implementation",
             description = "Usage of ProgressStyle with Live update treatment",
             documentation = "https://developer.android.com/about/versions/16/features/progress-centric-notifications",
+            minSdk = Build.VERSION_CODES.BAKLAVA,
             apiSurface = UserInterfaceLiveUpdatesApiSurface,
-            content = LiveUpdateActivity::class.java
+            content = {
+                MinSdkBox(minSdk = Build.VERSION_CODES.BAKLAVA) {
+                    //noinspection NewApi
+                    LiveUpdateSample()
+                }
+            },
         ),
         ActivitySampleDemo(
             id = "picture-in-picture-video-playback",

@@ -28,7 +28,6 @@ import android.os.Handler
 import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.IconCompat
-import com.example.platform.ui.live_updates.R
 
 object SnackbarNotificationManager {
     private lateinit var notificationManager: NotificationManager
@@ -38,11 +37,12 @@ object SnackbarNotificationManager {
     private const val NOTIFICATION_ID = 1234
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     fun initialize(context: Context, notifManager: NotificationManager) {
         notificationManager = notifManager
         val channel = NotificationChannel(CHANNEL_ID, CHANNEL_NAME, IMPORTANCE_DEFAULT)
         appContext = context
-        notificationManager?.createNotificationChannel(channel)
+        notificationManager.createNotificationChannel(channel)
     }
 
     private enum class OrderState(val delay: Long) {
@@ -186,6 +186,7 @@ object SnackbarNotificationManager {
             return progressStyle
         }
 
+        @RequiresApi(Build.VERSION_CODES.O)
         fun buildBaseNotification(appContext: Context, orderState: OrderState): Notification.Builder {
             var notificationBuilder = Notification.Builder(appContext, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
