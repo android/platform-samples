@@ -154,25 +154,43 @@ private fun ContentWithPermissionHandling(
             }
         }
 
-        is PermissionStatus.Denied -> {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-                verticalArrangement = Arrangement.Center,
-            ) {
-                val textToShow = if (cameraPermissionState.status.shouldShowRationale) {
-                    "The camera is needed to take pictures. Please grant the permission."
-                } else {
-                    "Camera permission is required to use this feature."
-                }
-                Text(text = textToShow)
-                Spacer(modifier = Modifier.height(8.dp))
-                Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
-                    Text("Request Permission")
-                }
-            }
+        is PermissionStatus.Denied -> CameraPermissionDeniedView(
+            cameraPermissionState.status,
+            cameraPermissionState,
+        )
+    }
+}
+
+/**
+ * Composable function that displays a message when camera permission is denied.
+ *
+ * It provides an option to request the permission again.
+ *
+ * @param status The current [PermissionStatus] of the camera permission.
+ * @param cameraPermissionState The [PermissionState] for the camera permission, used to request permission again.
+ */
+@Composable
+@OptIn(ExperimentalPermissionsApi::class)
+private fun CameraPermissionDeniedView(
+    status: PermissionStatus,
+    cameraPermissionState: PermissionState,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        val textToShow = if (status.shouldShowRationale) {
+            "The camera is needed to take pictures. Please grant the permission."
+        } else {
+            "Camera permission is required to use this feature."
+        }
+        Text(text = textToShow)
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = { cameraPermissionState.launchPermissionRequest() }) {
+            Text("Request Permission")
         }
     }
 }
