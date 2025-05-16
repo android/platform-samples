@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":shared"))
     implementation(project(":samples:accessibility"))
     implementation(project(":samples:camera:camera2"))
+    implementation(project(":samples:camera:camerax"))
     implementation(project(":samples:connectivity:audio"))
     implementation(project(":samples:connectivity:bluetooth:ble"))
     implementation(project(":samples:connectivity:bluetooth:companion"))
