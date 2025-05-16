@@ -48,7 +48,7 @@ fun LiveUpdateSample() {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(10.dp, 100.dp),
+                .padding(contentPadding),
         ) {
             Text(stringResource( R.string.live_update_summary_text))
             Spacer(modifier = Modifier.height(4.dp))
