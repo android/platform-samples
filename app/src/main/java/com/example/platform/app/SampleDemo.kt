@@ -28,9 +28,6 @@ import com.example.platform.camera.imagecapture.Camera2ImageCapture
 import com.example.platform.camera.imagecapture.Camera2UltraHDRCapture
 import com.example.platform.camera.preview.Camera2Preview
 import com.example.platform.camerax.basic.CameraXBasic
-import com.example.platform.camerax.CameraXExtensions
-import com.example.platform.camerax.CameraXMlKitScreen
-import com.example.platform.camerax.CameraXVideo
 import com.example.platform.connectivity.audio.AudioCommsSample
 import com.example.platform.connectivity.bluetooth.ble.BLEScanIntentSample
 import com.example.platform.connectivity.bluetooth.ble.ConnectGATTSample
@@ -226,38 +223,11 @@ val SAMPLE_DEMOS by lazy {
         ComposableSampleDemo(
             id = "camerax-basic",
             name = "CameraX • Basic Image Capture",
-            description = "This sample demonstrates how to capture an image using CameraX",
+            description = "This sample demonstrates how to capture an image & tap-to-focus using CameraX",
             documentation = "https://developer.android.com/training/camerax",
             apiSurface = CameraCameraXApiSurface,
             tags = listOf("CameraX"),
             content = { CameraXBasic() },
-        ),
-        ComposableSampleDemo(
-            id = "camerax-video",
-            name = "CameraX • Basic Video Capture",
-            description = "This sample demonstrates how to capture an video using CameraX",
-            documentation = "https://developer.android.com/training/camerax",
-            apiSurface = CameraCameraXApiSurface,
-            tags = listOf("CameraX"),
-            content = { CameraXVideo() },
-        ),
-        ComposableSampleDemo(
-            id = "camerax-extensions",
-            name = "CameraX • Extensions",
-            description = "This sample demonstrates how to check for and utilize CameraX Extensions",
-            documentation = "https://developer.android.com/training/camerax",
-            apiSurface = CameraCameraXApiSurface,
-            tags = listOf("CameraX"),
-            content = { CameraXExtensions() },
-        ),
-        ComposableSampleDemo(
-            id = "camerax-mlkit",
-            name = "CameraX • MLKit Sample",
-            description = "This sample demonstrates using CameraX in conjunction with MLKit",
-            documentation = "https://developer.android.com/training/camerax",
-            apiSurface = CameraCameraXApiSurface,
-            tags = listOf("CameraX"),
-            content = { CameraXMlKitScreen() },
         ),
 
         ComposableSampleDemo(
