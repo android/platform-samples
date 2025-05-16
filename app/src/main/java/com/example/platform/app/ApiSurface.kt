@@ -141,6 +141,12 @@ val UserInterfaceHapticsApiSurface = ApiSurface(
     null,
 )
 
+val UserInterfaceLiveUpdatesApiSurface = ApiSurface(
+    "live-updates",
+    "User Interface - Live Updates",
+    null,
+)
+
 val UserInterfacePictureInPictureApiSurface = ApiSurface(
     "user-interface-picture-in-picture",
     "User Interface - Picture In Picture",
@@ -204,6 +210,7 @@ val API_SURFACES = listOf(
     UserInterfaceConstraintLayoutApiSurface,
     UserInterfaceDragAndDropApiSurface,
     UserInterfaceHapticsApiSurface,
+    UserInterfaceLiveUpdatesApiSurface,
     UserInterfacePictureInPictureApiSurface,
     UserInterfacePredictiveBackApiSurface,
     UserInterfaceQuickSettingsApiSurface,

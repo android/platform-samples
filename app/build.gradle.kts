@@ -23,12 +23,12 @@ plugins {
 
 android {
     namespace = "com.example.platform"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.platform"
         minSdk = 21
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -92,6 +92,7 @@ dependencies {
     implementation(project(":samples:user-interface:constraintlayout"))
     implementation(project(":samples:user-interface:draganddrop"))
     implementation(project(":samples:user-interface:haptics"))
+    implementation(project(":samples:user-interface:live-updates"))
     implementation(project(":samples:user-interface:picture-in-picture"))
     implementation(project(":samples:user-interface:predictiveback"))
     implementation(project(":samples:user-interface:quicksettings"))
