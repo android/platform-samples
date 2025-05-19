@@ -82,11 +82,8 @@ import java.util.concurrent.Executors
 @Composable
 fun CameraXBasic(modifier: Modifier = Modifier) {
     var showCapturedImage by remember { mutableStateOf<Uri?>(null) }
-
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
-    val imageCaptureCallbackExecutor: ExecutorService =
-        remember { Executors.newSingleThreadExecutor() }
-
+    val imageCaptureCallbackExecutor: ExecutorService = remember { Executors.newSingleThreadExecutor() }
     val viewModel = remember { CameraXBasicViewModel() }
 
     DisposableEffect(Unit) {
