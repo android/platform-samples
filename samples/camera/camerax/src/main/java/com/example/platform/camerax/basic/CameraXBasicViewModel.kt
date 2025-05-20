@@ -37,6 +37,7 @@ import androidx.camera.lifecycle.awaitInstance
 import androidx.compose.ui.geometry.Offset
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.awaitCancellation
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -52,7 +53,7 @@ import java.util.concurrent.ExecutorService
  * functionality using CameraX. It exposes a [StateFlow] for the camera preview [SurfaceRequest]
  * to be used in a composable.
  */
-class CameraXBasicViewModel {
+class CameraXBasicViewModel : ViewModel() {
     private val _surfaceRequest = MutableStateFlow<SurfaceRequest?>(null)
     val surfaceRequest: StateFlow<SurfaceRequest?> = _surfaceRequest
     private var surfaceMeteringPointFactory: SurfaceOrientedMeteringPointFactory? = null

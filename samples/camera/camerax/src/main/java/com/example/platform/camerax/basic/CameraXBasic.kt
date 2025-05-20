@@ -35,7 +35,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -86,7 +85,7 @@ fun CameraXBasic(modifier: Modifier = Modifier) {
     var showCapturedImage by remember { mutableStateOf<Uri?>(null) }
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val imageCaptureCallbackExecutor: ExecutorService = remember { Executors.newSingleThreadExecutor() }
-    val viewModel = remember { CameraXBasicViewModel() }
+    val viewModel = viewModel { CameraXBasicViewModel() }
 
     DisposableEffect(Unit) {
         onDispose {
