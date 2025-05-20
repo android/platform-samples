@@ -269,7 +269,7 @@ private fun CameraPreviewContent(
 
             Button(
                 onClick = onTakePhotoClick,
-                modifier
+                modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(16.dp),
             ) { Text("Take Photo") }
