@@ -63,6 +63,7 @@ import androidx.compose.ui.unit.round
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.PermissionState
@@ -84,7 +85,7 @@ fun CameraXBasic(modifier: Modifier = Modifier) {
     var showCapturedImage by remember { mutableStateOf<Uri?>(null) }
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
     val imageCaptureCallbackExecutor: ExecutorService = remember { Executors.newSingleThreadExecutor() }
-    val viewModel = remember { CameraXBasicViewModel() }
+    val viewModel = viewModel { CameraXBasicViewModel() }
 
     DisposableEffect(Unit) {
         onDispose {
@@ -92,14 +93,13 @@ fun CameraXBasic(modifier: Modifier = Modifier) {
         }
     }
 
-    Box(modifier = Modifier.fillMaxSize()) {
+    Box(modifier = modifier.fillMaxSize()) {
         ContentWithPermissionHandling(
             cameraPermissionState = cameraPermissionState,
             showCapturedImage = showCapturedImage,
             onShowCapturedImageChange = { showCapturedImage = it },
             viewModel = viewModel,
-            imageCaptureCallbackExecutor = imageCaptureCallbackExecutor,
-            modifier = modifier,
+            imageCaptureCallbackExecutor = imageCaptureCallbackExecutor
         )
     }
 }
@@ -131,7 +131,7 @@ private fun ContentWithPermissionHandling(
     when (cameraPermissionState.status) {
         is PermissionStatus.Granted -> {
             if (showCapturedImage != null) {
-                CapturedImageView(uri = showCapturedImage) {
+                CapturedImageView(uri = showCapturedImage, modifier = modifier) {
                     onShowCapturedImageChange(null)
                 }
             } else {
@@ -152,8 +152,9 @@ private fun ContentWithPermissionHandling(
         }
 
         is PermissionStatus.Denied -> CameraPermissionDeniedView(
-            cameraPermissionState.status,
-            cameraPermissionState,
+            status = cameraPermissionState.status,
+            cameraPermissionState = cameraPermissionState,
+            modifier = modifier
         )
     }
 }
@@ -171,9 +172,10 @@ private fun ContentWithPermissionHandling(
 private fun CameraPermissionDeniedView(
     status: PermissionStatus,
     cameraPermissionState: PermissionState,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -232,7 +234,7 @@ private fun CameraPreviewContent(
 
     surfaceRequest?.let { request ->
         val coordinateTransformer = remember { MutableCoordinateTransformer() }
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(modifier = modifier.fillMaxSize()) {
             CameraXViewfinder(
                 surfaceRequest = request,
                 coordinateTransformer = coordinateTransformer,
@@ -263,14 +265,13 @@ private fun CameraPreviewContent(
                         .size(48.dp),
                 )
             }
-            Column(
+
+            Button(
+                onClick = onTakePhotoClick,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .padding(16.dp),
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Button(onClick = onTakePhotoClick) { Text("Take Photo") }
-            }
+            ) { Text("Take Photo") }
         }
     }
 }
@@ -283,9 +284,9 @@ private fun CameraPreviewContent(
  *                  (e.g., clicks the back button).
  */
 @Composable
-fun CapturedImageView(uri: Uri, onDismiss: () -> Unit) {
+fun CapturedImageView(uri: Uri, modifier: Modifier = Modifier, onDismiss: () -> Unit = {}) {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
     ) {
         Image(
             painter = rememberAsyncImagePainter(uri),
