@@ -99,8 +99,7 @@ fun CameraXBasic(modifier: Modifier = Modifier) {
             showCapturedImage = showCapturedImage,
             onShowCapturedImageChange = { showCapturedImage = it },
             viewModel = viewModel,
-            imageCaptureCallbackExecutor = imageCaptureCallbackExecutor,
-            modifier = Modifier,
+            imageCaptureCallbackExecutor = imageCaptureCallbackExecutor
         )
     }
 }
