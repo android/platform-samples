@@ -43,7 +43,7 @@ class SpringViewModel(
         @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.BAKLAVA)
         fun isSupportedOnDevice(context: Context): Boolean {
             if (!isSupportedSDK()) return false
-            val vibrator = ContextCompat.getSystemService(context, Vibrator::class.java)!!
+            val vibrator = ContextCompat.getSystemService(context, Vibrator::class.java) ?: return false
             return vibrator.areEnvelopeEffectsSupported() ?: false
         }
 
@@ -59,7 +59,7 @@ class SpringViewModel(
                 if (!isSupportedOnDevice(application)) {
                     messageToUser = application.getString(R.string.message_not_supported)
                 }
-                val vibrator = ContextCompat.getSystemService(application, Vibrator::class.java)!!
+                val vibrator = ContextCompat.getSystemService(application, Vibrator::class.java) ?: error("Vibrator service not available")
                 return SpringViewModel(messageToUser = messageToUser, vibrator = vibrator) as T
             }
         }

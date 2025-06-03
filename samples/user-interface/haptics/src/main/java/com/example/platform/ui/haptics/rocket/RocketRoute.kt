@@ -88,7 +88,6 @@ fun RocketExampleScreen(messageToUser: String, vibrator: Vibrator) {
     var componentHeight by remember { mutableStateOf(0.dp) }
     var componentWidth by remember { mutableStateOf(0.dp) }
 
-    var rocketYStartPosition by remember { mutableIntStateOf(0) }
     var inFlight by remember { mutableStateOf(false) }
     var rocketPositionY by remember { mutableFloatStateOf(0f) }
     val animation = remember { Animatable(0f) }
@@ -133,7 +132,6 @@ fun RocketExampleScreen(messageToUser: String, vibrator: Vibrator) {
                 .onGloballyPositioned {
                     componentHeight = with(density) { it.size.height.toDp() - FLOOR_HEIGHT_DP }
                     componentWidth = with(density) { it.size.width.toDp() }
-                    rocketYStartPosition = componentHeight.value.toInt()
                 },
         ) {
             if (!inFlight) DrawText(stringResource(R.string.rocket_tap_to_launch))
@@ -193,7 +191,7 @@ private fun DrawRocket(
             .height(ROCKET_HEIGHT_DP)
             .offset(rocketX, rocketY),
         painter = painterResource(id = resId),
-        contentDescription = "Rocket without flame",
+        contentDescription = if (launched) stringResource(R.string.rocket_content_description_launching) else stringResource(R.string.rocket_content_description_idle),
     )
 }
 

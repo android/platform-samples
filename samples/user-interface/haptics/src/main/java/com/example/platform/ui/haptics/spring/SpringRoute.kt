@@ -205,7 +205,7 @@ fun SpringExampleScreen(messageToUser: String, vibrator: Vibrator) {
                     .background(Color.Transparent),
             ) {
                 if (!isAnimating) {
-                    DrawText("Tap to restart")
+                    DrawText(stringResource(R.string.spring_tap_to_restart))
                 }
                 DrawSpring(MaterialTheme.colorScheme.primaryContainer, springX, springY)
                 DrawFloor(MaterialTheme.colorScheme.primaryContainer)
@@ -253,7 +253,7 @@ private fun playEnvelopeVibration(
     require(sharpness in 0f..1f) { "Sharpness must be between 0 and 1." }
     require(intensity in 0f..1f) { "intensity must be between 0 and 1." }
 
-    val minControlPointDurationMs = vibrator.envelopeEffectInfo.minControlPointDurationMillis
+    val minControlPointDurationMs = vibrator.envelopeEffectInfo.minControlPointDurationMillis ?: return
 
     // Calculate the fade-out duration of the vibration based on the vertical velocity.
     val fadeOutDuration = ((abs(velocityY) / GRAVITY) * FRAME_DELAY_MS).toLong()

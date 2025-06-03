@@ -44,7 +44,7 @@ class RocketViewModel(
         @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.BAKLAVA)
         fun isSupportedDevice(context: Context): Boolean {
             if (!isSupportedSDK()) return false
-            val vibrator = ContextCompat.getSystemService(context, Vibrator::class.java)!!
+            val vibrator = ContextCompat.getSystemService(context, Vibrator::class.java) ?: return false
             return vibrator.areEnvelopeEffectsSupported() ?: false
         }
 
