@@ -24,6 +24,7 @@ import android.app.NotificationManager.IMPORTANCE_DEFAULT
 import android.content.Context
 import android.graphics.Color
 import android.os.Build
+import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import androidx.annotation.RequiresApi
@@ -188,10 +189,13 @@ object SnackbarNotificationManager {
 
         @RequiresApi(Build.VERSION_CODES.O)
         fun buildBaseNotification(appContext: Context, orderState: OrderState): Notification.Builder {
-            var notificationBuilder = Notification.Builder(appContext, CHANNEL_ID)
+            val promotedExtras = Bundle()
+            promotedExtras.putBoolean("android.requestPromotedOngoing", true)
+            val notificationBuilder = Notification.Builder(appContext, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_launcher_foreground)
                 .setOngoing(true)
                 .setColorized(true)
+                .addExtras(promotedExtras)
 
             when (orderState) {
                 INITIALIZING -> {}

@@ -16,7 +16,8 @@
   -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <!--Permission for posting notifications-->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
+    <!--Permission for live update eligibility-->
+    <uses-permission android:name="POST_PROMOTED_NOTIFICATIONS" />
 </manifest>
