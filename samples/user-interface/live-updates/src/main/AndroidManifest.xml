@@ -19,5 +19,5 @@
     <!--Permission for posting notifications-->
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
     <!--Permission for live update eligibility-->
-    <uses-permission android:name="POST_PROMOTED_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.POST_PROMOTED_NOTIFICATIONS" />
 </manifest>
