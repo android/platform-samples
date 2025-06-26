@@ -81,6 +81,7 @@ fun LiveUpdateSample() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.BAKLAVA)
 fun onCheckout() {
     SnackbarNotificationManager.start()
 }
