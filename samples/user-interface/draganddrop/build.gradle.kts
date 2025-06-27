@@ -21,7 +21,7 @@ plugins {
 
 android {
     namespace = "com.example.platform.ui.draganddrop"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21
