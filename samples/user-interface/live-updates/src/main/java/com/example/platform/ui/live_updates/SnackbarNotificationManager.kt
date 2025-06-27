@@ -149,9 +149,9 @@ object SnackbarNotificationManager {
                 1f,
             ).toArgb()
             val segmentColor = Color.valueOf(
-                134f / 255f,
-                247f / 255f,
-                250f / 255f,
+                134f / 255f, // Normalize red value to be between 0.0 and 1.0
+                247f / 255f, // Normalize green value to be between 0.0 and 1.0
+                250f / 255f, // Normalize blue value to be between 0.0 and 1.0
                 1f,
             ).toArgb()
             var progressStyle = NotificationCompat.ProgressStyle()
