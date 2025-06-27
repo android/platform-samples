@@ -23,7 +23,7 @@ plugins {
 
 android {
     namespace = "com.example.platform.connectivity.bluetooth.ble"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21

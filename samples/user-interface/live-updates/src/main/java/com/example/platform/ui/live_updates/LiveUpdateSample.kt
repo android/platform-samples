@@ -48,7 +48,7 @@ import com.google.accompanist.permissions.rememberPermissionState
 import com.google.accompanist.permissions.shouldShowRationale
 import kotlinx.coroutines.launch
 
-@RequiresApi(Build.VERSION_CODES.O)
+@RequiresApi(Build.VERSION_CODES.BAKLAVA)
 @Composable
 fun LiveUpdateSample() {
     val notificationManager =
@@ -81,6 +81,7 @@ fun LiveUpdateSample() {
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.BAKLAVA)
 fun onCheckout() {
     SnackbarNotificationManager.start()
 }
