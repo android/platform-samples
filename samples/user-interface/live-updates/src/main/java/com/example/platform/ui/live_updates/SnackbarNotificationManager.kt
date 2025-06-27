@@ -143,9 +143,9 @@ object SnackbarNotificationManager {
         @RequiresApi(Build.VERSION_CODES.BAKLAVA)
         fun buildBaseProgressStyle(orderState: OrderState): ProgressStyle {
             val pointColor = Color.valueOf(
-                236f / 255f,
-                183f / 255f,
-                255f / 255f,
+                236f / 255f, // Normalize red value to be between 0.0 and 1.0
+                183f / 255f, // Normalize green value to be between 0.0 and 1.0
+                255f / 255f, // Normalize blue value to be between 0.0 and 1.0
                 1f,
             ).toArgb()
             val segmentColor = Color.valueOf(
