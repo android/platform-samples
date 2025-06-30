@@ -64,6 +64,7 @@ import com.example.platform.shared.MinSdkBox
 import com.example.platform.storage.mediastore.MediaStoreQuerySample
 import com.example.platform.storage.mediastore.SelectedPhotosAccessSample
 import com.example.platform.storage.photopicker.PhotoPickerSample
+import com.example.platform.storage.storageaccessframework.GetContentSample
 import com.example.platform.ui.appwidgets.AppWidgets
 import com.example.platform.ui.constraintlayout.AdvancedArrangementFragment
 import com.example.platform.ui.constraintlayout.AdvancedChainsFragment
@@ -579,6 +580,14 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/training/data-storage/shared/media#media_store",
             apiSurface = StorageApiSurface,
             content = { MediaStoreQuerySample() },
+        ),
+        ComposableSampleDemo(
+            id = "storageaccessframework-getcontent",
+            name = "Storage Access Framework - GET_CONTENT",
+            description = "Open a document using the Storage Access Framework",
+            documentation = "https://developer.android.com/training/data-storage/shared/documents-files#open-file",
+            apiSurface = StorageApiSurface,
+            content = { GetContentSample() },
         ),
         ComposableSampleDemo(
             id = "selected-photos-access",
