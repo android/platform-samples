@@ -35,6 +35,10 @@ import com.example.platform.ui.haptics.expand.ExpandRoute
 import com.example.platform.ui.haptics.expand.ExpandViewModel
 import com.example.platform.ui.haptics.resist.ResistRoute
 import com.example.platform.ui.haptics.resist.ResistViewModel
+import com.example.platform.ui.haptics.rocket.RocketRoute
+import com.example.platform.ui.haptics.rocket.RocketViewModel
+import com.example.platform.ui.haptics.spring.SpringRoute
+import com.example.platform.ui.haptics.spring.SpringViewModel
 import com.example.platform.ui.haptics.wobble.WobbleRoute
 import com.example.platform.ui.haptics.wobble.WobbleViewModel
 import kotlinx.coroutines.launch
@@ -102,4 +106,24 @@ fun Wobble() {
         factory = WobbleViewModel.provideFactory(application),
     )
     WobbleRoute(viewModel)
+}
+
+@Composable
+fun Spring() {
+    val context = LocalContext.current
+    val application = context.applicationContext as Application
+    val viewModel: SpringViewModel = viewModel(
+        factory = SpringViewModel.provideFactory(application),
+    )
+    SpringRoute(viewModel)
+}
+
+@Composable
+fun Rocket() {
+    val context = LocalContext.current
+    val application = context.applicationContext as Application
+    val viewModel: RocketViewModel = viewModel(
+        factory = RocketViewModel.provideFactory(application),
+    )
+    RocketRoute(viewModel)
 }
