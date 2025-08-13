@@ -47,6 +47,12 @@
             <meta-data
                 android:name="android.service.quicksettings.TOGGLEABLE_TILE"
                 android:value="true" />
+            <!--
+                  Categorize this tile as a Utility so that it's organized in that category in
+                  Quick Settings edit. Available in Android 16.1.
+             -->
+            <meta-data android:name="android.service.quicksettings.TILE_CATEGORY"
+                android:value="android.service.quicksettings.CATEGORY_UTILITIES" />
         </service>
 
     </application>
