@@ -18,4 +18,4 @@ package com.example.platform.ui.windowmanager.demos
 
 import android.app.Activity
 
-class DemoItem(val description: String, val buttonTitle: String, val clazz: Class<out Activity>)
+class DemoItem(val description: String, val title: String, val clazz: Class<out Activity>)

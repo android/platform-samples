@@ -28,7 +28,7 @@ android {
     defaultConfig {
         applicationId = "com.example.platform"
         minSdk = 21
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":shared"))
     implementation(project(":samples:accessibility"))
     implementation(project(":samples:camera:camera2"))
+    implementation(project(":samples:camera:camerax"))
     implementation(project(":samples:connectivity:audio"))
     implementation(project(":samples:connectivity:bluetooth:ble"))
     implementation(project(":samples:connectivity:bluetooth:companion"))
@@ -92,6 +93,7 @@ dependencies {
     implementation(project(":samples:user-interface:constraintlayout"))
     implementation(project(":samples:user-interface:draganddrop"))
     implementation(project(":samples:user-interface:haptics"))
+    implementation(project(":samples:user-interface:live-updates"))
     implementation(project(":samples:user-interface:picture-in-picture"))
     implementation(project(":samples:user-interface:predictiveback"))
     implementation(project(":samples:user-interface:quicksettings"))

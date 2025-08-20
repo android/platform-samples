@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Live Updates</string>
+    <!-- Notification permission -->
+    <string name="permission_grant">Grant</string>
+    <string name="permission_message">Please grant the notification permission.</string>
+    <string name="permission_rationale">Notifications are used for order tracking.</string>
+    <string name="live_update_summary_text">Clicking the checkout button will simulate the tracking of an order with notifications styled with ProgressStyle.</string>
+    <string name="checkout">Checkout</string>
+    <string name="checking_out">Order placed</string>
+
+</resources>

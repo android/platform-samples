@@ -47,47 +47,47 @@ class WindowDemosActivity : AppCompatActivity() {
 
         val demoItems = listOf(
             DemoItem(
-                buttonTitle = getString(R.string.activity_embedding),
+                title = getString(R.string.activity_embedding),
                 description = getString(R.string.activity_embedding_description),
                 clazz = SplitActivityList::class.java,
             ),
             DemoItem(
-                buttonTitle = getString(R.string.display_features),
+                title = getString(R.string.display_features),
                 description = getString(R.string.show_all_display_features_config_change_description),
                 clazz = DisplayFeaturesActivity::class.java,
             ),
             DemoItem(
-                buttonTitle = getString(R.string.window_metrics),
+                title = getString(R.string.window_metrics),
                 description = getString(R.string.window_metrics_description),
                 clazz = WindowMetricsActivity::class.java,
             ),
             DemoItem(
-                buttonTitle = getString(R.string.split_layout),
+                title = getString(R.string.split_layout),
                 description = getString(R.string.split_layout_demo_description),
                 clazz = SplitLayoutActivity::class.java,
             ),
             DemoItem(
-                buttonTitle = getString(R.string.split_layout_with_attributes),
+                title = getString(R.string.split_layout_with_attributes),
                 description = getString(R.string.split_layout_attributes_demo_description),
                 clazz = SplitAttributesToggleMainActivity::class.java,
             ),
             DemoItem(
-                buttonTitle = getString(R.string.split_layout_with_state),
+                title = getString(R.string.split_layout_with_state),
                 description = getString(R.string.split_layout_with_state_demo_description),
                 clazz = SplitDeviceStateActivityA::class.java,
             ),
             DemoItem(
-                buttonTitle = getString(R.string.media_player_activity),
+                title = getString(R.string.media_player_activity),
                 description = getString(R.string.media_player_activity_demo_description),
                 clazz = MediaPlayerActivity::class.java,
             ),
             DemoItem(
-                buttonTitle = getString(R.string.rear_display_activity),
+                title = getString(R.string.rear_display_activity),
                 description = getString(R.string.rear_display_activity_demo_description),
                 clazz = RearDisplayModeActivity::class.java,
             ),
             DemoItem(
-                buttonTitle = getString(R.string.dual_screen_activity),
+                title = getString(R.string.dual_screen_activity),
                 description = getString(R.string.dual_screen_activity_demo_description),
                 clazz = DualScreenActivity::class.java,
             ),

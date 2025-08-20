@@ -53,6 +53,7 @@ import com.example.platform.ui.appwidgets.glance.layout.collections.ImageGridApp
 import com.example.platform.ui.appwidgets.glance.layout.collections.ImageTextListAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.text.LongTextAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.text.TextWithImageAppWidgetReceiver
+import com.example.platform.ui.appwidgets.glance.layout.toolbars.ExpressiveToolbarAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.toolbars.SearchToolBarAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.toolbars.ToolBarAppWidgetReceiver
 import kotlinx.coroutines.CoroutineScope
@@ -303,5 +304,11 @@ private val canonicalLayoutWidgets = listOf(
         rowDescription = R.string.cl_description_search_toolbar,
         imageRes = R.drawable.cl_activity_row_search_toolbar,
         receiver = SearchToolBarAppWidgetReceiver::class.java,
+    ),
+    CanonicalLayoutRowData(
+        rowTitle = R.string.cl_title_expressive_toolbar,
+        rowDescription = R.string.cl_description_expressive_toolbar,
+        imageRes = R.drawable.cl_activity_row_expressive_toolbar,
+        receiver = ExpressiveToolbarAppWidgetReceiver::class.java,
     ),
 )

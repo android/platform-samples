@@ -33,6 +33,12 @@ val CameraCamera2ApiSurface = ApiSurface(
     null,
 )
 
+val CameraCameraXApiSurface = ApiSurface(
+    "camera-camerax",
+    "CameraX",
+    null,
+)
+
 val ConnectivityAudioApiSurface = ApiSurface(
     "connectivity-audio",
     "Connectivity Audio",
@@ -141,6 +147,12 @@ val UserInterfaceHapticsApiSurface = ApiSurface(
     null,
 )
 
+val UserInterfaceLiveUpdatesApiSurface = ApiSurface(
+    "live-updates",
+    "User Interface - Live Updates",
+    null,
+)
+
 val UserInterfacePictureInPictureApiSurface = ApiSurface(
     "user-interface-picture-in-picture",
     "User Interface - Picture In Picture",
@@ -186,6 +198,7 @@ val UserInterfaceWindowManagerApiSurface = ApiSurface(
 val API_SURFACES = listOf(
     AccessiblityApiSurface,
     CameraCamera2ApiSurface,
+    CameraCameraXApiSurface,
     ConnectivityAudioApiSurface,
     ConnectivityBluetoothBleApiSurface,
     ConnectivityBluetoothCompanionApiSurface,
@@ -204,6 +217,7 @@ val API_SURFACES = listOf(
     UserInterfaceConstraintLayoutApiSurface,
     UserInterfaceDragAndDropApiSurface,
     UserInterfaceHapticsApiSurface,
+    UserInterfaceLiveUpdatesApiSurface,
     UserInterfacePictureInPictureApiSurface,
     UserInterfacePredictiveBackApiSurface,
     UserInterfaceQuickSettingsApiSurface,

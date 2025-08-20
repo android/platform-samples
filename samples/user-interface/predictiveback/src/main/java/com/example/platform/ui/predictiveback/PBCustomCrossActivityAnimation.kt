@@ -17,6 +17,7 @@
 package com.example.platform.ui.predictiveback
 
 import android.os.Bundle
+import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import com.example.platform.ui.predictiveback.databinding.ActivityCustomCrossAnimationBinding
@@ -28,6 +29,8 @@ class PBCustomCrossActivityAnimation : AppCompatActivity() {
     @RequiresApi(34)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        enableEdgeToEdge()
 
         binding = ActivityCustomCrossAnimationBinding.inflate(layoutInflater)
         setContentView(binding.root)

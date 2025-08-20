@@ -22,6 +22,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import androidx.window.layout.WindowMetricsCalculator
 import androidx.window.core.layout.WindowSizeClass
+import androidx.window.core.layout.WindowSizeClass.Companion.HEIGHT_DP_EXPANDED_LOWER_BOUND
+import androidx.window.core.layout.WindowSizeClass.Companion.HEIGHT_DP_MEDIUM_LOWER_BOUND
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_EXPANDED_LOWER_BOUND
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
+import androidx.window.core.layout.computeWindowSizeClass
 
 import com.example.platform.ui.windowmanager.infolog.InfoLogAdapter
 
@@ -48,9 +53,38 @@ class WindowMetricsActivity : AppCompatActivity() {
         val width = windowMetrics.bounds.width()
         val height = windowMetrics.bounds.height()
         val density = resources.displayMetrics.density
-        val windowSizeClass = WindowSizeClass.compute(width/density, height/density)
+        val windowSizeClass = WindowSizeClass.BREAKPOINTS_V1.computeWindowSizeClass(width/density, height/density)
+
         adapter.append("WindowMetrics update", "width: $width, height: $height")
-        adapter.append("WindowSize Class", "" + windowSizeClass.windowHeightSizeClass + "\n" + windowSizeClass.windowWidthSizeClass)
+        adapter.append("WindowSize Class", "Height: " + getHeightSizeClass(windowSizeClass) + "\nWidth: " + getWidthSizeClass(windowSizeClass))
         adapter.notifyDataSetChanged()
+    }
+
+    private fun getWidthSizeClass(sizeClass: WindowSizeClass): String {
+        return when {
+            sizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_EXPANDED_LOWER_BOUND) -> {
+                "EXPANDED"
+            }
+            sizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND) -> {
+                "MEDIUM"
+            }
+            else -> {
+                "COMPACT"
+            }
+        }
+    }
+
+    private fun getHeightSizeClass(sizeClass: WindowSizeClass): String {
+        return when {
+            sizeClass.isHeightAtLeastBreakpoint(HEIGHT_DP_EXPANDED_LOWER_BOUND) -> {
+                "EXPANDED"
+            }
+            sizeClass.isHeightAtLeastBreakpoint(HEIGHT_DP_MEDIUM_LOWER_BOUND) -> {
+                "MEDIUM"
+            }
+            else -> {
+                "COMPACT"
+            }
+        }
     }
 }
