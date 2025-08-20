@@ -23,7 +23,7 @@ plugins {
 
 android {
     namespace = "com.example.platform"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.platform"

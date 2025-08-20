@@ -30,6 +30,7 @@ material = "1.12.0"
 coil = "2.4.0"
 navigationCompose = "2.8.7"
 coroutines = "1.7.3"
+photopickerCompose = "1.0.0-alpha01"
 play-services-location = "21.1.0"
 
 accompanist = "0.32.0"
@@ -63,6 +64,7 @@ tensorflowLiteSupport = "0.4.2"
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-fragment-compose = { module = "androidx.fragment:fragment-compose", version.ref = "fragmentCompose" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
+androidx-photopicker-compose = { module = "androidx.photopicker:photopicker-compose", version.ref = "photopickerCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }

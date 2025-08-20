@@ -24,7 +24,7 @@ plugins {
 
 android {
     namespace = "com.example.platform.storage"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 21
@@ -46,6 +46,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.androidx.photopicker.compose)
 
     implementation(project(":shared"))
 
