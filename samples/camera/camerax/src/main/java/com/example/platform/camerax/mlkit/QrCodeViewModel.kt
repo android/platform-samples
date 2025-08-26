@@ -38,7 +38,7 @@ class QrCodeViewModel(barcode: Barcode) {
     init {
         when (barcode.valueType) {
             Barcode.TYPE_URL -> {
-                qrContent = barcode.url!!.url!!
+                qrContent = barcode.url?.url ?: "Invalid URL"
                 qrCodeTouchCallback = { v: View, e: MotionEvent ->
                     if (e.action == MotionEvent.ACTION_DOWN && boundingRect.contains(
                             e.x.toInt(), e.y.toInt(),
