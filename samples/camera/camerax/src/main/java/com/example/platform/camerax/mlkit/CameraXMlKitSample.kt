@@ -65,7 +65,7 @@ fun CameraXMlKit() {
 
     // Request camera permission
     val cameraPermissionState = rememberPermissionState(Manifest.permission.CAMERA)
-    var barcodeScanner = remember {
+    val barcodeScanner = remember {
         BarcodeScanning.getClient(
             BarcodeScannerOptions.Builder()
                 .setBarcodeFormats(Barcode.FORMAT_QR_CODE)
@@ -189,7 +189,7 @@ fun CameraPreview(
         try {
             cameraController.cameraInfo
         } catch (e: Exception) {
-            Log.e("Test", "Camera error: $e")
+            Log.e("CameraXMlKit", "Camera error: $e")
             cameraError = true
         }
     }
