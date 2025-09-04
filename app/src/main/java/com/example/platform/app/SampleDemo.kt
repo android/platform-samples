@@ -128,6 +128,7 @@ import com.example.platform.ui.text.LineBreak
 import com.example.platform.ui.text.Linkify
 import com.example.platform.ui.text.TextSpanFragment
 import com.example.platform.ui.windowmanager.demos.WindowDemosActivity
+import com.google.uwb.hellouwb.ui.UwbRangingActivity
 
 interface SampleDemo : CatalogItem {
     override val id: String
@@ -366,6 +367,14 @@ val SAMPLE_DEMOS by lazy {
                     TelecomCallSample()
                 }
             },
+        ),
+        ActivitySampleDemo(
+            id = "connectivity-uwb-ranging",
+            name = "UWB Ranging",
+            description = "Demonstrates how to use the UWB APIs to perform ranging.",
+            documentation = "https://developer.android.com/guide/topics/connectivity/uwb",
+            apiSurface = ConnectivityUwbRangingApiSurface,
+            content = UwbRangingActivity::class.java
         ),
         ComposableSampleDemo(
             id = "pdf-renderer",
