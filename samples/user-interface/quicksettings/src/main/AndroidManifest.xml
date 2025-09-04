@@ -33,7 +33,6 @@
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE" />
             </intent-filter>
-
             <!--
                 This tile listens and keeps track of its state when the app calls
                 [TileService.requestListeningState].
@@ -47,6 +46,14 @@
             <meta-data
                 android:name="android.service.quicksettings.TOGGLEABLE_TILE"
                 android:value="true" />
+            <!--
+                  Categorize this tile as a Utility so that it's organized in that category in
+                  Quick Settings edit. Available in Android 16 QPR 2
+                  Build.VERSION_CODES_FULL.BAKLAVA_1
+             -->
+            <meta-data
+                android:name="android.service.quicksettings.TILE_CATEGORY"
+                android:value="android.service.quicksettings.CATEGORY_UTILITIES" />
         </service>
 
     </application>

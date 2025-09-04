@@ -48,12 +48,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-//@Sample(
-//    name = "Selected Photos Access",
-//    description = "Check and request storage permissions",
-//    documentation = "https://developer.android.com/about/versions/14/changes/partial-photo-video-access",
-//)
-//@RequiresPermission(anyOf = [READ_MEDIA_IMAGES, READ_MEDIA_VIDEO, READ_EXTERNAL_STORAGE])
 @Composable
 fun SelectedPhotosAccessSample() {
     val context = LocalContext.current

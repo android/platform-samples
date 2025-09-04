@@ -50,12 +50,6 @@ private const val TAG = "DragDropSample"
 private const val MAX_LENGTH = 200
 
 @RequiresApi(24)
-/*@Sample(
-    name = "Drag and Drop",
-    description = "Demonstrates basic Drag and Drop functionality.",
-    documentation = "https://developer.android.com/develop/ui/views/touch-and-input/drag-drop",
-)
- */
 @Deprecated("The new sample include segregated examples individually for Views, DragAndDropHelper, RichContentReceiver along with Compose")
 class DragAndDropActivity : AppCompatActivity() {
 

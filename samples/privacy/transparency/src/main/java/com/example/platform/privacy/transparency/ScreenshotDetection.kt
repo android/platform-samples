@@ -39,10 +39,6 @@ import androidx.fragment.app.Fragment
 import java.text.DateFormat
 import java.util.Date
 
-//@Sample(
-//    name = "Screenshot Detection",
-//    description = "This sample shows how to detect that the user capture the screen in Android 14 onwards",
-//)
 @RequiresApi(Build.VERSION_CODES.UPSIDE_DOWN_CAKE)
 class ScreenshotDetectionSample : Fragment() {
 

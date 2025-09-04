@@ -27,7 +27,10 @@ import com.example.platform.accessibility.SpeakableText
 import com.example.platform.camera.imagecapture.Camera2ImageCapture
 import com.example.platform.camera.imagecapture.Camera2UltraHDRCapture
 import com.example.platform.camera.preview.Camera2Preview
+import com.example.platform.camerax.video.CameraXVideo
 import com.example.platform.camerax.basic.CameraXBasic
+import com.example.platform.camerax.extensions.CameraXExtensions
+import com.example.platform.camerax.mlkit.CameraXMlKit
 import com.example.platform.connectivity.audio.AudioCommsSample
 import com.example.platform.connectivity.bluetooth.ble.BLEScanIntentSample
 import com.example.platform.connectivity.bluetooth.ble.ConnectGATTSample
@@ -64,6 +67,7 @@ import com.example.platform.shared.MinSdkBox
 import com.example.platform.storage.mediastore.MediaStoreQuerySample
 import com.example.platform.storage.mediastore.SelectedPhotosAccessSample
 import com.example.platform.storage.photopicker.PhotoPickerSample
+import com.example.platform.storage.storageaccessframework.GetContentSample
 import com.example.platform.ui.appwidgets.AppWidgets
 import com.example.platform.ui.constraintlayout.AdvancedArrangementFragment
 import com.example.platform.ui.constraintlayout.AdvancedChainsFragment
@@ -229,6 +233,33 @@ val SAMPLE_DEMOS by lazy {
             apiSurface = CameraCameraXApiSurface,
             tags = listOf("CameraX"),
             content = { CameraXBasic() },
+        ),
+        ComposableSampleDemo(
+            id = "camerax-video-capture",
+            name = "CameraX • Basic Video Capture",
+            description = "This sample demonstrates how to capture a video using CameraX",
+            documentation = "https://developer.android.com/training/camerax",
+            apiSurface = CameraCameraXApiSurface,
+            tags = listOf("CameraX"),
+            content = { CameraXVideo() },
+        ),
+        ComposableSampleDemo(
+            id = "camerax-extensions",
+            name = "CameraX • Extensions",
+            description = "This sample demonstrates how to check for and utilize CameraX Extensions",
+            documentation = "https://developer.android.com/training/camerax",
+            apiSurface = CameraCameraXApiSurface,
+            tags = listOf("CameraX"),
+            content = { CameraXExtensions() },
+        ),
+        ComposableSampleDemo(
+            id = "camerax-ml-kit",
+            name = "CameraX • MLKit Sample",
+            description = "This sample demonstrates how to use MLKit with CameraX",
+            documentation = "https://developer.android.com/training/camerax",
+            apiSurface = CameraCameraXApiSurface,
+            tags = listOf("CameraX"),
+            content = { CameraXMlKit() },
         ),
 
         ComposableSampleDemo(
@@ -588,6 +619,14 @@ val SAMPLE_DEMOS by lazy {
             documentation = "https://developer.android.com/training/data-storage/shared/media#media_store",
             apiSurface = StorageApiSurface,
             content = { MediaStoreQuerySample() },
+        ),
+        ComposableSampleDemo(
+            id = "storageaccessframework-getcontent",
+            name = "Storage Access Framework - GET_CONTENT",
+            description = "Open a document using the Storage Access Framework",
+            documentation = "https://developer.android.com/training/data-storage/shared/documents-files#open-file",
+            apiSurface = StorageApiSurface,
+            content = { GetContentSample() },
         ),
         ComposableSampleDemo(
             id = "selected-photos-access",
