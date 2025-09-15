@@ -52,7 +52,7 @@ fun ShareSender() {
     ) {
         val context = LocalContext.current
         Title(text = "Send various data")
-        ShareButton(text = "Share plain text") { sharePlainText(context) }
+        ShareButton(text = "Share plain text (Demonstrates share callback)") { sharePlainText(context) }
         ShareButton(text = "Share rich text") { shareRichText(context) }
         ShareButton(text = "Share image") { shareImage(context) }
         ShareButton(text = "Share multiple images") { shareMultipleImages(context) }
@@ -99,13 +99,30 @@ private val filenames = listOf(
     "night_highrise.jpg",
 )
 
+/**
+ * Shares a text message and demonstrates how to set up a BroadcastReceiver to be
+ * notified who has received the data we shared. See [ShareResultReceiver].
+ */
 private fun sharePlainText(context: Context) {
-    context.startActivity(
-        ShareCompat.IntentBuilder(context)
+    if (Build.VERSION.SDK_INT >= 22) {
+        val share = Intent(Intent.ACTION_SEND)
+        share.setType("text/plain")
+        share.putExtra(Intent.EXTRA_TEXT,"Hello, world!")
+        val pendingIntent = PendingIntent.getBroadcast(
+            context, 1234,
+            Intent(context, ShareResultReceiver::class.java),
+            PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        )
+        context.startActivity(
+            Intent.createChooser(share, null, pendingIntent.intentSender)
+        )
+    } else {
+        context.startActivity(ShareCompat.IntentBuilder(context)
             .setType("text/plain")
             .setText("Hello, world!")
-            .createChooserIntent(),
-    )
+            .createChooserIntent()
+        )
+    }
 }
 
 private fun shareRichText(context: Context) {
