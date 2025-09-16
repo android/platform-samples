@@ -99,6 +99,10 @@ private val filenames = listOf(
     "night_highrise.jpg",
 )
 
+private const val PLAIN_TEXT_CONTENT = "Hello, world!"
+private const val PLAIN_TEXT_TYPE = "text/plain"
+private const val SHARE_TEXT_REQUEST_CODE = 1234
+
 /**
  * Shares a text message and demonstrates how to set up a BroadcastReceiver to be
  * notified who has received the data we shared. See [ShareResultReceiver].
@@ -106,10 +110,10 @@ private val filenames = listOf(
 private fun sharePlainText(context: Context) {
     if (Build.VERSION.SDK_INT >= 22) {
         val share = Intent(Intent.ACTION_SEND)
-        share.setType("text/plain")
-        share.putExtra(Intent.EXTRA_TEXT,"Hello, world!")
+        share.setType(PLAIN_TEXT_TYPE)
+        share.putExtra(Intent.EXTRA_TEXT, PLAIN_TEXT_CONTENT)
         val pendingIntent = PendingIntent.getBroadcast(
-            context, 1234,
+            context, SHARE_TEXT_REQUEST_CODE,
             Intent(context, ShareResultReceiver::class.java),
             PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
@@ -118,8 +122,8 @@ private fun sharePlainText(context: Context) {
         )
     } else {
         context.startActivity(ShareCompat.IntentBuilder(context)
-            .setType("text/plain")
-            .setText("Hello, world!")
+            .setType(PLAIN_TEXT_TYPE)
+            .setText(PLAIN_TEXT_CONTENT)
             .createChooserIntent()
         )
     }
