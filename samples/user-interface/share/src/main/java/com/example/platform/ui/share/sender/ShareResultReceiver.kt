@@ -25,7 +25,6 @@ import android.service.chooser.ChooserResult
 import android.service.chooser.ChooserResult.CHOOSER_RESULT_COPY
 import android.service.chooser.ChooserResult.CHOOSER_RESULT_EDIT
 import android.service.chooser.ChooserResult.CHOOSER_RESULT_SELECTED_COMPONENT
-import android.service.chooser.ChooserResult.CHOOSER_RESULT_UNKNOWN
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.content.IntentCompat
@@ -43,13 +42,12 @@ class ShareResultReceiver : BroadcastReceiver() {
                 Intent.EXTRA_CHOOSER_RESULT,
                 ChooserResult::class.java,
             )
-            if (chooserResult != null) {
-                Log.i(TAG, "isShortcut: ${chooserResult.isShortcut}")
-                Log.i(TAG, "type: ${typeToString(chooserResult.type)}")
-                Log.i(TAG, "componentName: ${chooserResult.selectedComponent}")
-            } else {
-                Log.i(TAG, "chooserResult is null")
-            }
+            chooserResult?.let {
+                Log.i(
+                    TAG,
+                    "Share callback: isShortcut: ${it.isShortcut}, type: ${typeToString(it.type)}, componentName: ${it.selectedComponent}",
+                )
+            } ?: Log.i(TAG, "chooserResult is null")
         } else {
             // This ComponentName represents the Activity that has received the data we shared.
             val componentName: ComponentName? = IntentCompat.getParcelableExtra(
@@ -66,7 +64,6 @@ class ShareResultReceiver : BroadcastReceiver() {
             CHOOSER_RESULT_SELECTED_COMPONENT -> "SELECTED_COMPONENT"
             CHOOSER_RESULT_COPY -> "COPY"
             CHOOSER_RESULT_EDIT -> "EDIT"
-            CHOOSER_RESULT_UNKNOWN -> "UNKNOWN"
             else -> "UNKNOWN"
         }
     }
