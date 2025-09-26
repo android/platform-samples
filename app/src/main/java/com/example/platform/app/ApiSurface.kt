@@ -197,6 +197,12 @@ val UserInterfaceWindowManagerApiSurface = ApiSurface(
     null,
 )
 
+val ConnectivityUwbRangingApiSurface = ApiSurface(
+    "connectivity-uwb-ranging",
+    "Connectivity UWB Ranging",
+    null,
+)
+
 val API_SURFACES = listOf(
     AccessiblityApiSurface,
     CameraCamera2ApiSurface,
@@ -206,6 +212,7 @@ val API_SURFACES = listOf(
     ConnectivityBluetoothCompanionApiSurface,
     ConnectivityCallNotificationApiSurface,
     ConnectivityTelecomApiSurface,
+    ConnectivityUwbRangingApiSurface,
     GraphicsPdfApiSurface,
     GraphicsUltraHdrApiSurface,
     LocationApiSurface,

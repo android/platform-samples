@@ -27,7 +27,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.platform"
-        minSdk = 21
+        minSdk = 23
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -80,6 +80,7 @@ dependencies {
     implementation(project(":samples:connectivity:bluetooth:companion"))
     implementation(project(":samples:connectivity:callnotification"))
     implementation(project(":samples:connectivity:telecom"))
+    implementation(project(":samples:connectivity:UwbRanging"))
     implementation(project(":samples:graphics:pdf"))
     implementation(project(":samples:graphics:ultrahdr"))
     implementation(project(":samples:location"))
