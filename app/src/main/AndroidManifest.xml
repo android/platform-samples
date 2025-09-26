@@ -14,7 +14,16 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      Module :samples:storage uses an androidx lib that requires a min sdk of 34.
+      Rather than updating the main app's minSdk, override those libraries minSdk.
+      Removing this would otherwise cause Manifest merger issue.
+      See https://developer.android.com/build/manage-manifests#merge_conflict_heuristics
+    -->
+    <uses-sdk tools:overrideLibrary="com.example.platform.storage, androidx.photopicker.compose"/>
 
     <application
         android:enableOnBackInvokedCallback="true"
@@ -22,6 +31,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true">
+
         <activity
             android:name=".app.MainActivity"
             android:exported="true"
@@ -33,7 +43,7 @@
             </intent-filter>
         </activity>
 
-        <!--required for TFLite/LiteRT style transfer demo -->
+    <!--required for TFLite/LiteRT style transfer demo -->
         <uses-library
             android:name="libOpenCL.so"
             android:required="false" />

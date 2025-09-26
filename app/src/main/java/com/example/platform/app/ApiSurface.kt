@@ -120,7 +120,9 @@ val PrivacyTransparencyApiSurface = ApiSurface(
 val StorageApiSurface = ApiSurface(
     "storage",
     "Storage",
-    "Android photo library access capabilities.\nPhoto Picker for unified device and cloud photo access, and MediaStore for detailed local media querying",
+    "Android photo library access capabilities.\nPhoto Picker for unified device and "
+            + "cloud photo access, and MediaStore for detailed local media querying.\n\n"
+            + "WARNING: These samples only work on devices with Android 14 or higher."
 )
 
 val UserInterfaceAppWidgetsApiSurface = ApiSurface(
