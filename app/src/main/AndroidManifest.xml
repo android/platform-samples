@@ -43,7 +43,7 @@
             </intent-filter>
         </activity>
 
-    <!--required for TFLite/LiteRT style transfer demo -->
+        <!--required for TFLite/LiteRT style transfer demo -->
         <uses-library
             android:name="libOpenCL.so"
             android:required="false" />
