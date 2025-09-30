@@ -14,7 +14,16 @@
   ~ limitations under the License.
   -->
 
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      Modules/samples below use a lib that requires a minSdk higher than that of the.
+      main app. Rather than updating the main app's minSdk, override those libraries minSdk.
+      Removing this would otherwise cause a Manifest merger issue.
+      See https://developer.android.com/build/manage-manifests#merge_conflict_heuristics
+    -->
+    <uses-sdk tools:overrideLibrary="com.example.platform.storage, androidx.photopicker.compose, com.example.platform.connectivity.uwb" />
 
     <application
         android:enableOnBackInvokedCallback="true"
@@ -22,6 +31,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true">
+
         <activity
             android:name=".app.MainActivity"
             android:exported="true"
