@@ -18,9 +18,9 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--
-      Module :samples:storage uses an androidx lib that requires a min sdk of 34.
-      Rather than updating the main app's minSdk, override those libraries minSdk.
-      Removing this would otherwise cause Manifest merger issue.
+      Modules/samples below use a lib that requires a minSdk higher than that of the.
+      main app. Rather than updating the main app's minSdk, override those libraries minSdk.
+      Removing this would otherwise cause a Manifest merger issue.
       See https://developer.android.com/build/manage-manifests#merge_conflict_heuristics
     -->
     <uses-sdk tools:overrideLibrary="com.example.platform.storage, androidx.photopicker.compose, com.example.platform.connectivity.uwb" />
