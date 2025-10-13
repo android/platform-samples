@@ -233,7 +233,7 @@ object SnackbarNotificationManager {
                                 null, "Rate delivery", null).build()
                         )
             }
-            return   notificationBuilder
+            return notificationBuilder
         }
 
         abstract fun buildNotification(): NotificationCompat.Builder
