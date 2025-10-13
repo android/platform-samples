@@ -55,6 +55,7 @@ object SnackbarNotificationManager {
                     .setSmallIcon(R.drawable.ic_launcher_foreground)
                     .setContentTitle("You order is being placed")
                     .setContentText("Confirming with bakery...")
+                    .setShortCriticalText("Placing")
                     .setStyle(buildBaseProgressStyle(INITIALIZING).setProgressIndeterminate(true))
             }
         },
@@ -64,6 +65,7 @@ object SnackbarNotificationManager {
                 return buildBaseNotification(appContext, FOOD_PREPARATION)
                     .setContentTitle("Your order is being prepared")
                     .setContentText("Next step will be delivery")
+                    .setShortCriticalText("Prepping")
                     .setLargeIcon(
                         IconCompat.createWithResource(
                             appContext, R.drawable.cupcake
@@ -92,6 +94,9 @@ object SnackbarNotificationManager {
                             appContext, R.drawable.cupcake
                         ).toIcon(appContext)
                     )
+                    .setWhen(System.currentTimeMillis().plus(11 * 60 * 1000 /* 10 min */))
+                    .setUsesChronometer(true)
+                    .setChronometerCountDown(true)
             }
         },
         FOOD_ARRIVING(18000) {
@@ -114,6 +119,9 @@ object SnackbarNotificationManager {
                             appContext, R.drawable.cupcake
                         ).toIcon(appContext)
                     )
+                    .setWhen(System.currentTimeMillis().plus(11 * 60 * 500 /* 5 min */))
+                    .setUsesChronometer(true)
+                    .setChronometerCountDown(true)
             }
         },
         ORDER_COMPLETE(21000) {
@@ -131,6 +139,7 @@ object SnackbarNotificationManager {
                             )
                             .setProgress(100)
                     )
+                    .setShortCriticalText("Arrived")
                     .setLargeIcon(
                         IconCompat.createWithResource(
                             appContext, R.drawable.cupcake
@@ -224,7 +233,7 @@ object SnackbarNotificationManager {
                                 null, "Rate delivery", null).build()
                         )
             }
-            return notificationBuilder
+            return   notificationBuilder
         }
 
         abstract fun buildNotification(): NotificationCompat.Builder
