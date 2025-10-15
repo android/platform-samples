@@ -113,6 +113,8 @@ import com.example.platform.ui.haptics.Bounce
 import com.example.platform.ui.haptics.Expand
 import com.example.platform.ui.haptics.HapticsBasic
 import com.example.platform.ui.haptics.Resist
+import com.example.platform.ui.haptics.Rocket
+import com.example.platform.ui.haptics.Spring
 import com.example.platform.ui.haptics.Wobble
 import com.example.platform.ui.insets.ImmersiveMode
 import com.example.platform.ui.insets.WindowInsetsAnimationActivity
@@ -1068,6 +1070,24 @@ val SAMPLE_DEMOS by lazy {
                     LiveUpdateSample()
                 }
             },
+        ),
+        ComposableSampleDemo(
+            id = "haptics-6-spring",
+            name = "Haptics - 6. Spring",
+            description = "Play Pwle effects to simulate physical world of spring.",
+            documentation = "https://source.android.com/docs/core/interaction/haptics",
+            apiSurface = UserInterfaceHapticsApiSurface,
+            tags = listOf("Haptics"),
+            content = { Spring() }
+        ),
+        ComposableSampleDemo(
+            id = "haptics-7-rocket",
+            name = "Haptics - 7. Rocket",
+            description = "Play Pwle effects of rocket launch.",
+            documentation = "https://source.android.com/docs/core/interaction/haptics",
+            apiSurface = UserInterfaceHapticsApiSurface,
+            tags = listOf("Haptics"),
+            content = { Rocket() }
         ),
         ActivitySampleDemo(
             id = "picture-in-picture-video-playback",
