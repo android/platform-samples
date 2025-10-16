@@ -261,6 +261,6 @@ object SnackbarNotificationManager {
 
     @RequiresApi(Build.VERSION_CODES.BAKLAVA)
     fun isPostPromotionsEnabled(): Boolean {
-    return notificationManager.canPostPromotedNotifications()
+        return notificationManager.canPostPromotedNotifications()
     }
 }

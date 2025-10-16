@@ -37,9 +37,11 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -120,11 +122,11 @@ fun NotificationPermission() {
 @Composable
 fun NotificationPostPromotedPermission() {
     val context = LocalContext.current
-    val isPostPromotionsEnabled =  remember { mutableStateOf(SnackbarNotificationManager.isPostPromotionsEnabled()) }
+    var isPostPromotionsEnabled by remember { mutableStateOf(SnackbarNotificationManager.isPostPromotionsEnabled()) }
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        isPostPromotionsEnabled.value = SnackbarNotificationManager.isPostPromotionsEnabled()
+        isPostPromotionsEnabled = SnackbarNotificationManager.isPostPromotionsEnabled()
     }
-    if (!isPostPromotionsEnabled.value) {
+    if (!isPostPromotionsEnabled) {
         Text(
             text = stringResource(R.string.post_promoted_permission_message),
             modifier = Modifier.padding(horizontal = 10.dp),
@@ -132,7 +134,6 @@ fun NotificationPostPromotedPermission() {
         Button(
             onClick = {
                 val intent = Intent(Settings.ACTION_APP_NOTIFICATION_PROMOTION_SETTINGS).apply {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
                     putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
                 }
                 context.startActivity(intent)
