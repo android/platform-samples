@@ -19,7 +19,9 @@ package com.example.platform.ui.live_updates
 import android.annotation.SuppressLint
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.os.Build
+import android.provider.Settings
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +37,7 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -42,6 +45,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LifecycleEventEffect
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberPermissionState
@@ -66,15 +71,19 @@ fun LiveUpdateSample() {
                 .fillMaxSize()
                 .padding(contentPadding),
         ) {
+            NotificationPermission()
+            Spacer(modifier = Modifier.height(4.dp))
+            NotificationPostPromotedPermission()
             Text(stringResource( R.string.live_update_summary_text))
             Spacer(modifier = Modifier.height(4.dp))
-            NotificationPermission()
-            Button(onClick = {
-                onCheckout()
-                scope.launch {
-                    snackbarHostState.showSnackbar("Order placed")
-                }
-            }) {
+            Button(
+                onClick = {
+                    onCheckout()
+                    scope.launch {
+                        snackbarHostState.showSnackbar("Order placed")
+                    }
+                },
+            ) {
                 Text("Checkout")
             }
         }
@@ -100,8 +109,37 @@ fun NotificationPermission() {
                 notificationPermissionState.launchPermissionRequest()
             },
             modifier = Modifier
-                .fillMaxWidth()
+                .fillMaxWidth(),
+            permissionStringResourceId = R.string.permission_message,
+            permissionRationalStringResourceId = R.string.permission_rationale,
         )
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES.BAKLAVA)
+@Composable
+fun NotificationPostPromotedPermission() {
+    val context = LocalContext.current
+    val isPostPromotionsEnabled =  remember { mutableStateOf(SnackbarNotificationManager.isPostPromotionsEnabled()) }
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        isPostPromotionsEnabled.value = SnackbarNotificationManager.isPostPromotionsEnabled()
+    }
+    if (!isPostPromotionsEnabled.value) {
+        Text(
+            text = stringResource(R.string.post_promoted_permission_message),
+            modifier = Modifier.padding(horizontal = 10.dp),
+        )
+        Button(
+            onClick = {
+                val intent = Intent(Settings.ACTION_APP_NOTIFICATION_PROMOTION_SETTINGS).apply {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    putExtra(Settings.EXTRA_APP_PACKAGE, context.packageName)
+                }
+                context.startActivity(intent)
+            },
+        ) {
+            Text(text = stringResource(R.string.to_settings))
+        }
     }
 }
 
@@ -110,17 +148,19 @@ private fun NotificationPermissionCard(
     shouldShowRationale: Boolean,
     onGrantClick: () -> Unit,
     modifier: Modifier = Modifier,
+    permissionStringResourceId: Int,
+    permissionRationalStringResourceId: Int,
 ) {
     Card(
         modifier = modifier,
     ) {
         Text(
-            text = stringResource(R.string.permission_message),
+            text = stringResource(permissionStringResourceId),
             modifier = Modifier.padding(16.dp),
         )
         if (shouldShowRationale) {
             Text(
-                text = stringResource(R.string.permission_rationale),
+                text = stringResource(permissionRationalStringResourceId),
                 modifier = Modifier.padding(horizontal = 10.dp),
             )
         }
