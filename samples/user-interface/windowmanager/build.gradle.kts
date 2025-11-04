@@ -24,8 +24,8 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        minSdk = 21
-        targetSdk = 35
+        minSdk = 24
+        testOptions.targetSdk = 36
     }
     kotlinOptions {
         jvmTarget = "1.8"

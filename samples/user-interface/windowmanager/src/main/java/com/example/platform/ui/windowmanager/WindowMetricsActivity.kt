@@ -25,6 +25,8 @@ import androidx.window.core.layout.WindowSizeClass
 import androidx.window.core.layout.WindowSizeClass.Companion.HEIGHT_DP_EXPANDED_LOWER_BOUND
 import androidx.window.core.layout.WindowSizeClass.Companion.HEIGHT_DP_MEDIUM_LOWER_BOUND
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_EXPANDED_LOWER_BOUND
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_EXTRA_LARGE_LOWER_BOUND
+import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_LARGE_LOWER_BOUND
 import androidx.window.core.layout.WindowSizeClass.Companion.WIDTH_DP_MEDIUM_LOWER_BOUND
 import androidx.window.core.layout.computeWindowSizeClass
 
@@ -53,7 +55,7 @@ class WindowMetricsActivity : AppCompatActivity() {
         val width = windowMetrics.bounds.width()
         val height = windowMetrics.bounds.height()
         val density = resources.displayMetrics.density
-        val windowSizeClass = WindowSizeClass.BREAKPOINTS_V1.computeWindowSizeClass(width/density, height/density)
+        val windowSizeClass = WindowSizeClass.BREAKPOINTS_V2.computeWindowSizeClass(width/density, height/density)
 
         adapter.append("WindowMetrics update", "width: $width, height: $height")
         adapter.append("WindowSize Class", "Height: " + getHeightSizeClass(windowSizeClass) + "\nWidth: " + getWidthSizeClass(windowSizeClass))
@@ -62,29 +64,19 @@ class WindowMetricsActivity : AppCompatActivity() {
 
     private fun getWidthSizeClass(sizeClass: WindowSizeClass): String {
         return when {
-            sizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_EXPANDED_LOWER_BOUND) -> {
-                "EXPANDED"
-            }
-            sizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND) -> {
-                "MEDIUM"
-            }
-            else -> {
-                "COMPACT"
-            }
+            sizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_EXTRA_LARGE_LOWER_BOUND) -> "EXTRA-LARGE"
+            sizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_LARGE_LOWER_BOUND) -> "LARGE"
+            sizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_EXPANDED_LOWER_BOUND) -> "EXPANDED"
+            sizeClass.isWidthAtLeastBreakpoint(WIDTH_DP_MEDIUM_LOWER_BOUND) -> "MEDIUM"
+            else -> "COMPACT"
         }
     }
 
     private fun getHeightSizeClass(sizeClass: WindowSizeClass): String {
         return when {
-            sizeClass.isHeightAtLeastBreakpoint(HEIGHT_DP_EXPANDED_LOWER_BOUND) -> {
-                "EXPANDED"
-            }
-            sizeClass.isHeightAtLeastBreakpoint(HEIGHT_DP_MEDIUM_LOWER_BOUND) -> {
-                "MEDIUM"
-            }
-            else -> {
-                "COMPACT"
-            }
+            sizeClass.isHeightAtLeastBreakpoint(HEIGHT_DP_EXPANDED_LOWER_BOUND) -> "EXPANDED"
+            sizeClass.isHeightAtLeastBreakpoint(HEIGHT_DP_MEDIUM_LOWER_BOUND) -> "MEDIUM"
+            else -> "COMPACT"
         }
     }
 }
