@@ -89,7 +89,7 @@ class PiPSampleActivity : ComponentActivity() {
         binding.clear.setOnClickListener { viewModel.clear() }
         binding.startOrPause.setOnClickListener { viewModel.startOrPause() }
         binding.pip.setOnClickListener {
-            enterPictureInPictureMode(updatePictureInPictureParams(viewModel.started.value == true))
+//            enterPictureInPictureMode(updatePictureInPictureParams(viewModel.started.value == true))
         }
         // Observe data from the viewModel.
         viewModel.time.observe(this) { time -> binding.time.text = time }
@@ -97,28 +97,28 @@ class PiPSampleActivity : ComponentActivity() {
             binding.startOrPause.setImageResource(
                 if (started) R.drawable.ic_pause_24dp else R.drawable.ic_play_arrow_24dp,
             )
-            updatePictureInPictureParams(started)
+//            updatePictureInPictureParams(started)
         }
 
         // Use trackPipAnimationHint view to make a smooth enter/exit pip transition.
         // See https://android.devsite.corp.google.com/develop/ui/views/picture-in-picture#smoother-transition
-        lifecycleScope.launch {
+       /* lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 trackPipAnimationHintView(binding.stopwatchBackground)
             }
-        }
+        }*/
 
         // Handle events from the action icons on the picture-in-picture mode.
-        ActivityCompat.registerReceiver(
+        /*ActivityCompat.registerReceiver(
             this,
             broadcastReceiver,
             IntentFilter(ACTION_STOPWATCH_CONTROL),
             ContextCompat.RECEIVER_NOT_EXPORTED
-        )
+        )*/
     }
 
     // This is called when the activity gets into or out of the picture-in-picture mode.
-    override fun onPictureInPictureModeChanged(
+    /*override fun onPictureInPictureModeChanged(
         isInPictureInPictureMode: Boolean,
         newConfig: Configuration,
     ) {
@@ -126,25 +126,26 @@ class PiPSampleActivity : ComponentActivity() {
         // Toggle visibility of in-app buttons. They cannot be interacted in the picture-in-picture
         // mode, and their features are provided as the action icons.
         toggleControls(if (isInPictureInPictureMode) View.GONE else View.VISIBLE)
-    }
+    }*/
 
     private fun toggleControls(view: Int) {
         binding.clear.visibility = view
         binding.startOrPause.visibility = view
     }
 
-    @RequiresApi(35)
+/*    @RequiresApi(35)
     override fun onPictureInPictureUiStateChanged(pipState: PictureInPictureUiState) {
         super.onPictureInPictureUiStateChanged(pipState)
         if (pipState.isTransitioningToPip) {
             toggleControls(View.GONE)
         }
-    }
+    }*/
 
     /**
      * Updates the parameters of the picture-in-picture mode for this activity based on the current
      * [started] state of the stopwatch.
      */
+/*
     private fun updatePictureInPictureParams(started: Boolean): PictureInPictureParams {
         val params = PictureInPictureParams.Builder()
             // Set action items for the picture-in-picture mode. These are the only custom controls
@@ -191,6 +192,7 @@ class PiPSampleActivity : ComponentActivity() {
             setPictureInPictureParams(it)
         }
     }
+*/
 
     /**
      * Creates a [RemoteAction]. It is used as an action icon on the overlay of the

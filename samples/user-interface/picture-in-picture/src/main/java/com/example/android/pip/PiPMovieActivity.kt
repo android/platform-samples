@@ -111,7 +111,7 @@ class PiPMovieActivity : ComponentActivity() {
 
         // Configure parameters for the picture-in-picture mode. We do this at the first layout of
         // the MovieView because we use its layout position and size.
-        binding.movie.doOnLayout { updatePictureInPictureParams() }
+//        binding.movie.doOnLayout { updatePictureInPictureParams() }
 
         // Set up the video; it automatically starts.
         binding.movie.setMovieListener(movieListener)
@@ -175,7 +175,7 @@ class PiPMovieActivity : ComponentActivity() {
         }
     }
 
-    override fun onPictureInPictureModeChanged(
+    /*override fun onPictureInPictureModeChanged(
         isInPictureInPictureMode: Boolean, newConfig: Configuration,
     ) {
         super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
@@ -188,18 +188,18 @@ class PiPMovieActivity : ComponentActivity() {
                 binding.movie.showControls()
             }
         }
-    }
+    }*/
 
-    @RequiresApi(35)
+    /*@RequiresApi(35)
     override fun onPictureInPictureUiStateChanged(pipState: PictureInPictureUiState) {
         super.onPictureInPictureUiStateChanged(pipState)
         if (pipState.isTransitioningToPip) {
             binding.movie.hideControls()
         }
-    }
+    }*/
 
 
-    private fun updatePictureInPictureParams(): PictureInPictureParams {
+    /*private fun updatePictureInPictureParams(): PictureInPictureParams {
         // Calculate the aspect ratio of the PiP screen.
         val aspectRatio = Rational(binding.movie.width, binding.movie.height)
         // The movie view turns into the picture-in-picture mode.
@@ -219,13 +219,13 @@ class PiPMovieActivity : ComponentActivity() {
         return params.build().also {
             setPictureInPictureParams(it)
         }
-    }
+    }*/
 
     /**
      * Enters Picture-in-Picture mode.
      */
     private fun minimize() {
-        enterPictureInPictureMode(updatePictureInPictureParams())
+//        enterPictureInPictureMode(updatePictureInPictureParams())
     }
 
     /**
