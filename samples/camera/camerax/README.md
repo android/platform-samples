@@ -7,7 +7,7 @@ This folder contains Android sample code demonstrating CameraX usage, organized 
 - **Extensions**: demonstrates CameraX extensions (e.g., portrait, night, bokeh) integration.
 
 - **ML Kit (QR code)**: shows using CameraX with ML Kit to detect QR codes and draw overlays.
-	
+
 - **Video**: sample demonstrating video capture with CameraX.
 
 Check out our guides at https://developer.android.com/media/camera/camerax
