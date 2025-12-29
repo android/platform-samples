@@ -12,8 +12,6 @@ This folder contains Android sample code demonstrating CameraX usage, organized 
 
 Check out our guides at https://developer.android.com/media/camera/camerax
 
-
-
 ## License
 
 ```
