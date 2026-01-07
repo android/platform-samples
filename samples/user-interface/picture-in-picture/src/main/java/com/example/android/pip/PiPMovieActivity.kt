@@ -16,10 +16,7 @@
 
 package com.example.android.pip
 
-import android.app.PictureInPictureParams
-import android.app.PictureInPictureUiState
 import android.content.res.Configuration
-import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaMetadataCompat
@@ -28,14 +25,12 @@ import android.support.v4.media.session.MediaSessionCompat
 import android.support.v4.media.session.PlaybackStateCompat
 import android.text.util.Linkify
 import android.util.Log
-import android.util.Rational
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.doOnLayout
 import com.example.android.pip.databinding.PipMovieActivityBinding
 import com.example.android.pip.widget.MovieView
 
@@ -109,10 +104,6 @@ class PiPMovieActivity : ComponentActivity() {
         }
         binding.pip.setOnClickListener { minimize() }
 
-        // Configure parameters for the picture-in-picture mode. We do this at the first layout of
-        // the MovieView because we use its layout position and size.
-//        binding.movie.doOnLayout { updatePictureInPictureParams() }
-
         // Set up the video; it automatically starts.
         binding.movie.setMovieListener(movieListener)
     }
@@ -175,57 +166,11 @@ class PiPMovieActivity : ComponentActivity() {
         }
     }
 
-    /*override fun onPictureInPictureModeChanged(
-        isInPictureInPictureMode: Boolean, newConfig: Configuration,
-    ) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        if (isInPictureInPictureMode) {
-            // Hide the controls in picture-in-picture mode.
-            binding.movie.hideControls()
-        } else {
-            // Show the video controls if the video is not playing
-            if (!binding.movie.isPlaying) {
-                binding.movie.showControls()
-            }
-        }
-    }*/
-
-    /*@RequiresApi(35)
-    override fun onPictureInPictureUiStateChanged(pipState: PictureInPictureUiState) {
-        super.onPictureInPictureUiStateChanged(pipState)
-        if (pipState.isTransitioningToPip) {
-            binding.movie.hideControls()
-        }
-    }*/
-
-
-    /*private fun updatePictureInPictureParams(): PictureInPictureParams {
-        // Calculate the aspect ratio of the PiP screen.
-        val aspectRatio = Rational(binding.movie.width, binding.movie.height)
-        // The movie view turns into the picture-in-picture mode.
-        val visibleRect = Rect()
-        binding.movie.getGlobalVisibleRect(visibleRect)
-        val params = PictureInPictureParams.Builder()
-            .setAspectRatio(aspectRatio)
-            // Specify the portion of the screen that turns into the picture-in-picture mode.
-            // This makes the transition animation smoother.
-            .setSourceRectHint(visibleRect)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            // The screen automatically turns into the picture-in-picture mode when it is hidden
-            // by the "Home" button.
-            params.setAutoEnterEnabled(true)
-        }
-        return params.build().also {
-            setPictureInPictureParams(it)
-        }
-    }*/
-
     /**
      * Enters Picture-in-Picture mode.
      */
     private fun minimize() {
-//        enterPictureInPictureMode(updatePictureInPictureParams())
+        // Used for  Entering to Picture-in-Picture mode.
     }
 
     /**
