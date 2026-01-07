@@ -23,7 +23,6 @@
             android:name=".PiPSampleActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="true"
-            android:supportsPictureInPicture="false"
             android:launchMode="singleTask"
             android:theme="@style/PiPAppTheme"
             tools:targetApi="26" />
@@ -31,7 +30,6 @@
         <activity
             android:name=".PiPMovieActivity"
             android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
-            android:supportsPictureInPicture="false"
             android:launchMode="singleTask"
             android:theme="@style/PiPAppTheme"
             tools:targetApi="o" />

@@ -85,11 +85,6 @@ class PiPMovieActivity : ComponentActivity() {
                 binding.movie.getVideoResourceId(),
             )
         }
-
-        override fun onMovieMinimized() {
-            // The MovieView wants us to minimize it. We enter Picture-in-Picture mode now.
-            minimize()
-        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,7 +97,6 @@ class PiPMovieActivity : ComponentActivity() {
         } catch (e: Exception) {
             Log.w("PiP", "Failed to add links", e)
         }
-        binding.pip.setOnClickListener { minimize() }
 
         // Set up the video; it automatically starts.
         binding.movie.setMovieListener(movieListener)
@@ -166,12 +160,6 @@ class PiPMovieActivity : ComponentActivity() {
         }
     }
 
-    /**
-     * Enters Picture-in-Picture mode.
-     */
-    private fun minimize() {
-        // Used for  Entering to Picture-in-Picture mode.
-    }
 
     /**
      * Adjusts immersive full-screen flags depending on the screen orientation.
