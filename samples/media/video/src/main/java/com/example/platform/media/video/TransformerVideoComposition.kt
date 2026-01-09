@@ -309,12 +309,12 @@ class TransformerVideoComposition : Fragment() {
          * Video and audio assets
          */
         private const val URI_VIDEO1 =
-            "https://storage.googleapis.com/exoplayer-test-media-1/mp4/android-screens-10s.mp4"
+            "https://storage.googleapis.com/androiddevelopers/samples_assets/exoplayer-test-media-1/mp4/android-screens-10s.mp4"
         private const val URI_VIDEO2 =
-            "https://storage.googleapis.com/exoplayer-test-media-0/android-block-1080-hevc.mp4"
+            "https://storage.googleapis.com/androiddevelopers/samples_assets/exoplayer-test-media-0/android-block-1080-hevc.mp4"
         private const val URI_IMAGE =
             "https://developer.android.com/static/images/media/overview/migrate-to-media3_1440.png"
         private const val URI_AUDIO =
-            "https://storage.googleapis.com/exoplayer-test-media-0/play.mp3"
+            "https://storage.googleapis.com/androiddevelopers/samples_assets/exoplayer-test-media-0/play.mp3"
     }
 }

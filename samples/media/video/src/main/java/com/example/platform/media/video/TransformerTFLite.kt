@@ -261,6 +261,6 @@ class TransformerTFLite : Fragment() {
          * Video and audio assets
          */
         private const val URI_VIDEO1 =
-            "https://storage.googleapis.com/exoplayer-test-media-1/mp4/android-screens-10s.mp4"
+            "https://storage.googleapis.com/androiddevelopers/samples_assets/exoplayer-test-media-1/mp4/android-screens-10s.mp4"
     }
 }

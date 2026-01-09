@@ -104,7 +104,7 @@
     <string name="media_player_activity_demo_description">Demo of an ExoPlayer instance in tabletop mode</string>
     <!-- Big Buck Bunny video provided by the Blender Foundation.
 (c) copyright 2008, Blender Foundation / www.bigbuckbunny.org -->
-    <string name="media_url_mp4">https://storage.googleapis.com/exoplayer-test-media-0/BigBuckBunny_320x180.mp4</string>
+    <string name="media_url_mp4">https://storage.googleapis.com/androiddevelopers/samples_assets/exoplayer-test-media-0/BigBuckBunny_320x180.mp4</string>
     <string name="toggle_rear_display">Toggle Rear Display Mode</string>
     <string name="rear_display_activity">Rear Display Mode</string>
     <string name="rear_display_activity_demo_description">Demo of the Rear Display Mode</string>
