@@ -18,47 +18,28 @@ class PiPSampleActivityTest {
      */
     @Test
     fun startTimer_updatesTime() {
-        val scenario = launch(PiPSampleActivity::class.java)
-
-        scenario.onActivity { activity ->
-            val startBtn = activity.findViewById<View>(R.id.start_or_pause)
-            val timeText = activity.findViewById<TextView>(R.id.time)
-
-            // Initial state
-            assertThat(timeText.text.toString()).isEqualTo("00:00:00")
-
-            // Start timer
-            startBtn.performClick()
-        }
-
-        // Wait for async update
-        Thread.sleep(1500)
-
-        scenario.onActivity { activity ->
-            val timeText = activity.findViewById<TextView>(R.id.time)
-
-            // Time should now be updated
-            assertThat(timeText.text.toString()).isNotEqualTo("00:00:00")
+        launchActivity<PiPSampleActivity>().use {
+            // Initial time should be 00:00:00
+            onView(withId(R.id.time)).check(matches(withText("00:00:00")))
+            // Click Start
+            onView(withId(R.id.start_or_pause)).perform(click())
+            // Time should change
+            onView(withId(R.id.time)).check(matches(not(withText("00:00:00"))))
         }
     }
 
     /**
      * Verifies that the Clear button resets the timer.
      */
-    @Test
+        @Test
     fun clearTimer_resetsTime() {
-        val scenario = launch(PiPSampleActivity::class.java)
-
-        scenario.onActivity { activity ->
-            val startBtn = activity.findViewById<View>(R.id.start_or_pause)
-            val clearBtn = activity.findViewById<View>(R.id.clear)
-            val timeText = activity.findViewById<TextView>(R.id.time)
-
-            startBtn.performClick()
-            clearBtn.performClick()
-
+        launchActivity<PiPSampleActivity>().use {
+            // Start the timer
+            onView(withId(R.id.start_or_pause)).perform(click())
+            // Clear the timer
+            onView(withId(R.id.clear)).perform(click())
             // Time should reset
-            assertThat(timeText.text.toString()).isEqualTo("00:00:00")
+            onView(withId(R.id.time)).check(matches(withText("00:00:00")))
         }
     }
 }
