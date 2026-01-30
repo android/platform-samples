@@ -114,7 +114,7 @@ class PiPMovieActivity : ComponentActivity(),
         binding = PipMovieActivityBinding.inflate(layoutInflater)
         pictureInPictureImpl = VideoPlaybackPictureInPicture(this)
         pictureInPictureImpl.setPlayerView(binding.movie)
-        pictureInPictureImpl.setEnabled(true);
+        pictureInPictureImpl.setEnabled(true)
 
 
         setContentView(binding.root)
