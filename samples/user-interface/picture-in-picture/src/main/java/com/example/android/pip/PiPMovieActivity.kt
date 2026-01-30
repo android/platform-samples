@@ -8,18 +8,17 @@
  *     https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
 
 package com.example.android.pip
 
-import android.app.PictureInPictureParams
-import android.app.PictureInPictureUiState
+
 import android.content.res.Configuration
-import android.graphics.Rect
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.media.MediaMetadataCompat
@@ -32,44 +31,60 @@ import android.util.Rational
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.annotation.RequiresApi
+import androidx.core.app.PictureInPictureParamsCompat
+import androidx.core.pip.PictureInPictureDelegate
+import androidx.core.pip.VideoPlaybackPictureInPicture
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.doOnLayout
 import com.example.android.pip.databinding.PipMovieActivityBinding
 import com.example.android.pip.widget.MovieView
+
 
 /**
  * Demonstrates usage of Picture-in-Picture when using [MediaSessionCompat].
  */
 @RequiresApi(Build.VERSION_CODES.O)
-class PiPMovieActivity : ComponentActivity() {
+class PiPMovieActivity : ComponentActivity(),
+    PictureInPictureDelegate.OnPictureInPictureEventListener {
+
 
     companion object {
 
+
         private const val TAG = "MediaSessionPlaybackActivity"
+
 
         private const val MEDIA_ACTIONS_PLAY_PAUSE =
             PlaybackStateCompat.ACTION_PLAY or
                     PlaybackStateCompat.ACTION_PAUSE or
                     PlaybackStateCompat.ACTION_PLAY_PAUSE
 
+
         private const val MEDIA_ACTIONS_ALL =
             MEDIA_ACTIONS_PLAY_PAUSE or
                     PlaybackStateCompat.ACTION_SKIP_TO_NEXT or
                     PlaybackStateCompat.ACTION_SKIP_TO_PREVIOUS
 
+
         private const val PLAYLIST_SIZE = 2
     }
 
+
     private lateinit var binding: PipMovieActivityBinding
 
+
+    private lateinit var pictureInPictureImpl: VideoPlaybackPictureInPicture
+
+
     private lateinit var session: MediaSessionCompat
+
 
     /**
      * Callbacks from the [MovieView] showing the video playback.
      */
     private val movieListener = object : MovieView.MovieListener() {
+
 
         override fun onMovieStarted() {
             // We are playing the video now. Update the media session state and the PiP window will
@@ -81,6 +96,7 @@ class PiPMovieActivity : ComponentActivity() {
             )
         }
 
+
         override fun onMovieStopped() {
             // The video stopped or reached its end. Update the media session state and the PiP
             // window will update the actions.
@@ -90,49 +106,62 @@ class PiPMovieActivity : ComponentActivity() {
                 binding.movie.getVideoResourceId(),
             )
         }
-
-        override fun onMovieMinimized() {
-            // The MovieView wants us to minimize it. We enter Picture-in-Picture mode now.
-            minimize()
-        }
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = PipMovieActivityBinding.inflate(layoutInflater)
+        pictureInPictureImpl = VideoPlaybackPictureInPicture(this)
+        pictureInPictureImpl.setPlayerView(binding.movie)
+        pictureInPictureImpl.setEnabled(true);
+
+
         setContentView(binding.root)
+
 
         try {
             Linkify.addLinks(binding.explanation, Linkify.WEB_URLS)
         } catch (e: Exception) {
             Log.w("PiP", "Failed to add links", e)
         }
-        binding.pip.setOnClickListener { minimize() }
 
-        // Configure parameters for the picture-in-picture mode. We do this at the first layout of
-        // the MovieView because we use its layout position and size.
-        binding.movie.doOnLayout { updatePictureInPictureParams() }
 
+        binding.pip.setOnClickListener {
+            enterPictureInPictureMode(updatePictureInPictureParams())
+        }
         // Set up the video; it automatically starts.
         binding.movie.setMovieListener(movieListener)
     }
+
 
     override fun onStart() {
         super.onStart()
         initializeMediaSession()
     }
 
+
+    private fun updatePictureInPictureParams(): PictureInPictureParamsCompat {
+        return PictureInPictureParamsCompat.Builder()
+            .setAspectRatio(Rational(binding.movie.width, binding.movie.height))
+            .build()
+    }
+
+
     private fun initializeMediaSession() {
         session = MediaSessionCompat(this, TAG)
         session.isActive = true
         MediaControllerCompat.setMediaController(this, session.controller)
+
 
         val metadata = MediaMetadataCompat.Builder()
             .putString(MediaMetadataCompat.METADATA_KEY_DISPLAY_TITLE, binding.movie.title)
             .build()
         session.setMetadata(metadata)
 
+
         session.setCallback(MediaSessionCallback(binding.movie))
+
 
         val state = if (binding.movie.isPlaying) {
             PlaybackStateCompat.STATE_PLAYING
@@ -147,6 +176,7 @@ class PiPMovieActivity : ComponentActivity() {
         )
     }
 
+
     override fun onStop() {
         super.onStop()
         // On entering Picture-in-Picture mode, onPause is called, but not onStop.
@@ -154,6 +184,7 @@ class PiPMovieActivity : ComponentActivity() {
         binding.movie.pause()
         session.release()
     }
+
 
     override fun onRestart() {
         super.onRestart()
@@ -163,10 +194,12 @@ class PiPMovieActivity : ComponentActivity() {
         }
     }
 
+
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)
         adjustFullScreen(newConfig)
     }
+
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
         super.onWindowFocusChanged(hasFocus)
@@ -175,61 +208,12 @@ class PiPMovieActivity : ComponentActivity() {
         }
     }
 
-    override fun onPictureInPictureModeChanged(
-        isInPictureInPictureMode: Boolean, newConfig: Configuration,
-    ) {
-        super.onPictureInPictureModeChanged(isInPictureInPictureMode, newConfig)
-        if (isInPictureInPictureMode) {
-            // Hide the controls in picture-in-picture mode.
-            binding.movie.hideControls()
-        } else {
-            // Show the video controls if the video is not playing
-            if (!binding.movie.isPlaying) {
-                binding.movie.showControls()
-            }
-        }
-    }
-
-    @RequiresApi(35)
-    override fun onPictureInPictureUiStateChanged(pipState: PictureInPictureUiState) {
-        super.onPictureInPictureUiStateChanged(pipState)
-        if (pipState.isTransitioningToPip) {
-            binding.movie.hideControls()
-        }
-    }
 
 
-    private fun updatePictureInPictureParams(): PictureInPictureParams {
-        // Calculate the aspect ratio of the PiP screen.
-        val aspectRatio = Rational(binding.movie.width, binding.movie.height)
-        // The movie view turns into the picture-in-picture mode.
-        val visibleRect = Rect()
-        binding.movie.getGlobalVisibleRect(visibleRect)
-        val params = PictureInPictureParams.Builder()
-            .setAspectRatio(aspectRatio)
-            // Specify the portion of the screen that turns into the picture-in-picture mode.
-            // This makes the transition animation smoother.
-            .setSourceRectHint(visibleRect)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-            // The screen automatically turns into the picture-in-picture mode when it is hidden
-            // by the "Home" button.
-            params.setAutoEnterEnabled(true)
-        }
-        return params.build().also {
-            setPictureInPictureParams(it)
-        }
-    }
-
-    /**
-     * Enters Picture-in-Picture mode.
-     */
-    private fun minimize() {
-        enterPictureInPictureMode(updatePictureInPictureParams())
-    }
 
     /**
      * Adjusts immersive full-screen flags depending on the screen orientation.
+
 
      * @param config The current [Configuration].
      */
@@ -248,8 +232,10 @@ class PiPMovieActivity : ComponentActivity() {
         }
     }
 
+
     /**
      * Overloaded method that persists previously set media actions.
+
 
      * @param state The state of the video, e.g. playing, paused, etc.
      * @param position The position of playback in the video.
@@ -264,6 +250,7 @@ class PiPMovieActivity : ComponentActivity() {
         updatePlaybackState(state, actions, position, mediaId)
     }
 
+
     private fun updatePlaybackState(
         @PlaybackStateCompat.State state: Int,
         playbackActions: Long,
@@ -277,6 +264,15 @@ class PiPMovieActivity : ComponentActivity() {
         session.setPlaybackState(builder.build())
     }
 
+
+    override fun onPictureInPictureEvent(
+        event: PictureInPictureDelegate.Event,
+        config: Configuration?,
+    ) {
+        TODO("Not yet implemented")
+    }
+
+
     /**
      * Updates the [MovieView] based on the callback actions. <br></br>
      * Simulates a playlist that will disable actions when you cannot skip through the playlist in a
@@ -286,15 +282,19 @@ class PiPMovieActivity : ComponentActivity() {
         private val movieView: MovieView,
     ) : MediaSessionCompat.Callback() {
 
+
         private var indexInPlaylist: Int = 1
+
 
         override fun onPlay() {
             movieView.play()
         }
 
+
         override fun onPause() {
             movieView.pause()
         }
+
 
         override fun onSkipToNext() {
             movieView.startVideo()
@@ -317,6 +317,7 @@ class PiPMovieActivity : ComponentActivity() {
                 }
             }
         }
+
 
         override fun onSkipToPrevious() {
             movieView.startVideo()

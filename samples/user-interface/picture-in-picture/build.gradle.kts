@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.media)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.corepip)
 
     // Testing
     androidTestImplementation(libs.androidx.test.core)
