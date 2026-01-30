@@ -27,7 +27,7 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
         targetSdk = 35
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -45,6 +45,7 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.media)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.corepip)
 
     // Testing
     androidTestImplementation(libs.androidx.test.core)

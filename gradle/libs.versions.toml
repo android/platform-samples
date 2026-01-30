@@ -17,7 +17,7 @@
 agp = "8.9.1"
 fragmentCompose = "1.8.6"
 kotlin = "2.1.10"
-coreKtx = "1.17.0-alpha01"
+coreKtx = "1.12.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -103,9 +103,9 @@ play-services-location = { module = "com.google.android.gms:play-services-locati
 # Core dependencies
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }
 
-androidx-activity = "androidx.activity:activity-ktx:1.10.0"
+androidx-activity = "androidx.activity:activity-ktx:1.13.0-alpha01"
 
-androidx-core = "androidx.core:core-ktx:1.12.0"
+androidx-core = "androidx.core:core-ktx:1.18.0-alpha01"
 androidx-exifinterface = "androidx.exifinterface:exifinterface:1.3.7"
 # Fragment 1.7.0 alpha and Transition 1.5.0 alpha are required for predictive back to work with Fragments and transitions
 androidx-fragment = "androidx.fragment:fragment-ktx:1.7.0-alpha10"
@@ -170,6 +170,7 @@ androidx-window-rxjava2 = { module = "androidx.window:window-rxjava2", version.r
 androidx-window-core = { module = "androidx.window:window-core", version.ref = "androidx-window" }
 androidx-media = "androidx.media:media:1.7.0"
 androidx-constraintlayout = "androidx.constraintlayout:constraintlayout:2.1.4"
+androidx-corepip = "androidx.core:core-pip:1.0.0-SNAPSHOT"
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
 androidx-draganddrop = "androidx.draganddrop:draganddrop:1.0.0"
 androidx-dynamicanimation = "androidx.dynamicanimation:dynamicanimation-ktx:1.0.0-alpha03"
