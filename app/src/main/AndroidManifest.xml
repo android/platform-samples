@@ -23,7 +23,7 @@
       Removing this would otherwise cause a Manifest merger issue.
       See https://developer.android.com/build/manage-manifests#merge_conflict_heuristics
     -->
-    <uses-sdk tools:overrideLibrary="com.example.platform.storage, androidx.photopicker.compose, com.example.platform.connectivity.uwb, com.example.android.pip" />
+    <uses-sdk tools:overrideLibrary="com.example.platform.storage, androidx.photopicker.compose, com.example.platform.connectivity.uwb" />
 
     <application
         android:enableOnBackInvokedCallback="true"
