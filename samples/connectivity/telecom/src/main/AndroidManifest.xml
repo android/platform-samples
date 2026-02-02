@@ -20,7 +20,14 @@
             android:showOnLockScreen="true"
             android:showWhenLocked="true"
             android:turnScreenOn="true"
-            tools:targetApi="o" />
+            tools:targetApi="o">
+
+            <!-- Required intent to handle for call logging -->
+            <intent-filter>
+                <action android:name="android.telecom.action.CALL_BACK" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <receiver
             android:name=".call.TelecomCallBroadcast"
