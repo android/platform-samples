@@ -39,7 +39,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-telecom:1.0.0-alpha02")
+    implementation("androidx.core:core-telecom:1.0.1")
     implementation(project(mapOf("path" to ":samples:connectivity:audio")))
 
     implementation(libs.androidx.activity.compose)
