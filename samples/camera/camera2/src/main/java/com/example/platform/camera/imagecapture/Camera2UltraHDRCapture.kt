@@ -349,7 +349,7 @@ class Camera2UltraHDRCapture : Fragment() {
      *
      * - Encoding the JPEG/R format (UltraHDR)
      *
-     * This function will check for both to determine device support.
+     * This function will check for it to determine device support.
      */
     private fun canCaptureUltraHDR(c: CameraCharacteristics): Boolean {
         // Query the available output formats.
