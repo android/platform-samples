@@ -25,11 +25,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.telecom.CallAttributesCompat
 import androidx.core.telecom.CallControlResult
 import androidx.core.telecom.CallControlScope
-import androidx.core.telecom.CallException
 import androidx.core.telecom.CallsManager
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -87,16 +83,23 @@ class TelecomCallRepository(private val callsManager: CallsManager) {
      * Register a new call with the provided attributes.
      * Use the [currentCall] StateFlow to receive status updates and process call related actions.
      */
-    suspend fun registerCall(displayName: String, address: Uri, isIncoming: Boolean) {
-        // For simplicity we don't support multiple calls
+    suspend fun registerCall(
+        displayName: String,
+        address: Uri,
+        excludeCallLogging: Boolean,
+        isIncoming: Boolean
+    ) {
+        // For simplicity, we don't support multiple calls
         check(_currentCall.value !is TelecomCall.Registered) {
             "There cannot be more than one call at the same time."
         }
 
         // Create the call attributes
+        /* TODO (add isLogExcluded param for showcase) */
         val attributes = CallAttributesCompat(
             displayName = displayName,
             address = address,
+            isLogExcluded = excludeCallLogging,
             direction = if (isIncoming) {
                 CallAttributesCompat.DIRECTION_INCOMING
             } else {
@@ -221,7 +224,7 @@ class TelecomCallRepository(private val callsManager: CallsManager) {
                 }
 
                 is TelecomCallAction.ToggleMute -> {
-                    // We cannot programmatically mute the telecom stack. Instead we just update
+                    // We cannot programmatically mute the telecom stack. Instead, we just update
                     // the state of the call and this will start/stop audio capturing.
                     updateCurrentCall {
                         copy(isMuted = !isMuted)
