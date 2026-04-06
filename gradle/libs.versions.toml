@@ -14,7 +14,7 @@
 # limitations under the License.
 #
 [versions]
-agp = "8.9.1"
+agp = "8.13.2"
 fragmentCompose = "1.8.6"
 kotlin = "2.1.10"
 coreKtx = "1.17.0"
@@ -66,6 +66,7 @@ playServicesMlkitBarcodeScanning = "18.3.1"
 protobuf = "0.9.4"
 firebaseCrashlyticsBuildtools = "3.0.5"
 uwb = "1.0.0-alpha10"
+telecom = "1.1.0-alpha04"
 
 
 [libraries]
@@ -99,6 +100,7 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
 coil-video = { module = "io.coil-kt:coil-video", version.ref = "coil" }
 kotlin-coroutines-play = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-play-services", version.ref = "coroutines" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "play-services-location" }
+androidx-core-telecom = { module = "androidx.core:core-telecom", version.ref = "telecom" }
 
 # Core dependencies
 android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "agp" }

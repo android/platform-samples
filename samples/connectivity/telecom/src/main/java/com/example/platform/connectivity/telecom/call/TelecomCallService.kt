@@ -59,6 +59,7 @@ class TelecomCallService : Service() {
     companion object {
         internal const val EXTRA_NAME: String = "extra_name"
         internal const val EXTRA_URI: String = "extra_uri"
+        internal const val EXTRA_EXCLUDE_CALL_LOGGING = "extra_exclude_call_logging"
         internal const val ACTION_INCOMING_CALL = "incoming_call"
         internal const val ACTION_OUTGOING_CALL = "outgoing_call"
         internal const val ACTION_UPDATE_CALL = "update_call"
@@ -124,6 +125,7 @@ class TelecomCallService : Service() {
             @Suppress("DEPRECATION")
             intent.getParcelableExtra(EXTRA_URI)!!
         }
+        val excludeCallLogging = intent.getBooleanExtra(EXTRA_EXCLUDE_CALL_LOGGING, false)
 
         scope.launch {
             if (incoming) {
@@ -133,7 +135,7 @@ class TelecomCallService : Service() {
 
             launch {
                 // Register the call with the Telecom stack
-                telecomRepository.registerCall(name, uri, incoming)
+                telecomRepository.registerCall(name, uri, excludeCallLogging, incoming)
             }
 
             if (!incoming) {

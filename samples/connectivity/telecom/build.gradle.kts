@@ -25,11 +25,14 @@ plugins {
 
 android {
     namespace = "com.example.platform.connectivity.telecom"
-    compileSdk = 36
+    compileSdk {
+        version = release(version = 36) {
+            minorApiLevel = 1
+        }
+    }
 
     defaultConfig {
         minSdk = 23
-        targetSdk = 35
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -39,7 +42,6 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-telecom:1.0.1")
     implementation(project(mapOf("path" to ":samples:connectivity:audio")))
 
     implementation(libs.androidx.activity.compose)
@@ -49,6 +51,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(project(":shared"))
+
+    // Sample specific dependencies
+    implementation(libs.androidx.core.telecom)
 
     implementation(libs.accompanist.permissions)
 
