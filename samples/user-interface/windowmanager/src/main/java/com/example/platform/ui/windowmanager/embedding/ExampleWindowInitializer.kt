@@ -15,6 +15,7 @@
  */
 
 package com.example.platform.ui.windowmanager.embedding
+import android.annotation.SuppressLint
 import android.content.Context
 import androidx.startup.Initializer
 import androidx.window.WindowSdkExtensions
@@ -53,6 +54,7 @@ class ExampleWindowInitializer : Initializer<RuleController> {
 
     private val mDemoActivityEmbeddingController = DemoActivityEmbeddingController.getInstance()
 
+    @SuppressLint("RequiresWindowSdk")
     override fun create(context: Context): RuleController {
         SplitController.getInstance(context).apply {
             if (WindowSdkExtensions.getInstance().extensionVersion >= 2) {
