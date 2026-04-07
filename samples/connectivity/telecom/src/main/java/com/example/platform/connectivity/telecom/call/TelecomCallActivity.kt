@@ -83,6 +83,12 @@ class TelecomCallActivity : ComponentActivity() {
         )
     }
 
+    override fun onNewIntent(intent: Intent) {
+        super.onNewIntent(intent)
+        setIntent(intent)
+        handleCallBack()
+    }
+
     /**
      * Enable the calling activity to be shown in the lockscreen and dismiss the keyguard to enable
      * users to answer without unblocking.

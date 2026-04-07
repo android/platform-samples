@@ -95,7 +95,6 @@ class TelecomCallRepository(private val callsManager: CallsManager) {
         }
 
         // Create the call attributes
-        /* TODO (add isLogExcluded param for showcase) */
         val attributes = CallAttributesCompat(
             displayName = displayName,
             address = address,
