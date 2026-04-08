@@ -25,21 +25,16 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -49,7 +44,6 @@ import com.example.platform.connectivity.telecom.call.TelecomCallService
 import com.example.platform.connectivity.telecom.model.TelecomCall
 import com.example.platform.connectivity.telecom.model.TelecomCallRepository
 import com.example.platform.shared.PermissionBox
-import androidx.core.net.toUri
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -110,21 +104,6 @@ private fun TelecomCallOptions() {
             "No active call"
         }
         Text(text = title, style = MaterialTheme.typography.titleLarge)
-
-        var excludeCallLogging by rememberSaveable {
-            mutableStateOf(false)
-        }
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Checkbox(
-                checked = excludeCallLogging,
-                onCheckedChange = { isChecked ->
-                    excludeCallLogging = isChecked
-                }
-            )
-            Text("Exclude from call logs")
-        }
         Button(
             enabled = !hasOngoingCall,
             onClick = {
@@ -132,8 +111,7 @@ private fun TelecomCallOptions() {
                 context.launchCall(
                     action = TelecomCallService.ACTION_INCOMING_CALL,
                     name = "Alice",
-                    uri = "tel:12345".toUri(),
-                    excludeCallLogging = excludeCallLogging
+                    uri = Uri.parse("tel:12345"),
                 )
             },
         ) {
@@ -145,8 +123,7 @@ private fun TelecomCallOptions() {
                 context.launchCall(
                     action = TelecomCallService.ACTION_OUTGOING_CALL,
                     name = "Bob",
-                    uri = "tel:54321".toUri(),
-                    excludeCallLogging = excludeCallLogging
+                    uri = Uri.parse("tel:54321"),
                 )
             },
         ) {
@@ -156,13 +133,12 @@ private fun TelecomCallOptions() {
 }
 
 @RequiresApi(Build.VERSION_CODES.O)
-internal fun Context.launchCall(action: String, name: String, uri: Uri, excludeCallLogging: Boolean) {
+private fun Context.launchCall(action: String, name: String, uri: Uri) {
     startService(
         Intent(this, TelecomCallService::class.java).apply {
             this.action = action
             putExtra(TelecomCallService.EXTRA_NAME, name)
             putExtra(TelecomCallService.EXTRA_URI, uri)
-            putExtra(TelecomCallService.EXTRA_EXCLUDE_CALL_LOGGING, excludeCallLogging)
         },
     )
 }

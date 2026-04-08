@@ -20,7 +20,6 @@ import android.app.KeyguardManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.telecom.TelecomManager
 import android.util.Log
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
@@ -32,8 +31,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.core.content.getSystemService
-import androidx.core.net.toUri
-import com.example.platform.connectivity.telecom.launchCall
 import com.example.platform.connectivity.telecom.model.TelecomCallRepository
 
 
@@ -52,8 +49,6 @@ class TelecomCallActivity : ComponentActivity() {
 
         // Set the right flags for a call type activity.
         setupCallActivity()
-
-        handleCallBack()
 
         setContent {
             MaterialTheme {
@@ -83,12 +78,6 @@ class TelecomCallActivity : ComponentActivity() {
         )
     }
 
-    override fun onNewIntent(intent: Intent) {
-        super.onNewIntent(intent)
-        setIntent(intent)
-        handleCallBack()
-    }
-
     /**
      * Enable the calling activity to be shown in the lockscreen and dismiss the keyguard to enable
      * users to answer without unblocking.
@@ -105,17 +94,8 @@ class TelecomCallActivity : ComponentActivity() {
         }
 
         val keyguardManager = getSystemService<KeyguardManager>()
-        keyguardManager?.requestDismissKeyguard(this, null)
-    }
-
-    private fun handleCallBack() {
-        if (intent.action == TelecomManager.ACTION_CALL_BACK) {
-            launchCall(
-                action = TelecomCallService.ACTION_OUTGOING_CALL,
-                name = "Bob",
-                uri = "tel:54321".toUri(),
-                excludeCallLogging = false
-            )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && keyguardManager != null) {
+            keyguardManager.requestDismissKeyguard(this, null)
         }
     }
 }
