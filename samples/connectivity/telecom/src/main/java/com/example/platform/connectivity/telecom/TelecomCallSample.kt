@@ -133,7 +133,7 @@ private fun TelecomCallOptions() {
                     action = TelecomCallService.ACTION_INCOMING_CALL,
                     name = "Alice",
                     uri = "tel:12345".toUri(),
-                    excludeCallLogging
+                    excludeCallLogging = excludeCallLogging
                 )
             },
         ) {
@@ -146,7 +146,7 @@ private fun TelecomCallOptions() {
                     action = TelecomCallService.ACTION_OUTGOING_CALL,
                     name = "Bob",
                     uri = "tel:54321".toUri(),
-                    excludeCallLogging
+                    excludeCallLogging = excludeCallLogging
                 )
             },
         ) {
