@@ -114,7 +114,7 @@ class TelecomCallActivity : ComponentActivity() {
                 action = TelecomCallService.ACTION_OUTGOING_CALL,
                 name = "Bob",
                 uri = "tel:54321".toUri(),
-                false
+                excludeCallLogging = false
             )
         }
     }
