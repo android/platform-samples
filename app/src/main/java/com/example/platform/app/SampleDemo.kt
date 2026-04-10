@@ -24,6 +24,7 @@ import com.example.android.pip.PiPSampleActivity
 import com.example.platform.accessibility.ColorContrast
 import com.example.platform.accessibility.LiveRegionView
 import com.example.platform.accessibility.SpeakableText
+import com.example.platform.camera.imagecapture.Camera2HeicUltraHDRCapture
 import com.example.platform.camera.imagecapture.Camera2ImageCapture
 import com.example.platform.camera.imagecapture.Camera2UltraHDRCapture
 import com.example.platform.camera.preview.Camera2Preview
@@ -214,7 +215,18 @@ val SAMPLE_DEMOS by lazy {
             content = { AndroidFragment<Camera2UltraHDRCapture>() },
         ),
         ComposableSampleDemo(
-            id = "ultrahdr-image-capture",
+            id = "ultrahdr-heic-image-capture",
+            name = "HEIC UltraHDR Image Capture",
+            description = "This sample demonstrates how to capture a 10-bit compressed still image and " +
+                    "store it using the new UltraHDR image format using Camera2.",
+            documentation = "https://developer.android.com/guide/topics/media/hdr-image-format",
+            minSdk = android.os.Build.VERSION_CODES.BAKLAVA, // Added minSdk for HEIC_ULTRAHDR
+            apiSurface = CameraCamera2ApiSurface,
+            tags = listOf("UltraHDR", "Camera2"),
+            content = { AndroidFragment<Camera2HeicUltraHDRCapture>() },
+        ),
+        ComposableSampleDemo(
+            id = "image-preview",
             name = "Camera2 Preview",
             description = "Demonstrates displaying processed pixel data directly from the camera sensor "
                     + "to the screen using Camera2.",
