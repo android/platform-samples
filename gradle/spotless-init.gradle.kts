@@ -29,10 +29,6 @@ initscript {
 }
 
 rootProject {
-    // We don't want to run it for the "build-logic" rootProject separately
-    if (this.name != "Platform Samples") {
-        return@rootProject
-    }
     apply<com.diffplug.gradle.spotless.SpotlessPlugin>()
     extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension> {
         predeclareDeps()
