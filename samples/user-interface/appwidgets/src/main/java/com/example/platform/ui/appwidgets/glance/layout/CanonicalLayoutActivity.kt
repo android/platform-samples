@@ -53,6 +53,7 @@ import com.example.platform.ui.appwidgets.glance.layout.collections.ImageGridApp
 import com.example.platform.ui.appwidgets.glance.layout.collections.ImageTextListAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.text.LongTextAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.text.TextWithImageAppWidgetReceiver
+import com.example.platform.ui.appwidgets.glance.layout.text.FullBleedImageAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.toolbars.ExpressiveToolbarAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.toolbars.SearchToolBarAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.toolbars.ToolBarAppWidgetReceiver
@@ -286,6 +287,12 @@ private val canonicalLayoutWidgets = listOf(
         rowDescription = R.string.cl_description_text_and_image,
         imageRes = R.drawable.cl_activity_row_text_image,
         receiver = TextWithImageAppWidgetReceiver::class.java,
+    ),
+    CanonicalLayoutRowData(
+        rowTitle = R.string.cl_title_full_bleed_image,
+        rowDescription = R.string.cl_description_full_bleed_image,
+        imageRes = R.drawable.cl_activity_row_full_bleed_image,
+        receiver = FullBleedImageAppWidgetReceiver::class.java,
     ),
     CanonicalLayoutRowData(
         rowTitle = R.string.cl_title_grid,
