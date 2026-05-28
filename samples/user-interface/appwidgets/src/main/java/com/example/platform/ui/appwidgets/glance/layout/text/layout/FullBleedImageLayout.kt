@@ -66,6 +66,9 @@ fun FullBleedImageLayout(
     data: List<ImageGridItemData>? = null,
 ) {
     val size = LocalSize.current
+    val isSmall = size.height <= 110.dp
+    val appName = LocalContext.current.getString(R.string.sample_full_bleed_image_app_widget_name)
+
     Box(
         modifier = GlanceModifier
             .fillMaxSize()
@@ -85,6 +88,8 @@ fun FullBleedImageLayout(
             // with fillMaxSize to bypass any LazyColumn height/scroll container measurement issues.
             GalleryItemCard(
                 item = data[0],
+                isSmall = isSmall,
+                appName = appName,
                 modifier = GlanceModifier.fillMaxSize()
             )
         } else {
@@ -94,9 +99,11 @@ fun FullBleedImageLayout(
                 modifier = GlanceModifier.fillMaxSize(),
                 verticalScrollMode = VerticalScrollMode.SnapScroll
             ) {
-                items(limitedData) { item ->
+                items(limitedData, itemId = { it.key.hashCode().toLong() }) { item ->
                     GalleryItemCard(
                         item = item,
+                        isSmall = isSmall,
+                        appName = appName,
                         modifier = GlanceModifier.width(size.width).height(size.height)
                     )
                 }
@@ -108,9 +115,10 @@ fun FullBleedImageLayout(
 @Composable
 private fun GalleryItemCard(
     item: ImageGridItemData,
+    isSmall: Boolean,
+    appName: String,
     modifier: GlanceModifier = GlanceModifier,
 ) {
-    val size = LocalSize.current
     val itemTitle = item.title ?: ""
 
     Box(
@@ -118,11 +126,7 @@ private fun GalleryItemCard(
         contentAlignment = Alignment.BottomStart
     ) {
         // Layer 1: Full bleed background photo
-        val imageProvider = if (item.image != null) {
-            ImageProvider(item.image)
-        } else {
-            ImageProvider(R.drawable.sample_placeholder_image)
-        }
+        val imageProvider = item.image?.let { ImageProvider(it) } ?: ImageProvider(R.drawable.sample_placeholder_image)
 
         Image(
             provider = imageProvider,
@@ -131,11 +135,6 @@ private fun GalleryItemCard(
             modifier = GlanceModifier.fillMaxSize()
         )
 
-        val appIconSize = 24.dp
-        val spacerHeight = 4.dp
-
-        // Use discrete font sizing with a threshold of 110.dp (representing extremely small/XSmall layout sizes) to avoid scaling on resize.
-        val isSmall = size.height <= 110.dp
         val titleFontSize = if (isSmall) {
             WidgetTextDimensions.primaryTextFontSizeAndMaxLines(itemTitle).first
         } else {
@@ -161,20 +160,19 @@ private fun GalleryItemCard(
         Column(
             modifier = GlanceModifier
                 .fillMaxWidth()
-                .wrapContentHeight()
                 .padding(WidgetTextDimensions.widgetPadding),
             verticalAlignment = Alignment.Bottom,
         ) {
             // App Logo Icon styled as a fixed size monochrome asset above the Title
             Image(
                 provider = ImageProvider(R.drawable.sample_app_logo),
-                contentDescription = null,
+                contentDescription = appName,
                 contentScale = ContentScale.Fit,
-                modifier = GlanceModifier.width(appIconSize).height(appIconSize)
+                modifier = GlanceModifier.width(AppIconSize).height(AppIconSize)
             )
 
             if (itemTitle.isNotEmpty()) {
-                Spacer(modifier = GlanceModifier.height(spacerHeight))
+                Spacer(modifier = GlanceModifier.height(SpacerHeight))
                 Text(
                     text = itemTitle,
                     style = TextStyle(
@@ -189,6 +187,9 @@ private fun GalleryItemCard(
     }
 }
 
+private val AppIconSize = 24.dp
+private val SpacerHeight = 4.dp
+
 
 
 @RequiresApi(Build.VERSION_CODES_FULL.BAKLAVA_1)
@@ -200,14 +201,12 @@ private fun FullBleedImageLayoutPreview() {
         ImageGridItemData(
             key = "0",
             title = "Yosemite Valley under clear blue skies",
-            supportingText = "Yosemite National Park, California",
             image = null,
             imageContentDescription = null
         ),
         ImageGridItemData(
             key = "1",
             title = "Mystical forest lake reflection at sunrise",
-            supportingText = "Avenue of the Giants, Oregon",
             image = null,
             imageContentDescription = null
         )

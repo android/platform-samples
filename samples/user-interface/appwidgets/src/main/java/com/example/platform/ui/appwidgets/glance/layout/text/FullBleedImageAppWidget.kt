@@ -21,7 +21,6 @@ import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.key
 import androidx.glance.GlanceId
 import androidx.glance.GlanceTheme
 import androidx.glance.LocalSize
@@ -55,7 +54,7 @@ class FullBleedImageAppWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val repo = getImageGridDataRepo(id)
 
-        val initialData = withContext(Dispatchers.Default) {
+        val initialData = withContext(Dispatchers.IO) {
             repo.load(context)
         }
 
@@ -63,32 +62,23 @@ class FullBleedImageAppWidget : GlanceAppWidget() {
             val data by repo.data().collectAsState(initial = initialData)
 
             GlanceTheme {
-                key(LocalSize.current) {
-                    WidgetContent(
-                        data = data
-                    )
-                }
+                FullBleedImageLayout(
+                    data = data
+                )
             }
         }
-    }
-
-    @Composable
-    fun WidgetContent(data: List<ImageGridItemData>?) {
-        FullBleedImageLayout(
-            data = data
-        )
     }
 
     override suspend fun providePreview(context: Context, widgetCategory: Int) {
         val repo = getImageGridDataRepo(AppWidgetId(0))
 
-        val initialData = withContext(Dispatchers.Default) {
+        val initialData = withContext(Dispatchers.IO) {
             repo.load(context)
         }
 
         provideContent {
             GlanceTheme {
-                WidgetContent(
+                FullBleedImageLayout(
                     data = initialData.take(1)
                 )
             }

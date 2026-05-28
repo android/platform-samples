@@ -16,11 +16,11 @@ import com.example.platform.ui.appwidgets.glance.layout.collections.layout.Image
 import com.example.platform.ui.appwidgets.glance.layout.utils.ImageUtils.getMaxPossibleImageSize
 import com.example.platform.ui.appwidgets.glance.layout.utils.ImageUtils.getMaxWidgetMemoryAllowedSizeInBytes
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.runBlocking
 import com.example.platform.ui.appwidgets.glance.layout.computeIfAbsent as computeIfAbsentExt
 /**
  * A fake in-memory implementation of repository that produces a list of
@@ -74,7 +74,7 @@ class FakeImageGridDataRepository {
     val width = IMAGE_SIZE.coerceAtMost(imageSizeLimit.width)
     val height = width * 9 / 16
 
-    val mappedItems = runBlocking {
+    val mappedItems = coroutineScope {
       items.map { item ->
         async(Dispatchers.IO) {
           var bitmap: Bitmap? = null
