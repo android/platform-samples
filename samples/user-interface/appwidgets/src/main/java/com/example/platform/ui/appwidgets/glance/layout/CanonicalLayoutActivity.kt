@@ -60,6 +60,8 @@ import com.example.platform.ui.appwidgets.glance.layout.toolbars.ToolBarAppWidge
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
+import androidx.lifecycle.lifecycleScope
+
 class CanonicalLayoutActivity : ComponentActivity() {
 
     companion object {
@@ -73,6 +75,17 @@ class CanonicalLayoutActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
+
+        // Generate and publish the live preview for the widget picker
+        lifecycleScope.launch {
+            try {
+                val manager = GlanceAppWidgetManager(this@CanonicalLayoutActivity)
+                manager.setWidgetPreviews(FullBleedImageAppWidgetReceiver::class)
+            } catch (e: Exception) {
+                Log.e("CanonicalLayoutActivity", "Failed to set widget previews", e)
+            }
+        }
+
         setContent {
             MaterialTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->

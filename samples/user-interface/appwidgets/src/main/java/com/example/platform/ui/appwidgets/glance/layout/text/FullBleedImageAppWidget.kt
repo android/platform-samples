@@ -70,6 +70,22 @@ class FullBleedImageAppWidget : GlanceAppWidget() {
             data = data
         )
     }
+
+    override suspend fun providePreview(context: Context, widgetCategory: Int) {
+        val repo = getImageGridDataRepo(AppWidgetId(0))
+
+        val initialData = withContext(Dispatchers.Default) {
+            repo.load(context)
+        }
+
+        provideContent {
+            GlanceTheme {
+                WidgetContent(
+                    data = initialData
+                )
+            }
+        }
+    }
 }
 
 /**
