@@ -83,4 +83,43 @@ internal object FontUtils {
     val maxLines = (layoutHeight / textView.textSize).toInt().coerceAtLeast(1)
     return size.sp to maxLines
   }
+
+  /**
+   * Returns a truncated version of the text with "..." if the text does not fit
+   * within the available width at the given font size.
+   */
+  fun truncateTextToFit(
+    context: Context,
+    text: String,
+    fontSize: TextUnit,
+    availableWidth: Dp,
+  ): String {
+    fun dpToPx(dp: Dp): Int {
+      return TypedValue.applyDimension(
+        TypedValue.COMPLEX_UNIT_DIP,
+        dp.value,
+        context.resources.displayMetrics
+      ).toInt()
+    }
+
+    val paint = android.text.TextPaint().apply {
+      this.textSize = fontSize.value * context.resources.displayMetrics.scaledDensity
+    }
+
+    val maxWidthPx = dpToPx(availableWidth)
+    val textWidth = paint.measureText(text)
+
+    if (textWidth <= maxWidthPx) {
+      return text
+    }
+
+    val ellipsis = "..."
+    val ellipsisWidth = paint.measureText(ellipsis)
+    if (ellipsisWidth >= maxWidthPx) {
+      return ellipsis
+    }
+
+    val truncated = TextUtils.ellipsize(text, paint, maxWidthPx.toFloat(), TextUtils.TruncateAt.END)
+    return truncated.toString()
+  }
 }

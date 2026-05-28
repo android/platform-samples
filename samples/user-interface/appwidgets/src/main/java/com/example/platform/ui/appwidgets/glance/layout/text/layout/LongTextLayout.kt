@@ -40,9 +40,9 @@ import androidx.glance.layout.padding
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import com.example.platform.ui.appwidgets.R
-import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutDimensions.captionFontSizeAndMaxLines
-import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutDimensions.widgetPadding
-import com.example.platform.ui.appwidgets.glance.layout.text.layout.LongTextLayoutDimensions.primaryTextFontSizeAndMaxLines
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.WidgetTextDimensions.captionFontSizeAndMaxLines
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.WidgetTextDimensions.widgetPadding
+import com.example.platform.ui.appwidgets.glance.layout.text.layout.WidgetTextDimensions.primaryTextFontSizeAndMaxLines
 import com.example.platform.ui.appwidgets.glance.layout.utils.ActionUtils.actionStartDemoActivity
 import com.example.platform.ui.appwidgets.glance.layout.utils.FontUtils.calculateFontSizeAndMaxLines
 import com.example.platform.ui.appwidgets.glance.layout.utils.MediumWidgetPreview
@@ -221,7 +221,7 @@ data class LongTextLayoutData(
   val caption: String,
 )
 
-private object LongTextLayoutDimensions {
+internal object WidgetTextDimensions {
   val widgetPadding = 16.dp
   private val titleBarHeight: Dp
     @Composable get() = if (LongTextLayoutSize.fromLocalSize() == LongTextLayoutSize.XSmall) {
@@ -242,14 +242,14 @@ private object LongTextLayoutDimensions {
     }
 
   // Upper and lower bounds for the caption.
-  private val minCaptionFontSize = 12.sp // low - GM3 Label Medium
-  private val maxCaptionFontSize = 14.sp // high - GM3 Label Large
+  internal val minCaptionFontSize = 12.sp // low - GM3 Label Medium
+  internal val maxCaptionFontSize = 14.sp // high - GM3 Label Large
 
   // Upper bound for primary text.
-  private val maxPrimaryTextFontSize = 28.sp // GM3 Headline Medium
+  internal val maxPrimaryTextFontSize = 28.sp // GM3 Headline Medium
 
   // For a font size 16 of primary text, we want caption to be of size 14.
-  private const val captionToPrimaryTextRatio = 0.875f
+  internal const val captionToPrimaryTextRatio = 0.875f
 
   @Composable
   fun primaryTextFontSizeAndMaxLines(text: String): Pair<TextUnit, Int> {
