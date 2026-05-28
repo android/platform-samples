@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.glance.unit.ColorProvider
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
@@ -64,6 +65,7 @@ import com.example.platform.ui.appwidgets.glance.layout.utils.SmallWidgetPreview
 fun FullBleedImageLayout(
     data: List<ImageGridItemData>? = null,
 ) {
+    val size = LocalSize.current
     Box(
         modifier = GlanceModifier
             .fillMaxSize()
@@ -78,6 +80,13 @@ fun FullBleedImageLayout(
                 actionButtonIcon = R.drawable.sample_info_icon,
                 actionButtonOnClick = actionStartDemoActivity("on-click of info button in no data view")
             )
+        } else if (data.size == 1) {
+            // If there's only 1 item (such as in the widget preview), render directly
+            // with fillMaxSize to bypass any LazyColumn height/scroll container measurement issues.
+            GalleryItemCard(
+                item = data[0],
+                modifier = GlanceModifier.fillMaxSize()
+            )
         } else {
             val limitedData = data.take(5)
             // LazyColumn with SnapScroll mode enabled
@@ -86,7 +95,10 @@ fun FullBleedImageLayout(
                 verticalScrollMode = VerticalScrollMode.SnapScroll
             ) {
                 items(limitedData) { item ->
-                    GalleryItemCard(item = item)
+                    GalleryItemCard(
+                        item = item,
+                        modifier = GlanceModifier.width(size.width).height(size.height)
+                    )
                 }
             }
         }
@@ -94,14 +106,15 @@ fun FullBleedImageLayout(
 }
 
 @Composable
-private fun GalleryItemCard(item: ImageGridItemData) {
+private fun GalleryItemCard(
+    item: ImageGridItemData,
+    modifier: GlanceModifier = GlanceModifier,
+) {
     val size = LocalSize.current
     val itemTitle = item.title ?: ""
 
     Box(
-        modifier = GlanceModifier
-            .width(size.width)
-            .height(size.height),
+        modifier = modifier,
         contentAlignment = Alignment.BottomStart
     ) {
         // Layer 1: Full bleed background photo
@@ -121,8 +134,8 @@ private fun GalleryItemCard(item: ImageGridItemData) {
         val appIconSize = 24.dp
         val spacerHeight = 4.dp
 
-        // Use discrete font sizing based on the same size-class threshold as LongTextLayout (height <= 180.dp) to avoid continuous scaling on resize.
-        val isSmall = size.height <= 180.dp
+        // Use discrete font sizing with a threshold of 110.dp (representing extremely small/XSmall layout sizes) to avoid scaling on resize.
+        val isSmall = size.height <= 110.dp
         val titleFontSize = if (isSmall) {
             WidgetTextDimensions.primaryTextFontSizeAndMaxLines(itemTitle).first
         } else {

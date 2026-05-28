@@ -30,6 +30,8 @@ import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
+import androidx.compose.ui.unit.DpSize
+import androidx.compose.ui.unit.dp
 import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeImageGridDataRepository
 import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeImageGridDataRepository.Companion.getImageGridDataRepo
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridItemData
@@ -43,6 +45,12 @@ import kotlinx.coroutines.withContext
  */
 class FullBleedImageAppWidget : GlanceAppWidget() {
     override val sizeMode: SizeMode = SizeMode.Exact
+
+    override val previewSizeMode = SizeMode.Responsive(
+        setOf(
+            DpSize(109.dp, 115.dp)
+        )
+    )
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val repo = getImageGridDataRepo(id)
@@ -81,7 +89,7 @@ class FullBleedImageAppWidget : GlanceAppWidget() {
         provideContent {
             GlanceTheme {
                 WidgetContent(
-                    data = initialData
+                    data = initialData.take(1)
                 )
             }
         }
