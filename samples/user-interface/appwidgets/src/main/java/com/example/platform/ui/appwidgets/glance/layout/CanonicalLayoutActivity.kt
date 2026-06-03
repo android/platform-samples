@@ -16,15 +16,18 @@
 
 package com.example.platform.ui.appwidgets.glance.layout
 
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -87,16 +90,33 @@ class CanonicalLayoutActivity : ComponentActivity() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
 
-        // Generate and publish the live preview for the widget picker
+        // Publish Generated Widget Previews
         lifecycleScope.launch {
             try {
-                val manager = GlanceAppWidgetManager(this@CanonicalLayoutActivity)
-                manager.setWidgetPreviews(FullBleedImageAppWidgetReceiver::class)
+                val context = this@CanonicalLayoutActivity
+                val receiver = FullBleedImageAppWidgetReceiver::class.java
+                val glanceAppWidgetManager = GlanceAppWidgetManager(context)
+                val appWidgetManager = context.getSystemService(AppWidgetManager::class.java)
+
+                val providerInfo = appWidgetManager.installedProviders.firstOrNull {
+                    it.provider.className == receiver.name
+                }
+
+                if (providerInfo?.generatedPreviewCategories == 0) {
+                    val result = glanceAppWidgetManager.setWidgetPreviews(FullBleedImageAppWidgetReceiver::class)
+                    val status = when (result) {
+                        GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_SUCCESS -> "Success"
+                        GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_RATE_LIMITED -> "Rate-Limited"
+                        else -> "Error ($result)"
+                    }
+                    Log.i("CanonicalLayoutActivity", "Published previews for ${receiver.simpleName}: $status")
+                }
             } catch (e: Exception) {
                 Log.e("CanonicalLayoutActivity", "Failed to set widget previews", e)
             }
