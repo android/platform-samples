@@ -209,7 +209,7 @@ private fun CanonicalLayoutRow(widget: CanonicalLayoutRowData, modifier: Modifie
             painter = painterResource(id = widget.imageRes),
             contentDescription = "Screenshot of ${widget.rowTitle}",
             contentScale = ContentScale.FillWidth,
-            modifier = modifier,
+            modifier = modifier.fillMaxWidth(),
         )
     }
 
@@ -304,7 +304,7 @@ private val canonicalLayoutWidgets = listOf(
     CanonicalLayoutRowData(
         rowTitle = R.string.cl_title_full_bleed_image,
         rowDescription = R.string.cl_description_full_bleed_image,
-        imageRes = R.drawable.sample_full_bleed_image_preview,
+        imageRes = R.drawable.cl_activity_row_full_bleed_image,
         receiver = FullBleedImageAppWidgetReceiver::class.java,
     ),
     CanonicalLayoutRowData(
