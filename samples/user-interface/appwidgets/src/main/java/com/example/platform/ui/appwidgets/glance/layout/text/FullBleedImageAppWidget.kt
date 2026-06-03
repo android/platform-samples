@@ -10,22 +10,20 @@
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the details;
- * and limitations under the License.
+ * See the License for the details; and limitations under the License.
  */
 
 package com.example.platform.ui.appwidgets.glance.layout.text
 
-import android.annotation.SuppressLint
 import android.content.Context
-import androidx.compose.runtime.Composable
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.glance.GlanceId
 import androidx.glance.GlanceTheme
-import androidx.glance.LocalSize
-import androidx.glance.appwidget.AppWidgetId
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.provideContent
@@ -33,14 +31,12 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeImageGridDataRepository
 import com.example.platform.ui.appwidgets.glance.layout.collections.data.FakeImageGridDataRepository.Companion.getImageGridDataRepo
-import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridItemData
 import com.example.platform.ui.appwidgets.glance.layout.text.layout.FullBleedImageLayout
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 /**
- * Glance widget showcasing the Full Bleed Snapping Gallery layout, powered by the existing
- * memory-optimized [FakeImageGridDataRepository].
+ * Glance widget showcasing Full Bleed Snap Scrolling, powered by [FakeImageGridDataRepository].
  */
 class FullBleedImageAppWidget : GlanceAppWidget() {
     override val sizeMode: SizeMode = SizeMode.Exact
@@ -51,6 +47,7 @@ class FullBleedImageAppWidget : GlanceAppWidget() {
         )
     )
 
+    @RequiresApi(Build.VERSION_CODES_FULL.BAKLAVA_1)
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val repo = getImageGridDataRepo(id)
 
@@ -69,8 +66,9 @@ class FullBleedImageAppWidget : GlanceAppWidget() {
         }
     }
 
+    @RequiresApi(Build.VERSION_CODES_FULL.BAKLAVA_1)
     override suspend fun providePreview(context: Context, widgetCategory: Int) {
-        val repo = getImageGridDataRepo(AppWidgetId(0))
+        val repo = FakeImageGridDataRepository()
 
         val initialData = withContext(Dispatchers.IO) {
             repo.load(context)
@@ -87,15 +85,16 @@ class FullBleedImageAppWidget : GlanceAppWidget() {
 }
 
 /**
- * Receiver for the Full Bleed Snapping Gallery widget.
+ * Receiver for the Full Bleed Snap Scrolling widget.
  */
 class FullBleedImageAppWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget: GlanceAppWidget = FullBleedImageAppWidget()
 
-    @SuppressLint("RestrictedApi")
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+        val glanceAppWidgetManager = GlanceAppWidgetManager(context)
         appWidgetIds.forEach {
-            FakeImageGridDataRepository.cleanUp(AppWidgetId(appWidgetId = it))
+            val glanceId = glanceAppWidgetManager.getGlanceIdBy(it)
+            FakeImageGridDataRepository.cleanUp(glanceId)
         }
         super.onDeleted(context, appWidgetIds)
     }
