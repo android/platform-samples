@@ -90,7 +90,6 @@ fun FullBleedImageLayout(
             )
         } else {
             // Show a standard scrolling list of items without Snap Scrolling
-            // TODO: Remove once Snap Scrolling gracefully degrades
             GalleryList(
                 data = data,
                 isSmall = isSmall,

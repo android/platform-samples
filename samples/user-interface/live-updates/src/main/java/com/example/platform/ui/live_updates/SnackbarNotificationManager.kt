@@ -55,7 +55,7 @@ object SnackbarNotificationManager {
             override fun buildNotification(): NotificationCompat.Builder {
                 val orderText = "Your order is being placed"
                 return buildBaseNotification(appContext, INITIALIZING)
-                    .setSmallIcon(R.drawable.ic_launcher_foreground)
+                    .setSmallIcon(R.drawable.small_icon)
                     .setContentTitle(
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN) {
                             SpannableStringBuilder().append(
@@ -223,7 +223,7 @@ object SnackbarNotificationManager {
         @RequiresApi(Build.VERSION_CODES.O)
         fun buildBaseNotification(appContext: Context, orderState: OrderState): NotificationCompat.Builder {
             val notificationBuilder = NotificationCompat.Builder(appContext, CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_launcher_foreground)
+                .setSmallIcon(R.drawable.small_icon)
                 .setOngoing(true)
                 .setRequestPromotedOngoing(true)
 
