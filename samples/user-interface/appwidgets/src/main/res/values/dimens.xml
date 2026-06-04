@@ -134,5 +134,13 @@
     <dimen name="sample_image_grid_widget_max_resize_width">624dp</dimen>
     <dimen name="sample_image_grid_widget_max_resize_height">422dp</dimen>
 
+    <!-- Full bleed image widget -->
+    <integer name="sample_full_bleed_image_target_cell_width">2</integer>
+    <integer name="sample_full_bleed_image_target_cell_height">2</integer>
+    <dimen name="sample_full_bleed_image_widget_min_width">120dp</dimen>
+    <dimen name="sample_full_bleed_image_widget_min_height">48dp</dimen>
+    <dimen name="sample_full_bleed_image_widget_min_resize_width">120dp</dimen>
+    <dimen name="sample_full_bleed_image_widget_min_resize_height">48dp</dimen>
+
     <!-- other sizes go here -->
 </resources>

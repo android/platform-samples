@@ -23,10 +23,10 @@ plugins {
     
 android {
     namespace = "com.example.platform.ui.appwidgets"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
     }
 
     compileOptions {

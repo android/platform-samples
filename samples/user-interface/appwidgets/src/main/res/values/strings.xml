@@ -89,4 +89,8 @@
     <string name="cl_title_search_toolbar">Search Toolbar</string>
     <string name="cl_description_search_toolbar">Ideal for apps where search is paramount, this layout provides a dedicated search entry point while allowing for additional shortcuts based on available widget space.</string>
 
+    <string name="sample_full_bleed_image_app_widget_name">Full Bleed Snap Scrolling</string>
+    <string name="cl_title_full_bleed_image">Full Bleed Snap Scrolling</string>
+    <string name="cl_description_full_bleed_image">A full bleed gallery widget demonstrating snap scrolling. Scroll vertically between featured items with an overlaid title and caption.</string>
+
 </resources>

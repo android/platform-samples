@@ -1,14 +1,33 @@
+/*
+ * Copyright 2026 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.example.platform.ui.appwidgets.glance.layout
 
+import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -53,11 +72,14 @@ import com.example.platform.ui.appwidgets.glance.layout.collections.ImageGridApp
 import com.example.platform.ui.appwidgets.glance.layout.collections.ImageTextListAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.text.LongTextAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.text.TextWithImageAppWidgetReceiver
+import com.example.platform.ui.appwidgets.glance.layout.text.FullBleedImageAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.toolbars.ExpressiveToolbarAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.toolbars.SearchToolBarAppWidgetReceiver
 import com.example.platform.ui.appwidgets.glance.layout.toolbars.ToolBarAppWidgetReceiver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+
+import androidx.lifecycle.lifecycleScope
 
 class CanonicalLayoutActivity : ComponentActivity() {
 
@@ -72,6 +94,35 @@ class CanonicalLayoutActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
+
+        // Publish Generated Widget Previews
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            lifecycleScope.launch {
+                try {
+                    val context = this@CanonicalLayoutActivity
+                    val receiver = FullBleedImageAppWidgetReceiver::class.java
+                    val glanceAppWidgetManager = GlanceAppWidgetManager(context)
+                    val appWidgetManager = context.getSystemService(AppWidgetManager::class.java)
+
+                    val providerInfo = appWidgetManager?.installedProviders?.firstOrNull {
+                        it.provider.className == receiver.name
+                    }
+
+                    if (providerInfo?.generatedPreviewCategories == 0) {
+                        val result = glanceAppWidgetManager.setWidgetPreviews(FullBleedImageAppWidgetReceiver::class)
+                        val status = when (result) {
+                            GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_SUCCESS -> "Success"
+                            GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_RATE_LIMITED -> "Rate-Limited"
+                            else -> "Error ($result)"
+                        }
+                        Log.i("CanonicalLayoutActivity", "Published previews for ${receiver.simpleName}: $status")
+                    }
+                } catch (e: Exception) {
+                    Log.e("CanonicalLayoutActivity", "Failed to set widget previews", e)
+                }
+            }
+        }
+
         setContent {
             MaterialTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
@@ -195,7 +246,7 @@ private fun CanonicalLayoutRow(widget: CanonicalLayoutRowData, modifier: Modifie
             painter = painterResource(id = widget.imageRes),
             contentDescription = "Screenshot of ${widget.rowTitle}",
             contentScale = ContentScale.FillWidth,
-            modifier = modifier,
+            modifier = modifier.fillMaxWidth(),
         )
     }
 
@@ -286,6 +337,12 @@ private val canonicalLayoutWidgets = listOf(
         rowDescription = R.string.cl_description_text_and_image,
         imageRes = R.drawable.cl_activity_row_text_image,
         receiver = TextWithImageAppWidgetReceiver::class.java,
+    ),
+    CanonicalLayoutRowData(
+        rowTitle = R.string.cl_title_full_bleed_image,
+        rowDescription = R.string.cl_description_full_bleed_image,
+        imageRes = R.drawable.cl_activity_row_full_bleed_image,
+        receiver = FullBleedImageAppWidgetReceiver::class.java,
     ),
     CanonicalLayoutRowData(
         rowTitle = R.string.cl_title_grid,

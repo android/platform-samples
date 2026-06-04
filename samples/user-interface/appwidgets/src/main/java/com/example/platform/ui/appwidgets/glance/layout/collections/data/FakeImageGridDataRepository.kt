@@ -1,3 +1,19 @@
+/*
+ * Copyright 2026 The Android Open Source Project
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.example.platform.ui.appwidgets.glance.layout.collections.data
 
 import android.content.Context
@@ -16,11 +32,11 @@ import com.example.platform.ui.appwidgets.glance.layout.collections.layout.Image
 import com.example.platform.ui.appwidgets.glance.layout.utils.ImageUtils.getMaxPossibleImageSize
 import com.example.platform.ui.appwidgets.glance.layout.utils.ImageUtils.getMaxWidgetMemoryAllowedSizeInBytes
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.runBlocking
 import com.example.platform.ui.appwidgets.glance.layout.computeIfAbsent as computeIfAbsentExt
 /**
  * A fake in-memory implementation of repository that produces a list of
@@ -74,7 +90,7 @@ class FakeImageGridDataRepository {
     val width = IMAGE_SIZE.coerceAtMost(imageSizeLimit.width)
     val height = width * 9 / 16
 
-    val mappedItems = runBlocking {
+    val mappedItems = coroutineScope {
       items.map { item ->
         async(Dispatchers.IO) {
           var bitmap: Bitmap? = null
