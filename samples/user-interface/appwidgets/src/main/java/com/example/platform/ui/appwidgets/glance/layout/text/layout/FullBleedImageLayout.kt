@@ -142,7 +142,7 @@ private fun GalleryItemCard(
             modifier = GlanceModifier
                 .fillMaxWidth()
                 // Implementing a partial gradient scrim by applying a background modifier directly
-                // to a text  Column, shown here, results in the gradient stretching to fill the
+                // to a text Column, shown here, results in the gradient stretching to fill the
                 // entire widget. You can work around this by using an independent sibling Image
                 // with a hardcoded height (100.dp) to restrict a gradient to the bottom.
                 .background(ImageProvider(R.drawable.sample_scrim_gradient))
