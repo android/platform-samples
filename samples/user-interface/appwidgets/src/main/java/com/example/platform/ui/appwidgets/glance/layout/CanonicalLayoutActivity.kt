@@ -90,35 +90,36 @@ class CanonicalLayoutActivity : ComponentActivity() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
 
         super.onCreate(savedInstanceState)
 
         // Publish Generated Widget Previews
-        lifecycleScope.launch {
-            try {
-                val context = this@CanonicalLayoutActivity
-                val receiver = FullBleedImageAppWidgetReceiver::class.java
-                val glanceAppWidgetManager = GlanceAppWidgetManager(context)
-                val appWidgetManager = context.getSystemService(AppWidgetManager::class.java)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM) {
+            lifecycleScope.launch {
+                try {
+                    val context = this@CanonicalLayoutActivity
+                    val receiver = FullBleedImageAppWidgetReceiver::class.java
+                    val glanceAppWidgetManager = GlanceAppWidgetManager(context)
+                    val appWidgetManager = context.getSystemService(AppWidgetManager::class.java)
 
-                val providerInfo = appWidgetManager.installedProviders.firstOrNull {
-                    it.provider.className == receiver.name
-                }
-
-                if (providerInfo?.generatedPreviewCategories == 0) {
-                    val result = glanceAppWidgetManager.setWidgetPreviews(FullBleedImageAppWidgetReceiver::class)
-                    val status = when (result) {
-                        GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_SUCCESS -> "Success"
-                        GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_RATE_LIMITED -> "Rate-Limited"
-                        else -> "Error ($result)"
+                    val providerInfo = appWidgetManager?.installedProviders?.firstOrNull {
+                        it.provider.className == receiver.name
                     }
-                    Log.i("CanonicalLayoutActivity", "Published previews for ${receiver.simpleName}: $status")
+
+                    if (providerInfo?.generatedPreviewCategories == 0) {
+                        val result = glanceAppWidgetManager.setWidgetPreviews(FullBleedImageAppWidgetReceiver::class)
+                        val status = when (result) {
+                            GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_SUCCESS -> "Success"
+                            GlanceAppWidgetManager.SET_WIDGET_PREVIEWS_RESULT_RATE_LIMITED -> "Rate-Limited"
+                            else -> "Error ($result)"
+                        }
+                        Log.i("CanonicalLayoutActivity", "Published previews for ${receiver.simpleName}: $status")
+                    }
+                } catch (e: Exception) {
+                    Log.e("CanonicalLayoutActivity", "Failed to set widget previews", e)
                 }
-            } catch (e: Exception) {
-                Log.e("CanonicalLayoutActivity", "Failed to set widget previews", e)
             }
         }
 

@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.DpSize
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
@@ -58,7 +59,6 @@ import com.example.platform.ui.appwidgets.glance.layout.utils.SmallWidgetPreview
  * Each item displays an edge-to-edge background photo with overlaid
  * title and caption details that auto-scale to fit the current widget size.
  */
-@RequiresApi(Build.VERSION_CODES_FULL.BAKLAVA_1)
 @Composable
 fun FullBleedImageLayout(
     data: List<ImageGridItemData>? = null,
@@ -81,30 +81,74 @@ fun FullBleedImageLayout(
                 actionButtonIcon = R.drawable.sample_info_icon,
                 actionButtonOnClick = actionStartDemoActivity("on-click of info button in no data view")
             )
-        } else if (data.size == 1) {
-            // If there's only 1 item (like in the widget preview), render with fillMaxSize to
-            // bypass LazyColumn measurement issues where the generated widget preview item doesn't
-            // fill the widget bounds.
-            GalleryItemCard(
-                item = data[0],
+        } else if (Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.BAKLAVA_1) {
+            SnapScrollingGallery(
+                data = data,
                 isSmall = isSmall,
                 appName = appName,
-                modifier = GlanceModifier.fillMaxSize()
+                size = size
             )
         } else {
-            val limitedData = data.take(5)
-            LazyColumn(
-                modifier = GlanceModifier.fillMaxSize(),
-                verticalScrollMode = VerticalScrollMode.SnapScrollMatchHeight(size.height)
-            ) {
-                items(limitedData, itemId = { it.key.hashCode().toLong() }) { item ->
-                    GalleryItemCard(
-                        item = item,
-                        isSmall = isSmall,
-                        appName = appName,
-                        modifier = GlanceModifier.width(size.width).height(size.height)
-                    )
-                }
+            // Show a standard scrolling list of items without Snap Scrolling
+            // TODO: Remove once Snap Scrolling gracefully degrades
+            GalleryList(
+                data = data,
+                isSmall = isSmall,
+                appName = appName,
+                size = size
+            )
+        }
+    }
+}
+
+@RequiresApi(Build.VERSION_CODES_FULL.BAKLAVA_1)
+@Composable
+private fun SnapScrollingGallery(
+    data: List<ImageGridItemData>,
+    isSmall: Boolean,
+    appName: String,
+    size: DpSize,
+) {
+    GalleryList(
+        data = data,
+        isSmall = isSmall,
+        appName = appName,
+        size = size,
+        verticalScrollMode = VerticalScrollMode.SnapScrollMatchHeight(size.height)
+    )
+}
+
+@Composable
+private fun GalleryList(
+    data: List<ImageGridItemData>,
+    isSmall: Boolean,
+    appName: String,
+    size: DpSize,
+    verticalScrollMode: VerticalScrollMode = VerticalScrollMode.Normal
+) {
+    if (data.size == 1) {
+        // If there's only 1 item (like in the widget preview), render with fillMaxSize to
+        // bypass LazyColumn measurement issues where the generated widget preview item doesn't
+        // fill the widget bounds.
+        GalleryItemCard(
+            item = data[0],
+            isSmall = isSmall,
+            appName = appName,
+            modifier = GlanceModifier.fillMaxSize()
+        )
+    } else {
+        val limitedData = data.take(5)
+        LazyColumn(
+            modifier = GlanceModifier.fillMaxSize(),
+            verticalScrollMode = verticalScrollMode
+        ) {
+            items(limitedData, itemId = { item -> item.key.hashCode().toLong() }) { item ->
+                GalleryItemCard(
+                    item = item,
+                    isSmall = isSmall,
+                    appName = appName,
+                    modifier = GlanceModifier.width(size.width).height(size.height)
+                )
             }
         }
     }
@@ -142,9 +186,7 @@ private fun GalleryItemCard(
             modifier = GlanceModifier
                 .fillMaxWidth()
                 // Implementing a partial gradient scrim by applying a background modifier directly
-                // to a text Column, shown here, results in the gradient stretching to fill the
-                // entire widget. You can work around this by using an independent sibling Image
-                // with a hardcoded height (100.dp) to restrict a gradient to the bottom.
+                // to a text Column results in the gradient stretching to fill the entire widget.
                 .background(ImageProvider(R.drawable.sample_scrim_gradient))
                 .padding(WidgetTextDimensions.widgetPadding),
             verticalAlignment = Alignment.Bottom,

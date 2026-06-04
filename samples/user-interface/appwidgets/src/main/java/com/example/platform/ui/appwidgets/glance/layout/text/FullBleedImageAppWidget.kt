@@ -16,6 +16,7 @@
 package com.example.platform.ui.appwidgets.glance.layout.text
 
 import android.content.Context
+import android.util.Log
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.runtime.collectAsState
@@ -47,7 +48,6 @@ class FullBleedImageAppWidget : GlanceAppWidget() {
         )
     )
 
-    @RequiresApi(Build.VERSION_CODES_FULL.BAKLAVA_1)
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val repo = getImageGridDataRepo(id)
 
@@ -66,7 +66,6 @@ class FullBleedImageAppWidget : GlanceAppWidget() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES_FULL.BAKLAVA_1)
     override suspend fun providePreview(context: Context, widgetCategory: Int) {
         val repo = FakeImageGridDataRepository()
 
@@ -92,9 +91,13 @@ class FullBleedImageAppWidgetReceiver : GlanceAppWidgetReceiver() {
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         val glanceAppWidgetManager = GlanceAppWidgetManager(context)
-        appWidgetIds.forEach {
-            val glanceId = glanceAppWidgetManager.getGlanceIdBy(it)
-            FakeImageGridDataRepository.cleanUp(glanceId)
+        appWidgetIds.forEach { id ->
+            try {
+                val glanceId = glanceAppWidgetManager.getGlanceIdBy(id)
+                FakeImageGridDataRepository.cleanUp(glanceId)
+            } catch (e: IllegalArgumentException) {
+                Log.w("FullBleedImageReceiver", "Skipping cleanup for invalid AppWidget ID: $id", e)
+            }
         }
         super.onDeleted(context, appWidgetIds)
     }
