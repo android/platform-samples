@@ -21,8 +21,6 @@ import androidx.annotation.RequiresApi
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import androidx.glance.unit.ColorProvider
 import androidx.glance.GlanceModifier
 import androidx.glance.Image
 import androidx.glance.ImageProvider
@@ -32,20 +30,21 @@ import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.VerticalScrollMode
 import androidx.glance.appwidget.lazy.items
+import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.Column
 import androidx.glance.layout.ContentScale
-import androidx.glance.layout.Spacer
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.height
 import androidx.glance.layout.padding
+import androidx.glance.layout.size
 import androidx.glance.layout.width
-import androidx.glance.layout.wrapContentHeight
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
+import androidx.glance.unit.ColorProvider
 import com.example.platform.ui.appwidgets.R
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridItemData
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.NoDataContent
@@ -54,10 +53,9 @@ import com.example.platform.ui.appwidgets.glance.layout.utils.MediumWidgetPrevie
 import com.example.platform.ui.appwidgets.glance.layout.utils.SmallWidgetPreview
 
 /**
- * A beautiful canonical layout featuring an edge-to-edge full bleed gallery with snapping
- * vertical scroll support, reusing the unified [ImageGridItemData] schema.
+ * A full bleed snap scrolling gallery canonical layout using [ImageGridItemData].
  *
- * Each featured item displays an edge-to-edge landscape background photo with overlaid
+ * Each item displays an edge-to-edge background photo with overlaid
  * title and caption details that auto-scale to fit the current widget size.
  */
 @RequiresApi(Build.VERSION_CODES_FULL.BAKLAVA_1)
@@ -84,8 +82,9 @@ fun FullBleedImageLayout(
                 actionButtonOnClick = actionStartDemoActivity("on-click of info button in no data view")
             )
         } else if (data.size == 1) {
-            // If there's only 1 item (such as in the widget preview), render directly
-            // with fillMaxSize to bypass any LazyColumn height/scroll container measurement issues.
+            // If there's only 1 item (like in the widget preview), render with fillMaxSize to
+            // bypass LazyColumn measurement issues where the generated widget preview item doesn't
+            // fill the widget bounds.
             GalleryItemCard(
                 item = data[0],
                 isSmall = isSmall,
@@ -94,10 +93,9 @@ fun FullBleedImageLayout(
             )
         } else {
             val limitedData = data.take(5)
-            // LazyColumn with SnapScroll mode enabled
             LazyColumn(
                 modifier = GlanceModifier.fillMaxSize(),
-                verticalScrollMode = VerticalScrollMode.SnapScroll
+                verticalScrollMode = VerticalScrollMode.SnapScrollMatchHeight(size.height)
             ) {
                 items(limitedData, itemId = { it.key.hashCode().toLong() }) { item ->
                     GalleryItemCard(
@@ -125,7 +123,6 @@ private fun GalleryItemCard(
         modifier = modifier,
         contentAlignment = Alignment.BottomStart
     ) {
-        // Layer 1: Full bleed background photo
         val imageProvider = item.image?.let { ImageProvider(it) } ?: ImageProvider(R.drawable.sample_placeholder_image)
 
         Image(
@@ -141,38 +138,26 @@ private fun GalleryItemCard(
             WidgetTextDimensions.maxPrimaryTextFontSize
         }
 
-        // Determine a safe, explicit height for the gradient scrim area based on the size class
-        val scrimHeight = if (isSmall) 100.dp else 140.dp
-
-        // Layer 2: Independent background gradient scrim positioned at the bottom of the card.
-        // Giving this a hardcoded height guarantees it cannot stretch to full-widget height.
-        Image(
-            provider = ImageProvider(R.drawable.sample_scrim_gradient),
-            contentDescription = null,
-            contentScale = ContentScale.FillBounds,
-            modifier = GlanceModifier
-                .fillMaxWidth()
-                .height(scrimHeight)
-        )
-
-        // Layer 3: Independent content Column with no background, positioned at the bottom of the card.
-        // Because it has no background and wraps content, padding is never squished.
         Column(
             modifier = GlanceModifier
                 .fillMaxWidth()
+                // Implementing a partial gradient scrim by applying a background modifier directly
+                // to a text  Column, shown here, results in the gradient stretching to fill the
+                // entire widget. You can work around this by using an independent sibling Image
+                // with a hardcoded height (100.dp) to restrict a gradient to the bottom.
+                .background(ImageProvider(R.drawable.sample_scrim_gradient))
                 .padding(WidgetTextDimensions.widgetPadding),
             verticalAlignment = Alignment.Bottom,
         ) {
-            // App Logo Icon styled as a fixed size monochrome asset above the Title
+            // App Logo Icon styled as a fixed size monochrome asset above the Title as the Caption
             Image(
                 provider = ImageProvider(R.drawable.sample_app_logo),
                 contentDescription = appName,
                 contentScale = ContentScale.Fit,
-                modifier = GlanceModifier.width(AppIconSize).height(AppIconSize)
+                modifier = GlanceModifier.size(24.dp)
             )
 
             if (itemTitle.isNotEmpty()) {
-                Spacer(modifier = GlanceModifier.height(SpacerHeight))
                 Text(
                     text = itemTitle,
                     style = TextStyle(
@@ -180,17 +165,12 @@ private fun GalleryItemCard(
                         fontWeight = FontWeight.Bold,
                         fontSize = titleFontSize
                     ),
-                    modifier = GlanceModifier.fillMaxWidth()
+                    modifier = GlanceModifier.fillMaxWidth().padding(top = 4.dp)
                 )
             }
         }
     }
 }
-
-private val AppIconSize = 24.dp
-private val SpacerHeight = 4.dp
-
-
 
 @RequiresApi(Build.VERSION_CODES_FULL.BAKLAVA_1)
 @SmallWidgetPreview
