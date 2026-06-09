@@ -37,6 +37,7 @@ The `layouts` directory contains following layout categories:
 * [text](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/text)
   * [Long Text](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/text/LongTextAppWidget.kt)
   * [Text with image](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/text/TextWithImageAppWidget.kt)
+  * [Full bleed image snap scroll](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/text/FullBleedImageAppWidget.kt)
 
 * [toolbars](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/toolbars)
   * [Toolbar with app name](./src/main/java/com/example/platform/ui/appwidgets/glance/layout/toolbars/ToolBarAppWidget.kt)
