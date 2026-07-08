@@ -38,10 +38,6 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
 
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-
     sourceSets {
         getByName("main") {
             java.srcDirs("src/main/java", "src/main/proto")
