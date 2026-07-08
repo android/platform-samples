@@ -21,7 +21,7 @@ plugins {
 
 android {
     namespace = "com.example.platform.ui.windowmanager"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 24

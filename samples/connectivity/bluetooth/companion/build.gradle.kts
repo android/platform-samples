@@ -23,7 +23,7 @@ plugins {
 
 android {
     namespace = "com.example.platform.connectivity.bluetooth.companion"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 21

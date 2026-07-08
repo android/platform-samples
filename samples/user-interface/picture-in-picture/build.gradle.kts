@@ -23,7 +23,7 @@ plugins {
 
 android {
     namespace = "com.example.android.pip"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 23

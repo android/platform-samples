@@ -25,7 +25,7 @@ plugins {
 
 android {
     namespace = "com.example.platform.connectivity.uwb"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 31

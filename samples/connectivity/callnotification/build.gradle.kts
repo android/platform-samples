@@ -24,7 +24,7 @@ plugins {
 
 android {
     namespace = "com.example.platform.connectivity.callnotification"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 21

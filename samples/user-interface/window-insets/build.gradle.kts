@@ -22,7 +22,7 @@ plugins {
 
 android {
     namespace = "com.example.platform.ui.insets"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 21
