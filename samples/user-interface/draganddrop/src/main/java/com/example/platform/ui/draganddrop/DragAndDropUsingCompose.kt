@@ -159,17 +159,11 @@ fun Photo(urlStr: String) {
         contentDescription = "demo",
         modifier = Modifier
             .size(100.dp)
-            .dragAndDropSource {
-                detectTapGestures(
-                    onLongPress = {
-                        startTransfer(
-                            DragAndDropTransferData(
-                                ClipData.newPlainText(
-                                    "image Url", url,
-                                ),
-                            ),
-                        )
-                    },
+            .dragAndDropSource { _ ->
+                DragAndDropTransferData(
+                    ClipData.newPlainText(
+                        "image Url", url,
+                    )
                 )
             },
     )

@@ -263,9 +263,9 @@ private fun BluetoothScanEffect(
         val observer = LifecycleEventObserver { _, event ->
             // Start scanning once the app is in foreground and stop when in background
             if (event == Lifecycle.Event.ON_START) {
-                adapter.bluetoothLeScanner.startScan(null, scanSettings, leScanCallback)
+                adapter.bluetoothLeScanner?.startScan(null, scanSettings, leScanCallback)
             } else if (event == Lifecycle.Event.ON_STOP) {
-                adapter.bluetoothLeScanner.stopScan(leScanCallback)
+                adapter.bluetoothLeScanner?.stopScan(leScanCallback)
             }
         }
 
@@ -275,7 +275,7 @@ private fun BluetoothScanEffect(
         // When the effect leaves the Composition, remove the observer and stop scanning
         onDispose {
             lifecycleOwner.lifecycle.removeObserver(observer)
-            adapter.bluetoothLeScanner.stopScan(leScanCallback)
+            adapter.bluetoothLeScanner?.stopScan(leScanCallback)
         }
     }
 }

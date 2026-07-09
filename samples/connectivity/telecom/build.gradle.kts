@@ -25,11 +25,7 @@ plugins {
 
 android {
     namespace = "com.example.platform.connectivity.telecom"
-    compileSdk {
-        version = release(version = 36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 23

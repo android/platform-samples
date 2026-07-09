@@ -43,6 +43,7 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    api(libs.compose.material.iconsext)
 
     implementation(libs.accompanist.permissions)
 }

@@ -101,6 +101,7 @@ internal class UwbSessionScopeImpl(
         trySend(EndpointEvents.PositionUpdated(endpoint, result.position))
       is RangingResult.RangingResultPeerDisconnected ->
         trySend(EndpointEvents.UwbDisconnected(endpoint))
+      else -> { /* Ignore other results */ }
     }
   }
 }

@@ -20,3 +20,9 @@ plugins {
     alias(libs.plugins.android.library) apply false
     alias(libs.plugins.protobuf) apply false
 }
+
+allprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        compilerOptions.jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+    }
+}
