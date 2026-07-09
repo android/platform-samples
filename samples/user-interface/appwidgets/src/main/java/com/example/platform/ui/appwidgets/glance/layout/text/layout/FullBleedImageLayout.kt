@@ -29,7 +29,7 @@ import androidx.glance.LocalContext
 import androidx.glance.LocalSize
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
-import androidx.glance.appwidget.lazy.VerticalScrollMode
+// import androidx.glance.appwidget.lazy.VerticalScrollMode
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.background
 import androidx.glance.layout.Alignment
@@ -45,7 +45,7 @@ import androidx.glance.layout.width
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
-import androidx.glance.unit.ColorProvider
+import androidx.glance.color.ColorProvider
 import com.example.platform.ui.appwidgets.R
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.ImageGridItemData
 import com.example.platform.ui.appwidgets.glance.layout.collections.layout.NoDataContent
@@ -112,8 +112,7 @@ private fun SnapScrollingGallery(
         data = data,
         isSmall = isSmall,
         appName = appName,
-        size = size,
-        verticalScrollMode = VerticalScrollMode.SnapScrollMatchHeight(size.height)
+        size = size
     )
 }
 
@@ -122,8 +121,7 @@ private fun GalleryList(
     data: List<ImageGridItemData>,
     isSmall: Boolean,
     appName: String,
-    size: DpSize,
-    verticalScrollMode: VerticalScrollMode = VerticalScrollMode.Normal
+    size: DpSize
 ) {
     if (data.size == 1) {
         // If there's only 1 item (like in the widget preview), render with fillMaxSize to
@@ -138,8 +136,7 @@ private fun GalleryList(
     } else {
         val limitedData = data.take(5)
         LazyColumn(
-            modifier = GlanceModifier.fillMaxSize(),
-            verticalScrollMode = verticalScrollMode
+            modifier = GlanceModifier.fillMaxSize()
         ) {
             items(limitedData, itemId = { item -> item.key.hashCode().toLong() }) { item ->
                 GalleryItemCard(
@@ -202,7 +199,7 @@ private fun GalleryItemCard(
                 Text(
                     text = itemTitle,
                     style = TextStyle(
-                        color = ColorProvider(Color.White),
+                        color = ColorProvider(Color.White, Color.White),
                         fontWeight = FontWeight.Bold,
                         fontSize = titleFontSize
                     ),

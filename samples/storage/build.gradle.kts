@@ -24,7 +24,7 @@ plugins {
 
 android {
     namespace = "com.example.platform.storage"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 34
@@ -32,10 +32,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = "11"
     }
 
     lint {

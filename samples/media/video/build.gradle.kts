@@ -18,24 +18,20 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.android)
-    id("de.undercouch.download") version "5.6.0"
+    id("de.undercouch.download") version "5.7.0"
 }
 
 android {
     namespace = "com.example.platform.media.video"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
-        minSdk = 21
+        minSdk = 23
     }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = "11"
     }
 
     buildFeatures {
@@ -86,6 +82,7 @@ dependencies {
     // Tensorflow lite dependencies
     implementation(libs.tensorflow.lite)
     implementation(libs.tensorflow.lite.gpu)
+    implementation("org.tensorflow:tensorflow-lite-gpu-api:2.16.1")
     implementation(libs.tensorflow.lite.gpu.delegate.plugin)
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.select.tf.ops)

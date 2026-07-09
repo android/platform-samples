@@ -178,16 +178,17 @@ class TransformerVideoComposition : Fragment() {
 
         videoSequence.addAll(listOf(video1, video2))
 
-        compositionSequences.add(EditedMediaItemSequence(videoSequence))
+        compositionSequences.add(
+            EditedMediaItemSequence.Builder(videoSequence).build()
+        )
 
         if (binding.backgroundAudioChip.isChecked) {
             val backgroundAudio = EditedMediaItem.Builder(MediaItem.fromUri(URI_AUDIO)).build()
             // create an audio sequence that will be looping over the duration of the first video
             // sequence.
-            val audioSequence = EditedMediaItemSequence(
-                ImmutableList.of(backgroundAudio),
-                /* isLooping*/true,
-            )
+            val audioSequence = EditedMediaItemSequence.Builder(backgroundAudio)
+                .setIsLooping(true)
+                .build()
             compositionSequences.add(audioSequence)
         }
 

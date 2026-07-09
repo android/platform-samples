@@ -25,11 +25,7 @@ plugins {
 
 android {
     namespace = "com.example.platform.connectivity.telecom"
-    compileSdk {
-        version = release(version = 36) {
-            minorApiLevel = 1
-        }
-    }
+    compileSdk = 37
 
     defaultConfig {
         minSdk = 23
@@ -40,10 +36,6 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
-    }
-
-    kotlinOptions {
-        jvmTarget = "11"
     }
 }
 

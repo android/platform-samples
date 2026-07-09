@@ -17,7 +17,7 @@
 val ktlintVersion = "0.48.1"
 
 initscript {
-    val spotlessVersion = "6.13.0"
+    val spotlessVersion = "8.8.0"
 
     repositories {
         mavenCentral()
@@ -34,15 +34,12 @@ rootProject {
         return@rootProject
     }
     apply<com.diffplug.gradle.spotless.SpotlessPlugin>()
-    extensions.configure<com.diffplug.gradle.spotless.SpotlessExtension> {
-        predeclareDeps()
-    }
 
     extensions.configure<com.diffplug.gradle.spotless.SpotlessExtensionPredeclare> {
         kotlin {
             target("**/*.kt")
             targetExclude("**/build/**/*.kt")
-            ktlint(ktlintVersion).userData(mapOf("android" to "true"))
+            ktlint(ktlintVersion).editorConfigOverride(mapOf("android" to "true"))
             licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
         }
         format("kts") {

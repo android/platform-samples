@@ -81,7 +81,7 @@ class GATTServerSampleService : Service() {
     private val manager: BluetoothManager by lazy {
         applicationContext.getSystemService(BluetoothManager::class.java)
     }
-    private val advertiser: BluetoothLeAdvertiser
+    private val advertiser: BluetoothLeAdvertiser?
         get() = manager.adapter.bluetoothLeAdvertiser
 
     private val service =
@@ -134,7 +134,7 @@ class GATTServerSampleService : Service() {
 
             ACTION_STOP_ADVERTISING -> {
                 serverLogsState.value += "Stop advertising\n"
-                advertiser.stopAdvertising(SampleAdvertiseCallback)
+                advertiser?.stopAdvertising(SampleAdvertiseCallback)
             }
 
             else -> throw IllegalArgumentException("Unknown action")
@@ -148,7 +148,7 @@ class GATTServerSampleService : Service() {
         super.onDestroy()
         isServerRunning.value = false
         if (hasAdvertisingPermission()) {
-            advertiser.stopAdvertising(SampleAdvertiseCallback)
+            advertiser?.stopAdvertising(SampleAdvertiseCallback)
         }
         server.close()
         scope.cancel()
@@ -206,7 +206,7 @@ class GATTServerSampleService : Service() {
             .addServiceUuid(ParcelUuid(SERVICE_UUID))
             .build()
 
-        advertiser.startAdvertising(settings, data, SampleAdvertiseCallback)
+        advertiser?.startAdvertising(settings, data, SampleAdvertiseCallback)
     }
 
     @SuppressLint("MissingPermission")
@@ -256,6 +256,7 @@ class GATTServerSampleService : Service() {
             characteristic: BluetoothGattCharacteristic?,
         ) {
             super.onCharacteristicReadRequest(device, requestId, offset, characteristic)
+            if (device == null) return
             serverLogsState.value += "Characteristic Read request: $requestId (offset $offset)\n"
             val data = serverLogsState.value.toByteArray()
             val response = data.copyOfRange(offset, data.size)

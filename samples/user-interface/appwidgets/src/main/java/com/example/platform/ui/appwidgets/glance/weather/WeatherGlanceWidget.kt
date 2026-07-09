@@ -16,6 +16,7 @@
 
 package com.example.platform.ui.appwidgets.glance.weather
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
@@ -391,6 +392,7 @@ suspend fun refreshWeather(context: Context) {
     WeatherRepo.updateWeatherInfo()
 }
 
+@SuppressLint("NonObservableLocale")
 @Composable
 private fun WeatherData.toDayString() = day.lowercase(Locale.getDefault()).replaceFirstChar {
     if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
