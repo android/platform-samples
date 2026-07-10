@@ -29,7 +29,7 @@ import androidx.glance.LocalContext
 import androidx.glance.LocalSize
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
-// import androidx.glance.appwidget.lazy.VerticalScrollMode
+import androidx.glance.appwidget.lazy.VerticalScrollMode
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.background
 import androidx.glance.layout.Alignment
@@ -38,10 +38,8 @@ import androidx.glance.layout.Column
 import androidx.glance.layout.ContentScale
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
-import androidx.glance.layout.height
 import androidx.glance.layout.padding
 import androidx.glance.layout.size
-import androidx.glance.layout.width
 import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
@@ -67,6 +65,12 @@ fun FullBleedImageLayout(
     val isSmall = size.height <= 110.dp
     val appName = LocalContext.current.getString(R.string.sample_full_bleed_image_app_widget_name)
 
+    val scrollMode = if (Build.VERSION.SDK_INT >= 37) {
+        VerticalScrollMode.SnapScrollMatchHeight(size.height)
+    } else {
+        VerticalScrollMode.Normal
+    }
+
     Box(
         modifier = GlanceModifier
             .fillMaxSize()
@@ -81,20 +85,13 @@ fun FullBleedImageLayout(
                 actionButtonIcon = R.drawable.sample_info_icon,
                 actionButtonOnClick = actionStartDemoActivity("on-click of info button in no data view")
             )
-        } else if (Build.VERSION.SDK_INT_FULL >= Build.VERSION_CODES_FULL.BAKLAVA_1) {
+        } else {
             SnapScrollingGallery(
                 data = data,
                 isSmall = isSmall,
                 appName = appName,
-                size = size
-            )
-        } else {
-            // Show a standard scrolling list of items without Snap Scrolling
-            GalleryList(
-                data = data,
-                isSmall = isSmall,
-                appName = appName,
-                size = size
+                size = size,
+                scrollMode = scrollMode
             )
         }
     }
@@ -103,47 +100,36 @@ fun FullBleedImageLayout(
 @RequiresApi(Build.VERSION_CODES_FULL.BAKLAVA_1)
 @Composable
 private fun SnapScrollingGallery(
-    data: List<ImageGridItemData>,
+    data: List<ImageGridItemData>?,
     isSmall: Boolean,
     appName: String,
     size: DpSize,
+    scrollMode: VerticalScrollMode,
 ) {
-    GalleryList(
-        data = data,
-        isSmall = isSmall,
-        appName = appName,
-        size = size
-    )
-}
+    val galleryData = data ?: return
+    if (galleryData.isEmpty()) return
 
-@Composable
-private fun GalleryList(
-    data: List<ImageGridItemData>,
-    isSmall: Boolean,
-    appName: String,
-    size: DpSize
-) {
-    if (data.size == 1) {
+    if (galleryData.size == 1) {
         // If there's only 1 item (like in the widget preview), render with fillMaxSize to
         // bypass LazyColumn measurement issues where the generated widget preview item doesn't
         // fill the widget bounds.
         GalleryItemCard(
-            item = data[0],
+            item = galleryData[0],
             isSmall = isSmall,
             appName = appName,
             modifier = GlanceModifier.fillMaxSize()
         )
     } else {
-        val limitedData = data.take(5)
         LazyColumn(
-            modifier = GlanceModifier.fillMaxSize()
+            modifier = GlanceModifier.fillMaxSize(),
+            verticalScrollMode = scrollMode
         ) {
-            items(limitedData, itemId = { item -> item.key.hashCode().toLong() }) { item ->
+            items(galleryData.take(5), itemId = { it.key.hashCode().toLong() }) { item ->
                 GalleryItemCard(
                     item = item,
                     isSmall = isSmall,
                     appName = appName,
-                    modifier = GlanceModifier.width(size.width).height(size.height)
+                    modifier = GlanceModifier.size(size.width, size.height)
                 )
             }
         }
