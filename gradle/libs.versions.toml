@@ -14,9 +14,9 @@
 # limitations under the License.
 #
 [versions]
-agp = "9.2.1"
+agp = "9.3.0"
 fragmentCompose = "1.8.9"
-kotlin = "2.4.0"
+kotlin = "2.4.10"
 coreKtx = "1.19.0"
 junit = "4.13.2"
 junitVersion = "1.3.0"
@@ -48,11 +48,11 @@ androidxTestRunner = "1.7.0"
 camerax = "1.6.1"
 material3Android = "1.4.0"
 media3 = "1.10.1"
-glide-compose = "1.0.0-beta09"
-glance = "1.3.0-alpha02"
-tensorflowLite = "2.16.1"
+glide-compose = "1.0.0-beta10"
+glance = "1.3.0-SNAPSHOT"
+tensorflowLite = "2.17.0"
 tensorflowLiteGpuDelegatePlugin = "0.4.4"
-tensorflowLiteSupport = "0.4.4"
+tensorflowLiteSupport = "0.5.0"
 barcodeScanningCommon = "17.0.0"
 playServicesMlkitBarcodeScanning = "18.3.1"
 protobuf = "0.10.0"
@@ -156,7 +156,7 @@ androidx-camerax-extensions = { module = "androidx.camera:camera-extensions", ve
 
 fresco = "com.facebook.fresco:fresco:3.7.0"
 fresco-nativeimagetranscoder = "com.facebook.fresco:nativeimagetranscoder:2.6.0!!"
-glide = "com.github.bumptech.glide:glide:5.0.7"
+glide = "com.github.bumptech.glide:glide:5.0.9"
 glide-compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide-compose" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 tensorflow-lite = { module = "org.tensorflow:tensorflow-lite", version.ref = "tensorflowLite" }
