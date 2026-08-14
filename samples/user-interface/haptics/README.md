@@ -56,7 +56,7 @@ animation has ended.
 
 ## Bounce
 
-This example showcases the the PRIMITIVE_THUD as an example of using vibration
+This example showcases the PRIMITIVE_THUD as an example of using vibration
 effects to simulate physical interactions. In the example the ball drops with
 multiple bounces, playing the primitive at a decreased intensity each time.
 
@@ -78,6 +78,33 @@ a tight spinning sensation while increasing the inter-spin gap from 10 to 50 ms 
 to a looser spinning sensation.
 
 <img src="screenshots/wobble.gif" alt="Screenshot of wobble effect." width="300px">
+
+### LavaBeats
+
+The `WaveformEnvelopeBuilder` is a powerful API to create complex haptics by
+enabling the control of amplitude and frequency segments in a vibration. This
+example demonstrates how to use this API to create a haptic sensation of
+"liveliness".
+
+In the example, two biomarkers of a typical electrocardiogram (ECG) signal are
+represented with vibration pulses of varying amplitudes and frequencies. The
+first pulse represents the QRS complex of the ECG, which shows as a sharp peak
+of high amplitude and short duration. The second pulse is the T wave, which has
+lower amplitude, longer duration, and a smoother shape.
+
+The `WaveformEnvelopeBuilder` is used to construct various repetitions of these
+two pulses separated by a fixed first-to-second pulse delay. The first pulse is
+a chirp signal that starts at a low frequency and ends at a higher frequency
+over a short duration. The second pulse is a single period of a low frequency
+sinusoid. The two pulses are composed into a beat, and repeated several times
+with delay in-between following a typical beats-per-minute (bpm) rate. The
+result is a haptic effect that resembles a beating heart.
+
+LavaBeats also allows users to configure all the parameters of the effect to
+emulate various beating patterns. It also displays a lava-lamp visualization
+that beats at the same rhythm as the haptic pattern.
+
+<img src="screenshots/lavabeats.gif" alt="Screenshot of the lavabeats example." width="300px">
 
 ## License
 
