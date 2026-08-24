@@ -109,6 +109,7 @@ fun CurrentLocationContent(usePreciseLocation: Boolean) {
             onClick = {
                 //To get more accurate or fresher device location use this method
                 scope.launch(Dispatchers.IO) {
+                    val cancellationTokenSource = CancellationTokenSource()
                     val priority = if (usePreciseLocation) {
                         Priority.PRIORITY_HIGH_ACCURACY
                     } else {
@@ -116,8 +117,8 @@ fun CurrentLocationContent(usePreciseLocation: Boolean) {
                     }
                     val result = locationClient.getCurrentLocation(
                         priority,
-                        CancellationTokenSource().token,
-                    ).await()
+                        cancellationTokenSource.token,
+                    ).await(cancellationTokenSource)
                     result?.let { fetchedLocation ->
                         locationInfo =
                             "Current location is \n" + "lat : ${fetchedLocation.latitude}\n" +
