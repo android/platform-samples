@@ -27,12 +27,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.graphics.ShaderBrush
 import androidx.compose.ui.platform.LocalDensity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.compose.LocalLifecycleOwner
+import androidx.lifecycle.repeatOnLifecycle
 
 @Composable
 fun LavaBeatsGraphics(
@@ -47,21 +51,22 @@ fun LavaBeatsGraphics(
         val density = LocalDensity.current
         val width = with(density) { constraints.maxWidth.toPx() }
         val height = with(density) { constraints.maxHeight.toPx() }
-        var firstTime by remember { mutableFloatStateOf(-1f) }
+        var startTimeMillis by remember { mutableLongStateOf(-1L) }
         var time by remember { mutableFloatStateOf(0f) }
+
+        val lifecycleOwner = LocalLifecycleOwner.current
         val isInDarkMode = isSystemInDarkTheme()
         val surfaceColor = MaterialTheme.colorScheme.background
 
-        LaunchedEffect(Unit) {
-            // Use withInfiniteAnimationFrameMillis to update the time uniform per frame.
-            // This is a more efficient approach than passing a new shader instance
-            // or re-creating the RenderEffect on every frame.
-            while (true) {
-                withInfiniteAnimationFrameMillis { frameTime ->
-                    if (firstTime == -1f) {
-                        firstTime = frameTime / 1000f
-                    } else {
-                        time = frameTime / 1000f - firstTime
+        LaunchedEffect(lifecycleOwner) {
+            lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+                startTimeMillis = -1L
+                while (true) {
+                    withInfiniteAnimationFrameMillis { frameTime ->
+                        if (startTimeMillis == -1L) {
+                            startTimeMillis = frameTime
+                        }
+                        time = (frameTime - startTimeMillis) / 1000f
                     }
                 }
             }
