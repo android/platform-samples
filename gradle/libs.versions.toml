@@ -120,7 +120,6 @@ junit4 = { group = "junit", name = "junit", version.ref = "junit4" }
 lottie = "com.airbnb.android:lottie:6.7.1"
 rxjava2-android = 'io.reactivex.rxjava2:rxandroid:2.1.1'
 androidx-work-runtime-ktx = "androidx.work:work-runtime-ktx:2.11.2"
-androidx-core-remoteviews = "androidx.core:core-remoteviews:1.1.0"
 androidx-glance-appwidget = {group = "androidx.glance", name = "glance-appwidget", version.ref = "glance"}
 androidx-glance-preview = {group = "androidx.glance", name = "glance-preview", version.ref = "glance"}
 androidx-glance-appwidget-preview = {group = "androidx.glance", name = "glance-appwidget-preview", version.ref = "glance"}
