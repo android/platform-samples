@@ -85,6 +85,7 @@ class WeatherGlanceWidget : GlanceAppWidget() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override suspend fun provideGlance(context: Context, id: GlanceId) {
+        WeatherRepo.updateWeatherInfo()
         provideContent { Content() }
     }
 

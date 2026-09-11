@@ -16,13 +16,9 @@
 
 package com.example.platform.ui.appwidgets.glance.weather
 
-import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.glance.appwidget.GlanceAppWidgetReceiver
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 
 /**
@@ -33,12 +29,4 @@ import kotlinx.coroutines.launch
 @RequiresApi(Build.VERSION_CODES.O)
 class WeatherGlanceWidgetReceiver : GlanceAppWidgetReceiver() {
     override val glanceAppWidget = WeatherGlanceWidget()
-
-    override fun onEnabled(context: Context?) {
-        super.onEnabled(context)
-        CoroutineScope(Dispatchers.IO).launch {
-            WeatherRepo.updateWeatherInfo()
-        }
-    }
-
 }
