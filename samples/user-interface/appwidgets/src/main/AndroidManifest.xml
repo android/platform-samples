@@ -183,19 +183,6 @@
         </receiver>
 
         <receiver
-            android:name=".rv.weather.WeatherForecastAppWidget"
-            android:enabled="@bool/weather_appwidget_enabled"
-            android:label="@string/remote_views_weather"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/app_widget_weather_forecast" />
-        </receiver>
-        <receiver
             android:name=".glance.weather.WeatherGlanceWidgetReceiver"
             android:label="@string/glance_weather"
             android:enabled="@bool/glance_appwidget_available"

@@ -58,8 +58,7 @@ dependencies {
     implementation(libs.coil.compose)
 
     implementation(libs.kotlinx.serialization.json)
-    // For traditional RemoteViews
-    implementation(libs.androidx.core.remoteviews)
+
     // For building appwidgets with Glance
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)

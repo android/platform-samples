@@ -1,14 +1,6 @@
 # AppWidgets samples
 
-This module demonstrates how to build Android AppWidgets with:
-
-* [`RemoteViews`](https://developer.android.com/reference/android/widget/RemoteViews)
-  and the [new Widgets APIs](https://developer.android.com/about/versions/12/features/widgets)
-  introduced in [Android 12](https://developer.android.com/studio/releases/platforms#12)
-  (API level 31) together with
-  [`core-remoteviews`](https://developer.android.com/jetpack/androidx/releases/core)
-  .
-* [Jetpack Glance](https://developer.android.com/jetpack/androidx/releases/glance) for app widgets.
+This module demonstrates how to build Android AppWidgets with [Jetpack Glance](https://developer.android.com/jetpack/androidx/releases/glance).
 
 The new set of APIs allows an application to build more engaging and beautiful widgets. Use this
 sample together with the
@@ -90,10 +82,8 @@ title="screenshot showing run configuration in Android Studio for widgets" />
 
 If you've found an error in this sample, please file an issue at https://github.com/android/user-interface.
 
-For API-related issues, please file any bugs using the following links:
-
-- For Glance: https://issuetracker.google.com/issues/new?component=1097239&template=1611667
-- For Core Remote Views: https://issuetracker.google.com/issues/new?component=460834&template=1418393
+For API-related issues, please file any bugs at:
+https://issuetracker.google.com/issues/new?component=1097239&template=1611667
 
 ## License
 
