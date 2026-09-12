@@ -55,7 +55,7 @@ protobuf {
     // Configures the protoc compiler
     protoc {
         // Automatically download protoc from Maven Central
-        artifact = "com.google.protobuf:protoc:4.35.1"
+        artifact = "com.google.protobuf:protoc:4.36.1"
     }
 
     // Configures the code generation tasks
@@ -85,9 +85,9 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.compose.material.iconsext)
     implementation(libs.kotlin.coroutines.play)
-    implementation("com.google.android.gms:play-services-nearby:19.3.0")
-    implementation("com.google.protobuf:protobuf-java:4.35.1")
-    implementation("com.google.protobuf:protobuf-kotlin:4.35.1")
+    implementation("com.google.android.gms:play-services-nearby:19.5.0")
+    implementation("com.google.protobuf:protobuf-java:4.36.1")
+    implementation("com.google.protobuf:protobuf-kotlin:4.36.1")
     implementation("androidx.datastore:datastore:1.2.1")
     implementation(libs.androidx.appcompat)
     implementation(libs.kotlinx.serialization.json)
