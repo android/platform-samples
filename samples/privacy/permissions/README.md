@@ -2,6 +2,8 @@
 
 The samples in this directory showcase how to request
 
+
+
 [single](src/main/java/com/example/platform/privacy/permissions/SinglePermission.kt)
 and [multiple](src/main/java/com/example/platform/privacy/permissions/MultiplePermissions.kt)
 permissions using the [ActivityResultContracts](https://developer.android.com/reference/androidx/activity/result/contract/ActivityResultContracts) API part of:
