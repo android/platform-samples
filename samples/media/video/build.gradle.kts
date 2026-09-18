@@ -82,7 +82,7 @@ dependencies {
     // Tensorflow lite dependencies
     implementation(libs.tensorflow.lite)
     implementation(libs.tensorflow.lite.gpu)
-    implementation("org.tensorflow:tensorflow-lite-gpu-api:2.16.1")
+    implementation("org.tensorflow:tensorflow-lite-gpu-api:2.17.0")
     implementation(libs.tensorflow.lite.gpu.delegate.plugin)
     implementation(libs.tensorflow.lite.support)
     implementation(libs.tensorflow.lite.select.tf.ops)
