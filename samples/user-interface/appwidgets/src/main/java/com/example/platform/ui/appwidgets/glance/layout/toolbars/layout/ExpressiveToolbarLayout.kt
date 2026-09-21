@@ -34,7 +34,6 @@ import androidx.glance.action.clickable
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.background
-import androidx.glance.color.ColorProvider
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Box
 import androidx.glance.layout.fillMaxSize
@@ -235,7 +234,7 @@ private fun CornerButton(
         contentDescription = toolBarButton.contentDescription,
         iconSize = iconSize,
         backgroundSize = buttonBackgroundSize,
-        backgroundColor = ColorProvider(Color.Transparent, Color.Transparent),
+        backgroundColor = androidx.glance.color.ColorProvider(Color.Transparent, Color.Transparent),
         contentColor = GlanceTheme.colors.primary,
         roundedCornerShape = RoundedCornerShape.FULL,
         onClick = toolBarButton.onClick,
@@ -255,7 +254,7 @@ private fun CenterButton(
     val backgroundColor = if (filled) {
         GlanceTheme.colors.tertiary
     } else {
-        ColorProvider(Color.Transparent, Color.Transparent)
+        androidx.glance.color.ColorProvider(Color.Transparent, Color.Transparent)
     }
 
     val contentColor = if (filled) {
