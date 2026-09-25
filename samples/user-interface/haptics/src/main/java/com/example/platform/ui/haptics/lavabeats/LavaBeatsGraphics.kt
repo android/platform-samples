@@ -59,7 +59,7 @@ fun LavaBeatsGraphics(
         val surfaceColor = MaterialTheme.colorScheme.background
 
         LaunchedEffect(lifecycleOwner) {
-            lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
+            lifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.RESUMED) {
                 startTimeMillis = -1L
                 while (true) {
                     withInfiniteAnimationFrameMillis { frameTime ->
