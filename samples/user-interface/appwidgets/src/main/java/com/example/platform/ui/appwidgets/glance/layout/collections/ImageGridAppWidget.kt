@@ -46,18 +46,19 @@ class ImageGridAppWidget : GlanceAppWidget() {
       val items by repo.data().collectAsState(initial = initialItems)
       val coroutineScope = rememberCoroutineScope()
 
-      GlanceTheme
-      key(LocalSize.current) {
-        WidgetContent(
-          items = items,
-          refreshAction = {
-            coroutineScope.launch {
-              withContext(Dispatchers.IO) {
-                repo.refresh(context)
-              }
-            }
+      GlanceTheme {
+          key(LocalSize.current) {
+              WidgetContent(
+                  items = items,
+                  refreshAction = {
+                      coroutineScope.launch {
+                          withContext(Dispatchers.IO) {
+                              repo.refresh(context)
+                          }
+                      }
+                  }
+              )
           }
-        )
       }
     }
   }
