@@ -201,7 +201,7 @@
 
         <!-- Remote Compose Android Pet Widget -->
         <receiver
-            android:name=".widget.AndroidPetWidget"
+            android:name=".remote_compose.AndroidPetWidget"
             android:exported="true"
             android:label="@string/appwidget_android_pet_name">
             <intent-filter>

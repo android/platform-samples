@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-package com.example.platform.ui.appwidgets.widget
+package com.example.platform.ui.appwidgets.remote_compose
 
 import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteBox
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
@@ -35,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 @SuppressLint("RestrictedApiAndroidX", "RestrictedApi")
 class AndroidPetWidget : RemoteComposeWidget() {
 
+    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
     override fun onUpdate(
         context: Context,
         appWidgetManager: AppWidgetManager,
@@ -55,7 +58,7 @@ class AndroidPetWidget : RemoteComposeWidget() {
             contentAlignment = RemoteAlignment.Center
         ) {
             RemoteText(
-                text = "Android Pet".rs,
+                text = "Android Pet Coming Soon".rs,
                 color = Color.Black.rc
             )
         }
