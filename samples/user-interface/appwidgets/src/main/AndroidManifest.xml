@@ -16,6 +16,8 @@
 <manifest xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-sdk tools:overrideLibrary="androidx.compose.remote.creation.compose, androidx.compose.remote.creation, androidx.compose.remote.core" />
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <queries>
@@ -195,6 +197,20 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/app_widget_weather_forecast_glance" />
+        </receiver>
+
+        <!-- Remote Compose Android Pet Widget -->
+        <receiver
+            android:name=".widget.AndroidPetWidget"
+            android:exported="true"
+            android:label="@string/appwidget_android_pet_name">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="androidx.compose.remote.ACTION_CLICKED" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/android_pet_widget_info" />
         </receiver>
     </application>
 

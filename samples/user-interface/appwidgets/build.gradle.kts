@@ -62,6 +62,11 @@ dependencies {
     // For building appwidgets with Glance
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
+
+    // For building appwidgets with Remote Compose
+    implementation(libs.androidx.compose.remote.core)
+    implementation(libs.androidx.compose.remote.creation)
+    implementation(libs.androidx.compose.remote.creation.compose)
     // Recommended to use WorkManager to load data for widgets
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.material)

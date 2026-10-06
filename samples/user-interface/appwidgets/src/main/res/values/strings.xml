@@ -25,6 +25,10 @@
     <string name="glance_weather">Glance Weather</string>
     <string name="app_widget_weather_description">Widget for weather forecast</string>
     <string name="mostly_cloudy">Mostly cloudy</string>
+
+    <!-- Remote Compose Android Pet Widget -->
+    <string name="appwidget_android_pet_name">Android Pet</string>
+    <string name="android_pet_widget_description">An animated interactive pet widget powered by Remote Compose.</string>
     <!-- Common texts-->
     <string name="sample_app_name">LayoutSamples</string>
     <string name="sample_action_list_settings_label">Settings</string>
