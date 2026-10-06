@@ -29,6 +29,7 @@
     <!-- Remote Compose Android Pet Widget -->
     <string name="appwidget_android_pet_name">Android Pet</string>
     <string name="android_pet_widget_description">An animated interactive pet widget powered by Remote Compose.</string>
+    <string name="android_pet_widget_fallback_message">Remote Compose widgets work on Android 17 and higher devices. Use an Android 17 device.</string>
     <!-- Common texts-->
     <string name="sample_app_name">LayoutSamples</string>
     <string name="sample_action_list_settings_label">Settings</string>

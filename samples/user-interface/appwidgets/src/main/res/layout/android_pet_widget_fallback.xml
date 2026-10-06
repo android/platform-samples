@@ -14,12 +14,19 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
-<appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:description="@string/android_pet_widget_description"
-    android:initialLayout="@layout/android_pet_widget_fallback"
-    android:minWidth="180dp"
-    android:minHeight="110dp"
-    android:previewImage="@drawable/sample_placeholder_image"
-    android:resizeMode="horizontal|vertical"
-    android:updatePeriodMillis="0"
-    android:widgetCategory="home_screen" />
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:padding="16dp">
+
+    <TextView
+        android:id="@+id/fallback_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/android_pet_widget_fallback_message"
+        android:textColor="@android:color/black"
+        android:textSize="14sp" />
+</FrameLayout>
