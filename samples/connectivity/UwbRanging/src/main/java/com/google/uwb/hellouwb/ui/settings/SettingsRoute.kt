@@ -29,6 +29,7 @@ fun SettingsRoute(settingsViewModel: SettingsViewModel) {
     uiState = uiState,
     updateDeviceDisplayName = { settingsViewModel.updateDeviceDisplayName(it) },
     updateDeviceType = { settingsViewModel.updateDeviceType(it) },
-    updateConfigType = { settingsViewModel.updateConfigType(it) }
+    updateConfigType = { settingsViewModel.updateConfigType(it) },
+    updateSensorFusionEnabled = { settingsViewModel.updateSensorFusionEnabled(it) },
   )
 }

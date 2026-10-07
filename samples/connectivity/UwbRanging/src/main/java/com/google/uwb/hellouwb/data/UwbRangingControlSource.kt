@@ -31,6 +31,8 @@ interface UwbRangingControlSource {
 
     var configType: ConfigType
 
+    var sensorFusionEnabled: Boolean
+
     fun updateEndpointId(id: String)
 
     fun start()

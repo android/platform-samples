@@ -72,6 +72,7 @@ protobuf {
 
 dependencies {
     implementation(libs.androidx.uwb)
+    implementation(libs.arcore)
     implementation(project(mapOf("path" to ":samples:connectivity:audio")))
 
     implementation(libs.androidx.activity.compose)

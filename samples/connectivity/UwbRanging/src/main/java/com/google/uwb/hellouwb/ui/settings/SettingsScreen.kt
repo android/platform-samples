@@ -41,6 +41,7 @@ fun SettingsScreen(
     updateDeviceDisplayName: (String) -> Unit,
     updateDeviceType: (DeviceType) -> Unit,
     updateConfigType: (ConfigType) -> Unit,
+    updateSensorFusionEnabled: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -151,6 +152,18 @@ fun SettingsScreen(
                 }
             }
         }
+
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text("Sensor Fusion", Modifier.padding(end = 12.dp))
+            var sensorFusionEnabled by remember { mutableStateOf(uiState.sensorFusionEnabled) }
+            Switch(
+                checked = sensorFusionEnabled,
+                onCheckedChange = {
+                    updateSensorFusionEnabled(it)
+                    sensorFusionEnabled = it
+                },
+            )
+        }
     }
         }
 }
@@ -163,7 +176,9 @@ fun PreviewSettingsScreen() {
             .setDeviceDisplayName("UWB")
             .setDeviceType(DeviceType.CONTROLEE)
             .setConfigType(ConfigType.CONFIG_PROVISIONED_UNICAST)
+            .setSensorFusionEnabled(true)
             .build(),
+        {},
         {},
         {},
         {}

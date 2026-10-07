@@ -33,19 +33,26 @@ internal class UwbConnectionManagerImpl(
 
   private val uwbManager = UwbManager.createInstance(context)
 
-  override fun controllerUwbScope(endpoint: UwbEndpoint, configId: Int): UwbSessionScope {
+  override fun controllerUwbScope(
+    endpoint: UwbEndpoint,
+    configId: Int,
+    sensorFusionEnabled: Boolean,
+  ): UwbSessionScope {
     val connector =
       NearbyControllerConnector(endpoint, configId, NearbyConnections(context, dispatcher)) {
         uwbManager.controllerSessionScope()
       }
-    return UwbSessionScopeImpl(endpoint, connector)
+    return UwbSessionScopeImpl(endpoint, connector, sensorFusionEnabled)
   }
 
-  override fun controleeUwbScope(endpoint: UwbEndpoint): UwbSessionScope {
+  override fun controleeUwbScope(
+    endpoint: UwbEndpoint,
+    sensorFusionEnabled: Boolean,
+  ): UwbSessionScope {
     val connector =
       NearbyControleeConnector(endpoint, NearbyConnections(context, dispatcher)) {
         uwbManager.controleeSessionScope()
       }
-    return UwbSessionScopeImpl(endpoint, connector)
+    return UwbSessionScopeImpl(endpoint, connector, sensorFusionEnabled)
   }
 }
