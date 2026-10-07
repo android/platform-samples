@@ -57,7 +57,8 @@ barcodeScanningCommon = "17.0.0"
 playServicesMlkitBarcodeScanning = "18.3.1"
 protobuf = "0.10.0"
 firebaseCrashlyticsBuildtools = "3.0.7"
-uwb = "1.0.0"
+uwb = "1.1.0-alpha03"
+arcore = "1.48.0"
 telecom = "1.1.0-SNAPSHOT"
 
 
@@ -66,6 +67,7 @@ androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = 
 androidx-fragment-compose = { module = "androidx.fragment:fragment-compose", version.ref = "fragmentCompose" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-uwb = { module = "androidx.core.uwb:uwb", version.ref = "uwb" }
+arcore = { module = "com.google.ar:core", version.ref = "arcore" }
 androidx-photopicker-compose = { module = "androidx.photopicker:photopicker-compose", version.ref = "photopickerCompose" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

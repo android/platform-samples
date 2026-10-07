@@ -20,6 +20,8 @@ package com.google.uwb.uwbranging.impl
 
 import androidx.core.uwb.RangingParameters
 import androidx.core.uwb.RangingResult
+import androidx.core.uwb.SensorFusionParameters
+import androidx.core.uwb.SensorFusionResult
 import androidx.core.uwb.UwbAddress
 import androidx.core.uwb.UwbDevice
 import com.google.uwb.uwbranging.EndpointEvents
@@ -35,6 +37,7 @@ import kotlinx.coroutines.launch
 internal class UwbSessionScopeImpl(
     private val localEndpoint: UwbEndpoint,
     private val connector: OobConnector,
+    private val sensorFusionEnabled: Boolean = false,
 ) : UwbSessionScope {
 
   private val localAddresses = mutableSetOf<UwbAddress>()
@@ -74,29 +77,39 @@ internal class UwbSessionScopeImpl(
 
   private fun ProducerScope<EndpointEvents>.processEndpointFound(
       event: UwbOobEvent.UwbEndpointFound,
-  ): Flow<RangingResult> {
+  ): Flow<SensorFusionResult> {
     remoteDeviceMap[event.endpointAddress] = event.endpoint
     localAddresses.add(event.sessionScope.localAddress)
     val rangingParameters =
       RangingParameters(
-        event.configId,
-        event.sessionId,
-        event.subSessionid,
-        event.sessionKeyInfo,
-        event.subSessionKeyInfo,
-        event.complexChannel,
-        listOf(UwbDevice(event.endpointAddress)),
-        RangingParameters.RANGING_UPDATE_RATE_FREQUENT
+        uwbConfigType = event.configId,
+        sessionId = event.sessionId,
+        subSessionId = event.subSessionid,
+        sessionKeyInfo = event.sessionKeyInfo,
+        subSessionKeyInfo = event.subSessionKeyInfo,
+        complexChannel = event.complexChannel,
+        peerDevices = listOf(UwbDevice(event.endpointAddress)),
+        updateRateType = RangingParameters.RANGING_UPDATE_RATE_FREQUENT,
+        // Sensor fusion provides the angle estimates, so hardware AoA is disabled.
+        isAoaDisabled = sensorFusionEnabled,
       )
     trySend(EndpointEvents.EndpointFound(event.endpoint))
-    return event.sessionScope.prepareSession(rangingParameters)
+    return if (sensorFusionEnabled) {
+      event.sessionScope.prepareSession(SensorFusionParameters(rangingParameters))
+    } else {
+      event.sessionScope.prepareSession(rangingParameters)
+    }
   }
 
-  private fun ProducerScope<EndpointEvents>.sendResult(result: RangingResult) {
+  private fun ProducerScope<EndpointEvents>.sendResult(result: SensorFusionResult) {
     val endpoint =
       if (localAddresses.contains(result.device.address)) localEndpoint
       else remoteDeviceMap[result.device.address] ?: return
     when (result) {
+      is SensorFusionResult.Estimate ->
+        trySend(EndpointEvents.SensorFusionEstimateUpdated(endpoint, result))
+      is SensorFusionResult.SensorFusionFallback ->
+        trySend(EndpointEvents.SensorFusionFallback(endpoint, result))
       is RangingResult.RangingResultPosition ->
         trySend(EndpointEvents.PositionUpdated(endpoint, result.position))
       is RangingResult.RangingResultPeerDisconnected ->
