@@ -58,6 +58,7 @@ playServicesMlkitBarcodeScanning = "18.3.1"
 protobuf = "0.10.0"
 firebaseCrashlyticsBuildtools = "3.0.7"
 uwb = "1.0.0"
+remoteCompose = "1.0.0-alpha20"
 telecom = "1.1.0-SNAPSHOT"
 
 
@@ -124,6 +125,9 @@ androidx-glance-appwidget = {group = "androidx.glance", name = "glance-appwidget
 androidx-glance-preview = {group = "androidx.glance", name = "glance-preview", version.ref = "glance"}
 androidx-glance-appwidget-preview = {group = "androidx.glance", name = "glance-appwidget-preview", version.ref = "glance"}
 androidx-glance-material3 = {group = "androidx.glance", name = "glance-material3", version.ref = "glance"}
+androidx-compose-remote-core = { group = "androidx.compose.remote", name = "remote-core", version.ref = "remoteCompose" }
+androidx-compose-remote-creation = { group = "androidx.compose.remote", name = "remote-creation", version.ref = "remoteCompose" }
+androidx-compose-remote-creation-compose = { group = "androidx.compose.remote", name = "remote-creation-compose", version.ref = "remoteCompose" }
 androidx-graphics-core = { group = "androidx.graphics", name = "graphics-core", version = "1.0.4" }
 androidx-startup = 'androidx.startup:startup-runtime:1.2.0'
 androidx-window = { module = "androidx.window:window", version.ref = "androidx-window" }
