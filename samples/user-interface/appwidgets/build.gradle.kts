@@ -42,6 +42,26 @@ android {
     }
     testOptions {
         targetSdk = 35
+        unitTests {
+            isIncludeAndroidResources = true
+            all {
+                it.systemProperty("robolectric.conscryptMode", "OFF")
+                val robolectricM2Dir = file(
+                    "${System.getProperty("user.home")}/.m2/repository/org/robolectric/android-all-instrumented/15-robolectric-12650502-i7"
+                )
+                if (robolectricM2Dir.exists()) {
+                    it.systemProperty("robolectric.offline", "true")
+                    it.systemProperty("robolectric.dependency.dir", robolectricM2Dir.absolutePath)
+                }
+                val asmCacheDir = file("${System.getProperty("user.home")}/.gradle/caches/modules-2/files-2.1/org.ow2.asm")
+                if (asmCacheDir.exists()) {
+                    val asm99Jars = fileTree(asmCacheDir) {
+                        include("**/9.9/**/*.jar")
+                    }
+                    it.classpath = asm99Jars + it.classpath
+                }
+            }
+        }
     }
 }
 
@@ -73,4 +93,8 @@ dependencies {
 
     debugImplementation(libs.androidx.glance.preview)
     debugImplementation(libs.androidx.glance.appwidget.preview)
+
+    testImplementation(libs.junit4)
+    testImplementation("androidx.test:core-ktx:1.6.1")
+    testImplementation("org.robolectric:robolectric:4.14")
 }

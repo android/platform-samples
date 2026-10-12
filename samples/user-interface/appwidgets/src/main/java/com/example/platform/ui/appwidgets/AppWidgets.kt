@@ -46,6 +46,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.platform.ui.appwidgets.glance.layout.CanonicalLayoutActivity
+import com.example.platform.ui.appwidgets.remote_compose.StoreActivity
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -82,6 +83,10 @@ fun AppWidgetsList(widgetProviders: List<AppWidgetProviderInfo>) {
 
         item {
             CanonicalLayoutsInfoCard()
+        }
+
+        item {
+            AndroidPetStoreInfoCard()
         }
 
         // If the launcher does not support pinning request show a banner
@@ -125,6 +130,39 @@ private fun CanonicalLayoutsInfoCard() {
                 maxLines = 3,
             )
             Image(painter = preview, contentDescription = null)
+        }
+    }
+}
+
+@Composable
+private fun AndroidPetStoreInfoCard() {
+    val context = LocalContext.current
+    Card(
+        modifier = Modifier
+            .fillMaxWidth(),
+        onClick = { StoreActivity.start(context) },
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+        ) {
+            Column(modifier = Modifier.padding(end = 8.dp)) {
+                Text(
+                    text = stringResource(R.string.android_pet_store_title),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                )
+                Text(
+                    text = stringResource(R.string.android_pet_store_description),
+                    style = MaterialTheme.typography.bodyMedium,
+                )
+            }
+            Image(
+                painter = painterResource(id = R.drawable.shop_button),
+                contentDescription = stringResource(R.string.android_pet_store_title),
+            )
         }
     }
 }

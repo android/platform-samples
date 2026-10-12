@@ -69,6 +69,7 @@ import com.example.platform.storage.mediastore.SelectedPhotosAccessSample
 import com.example.platform.storage.photopicker.PhotoPickerSample
 import com.example.platform.storage.storageaccessframework.GetContentSample
 import com.example.platform.ui.appwidgets.AppWidgets
+import com.example.platform.ui.appwidgets.remote_compose.StoreActivity
 import com.example.platform.ui.constraintlayout.AdvancedArrangementFragment
 import com.example.platform.ui.constraintlayout.AdvancedChainsFragment
 import com.example.platform.ui.constraintlayout.AspectRatioFragment
@@ -650,6 +651,15 @@ val SAMPLE_DEMOS by lazy {
                     AppWidgets()
                 }
             },
+        ),
+        ActivitySampleDemo(
+            id = "android-pet-store",
+            name = "Android Pet Store",
+            description = "Companion store for the Remote Compose Android Pet widget displaying active widget IDs and collected coin balances.",
+            documentation = "https://developer.android.com/develop/ui/views/appwidgets/overview",
+            apiSurface = UserInterfaceAppWidgetsApiSurface,
+            tags = listOf("App Widgets", "Remote Compose"),
+            content = StoreActivity::class.java,
         ),
         ComposableSampleDemo(
             id = "constraintlayout-centering-views",
