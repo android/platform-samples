@@ -43,10 +43,6 @@ object WidgetAssetProvider {
         }
     }
 
-    fun clearCache() {
-        bitmapCache.clear()
-    }
-
     private fun decodeDrawableToBitmap(context: Context, @DrawableRes resId: Int): Bitmap {
         val drawable = ContextCompat.getDrawable(context, resId)
             ?: return Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)

@@ -37,7 +37,6 @@ import androidx.compose.remote.creation.compose.state.rb
 import androidx.compose.remote.creation.compose.state.rdp
 import androidx.compose.remote.creation.compose.widgets.onClick
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.asImageBitmap
 
@@ -54,69 +53,36 @@ fun StoreButton(
         WidgetAssetProvider.storeBitmap(context)
     }
 
-    CompositionLocalProvider(
-        RemoteWidgetActionBridge.getLocalWidget() provides
-            RemoteWidgetActionBridge.createWidgetInformation(widgetId)
+    RemoteBox(
+        contentAlignment = RemoteAlignment.BottomEnd,
+        modifier = RemoteModifier.fillMaxSize(),
     ) {
-        RemoteBox(
-            contentAlignment = RemoteAlignment.BottomEnd,
-            modifier = RemoteModifier.fillMaxSize(),
-        ) {
-            val buttonModifier = if (isStoreVisible != null) {
-                RemoteModifier
-                    .padding(12.rdp)
-                    .size(48.rdp)
-                    .visibility(isStoreVisible)
-            } else {
-                RemoteModifier
-                    .padding(12.rdp)
-                    .size(48.rdp)
-            }
+        val buttonModifier = if (isStoreVisible != null) {
+            RemoteModifier
+                .padding(12.rdp)
+                .size(48.rdp)
+                .visibility(isStoreVisible)
+        } else {
+            RemoteModifier
+                .padding(12.rdp)
+                .size(48.rdp)
+        }
 
-            RemoteBox(
-                modifier = buttonModifier
-                    .onClick {
-                        launchStoreActivity(context, widgetId)
-                    },
-            ) {
-                RemoteCanvas(modifier = RemoteModifier.fillMaxSize()) {
-                    drawScaledBitmap(
-                        image = bitmap.asImageBitmap().rb,
-                        contentDescription = "Store",
-                    )
-                }
+        RemoteBox(
+            modifier = buttonModifier
+                .onClick {
+                    launchStoreActivity(context, widgetId)
+                },
+        ) {
+            RemoteCanvas(modifier = RemoteModifier.fillMaxSize()) {
+                drawScaledBitmap(
+                    image = bitmap.asImageBitmap().rb,
+                    contentDescription = "Store",
+                )
             }
         }
     }
 }
-
-@SuppressLint("RestrictedApiAndroidX", "RestrictedApi")
-@RemoteComposable
-@Composable
-fun StoreButton(
-    isStoreVisible: RemoteInt,
-    context: Context,
-    widgetId: Int,
-): Unit = StoreButton(
-    context = context,
-    widgetId = widgetId,
-    isStoreVisible = isStoreVisible,
-)
-
-@SuppressLint("RestrictedApiAndroidX", "RestrictedApi")
-@RemoteComposable
-@Composable
-fun StoreButton(
-    context: Context,
-    widgetId: Int,
-    isStoreVisible: RemoteInt,
-    iconBitmap: Bitmap? = null,
-): Unit = StoreButton(
-    context = context,
-    widgetId = widgetId,
-    storeIconBitmap = iconBitmap,
-    isStoreVisible = isStoreVisible,
-)
 
 internal fun launchStoreActivity(context: Context, widgetId: Int) {
     val intent = Intent(context, StoreActivity::class.java).apply {

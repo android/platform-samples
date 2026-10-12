@@ -20,9 +20,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Bitmap
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
-import androidx.compose.remote.creation.compose.state.MutableRemoteInt
 import androidx.compose.remote.creation.compose.state.RemoteInt
-import androidx.compose.remote.creation.compose.state.ri
 import androidx.compose.runtime.Composable
 
 @SuppressLint("RestrictedApiAndroidX", "RestrictedApi")
@@ -34,16 +32,12 @@ fun WidgetActionBar(
     claimCreditIconBitmap: Bitmap? = null,
     storeIconBitmap: Bitmap? = null,
     isClaimVisible: RemoteInt? = null,
-    petTaps: MutableRemoteInt? = null,
-    resetValue: RemoteInt = 0.ri,
 ) {
     ClaimCreditButton(
         context = context,
         widgetId = widgetId,
         claimCreditIconBitmap = claimCreditIconBitmap,
         isClaimVisible = isClaimVisible,
-        petTaps = petTaps,
-        resetValue = resetValue,
     )
     StoreButton(
         context = context,

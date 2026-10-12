@@ -52,7 +52,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -225,9 +224,7 @@ private fun WidgetCoinCard(
         MaterialTheme.colorScheme.surfaceVariant
     }
     Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .testTag("widget_card_${state.widgetId}"),
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(containerColor = containerColor),
     ) {
         Row(
