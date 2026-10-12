@@ -48,11 +48,6 @@ class AndroidPetWidget : RemoteComposeWidget() {
         appWidgetManager: AppWidgetManager,
         appWidgetIds: IntArray
     ) {
-        for (id in appWidgetIds) {
-            if (id != AppWidgetManager.INVALID_APPWIDGET_ID) {
-                BuddyPreferences.ensureWidgetRegistered(context, id)
-            }
-        }
         super.onUpdate(context, appWidgetManager, appWidgetIds)
     }
 
@@ -78,15 +73,18 @@ class AndroidPetWidget : RemoteComposeWidget() {
 
         val petTaps = rememberMutableRemoteInt(0)
         val nextPetTaps = petTaps + 1.ri
+        // Evaluates to 1 (visible) in the host's expression graph when petTaps >= 3,
+        // or 0 (hidden) otherwise, allowing the coin button to appear after 3 taps
+        // without waking the app process.
         val isClaimVisible = selectIfGe(petTaps, REQUIRED_TAPS_FOR_COIN.ri, 1.ri, 0.ri)
 
         RemoteBox(
             modifier = RemoteModifier.fillMaxSize().background(Color.White.rc),
             contentAlignment = RemoteAlignment.Center
         ) {
-            // Materialize RemoteInt expression IDs in the active creation state before
-            // action modifiers serialize them into nested action lists.
             RemoteCanvas(modifier = RemoteModifier.fillMaxSize()) {
+                // Register the local state variables and expressions in the Remote Document
+                // before they are used inside the onTouchDown action below.
                 petTaps.getIdForCreationState(remoteComposeCreationState)
                 nextPetTaps.getIdForCreationState(remoteComposeCreationState)
                 isClaimVisible.getIdForCreationState(remoteComposeCreationState)

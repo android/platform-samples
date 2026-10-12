@@ -88,16 +88,6 @@ object BuddyPreferences {
         return updated
     }
 
-    fun ensureWidgetRegistered(context: Context, widgetId: Int) {
-        if (widgetId == AppWidgetManager.INVALID_APPWIDGET_ID) return
-        val p = prefs(context)
-        val coinsKey = "$KEY_COINS_PREFIX$widgetId"
-        val tapsKey = "$KEY_TAPS_PREFIX$widgetId"
-        if (!p.contains(coinsKey) && !p.contains(tapsKey)) {
-            p.edit().putInt(coinsKey, 0).apply()
-        }
-    }
-
     fun getWidgetBuddyState(context: Context, widgetId: Int): WidgetBuddyState =
         WidgetBuddyState(
             widgetId = widgetId,
@@ -113,27 +103,13 @@ object BuddyPreferences {
     }
 
     /**
-     * Returns all active widget IDs from [AppWidgetManager] combined with any widget IDs
-     * that have persisted state in [BuddyPreferences].
+     * Returns all active widget IDs from [AppWidgetManager].
      */
     fun getActiveWidgetIds(context: Context): List<Int> {
-        val managerIds = runCatching {
-            val manager = AppWidgetManager.getInstance(context)
-            val component = ComponentName(context, AndroidPetWidget::class.java)
-            manager.getAppWidgetIds(component).toList()
-        }.getOrDefault(emptyList())
-
-        val prefIds = prefs(context).all.keys.mapNotNull { key ->
-            when {
-                key.startsWith(KEY_COINS_PREFIX) -> key.removePrefix(KEY_COINS_PREFIX).toIntOrNull()
-                key.startsWith(KEY_TAPS_PREFIX) -> key.removePrefix(KEY_TAPS_PREFIX).toIntOrNull()
-                else -> null
-            }
-        }
-
-        return (managerIds + prefIds)
+        val manager = AppWidgetManager.getInstance(context)
+        val component = ComponentName(context, AndroidPetWidget::class.java)
+        return (manager.getAppWidgetIds(component) ?: IntArray(0))
             .filter { it != AppWidgetManager.INVALID_APPWIDGET_ID }
-            .distinct()
             .sorted()
     }
 
