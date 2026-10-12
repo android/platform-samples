@@ -400,8 +400,7 @@ class AndroidPetWidgetTest {
         assertEquals(0, BuddyPreferences.getCoinsForWidget(context, 501))
         assertEquals(0, BuddyPreferences.getCoinsForWidget(context, 502))
 
-        // Launching StoreActivity without EXTRA_APPWIDGET_ID (as from the samples list)
-        // must still display both active widgets with 0 coins.
+        // Launching StoreActivity must display both active widgets with 0 coins.
         ActivityScenario.launch(StoreActivity::class.java).use { scenario ->
             scenario.onActivity { activity ->
                 val texts = collectSemanticsTexts(activity)
