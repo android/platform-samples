@@ -172,7 +172,6 @@ class BuddyRepository(context: Context) {
     fun playWithBuddy(widgetId: Int): Int {
         val updated = BuddyPreferences.addCoinsForWidget(appContext, widgetId, 1)
         BuddyPreferences.saveTapsCount(appContext, widgetId, updated)
-        AndroidPetWidget.updateAppWidget(appContext, widgetId)
         return updated
     }
 

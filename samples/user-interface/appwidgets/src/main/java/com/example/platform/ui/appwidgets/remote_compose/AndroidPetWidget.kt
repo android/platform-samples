@@ -19,7 +19,6 @@ package com.example.platform.ui.appwidgets.remote_compose
 import android.annotation.SuppressLint
 import android.appwidget.AppWidgetManager
 import android.content.Context
-import android.content.Intent
 import androidx.compose.remote.creation.compose.action.valueChange
 import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteBox
@@ -43,16 +42,6 @@ import androidx.compose.ui.graphics.Color
 
 @SuppressLint("RestrictedApiAndroidX", "RestrictedApi")
 class AndroidPetWidget : RemoteComposeWidget() {
-
-    override fun onReceive(context: Context, intent: Intent) {
-        if (
-            intent.action == AppWidgetManager.ACTION_APPWIDGET_UPDATE &&
-            intent.getBooleanExtra(EXTRA_ALREADY_UPDATED, false)
-        ) {
-            return
-        }
-        super.onReceive(context, intent)
-    }
 
     override fun onUpdate(
         context: Context,
@@ -137,26 +126,5 @@ class AndroidPetWidget : RemoteComposeWidget() {
 
     companion object {
         const val REQUIRED_TAPS_FOR_COIN = 3
-        private const val EXTRA_ALREADY_UPDATED =
-            "com.example.platform.ui.appwidgets.remote_compose.EXTRA_ALREADY_UPDATED"
-
-        fun updateAppWidget(
-            context: Context,
-            appWidgetManager: AppWidgetManager,
-            appWidgetId: Int,
-        ) {
-            AndroidPetWidget().onUpdate(context, appWidgetManager, intArrayOf(appWidgetId))
-            val intent = Intent(context, AndroidPetWidget::class.java).apply {
-                action = AppWidgetManager.ACTION_APPWIDGET_UPDATE
-                putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, intArrayOf(appWidgetId))
-                putExtra(EXTRA_ALREADY_UPDATED, true)
-            }
-            context.sendBroadcast(intent)
-        }
-
-        fun updateAppWidget(context: Context, appWidgetId: Int) {
-            val manager = AppWidgetManager.getInstance(context)
-            updateAppWidget(context, manager, appWidgetId)
-        }
     }
 }
