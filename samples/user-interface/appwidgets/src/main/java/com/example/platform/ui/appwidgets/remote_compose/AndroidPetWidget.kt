@@ -22,7 +22,6 @@ import android.content.Context
 import androidx.compose.remote.creation.compose.action.valueChange
 import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteBox
-import androidx.compose.remote.creation.compose.layout.RemoteCanvas
 import androidx.compose.remote.creation.compose.layout.RemoteColumn
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
 import androidx.compose.remote.creation.compose.layout.RemoteText
@@ -82,14 +81,6 @@ class AndroidPetWidget : RemoteComposeWidget() {
             modifier = RemoteModifier.fillMaxSize().background(Color.White.rc),
             contentAlignment = RemoteAlignment.Center
         ) {
-            RemoteCanvas(modifier = RemoteModifier.fillMaxSize()) {
-                // Register the local state variables and expressions in the Remote Document
-                // before they are used inside the onTouchDown action below.
-                petTaps.getIdForCreationState(remoteComposeCreationState)
-                nextPetTaps.getIdForCreationState(remoteComposeCreationState)
-                isClaimVisible.getIdForCreationState(remoteComposeCreationState)
-            }
-
             // Pet interactive touch target (placed below WidgetActionBar so button clicks
             // on the action bar are not intercepted by the pet touch target).
             RemoteBox(
