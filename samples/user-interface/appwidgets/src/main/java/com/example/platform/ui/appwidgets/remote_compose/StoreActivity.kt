@@ -18,26 +18,23 @@ package com.example.platform.ui.appwidgets.remote_compose
 
 import android.appwidget.AppWidgetManager
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
@@ -48,10 +45,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.Typography
-import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
-import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -101,16 +96,8 @@ fun StoreTheme(
     content: @Composable () -> Unit,
 ) {
     val context = LocalContext.current
-    val colorScheme = when {
-        Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
-        darkTheme -> darkColorScheme()
-        else -> lightColorScheme()
-    }
-
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context),
         typography = StoreTypography,
         content = content,
     )
@@ -172,10 +159,9 @@ fun StoreScreen(
     }
     val totalCoins = activeStates.sumOf { it.coins }
 
-    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+    Scaffold { innerPadding ->
         Column(
             modifier = Modifier
-                .fillMaxSize()
                 .padding(innerPadding)
                 .padding(top = 16.dp, start = 16.dp, end = 16.dp),
         ) {
@@ -188,7 +174,6 @@ fun StoreScreen(
             )
 
             LazyColumn(
-                modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(bottom = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
@@ -239,21 +224,19 @@ fun BuddySelectorBar(
     selectedWidgetId: Int?,
     onSelectBuddy: (Int?) -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 12.dp)
-            .horizontalScroll(rememberScrollState()),
+    LazyRow(
+        modifier = Modifier.padding(bottom = 12.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalAlignment = Alignment.CenterVertically,
     ) {
-        FilterChip(
-            selected = selectedWidgetId == null,
-            onClick = { onSelectBuddy(null) },
-            label = { Text("All Buddies") },
-            shape = CircleShape,
-        )
-        buddies.forEach { buddy ->
+        item {
+            FilterChip(
+                selected = selectedWidgetId == null,
+                onClick = { onSelectBuddy(null) },
+                label = { Text("All Buddies") },
+                shape = CircleShape,
+            )
+        }
+        items(buddies, key = { it.widgetId }) { buddy ->
             FilterChip(
                 selected = selectedWidgetId == buddy.widgetId,
                 onClick = { onSelectBuddy(buddy.widgetId) },
@@ -267,15 +250,11 @@ fun BuddySelectorBar(
 @Composable
 fun WidgetCoinCard(state: WidgetBuddyState) {
     ElevatedCard(
-        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(28.dp),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 6.dp),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(18.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier.padding(18.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -297,7 +276,6 @@ private fun CreditPill(text: String) {
     Text(
         text = text,
         style = MaterialTheme.typography.labelLarge,
-        fontWeight = FontWeight.Bold,
         color = badgeText,
         modifier = Modifier
             .background(badgeBg, CircleShape)
