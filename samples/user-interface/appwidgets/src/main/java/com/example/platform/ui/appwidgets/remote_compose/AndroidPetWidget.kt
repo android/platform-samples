@@ -17,7 +17,6 @@
 package com.example.platform.ui.appwidgets.remote_compose
 
 import android.annotation.SuppressLint
-import android.appwidget.AppWidgetManager
 import android.content.Context
 import androidx.compose.remote.creation.compose.action.valueChange
 import androidx.compose.remote.creation.compose.layout.RemoteAlignment
@@ -41,14 +40,6 @@ import androidx.compose.ui.graphics.Color
 
 @SuppressLint("RestrictedApiAndroidX", "RestrictedApi")
 class AndroidPetWidget : RemoteComposeWidget() {
-
-    override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
-        super.onUpdate(context, appWidgetManager, appWidgetIds)
-    }
 
     override fun onDeleted(context: Context, appWidgetIds: IntArray) {
         super.onDeleted(context, appWidgetIds)
