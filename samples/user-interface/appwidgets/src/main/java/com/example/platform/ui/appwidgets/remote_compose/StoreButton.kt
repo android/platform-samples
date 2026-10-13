@@ -32,8 +32,10 @@ import androidx.compose.remote.creation.compose.state.rdp
 import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.widgets.onClick
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
+import com.example.platform.ui.appwidgets.R
 
 @SuppressLint("RestrictedApiAndroidX", "RestrictedApi")
 @RemoteComposable
@@ -42,9 +44,7 @@ fun StoreButton(
     context: Context,
     widgetId: Int,
 ) {
-    val bitmap = remember(context) {
-        WidgetAssetProvider.storeBitmap(context)
-    }
+    val bitmap = ContextCompat.getDrawable(context, R.drawable.shop_button)!!.toBitmap()
 
     RemoteImage(
         remoteBitmap = bitmap.asImageBitmap().rb,
