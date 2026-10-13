@@ -65,25 +65,18 @@ class AndroidPetWidget : RemoteComposeWidget() {
             modifier = RemoteModifier.fillMaxSize().background(Color.White.rc),
             contentAlignment = RemoteAlignment.Center
         ) {
-            // Declared before the action buttons so the buttons sit on top of the pet touch area.
-            RemoteBox(
-                modifier = RemoteModifier
-                    .fillMaxSize()
-                    .onTouchDown(valueChange(petTaps, nextPetTaps)),
-                contentAlignment = RemoteAlignment.Center
+            RemoteColumn(
+                modifier = RemoteModifier.onTouchDown(valueChange(petTaps, nextPetTaps)),
+                horizontalAlignment = RemoteAlignment.CenterHorizontally
             ) {
-                RemoteColumn(
-                    horizontalAlignment = RemoteAlignment.CenterHorizontally
-                ) {
-                    RemoteText(
-                        text = "Android Pet".rs,
-                        color = Color.Black.rc
-                    )
-                    RemoteText(
-                        text = "Coins: $coins".rs,
-                        color = Color.DarkGray.rc
-                    )
-                }
+                RemoteText(
+                    text = "Android Pet".rs,
+                    color = Color.Black.rc
+                )
+                RemoteText(
+                    text = "Coins: $coins".rs,
+                    color = Color.DarkGray.rc
+                )
             }
 
             WidgetActionBar(
