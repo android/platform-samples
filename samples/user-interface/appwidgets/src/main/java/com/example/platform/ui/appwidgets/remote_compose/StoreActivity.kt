@@ -278,7 +278,6 @@ private fun loadWidgetStates(
         states.add(
             WidgetBuddyState(
                 widgetId = selectedWidgetId,
-                tapsCount = BuddyPreferences.getTapsCount(context, selectedWidgetId),
                 coins = BuddyPreferences.getCoinsForWidget(context, selectedWidgetId),
             )
         )

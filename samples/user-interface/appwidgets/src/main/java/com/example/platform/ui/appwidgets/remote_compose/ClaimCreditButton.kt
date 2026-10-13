@@ -67,7 +67,7 @@ fun ClaimCreditButton(
         RemoteBox(
             modifier = buttonModifier
                 .onClick {
-                    BuddyRepository(context).playWithBuddy(widgetId)
+                    BuddyPreferences.addCoinsForWidget(context, widgetId)
                 },
         ) {
             RemoteCanvas(modifier = RemoteModifier.fillMaxSize()) {

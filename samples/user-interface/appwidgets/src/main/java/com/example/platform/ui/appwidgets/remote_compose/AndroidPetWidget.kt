@@ -81,8 +81,7 @@ class AndroidPetWidget : RemoteComposeWidget() {
             modifier = RemoteModifier.fillMaxSize().background(Color.White.rc),
             contentAlignment = RemoteAlignment.Center
         ) {
-            // Pet interactive touch target (placed below WidgetActionBar so button clicks
-            // on the action bar are not intercepted by the pet touch target).
+            // Declared before the action buttons so the buttons sit on top of the pet touch area.
             RemoteBox(
                 modifier = RemoteModifier
                     .fillMaxSize()
