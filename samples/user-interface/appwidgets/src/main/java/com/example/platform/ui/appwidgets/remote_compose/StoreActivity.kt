@@ -23,21 +23,18 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -45,10 +42,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
@@ -179,12 +176,8 @@ fun StoreScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(
-                    top = innerPadding.calculateTopPadding() + 16.dp,
-                    start = 16.dp,
-                    end = 16.dp,
-                )
-                .consumeWindowInsets(innerPadding),
+                .padding(innerPadding)
+                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
         ) {
             StoreTopBar(totalCoins = totalCoins)
 
@@ -196,9 +189,7 @@ fun StoreScreen(
 
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(
-                    bottom = innerPadding.calculateBottomPadding() + 16.dp,
-                ),
+                contentPadding = PaddingValues(bottom = 16.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
                 items(displayedBuddies, key = { it.widgetId }) { state ->
@@ -215,41 +206,29 @@ fun StoreTopBar(totalCoins: Int) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.weight(1f),
-        ) {
-            Surface(
-                shape = CircleShape,
-                color = MaterialTheme.colorScheme.primaryContainer,
-                modifier = Modifier.size(44.dp),
-            ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.rounded_storefront),
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(24.dp),
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.width(12.dp))
-            Column {
-                Text(
-                    text = "Pet Buddy Store",
-                    style = MaterialTheme.typography.headlineMedium,
-                )
-                Text(
-                    text = "Furnish & customize your buddy's room",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
+        Icon(
+            painter = painterResource(id = R.drawable.rounded_storefront),
+            contentDescription = null,
+            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier
+                .background(MaterialTheme.colorScheme.primaryContainer, CircleShape)
+                .padding(10.dp)
+                .size(24.dp),
+        )
+        Column(modifier = Modifier.weight(1f)) {
+            Text(
+                text = "Pet Buddy Store",
+                style = MaterialTheme.typography.headlineMedium,
+            )
+            Text(
+                text = "Furnish & customize your buddy's room",
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
-
         CreditPill(text = "🪙 $totalCoins")
     }
 }
@@ -268,43 +247,20 @@ fun BuddySelectorBar(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        BuddyFilterChip(
-            text = "All Buddies",
+        FilterChip(
             selected = selectedWidgetId == null,
             onClick = { onSelectBuddy(null) },
+            label = { Text("All Buddies") },
+            shape = CircleShape,
         )
         buddies.forEach { buddy ->
-            BuddyFilterChip(
-                text = "Android Buddy #${buddy.widgetId}",
+            FilterChip(
                 selected = selectedWidgetId == buddy.widgetId,
                 onClick = { onSelectBuddy(buddy.widgetId) },
+                label = { Text("Android Buddy #${buddy.widgetId}") },
+                shape = CircleShape,
             )
         }
-    }
-}
-
-@Composable
-private fun BuddyFilterChip(
-    text: String,
-    selected: Boolean,
-    onClick: () -> Unit,
-) {
-    val colorScheme = MaterialTheme.colorScheme
-    Surface(
-        onClick = onClick,
-        shape = RoundedCornerShape(50),
-        color = if (selected) colorScheme.primary else colorScheme.surfaceContainerLow,
-        border = BorderStroke(
-            width = 1.dp,
-            color = if (selected) colorScheme.primary else colorScheme.outlineVariant,
-        ),
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelLarge,
-            color = if (selected) colorScheme.onPrimary else colorScheme.onSurface,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp),
-        )
     }
 }
 
@@ -338,17 +294,14 @@ private fun CreditPill(text: String) {
     val badgeBg = if (isDark) Color(0xFF3D3112) else Color(0xFFFFF3CD)
     val badgeText = if (isDark) Color(0xFFFFD54F) else Color(0xFF7A5200)
 
-    Surface(
-        shape = RoundedCornerShape(50),
-        color = badgeBg,
-        border = BorderStroke(1.dp, badgeText.copy(alpha = 0.25f)),
-    ) {
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelLarge,
-            fontWeight = FontWeight.Bold,
-            color = badgeText,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp),
-        )
-    }
+    Text(
+        text = text,
+        style = MaterialTheme.typography.labelLarge,
+        fontWeight = FontWeight.Bold,
+        color = badgeText,
+        modifier = Modifier
+            .background(badgeBg, CircleShape)
+            .border(1.dp, badgeText.copy(alpha = 0.25f), CircleShape)
+            .padding(horizontal = 12.dp, vertical = 6.dp),
+    )
 }
