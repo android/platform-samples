@@ -18,8 +18,11 @@ package com.example.platform.ui.appwidgets.remote_compose
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
+import androidx.compose.remote.creation.compose.layout.RemoteAlignment
+import androidx.compose.remote.creation.compose.layout.RemoteBox
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
+import androidx.compose.remote.creation.compose.modifier.RemoteModifier
+import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.compose.state.RemoteInt
 import androidx.compose.runtime.Composable
 
@@ -29,19 +32,20 @@ import androidx.compose.runtime.Composable
 fun WidgetActionBar(
     context: Context,
     widgetId: Int,
-    claimCreditIconBitmap: Bitmap? = null,
-    storeIconBitmap: Bitmap? = null,
-    isClaimVisible: RemoteInt? = null,
+    isClaimVisible: RemoteInt,
 ) {
-    ClaimCreditButton(
-        context = context,
-        widgetId = widgetId,
-        claimCreditIconBitmap = claimCreditIconBitmap,
-        isClaimVisible = isClaimVisible,
-    )
-    StoreButton(
-        context = context,
-        widgetId = widgetId,
-        storeIconBitmap = storeIconBitmap,
-    )
+    RemoteBox(
+        contentAlignment = RemoteAlignment.BottomEnd,
+        modifier = RemoteModifier.fillMaxSize(),
+    ) {
+        ClaimCreditButton(
+            context = context,
+            widgetId = widgetId,
+            isClaimVisible = isClaimVisible,
+        )
+        StoreButton(
+            context = context,
+            widgetId = widgetId,
+        )
+    }
 }

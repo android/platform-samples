@@ -18,8 +18,6 @@ package com.example.platform.ui.appwidgets.remote_compose
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Bitmap
-import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteBox
 import androidx.compose.remote.creation.compose.layout.RemoteCanvas
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
@@ -42,40 +40,26 @@ import androidx.compose.ui.graphics.asImageBitmap
 fun ClaimCreditButton(
     context: Context,
     widgetId: Int,
-    claimCreditIconBitmap: Bitmap? = null,
-    isClaimVisible: RemoteInt? = null,
+    isClaimVisible: RemoteInt,
 ) {
-    val bitmap = claimCreditIconBitmap ?: remember {
+    val bitmap = remember(context) {
         WidgetAssetProvider.claimCreditBitmap(context)
     }
 
     RemoteBox(
-        contentAlignment = RemoteAlignment.BottomEnd,
-        modifier = RemoteModifier.fillMaxSize(),
+        modifier = RemoteModifier
+            .padding(end = 68.rdp, bottom = 12.rdp)
+            .size(48.rdp)
+            .visibility(isClaimVisible)
+            .onClick {
+                BuddyPreferences.addCoinsForWidget(context, widgetId)
+            },
     ) {
-        val buttonModifier = if (isClaimVisible != null) {
-            RemoteModifier
-                .padding(end = 68.rdp, bottom = 12.rdp)
-                .size(48.rdp)
-                .visibility(isClaimVisible)
-        } else {
-            RemoteModifier
-                .padding(end = 68.rdp, bottom = 12.rdp)
-                .size(48.rdp)
-        }
-
-        RemoteBox(
-            modifier = buttonModifier
-                .onClick {
-                    BuddyPreferences.addCoinsForWidget(context, widgetId)
-                },
-        ) {
-            RemoteCanvas(modifier = RemoteModifier.fillMaxSize()) {
-                drawScaledBitmap(
-                    image = bitmap.asImageBitmap().rb,
-                    contentDescription = "Claim Credit",
-                )
-            }
+        RemoteCanvas(modifier = RemoteModifier.fillMaxSize()) {
+            drawScaledBitmap(
+                image = bitmap.asImageBitmap().rb,
+                contentDescription = "Claim Credit",
+            )
         }
     }
 }

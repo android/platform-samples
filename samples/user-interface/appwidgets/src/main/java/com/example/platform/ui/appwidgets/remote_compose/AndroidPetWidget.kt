@@ -35,7 +35,6 @@ import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.state.selectIfGe
 import androidx.compose.remote.creation.compose.widgets.RemoteComposeWidget
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 
 @SuppressLint("RestrictedApiAndroidX", "RestrictedApi")
@@ -53,12 +52,6 @@ class AndroidPetWidget : RemoteComposeWidget() {
     @Composable
     override fun Content(context: Context, widgetId: Int) {
         val appContext = context.applicationContext ?: context
-        val claimCreditIconBitmap = remember(appContext) {
-            WidgetAssetProvider.claimCreditBitmap(appContext)
-        }
-        val storeIconBitmap = remember(appContext) {
-            WidgetAssetProvider.storeBitmap(appContext)
-        }
         val coins = BuddyPreferences.getCoinsForWidget(appContext, widgetId)
 
         val petTaps = rememberMutableRemoteInt(0)
@@ -96,8 +89,6 @@ class AndroidPetWidget : RemoteComposeWidget() {
             WidgetActionBar(
                 context = appContext,
                 widgetId = widgetId,
-                claimCreditIconBitmap = claimCreditIconBitmap,
-                storeIconBitmap = storeIconBitmap,
                 isClaimVisible = isClaimVisible,
             )
         }

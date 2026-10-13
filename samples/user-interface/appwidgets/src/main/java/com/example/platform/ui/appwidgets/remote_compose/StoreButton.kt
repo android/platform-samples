@@ -21,9 +21,7 @@ import android.app.ActivityOptions
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
-import android.graphics.Bitmap
 import android.os.Build
-import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteBox
 import androidx.compose.remote.creation.compose.layout.RemoteCanvas
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
@@ -31,8 +29,6 @@ import androidx.compose.remote.creation.compose.modifier.RemoteModifier
 import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.compose.modifier.padding
 import androidx.compose.remote.creation.compose.modifier.size
-import androidx.compose.remote.creation.compose.modifier.visibility
-import androidx.compose.remote.creation.compose.state.RemoteInt
 import androidx.compose.remote.creation.compose.state.rb
 import androidx.compose.remote.creation.compose.state.rdp
 import androidx.compose.remote.creation.compose.widgets.onClick
@@ -46,40 +42,24 @@ import androidx.compose.ui.graphics.asImageBitmap
 fun StoreButton(
     context: Context,
     widgetId: Int,
-    storeIconBitmap: Bitmap? = null,
-    isStoreVisible: RemoteInt? = null,
 ) {
-    val bitmap = storeIconBitmap ?: remember {
+    val bitmap = remember(context) {
         WidgetAssetProvider.storeBitmap(context)
     }
 
     RemoteBox(
-        contentAlignment = RemoteAlignment.BottomEnd,
-        modifier = RemoteModifier.fillMaxSize(),
+        modifier = RemoteModifier
+            .padding(12.rdp)
+            .size(48.rdp)
+            .onClick {
+                launchStoreActivity(context, widgetId)
+            },
     ) {
-        val buttonModifier = if (isStoreVisible != null) {
-            RemoteModifier
-                .padding(12.rdp)
-                .size(48.rdp)
-                .visibility(isStoreVisible)
-        } else {
-            RemoteModifier
-                .padding(12.rdp)
-                .size(48.rdp)
-        }
-
-        RemoteBox(
-            modifier = buttonModifier
-                .onClick {
-                    launchStoreActivity(context, widgetId)
-                },
-        ) {
-            RemoteCanvas(modifier = RemoteModifier.fillMaxSize()) {
-                drawScaledBitmap(
-                    image = bitmap.asImageBitmap().rb,
-                    contentDescription = "Store",
-                )
-            }
+        RemoteCanvas(modifier = RemoteModifier.fillMaxSize()) {
+            drawScaledBitmap(
+                image = bitmap.asImageBitmap().rb,
+                contentDescription = "Store",
+            )
         }
     }
 }
