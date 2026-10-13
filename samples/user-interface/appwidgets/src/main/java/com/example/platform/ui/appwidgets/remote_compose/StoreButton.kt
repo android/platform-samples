@@ -22,15 +22,14 @@ import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.Intent
 import android.os.Build
-import androidx.compose.remote.creation.compose.layout.RemoteBox
-import androidx.compose.remote.creation.compose.layout.RemoteCanvas
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
+import androidx.compose.remote.creation.compose.layout.RemoteImage
 import androidx.compose.remote.creation.compose.modifier.RemoteModifier
-import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.compose.modifier.padding
 import androidx.compose.remote.creation.compose.modifier.size
 import androidx.compose.remote.creation.compose.state.rb
 import androidx.compose.remote.creation.compose.state.rdp
+import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.widgets.onClick
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -47,21 +46,16 @@ fun StoreButton(
         WidgetAssetProvider.storeBitmap(context)
     }
 
-    RemoteBox(
+    RemoteImage(
+        remoteBitmap = bitmap.asImageBitmap().rb,
+        contentDescription = "Store".rs,
         modifier = RemoteModifier
             .padding(12.rdp)
             .size(48.rdp)
             .onClick {
                 launchStoreActivity(context, widgetId)
             },
-    ) {
-        RemoteCanvas(modifier = RemoteModifier.fillMaxSize()) {
-            drawScaledBitmap(
-                image = bitmap.asImageBitmap().rb,
-                contentDescription = "Store",
-            )
-        }
-    }
+    )
 }
 
 internal fun launchStoreActivity(context: Context, widgetId: Int) {
