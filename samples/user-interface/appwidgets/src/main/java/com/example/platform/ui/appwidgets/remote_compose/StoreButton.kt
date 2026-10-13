@@ -67,7 +67,6 @@ fun StoreButton(
 internal fun launchStoreActivity(context: Context, widgetId: Int) {
     val intent = Intent(context, StoreActivity::class.java).apply {
         putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
-        putExtra(StoreActivity.EXTRA_WIDGET_ID, widgetId)
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or
             Intent.FLAG_ACTIVITY_CLEAR_TOP or
             Intent.FLAG_ACTIVITY_SINGLE_TOP
