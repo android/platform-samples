@@ -20,6 +20,7 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.core.content.edit
 
 /**
  * Snapshot of an Android Pet widget instance's state.
@@ -44,16 +45,16 @@ object BuddyPreferences {
 
     fun addCoinsForWidget(context: Context, widgetId: Int, amount: Int = 1): Int {
         val updated = (getCoinsForWidget(context, widgetId) + amount).coerceAtLeast(0)
-        prefs(context).edit()
-            .putInt("$KEY_COINS_PREFIX$widgetId", updated)
-            .apply()
+        prefs(context).edit {
+            putInt("$KEY_COINS_PREFIX$widgetId", updated)
+        }
         return updated
     }
 
     fun removeWidgetState(context: Context, widgetId: Int) {
-        prefs(context).edit()
-            .remove("$KEY_COINS_PREFIX$widgetId")
-            .apply()
+        prefs(context).edit {
+            remove("$KEY_COINS_PREFIX$widgetId")
+        }
     }
 
     fun getActiveBuddyStates(context: Context): List<WidgetBuddyState> {
