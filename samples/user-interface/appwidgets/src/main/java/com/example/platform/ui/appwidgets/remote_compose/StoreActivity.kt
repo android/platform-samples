@@ -24,7 +24,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -62,7 +61,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -74,13 +72,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.platform.ui.appwidgets.R
 
-private val MadimiOneFontFamily = FontFamily(
-    Font(R.font.madimi_one_regular, FontWeight.Normal),
-    Font(R.font.madimi_one_regular, FontWeight.Medium),
-    Font(R.font.madimi_one_regular, FontWeight.SemiBold),
-    Font(R.font.madimi_one_regular, FontWeight.Bold),
-    Font(R.font.madimi_one_regular, FontWeight.ExtraBold),
-)
+private val MadimiOneFontFamily = FontFamily(Font(R.font.madimi_one_regular))
 
 private val StoreTypography = Typography(
     headlineMedium = TextStyle(
@@ -93,11 +85,6 @@ private val StoreTypography = Typography(
         fontFamily = MadimiOneFontFamily,
         fontSize = 21.sp,
         fontWeight = FontWeight.Bold,
-    ),
-    bodyLarge = TextStyle(
-        fontFamily = MadimiOneFontFamily,
-        fontSize = 15.sp,
-        fontWeight = FontWeight.Normal,
     ),
     bodyMedium = TextStyle(
         fontFamily = MadimiOneFontFamily,
@@ -149,8 +136,6 @@ class StoreActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-
-        activeStates = BuddyPreferences.getActiveBuddyStates(this)
         selectedWidgetId = extractWidgetIdFromIntent(intent)
 
         setContent {
@@ -168,7 +153,6 @@ class StoreActivity : ComponentActivity() {
         super.onNewIntent(intent)
         setIntent(intent)
         extractWidgetIdFromIntent(intent)?.let { selectedWidgetId = it }
-        activeStates = BuddyPreferences.getActiveBuddyStates(this)
     }
 
     override fun onResume() {
@@ -182,7 +166,6 @@ fun StoreScreen(
     activeStates: List<WidgetBuddyState>,
     selectedWidgetId: Int? = null,
     onSelectBuddy: (Int?) -> Unit = {},
-    modifier: Modifier = Modifier,
 ) {
     val effectiveSelectedId = selectedWidgetId?.takeIf { id -> activeStates.any { it.widgetId == id } }
     val displayedBuddies = if (effectiveSelectedId == null) {
@@ -192,7 +175,7 @@ fun StoreScreen(
     }
     val totalCoins = activeStates.sumOf { it.coins }
 
-    Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
+    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -205,28 +188,21 @@ fun StoreScreen(
         ) {
             StoreTopBar(totalCoins = totalCoins)
 
-            if (activeStates.isNotEmpty()) {
-                BuddySelectorBar(
-                    buddies = activeStates,
-                    selectedWidgetId = effectiveSelectedId,
-                    onSelectBuddy = onSelectBuddy,
-                    modifier = Modifier.padding(bottom = 12.dp),
-                )
-            }
+            BuddySelectorBar(
+                buddies = activeStates,
+                selectedWidgetId = effectiveSelectedId,
+                onSelectBuddy = onSelectBuddy,
+            )
 
-            if (activeStates.isEmpty()) {
-                StoreEmptyStateCard()
-            } else {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(
-                        bottom = innerPadding.calculateBottomPadding() + 16.dp,
-                    ),
-                    verticalArrangement = Arrangement.spacedBy(20.dp),
-                ) {
-                    items(displayedBuddies, key = { it.widgetId }) { state ->
-                        WidgetCoinCard(state = state)
-                    }
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(
+                    bottom = innerPadding.calculateBottomPadding() + 16.dp,
+                ),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
+            ) {
+                items(displayedBuddies, key = { it.widgetId }) { state ->
+                    WidgetCoinCard(state = state)
                 }
             }
         }
@@ -234,12 +210,9 @@ fun StoreScreen(
 }
 
 @Composable
-fun StoreTopBar(
-    totalCoins: Int,
-    modifier: Modifier = Modifier,
-) {
+fun StoreTopBar(totalCoins: Int) {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .padding(bottom = 16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -286,11 +259,11 @@ fun BuddySelectorBar(
     buddies: List<WidgetBuddyState>,
     selectedWidgetId: Int?,
     onSelectBuddy: (Int?) -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
+            .padding(bottom = 12.dp)
             .horizontalScroll(rememberScrollState()),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -318,15 +291,13 @@ private fun BuddyFilterChip(
 ) {
     val colorScheme = MaterialTheme.colorScheme
     Surface(
+        onClick = onClick,
         shape = RoundedCornerShape(50),
         color = if (selected) colorScheme.primary else colorScheme.surfaceContainerLow,
         border = BorderStroke(
             width = 1.dp,
             color = if (selected) colorScheme.primary else colorScheme.outlineVariant,
         ),
-        modifier = Modifier
-            .clip(RoundedCornerShape(50))
-            .clickable(onClick = onClick),
     ) {
         Text(
             text = text,
@@ -338,40 +309,9 @@ private fun BuddyFilterChip(
 }
 
 @Composable
-fun StoreEmptyStateCard(
-    modifier: Modifier = Modifier,
-) {
+fun WidgetCoinCard(state: WidgetBuddyState) {
     ElevatedCard(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            Text(
-                text = "🐾",
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(bottom = 8.dp),
-            )
-            Text(
-                text = "No active pet widgets found. Add a Pet Buddy widget to access the store!",
-                style = MaterialTheme.typography.bodyLarge,
-            )
-        }
-    }
-}
-
-@Composable
-fun WidgetCoinCard(
-    state: WidgetBuddyState,
-    modifier: Modifier = Modifier,
-) {
-    ElevatedCard(
-        modifier = modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(28.dp),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 6.dp),
     ) {
