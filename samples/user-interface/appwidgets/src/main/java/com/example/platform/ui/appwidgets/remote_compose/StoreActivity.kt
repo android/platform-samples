@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,11 +38,13 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.Typography
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -159,14 +160,14 @@ fun StoreScreen(
     }
     val totalCoins = activeStates.sumOf { it.coins }
 
-    Scaffold { innerPadding ->
+    Scaffold(
+        topBar = { StoreTopBar(totalCoins = totalCoins) },
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(top = 16.dp, start = 16.dp, end = 16.dp),
+                .padding(top = 8.dp, start = 16.dp, end = 16.dp),
         ) {
-            StoreTopBar(totalCoins = totalCoins)
-
             BuddySelectorBar(
                 buddies = activeStates,
                 selectedWidgetId = effectiveSelectedId,
@@ -185,37 +186,42 @@ fun StoreScreen(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun StoreTopBar(totalCoins: Int) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(bottom = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            painter = painterResource(id = R.drawable.rounded_storefront),
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onPrimaryContainer,
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.primaryContainer, CircleShape)
-                .padding(10.dp)
-                .size(24.dp),
-        )
-        Column(modifier = Modifier.weight(1f)) {
-            Text(
-                text = "Pet Buddy Store",
-                style = MaterialTheme.typography.headlineMedium,
+    TopAppBar(
+        navigationIcon = {
+            Icon(
+                painter = painterResource(id = R.drawable.rounded_storefront),
+                contentDescription = null,
+                tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                modifier = Modifier
+                    .padding(start = 16.dp, end = 12.dp)
+                    .background(MaterialTheme.colorScheme.primaryContainer, CircleShape)
+                    .padding(10.dp)
+                    .size(24.dp),
             )
-            Text(
-                text = "Furnish & customize your buddy's room",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+        },
+        title = {
+            Column {
+                Text(
+                    text = "Pet Buddy Store",
+                    style = MaterialTheme.typography.headlineMedium,
+                )
+                Text(
+                    text = "Furnish & customize your buddy's room",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+            }
+        },
+        actions = {
+            CreditPill(
+                text = "🪙 $totalCoins",
+                modifier = Modifier.padding(end = 16.dp),
             )
-        }
-        CreditPill(text = "🪙 $totalCoins")
-    }
+        },
+    )
 }
 
 @Composable
@@ -268,7 +274,7 @@ fun WidgetCoinCard(state: WidgetBuddyState) {
 }
 
 @Composable
-private fun CreditPill(text: String) {
+private fun CreditPill(text: String, modifier: Modifier = Modifier) {
     val isDark = isSystemInDarkTheme()
     val badgeBg = if (isDark) Color(0xFF3D3112) else Color(0xFFFFF3CD)
     val badgeText = if (isDark) Color(0xFFFFD54F) else Color(0xFF7A5200)
@@ -277,7 +283,7 @@ private fun CreditPill(text: String) {
         text = text,
         style = MaterialTheme.typography.labelLarge,
         color = badgeText,
-        modifier = Modifier
+        modifier = modifier
             .background(badgeBg, CircleShape)
             .border(1.dp, badgeText.copy(alpha = 0.25f), CircleShape)
             .padding(horizontal = 12.dp, vertical = 6.dp),
