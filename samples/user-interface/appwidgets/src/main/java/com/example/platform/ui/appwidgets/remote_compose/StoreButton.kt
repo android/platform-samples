@@ -32,6 +32,7 @@ import androidx.compose.remote.creation.compose.state.rdp
 import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.widgets.onClick
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -44,10 +45,12 @@ fun StoreButton(
     context: Context,
     widgetId: Int,
 ) {
-    val bitmap = ContextCompat.getDrawable(context, R.drawable.shop_button)!!.toBitmap()
+    val imageBitmap = remember(context) {
+        ContextCompat.getDrawable(context, R.drawable.shop_button)!!.toBitmap().asImageBitmap()
+    }
 
     RemoteImage(
-        remoteBitmap = bitmap.asImageBitmap().rb,
+        remoteBitmap = imageBitmap.rb,
         contentDescription = "Store".rs,
         modifier = RemoteModifier
             .padding(12.rdp)
@@ -61,10 +64,16 @@ fun StoreButton(
 internal fun launchStoreActivity(context: Context, widgetId: Int) {
     val intent = Intent(context, StoreActivity::class.java).apply {
         putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, widgetId)
+        // FLAG_ACTIVITY_NEW_TASK is required when starting an Activity from a BroadcastReceiver
+        // context (RemoteComposeWidget dispatches onClick lambdas from onReceive).
+        // FLAG_ACTIVITY_CLEAR_TOP and FLAG_ACTIVITY_SINGLE_TOP reuse an existing StoreActivity
+        // instance if one is already open and deliver the newly selected widgetId via onNewIntent.
         flags = Intent.FLAG_ACTIVITY_NEW_TASK or
-                Intent.FLAG_ACTIVITY_CLEAR_TOP or
-                Intent.FLAG_ACTIVITY_SINGLE_TOP
+            Intent.FLAG_ACTIVITY_CLEAR_TOP or
+            Intent.FLAG_ACTIVITY_SINGLE_TOP
     }
+    // Starting in Android 14 (API 34), apps must explicitly opt in to allow background activity
+    // starts when triggered from a PendingIntent broadcast (such as a widget click).
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
         val options = ActivityOptions.makeBasic().apply {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA) {

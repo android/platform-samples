@@ -30,6 +30,7 @@ import androidx.compose.remote.creation.compose.state.rdp
 import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.widgets.onClick
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
@@ -43,10 +44,12 @@ fun ClaimCreditButton(
     widgetId: Int,
     isClaimVisible: RemoteInt,
 ) {
-    val bitmap = ContextCompat.getDrawable(context, R.drawable.claim_credit_button)!!.toBitmap()
+    val imageBitmap = remember(context) {
+        ContextCompat.getDrawable(context, R.drawable.claim_credit_button)!!.toBitmap().asImageBitmap()
+    }
 
     RemoteImage(
-        remoteBitmap = bitmap.asImageBitmap().rb,
+        remoteBitmap = imageBitmap.rb,
         contentDescription = "Claim Credit".rs,
         modifier = RemoteModifier
             .padding(end = 68.rdp, bottom = 12.rdp)

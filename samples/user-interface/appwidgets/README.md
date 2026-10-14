@@ -1,6 +1,6 @@
 # AppWidgets samples
 
-This module demonstrates how to build Android AppWidgets with [Jetpack Glance](https://developer.android.com/jetpack/androidx/releases/glance).
+This module demonstrates how to build Android AppWidgets with [Jetpack Glance](https://developer.android.com/jetpack/androidx/releases/glance) and [Remote Compose](https://developer.android.com/jetpack/androidx/releases/compose-remote).
 
 The new set of APIs allows an application to build more engaging and beautiful widgets. Use this
 sample together with the
@@ -8,10 +8,26 @@ sample together with the
 
 # Pre-requisites
 
-* Android 12 (API level 31)
+* Android 12 (API level 31) for Jetpack Glance samples; Android 17 (API level 37) for Remote Compose samples
 * Android Studio Chipmunk or newer
 
 # Getting Started
+
+## Remote Compose Widget Sample (`remote_compose`)
+
+The [`remote_compose`](./src/main/java/com/example/platform/ui/appwidgets/remote_compose) directory contains the **Android Pet Widget** ([`AndroidPetWidget.kt`](./src/main/java/com/example/platform/ui/appwidgets/remote_compose/AndroidPetWidget.kt)) and [`StoreActivity.kt`](./src/main/java/com/example/platform/ui/appwidgets/remote_compose/StoreActivity.kt). This sample is a work in progress. We will add more features in the coming months.
+
+### When to use Jetpack Glance vs. Remote Compose
+
+For most cases, use [Jetpack Glance](https://developer.android.com/develop/ui/compose/glance) to build Android widgets. Jetpack Glance is a backwards-compatible library with developer tools (such as Canonical Layouts) that help you build high-quality widgets across form factors.
+
+However, you cannot build some widget use cases with Jetpack Glance, such as widgets that require animations. Jetpack Glance uses the legacy `RemoteViews` system:
+* `RemoteViews` cannot evaluate mathematical expressions on the host (for example, to continuously rotate an object).
+* The Android system controls `RemoteViews` and limits the size and frequency of widget updates.
+
+Remote Compose does **not** replace Jetpack Glance. Build most production widgets with Jetpack Glance for backwards compatibility and stable developer tools. Remote Compose widgets work best on Android 17 and higher devices.
+
+> **Note:** Remote Compose is in alpha and the API surface can change. Send us your [feedback](https://issuetracker.google.com/issues/new?component=1984647&template=2233909).
 
 ## Canonical Widget Layout Samples
 
