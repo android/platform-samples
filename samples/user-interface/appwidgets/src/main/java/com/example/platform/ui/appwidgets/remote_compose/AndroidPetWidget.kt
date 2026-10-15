@@ -17,19 +17,22 @@
 package com.example.platform.ui.appwidgets.remote_compose
 
 import android.annotation.SuppressLint
-import android.appwidget.AppWidgetManager
 import android.content.Context
-import android.os.Build
-import androidx.annotation.RequiresApi
+import androidx.compose.remote.creation.compose.action.valueChange
 import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteBox
+import androidx.compose.remote.creation.compose.layout.RemoteColumn
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
 import androidx.compose.remote.creation.compose.layout.RemoteText
 import androidx.compose.remote.creation.compose.modifier.RemoteModifier
 import androidx.compose.remote.creation.compose.modifier.background
 import androidx.compose.remote.creation.compose.modifier.fillMaxSize
+import androidx.compose.remote.creation.compose.modifier.onTouchDown
 import androidx.compose.remote.creation.compose.state.rc
+import androidx.compose.remote.creation.compose.state.rememberMutableRemoteInt
+import androidx.compose.remote.creation.compose.state.ri
 import androidx.compose.remote.creation.compose.state.rs
+import androidx.compose.remote.creation.compose.state.selectIfGe
 import androidx.compose.remote.creation.compose.widgets.RemoteComposeWidget
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -37,15 +40,10 @@ import androidx.compose.ui.graphics.Color
 @SuppressLint("RestrictedApiAndroidX", "RestrictedApi")
 class AndroidPetWidget : RemoteComposeWidget() {
 
-    @RequiresApi(Build.VERSION_CODES.VANILLA_ICE_CREAM)
-    override fun onUpdate(
-        context: Context,
-        appWidgetManager: AppWidgetManager,
-        appWidgetIds: IntArray
-    ) {
-        super.onUpdate(context, appWidgetManager, appWidgetIds)
+    override fun onDeleted(context: Context, appWidgetIds: IntArray) {
+        super.onDeleted(context, appWidgetIds)
         appWidgetIds.forEach { id ->
-            widget.updateRemoteView(context, appWidgetManager, this, id, -1)
+            BuddyPreferences.removeWidgetState(context, id)
         }
     }
 
@@ -53,14 +51,43 @@ class AndroidPetWidget : RemoteComposeWidget() {
     @RemoteComposable
     @Composable
     override fun Content(context: Context, widgetId: Int) {
+        val appContext = context.applicationContext ?: context
+        val coins = BuddyPreferences.getCoinsForWidget(appContext, widgetId)
+
+        val petTaps = rememberMutableRemoteInt(0)
+        val nextPetTaps = petTaps + 1.ri
+        // Evaluates to 1 (visible) in the host's expression graph when petTaps >= 3,
+        // or 0 (hidden) otherwise, allowing the coin button to appear after 3 taps
+        // without waking the app process.
+        val isClaimVisible = selectIfGe(petTaps, REQUIRED_TAPS_FOR_COIN.ri, 1.ri, 0.ri)
+
         RemoteBox(
             modifier = RemoteModifier.fillMaxSize().background(Color.White.rc),
             contentAlignment = RemoteAlignment.Center
         ) {
-            RemoteText(
-                text = "Android Pet Coming Soon".rs,
-                color = Color.Black.rc
+            RemoteColumn(
+                modifier = RemoteModifier.onTouchDown(valueChange(petTaps, nextPetTaps)),
+                horizontalAlignment = RemoteAlignment.CenterHorizontally
+            ) {
+                RemoteText(
+                    text = "Android Pet".rs,
+                    color = Color.Black.rc
+                )
+                RemoteText(
+                    text = "Coins: $coins".rs,
+                    color = Color.DarkGray.rc
+                )
+            }
+
+            WidgetActionBar(
+                context = appContext,
+                widgetId = widgetId,
+                isClaimVisible = isClaimVisible,
             )
         }
+    }
+
+    companion object {
+        const val REQUIRED_TAPS_FOR_COIN = 3
     }
 }

@@ -1,0 +1,45 @@
+<vector xmlns:aapt="http://schemas.android.com/aapt" xmlns:android="http://schemas.android.com/apk/res/android" android:height="24dp" android:viewportHeight="63" android:viewportWidth="63" android:width="24dp">
+      
+    <!-- Base background circle in warm gold -->
+    <path android:fillColor="#FFD54F" android:pathData="M31.733,29.067m-28,0a28,28 0,1 1,56 0a28,28 0,1 1,-56 0"/>
+      
+    <!-- Subtle shadow gradient -->
+    <path android:fillAlpha="0.25" android:pathData="M31.733,29.067m-28,0a28,28 0,1 1,56 0a28,28 0,1 1,-56 0">
+        <aapt:attr name="android:fillColor">
+            <gradient android:centerX="16.8" android:centerY="57.067" android:gradientRadius="21.245" android:type="radial">
+                <item android:color="#FF000000" android:offset="0"/>
+                <item android:color="#00000000" android:offset="1"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+      
+    <!-- Rich gold/orange shading -->
+    <path android:fillAlpha="0.7" android:pathData="M31.733,29.067m-28,0a28,28 0,1 1,56 0a28,28 0,1 1,-56 0">
+        <aapt:attr name="android:fillColor">
+            <gradient android:centerX="17.067" android:centerY="48" android:gradientRadius="40.263" android:type="radial">
+                <item android:color="#FFF57F17" android:offset="0"/>
+                <item android:color="#FFFFCA28" android:offset="0.903"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+      
+    <!-- Top-right highlight gradient for a glossy coin sheen -->
+    <path android:pathData="M31.733,29.067m-28,0a28,28 0,1 1,56 0a28,28 0,1 1,-56 0">
+        <aapt:attr name="android:fillColor">
+            <gradient android:centerX="38.933" android:centerY="12.533" android:gradientRadius="45.112" android:type="radial">
+                <item android:color="#FFFFF9C4" android:offset="0"/>
+                <item android:color="#00FFD54F" android:offset="1"/>
+            </gradient>
+        </aapt:attr>
+    </path>
+      
+    <!-- Outer edge bevel ring -->
+    <path android:fillColor="#00000000" android:pathData="M31.733,29.067m-27.467,0a27.467,27.467 0,1 1,54.933 0a27.467,27.467 0,1 1,-54.933 0" android:strokeAlpha="0.3" android:strokeColor="#FF8F00" android:strokeWidth="1.2"/>
+      
+    <!-- Coin Inner Inset Ring in deep amber/gold -->
+    <path android:fillColor="#00000000" android:strokeColor="#E65100" android:strokeWidth="2.5" android:pathData="M31.733,29.067m-13.5,0a13.5,13.5 0,1 1,27 0a13.5,13.5 0,1 1,-27 0"/>
+
+    <!-- Dollar sign "$" for Credit inside the Coin in deep amber/brown-gold -->
+    <path android:fillColor="#E65100" android:pathData="M30.5,18.0 L33.0,18.0 L33.0,20.6 C35.8,21.1 37.8,22.8 38.0,25.4 L35.3,25.4 C35.0,23.8 33.8,22.8 31.7,22.8 C29.4,22.8 28.1,23.9 28.1,25.4 C28.1,26.8 29.1,27.6 31.2,28.2 L32.8,28.7 C35.7,29.5 38.2,30.8 38.2,33.5 C38.2,36.1 36.0,37.8 33.0,38.3 L33.0,40.5 L30.5,40.5 L30.5,38.3 C27.6,37.7 25.4,36.0 25.2,33.0 L27.9,33.0 C28.2,34.8 29.6,36.0 31.7,36.0 C34.2,36.0 35.5,34.8 35.5,33.3 C35.5,31.8 34.4,31.0 32.2,30.4 L30.6,29.9 C27.8,29.1 25.5,27.9 25.5,25.2 C25.5,22.6 27.7,20.9 30.5,20.6 Z"/>
+    
+</vector>

@@ -200,6 +200,11 @@
         </receiver>
 
         <!-- Remote Compose Android Pet Widget -->
+        <activity
+            android:name=".remote_compose.StoreActivity"
+            android:exported="false"
+            android:label="@string/android_pet_store_title" />
+
         <receiver
             android:name=".remote_compose.AndroidPetWidget"
             android:exported="true"
