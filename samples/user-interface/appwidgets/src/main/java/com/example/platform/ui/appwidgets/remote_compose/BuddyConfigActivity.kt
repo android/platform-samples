@@ -55,11 +55,12 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.listSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -67,6 +68,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
@@ -85,7 +87,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.example.platform.ui.appwidgets.R
 
-enum class ConfigStep(
+private enum class ConfigStep(
     @DrawableRes val iconRes: Int,
     @StringRes val labelRes: Int,
     @StringRes val titleRes: Int,
@@ -96,36 +98,10 @@ enum class ConfigStep(
     THEME(R.drawable.ic_nav_palette, R.string.nav_palette, R.string.select_theme_title),
 }
 
-private val WidgetBuddyStateSaver = listSaver<WidgetBuddyState, Any>(
-    save = {
-        listOf(
-            it.widgetId,
-            it.coins,
-            it.buddyName,
-            it.nickname,
-            it.eyes,
-            it.mouth,
-            it.environment,
-            it.buddyColor,
-            it.eyeMouthColor,
-            it.isGrownUp,
-        )
-    },
-    restore = {
-        WidgetBuddyState(
-            widgetId = it[0] as Int,
-            coins = it[1] as Int,
-            buddyName = it[2] as String,
-            nickname = it[3] as String,
-            eyes = it[4] as String,
-            mouth = it[5] as String,
-            environment = it[6] as String,
-            buddyColor = it[7] as Int,
-            eyeMouthColor = it[8] as Int,
-            isGrownUp = it[9] as Boolean,
-        )
-    },
-)
+private val NavSuiteContainerColor = Color(0xFFEEF3E7)
+private val NavSelectedTextColor = Color(0xFF1B1C17)
+private val NavIndicatorColor = Color(0xFF50524A)
+private val NavUnselectedColor = Color(0xFF49454F)
 
 /**
  * Configuration activity for [AndroidPetWidget], allowing the user to customize the pet's
@@ -157,72 +133,35 @@ class BuddyConfigActivity : ComponentActivity() {
         setContent {
             StoreTheme(darkTheme = false) {
                 var currentStep by rememberSaveable { mutableStateOf(ConfigStep.BUDDY) }
-                var state by rememberSaveable(stateSaver = WidgetBuddyStateSaver) {
+                var state by rememberSaveable(stateSaver = WidgetBuddyState.Saver) {
                     mutableStateOf(initialState)
                 }
-
-                val itemColors = NavigationSuiteDefaults.itemColors(
-                    navigationBarItemColors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = Color.White,
-                        selectedTextColor = Color(0xFF1B1C17),
-                        indicatorColor = Color(0xFF50524A),
-                        unselectedIconColor = Color(0xFF49454F),
-                        unselectedTextColor = Color(0xFF49454F),
-                    ),
-                    navigationRailItemColors = NavigationRailItemDefaults.colors(
-                        selectedIconColor = Color.White,
-                        selectedTextColor = Color(0xFF1B1C17),
-                        indicatorColor = Color(0xFF50524A),
-                        unselectedIconColor = Color(0xFF49454F),
-                        unselectedTextColor = Color(0xFF49454F),
-                    ),
-                )
+                val itemColors = configNavigationItemColors()
 
                 NavigationSuiteScaffold(
                     navigationSuiteItems = {
                         ConfigStep.entries.forEach { step ->
-                            item(
+                            configNavItem(
                                 selected = currentStep == step,
                                 onClick = { currentStep = step },
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(id = step.iconRes),
-                                        contentDescription = stringResource(id = step.labelRes),
-                                        modifier = Modifier.size(32.dp),
-                                    )
-                                },
-                                label = {
-                                    Text(
-                                        text = stringResource(id = step.labelRes),
-                                        fontFamily = MadimiOneFontFamily,
-                                    )
-                                },
+                                iconRes = step.iconRes,
+                                labelRes = step.labelRes,
                                 colors = itemColors,
                             )
                         }
-                        item(
+                        configNavItem(
                             selected = false,
                             onClick = { commitSelection(state) },
-                            icon = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_arrow_forward),
-                                    contentDescription = stringResource(id = R.string.save_to_home_screen),
-                                    modifier = Modifier.size(32.dp),
-                                )
-                            },
-                            label = {
-                                Text(
-                                    text = stringResource(id = R.string.nav_place),
-                                    fontFamily = MadimiOneFontFamily,
-                                )
-                            },
+                            iconRes = R.drawable.ic_arrow_forward,
+                            labelRes = R.string.nav_place,
+                            contentDescriptionRes = R.string.save_to_home_screen,
                             colors = itemColors,
                         )
                     },
                     containerColor = colorResource(id = R.color.config_bg),
                     navigationSuiteColors = NavigationSuiteDefaults.colors(
-                        navigationBarContainerColor = Color(0xFFEEF3E7),
-                        navigationRailContainerColor = Color(0xFFEEF3E7),
+                        navigationBarContainerColor = NavSuiteContainerColor,
+                        navigationRailContainerColor = NavSuiteContainerColor,
                     ),
                 ) {
                     BuddyConfigScreenContent(
@@ -252,7 +191,54 @@ class BuddyConfigActivity : ComponentActivity() {
 }
 
 @Composable
-fun BuddyConfigScreenContent(
+private fun configNavigationItemColors(): NavigationSuiteItemColors =
+    NavigationSuiteDefaults.itemColors(
+        navigationBarItemColors = NavigationBarItemDefaults.colors(
+            selectedIconColor = Color.White,
+            selectedTextColor = NavSelectedTextColor,
+            indicatorColor = NavIndicatorColor,
+            unselectedIconColor = NavUnselectedColor,
+            unselectedTextColor = NavUnselectedColor,
+        ),
+        navigationRailItemColors = NavigationRailItemDefaults.colors(
+            selectedIconColor = Color.White,
+            selectedTextColor = NavSelectedTextColor,
+            indicatorColor = NavIndicatorColor,
+            unselectedIconColor = NavUnselectedColor,
+            unselectedTextColor = NavUnselectedColor,
+        ),
+    )
+
+private fun NavigationSuiteScope.configNavItem(
+    selected: Boolean,
+    onClick: () -> Unit,
+    @DrawableRes iconRes: Int,
+    @StringRes labelRes: Int,
+    colors: NavigationSuiteItemColors,
+    @StringRes contentDescriptionRes: Int = labelRes,
+) {
+    item(
+        selected = selected,
+        onClick = onClick,
+        icon = {
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = stringResource(id = contentDescriptionRes),
+                modifier = Modifier.size(32.dp),
+            )
+        },
+        label = {
+            Text(
+                text = stringResource(id = labelRes),
+                fontFamily = MadimiOneFontFamily,
+            )
+        },
+        colors = colors,
+    )
+}
+
+@Composable
+private fun BuddyConfigScreenContent(
     currentStep: ConfigStep,
     state: WidgetBuddyState,
     onStateChange: (WidgetBuddyState) -> Unit,
@@ -276,18 +262,28 @@ fun BuddyConfigScreenContent(
 
         if (currentStep == ConfigStep.BUDDY) {
             ConfigSectionCard(titleRes = R.string.select_buddy_title) {
-                BuddySelectionRow(
-                    selectedBuddy = state.buddyName,
-                    onBuddySelected = { onStateChange(state.copy(buddyName = it)) },
+                DrawableOptionRow(
+                    options = BuddyPreferences.BUDDY_OPTIONS,
+                    selectedOption = state.buddyName,
+                    onOptionSelected = { onStateChange(state.copy(buddyName = it)) },
+                    drawableResFor = BuddyPreferences::getBodyDrawableResForBuddy,
+                    optionModifier = Modifier.size(56.dp),
+                    shape = RoundedCornerShape(28.dp),
                 )
             }
 
             Spacer(modifier = Modifier.height(6.dp))
 
             ConfigSectionCard(titleRes = R.string.choose_eyes_title) {
-                EyesSelectionRow(
-                    selectedEyes = state.eyes,
-                    onEyesSelected = { onStateChange(state.copy(eyes = it)) },
+                DrawableOptionRow(
+                    options = BuddyPreferences.EYE_OPTIONS,
+                    selectedOption = state.eyes,
+                    onOptionSelected = { onStateChange(state.copy(eyes = it)) },
+                    drawableResFor = BuddyPreferences::getEyesDrawableRes,
+                    optionModifier = Modifier.size(52.dp),
+                    shape = RoundedCornerShape(26.dp),
+                    horizontalPadding = 12.dp,
+                    colorFilter = createEyeMouthColorFilter(BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR),
                 )
             }
 
@@ -316,9 +312,16 @@ fun BuddyConfigScreenContent(
                         buddyNickname = state.nickname,
                         onNicknameChanged = { onStateChange(state.copy(nickname = it.take(20))) },
                     )
-                    ConfigStep.ENVIRONMENT -> EnvironmentSelectionRow(
-                        selectedEnv = state.environment,
-                        onEnvironmentSelected = { onStateChange(state.copy(environment = it)) },
+                    ConfigStep.ENVIRONMENT -> DrawableOptionRow(
+                        options = BuddyPreferences.ENVIRONMENT_OPTIONS,
+                        selectedOption = state.environment,
+                        onOptionSelected = { onStateChange(state.copy(environment = it)) },
+                        drawableResFor = BuddyPreferences::getDrawableResForEnvironment,
+                        optionModifier = Modifier.size(96.dp, 64.dp),
+                        shape = RoundedCornerShape(24.dp),
+                        verticalPadding = 12.dp,
+                        contentPadding = PaddingValues(4.dp),
+                        contentScale = ContentScale.Crop,
                     )
                     else -> ThemeSelectionRow(
                         selectedThemeColor = state.buddyColor,
@@ -386,7 +389,7 @@ private fun ConfigSectionCard(
 }
 
 @Composable
-fun NameBuddyStepContent(
+private fun NameBuddyStepContent(
     buddyNickname: String,
     onNicknameChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -534,48 +537,37 @@ private fun SelectableOptionBox(
 }
 
 @Composable
-private fun BuddySelectionRow(
-    selectedBuddy: String,
-    onBuddySelected: (String) -> Unit,
+private fun DrawableOptionRow(
+    options: List<String>,
+    selectedOption: String,
+    onOptionSelected: (String) -> Unit,
+    drawableResFor: (String) -> Int,
+    optionModifier: Modifier,
+    shape: Shape,
+    verticalPadding: Dp = 6.dp,
+    horizontalPadding: Dp = 16.dp,
+    contentPadding: PaddingValues = PaddingValues(6.dp),
+    contentScale: ContentScale = ContentScale.Fit,
+    colorFilter: ColorFilter? = null,
 ) {
-    OptionRow {
-        BuddyPreferences.BUDDY_OPTIONS.forEach { buddyName ->
+    OptionRow(
+        verticalPadding = verticalPadding,
+        horizontalPadding = horizontalPadding,
+    ) {
+        options.forEach { option ->
             SelectableOptionBox(
-                isSelected = selectedBuddy == buddyName,
-                onClick = { onBuddySelected(buddyName) },
-                modifier = Modifier.size(56.dp),
-                shape = RoundedCornerShape(28.dp),
+                isSelected = selectedOption == option,
+                onClick = { onOptionSelected(option) },
+                modifier = optionModifier,
+                shape = shape,
+                contentPadding = contentPadding,
             ) {
                 Image(
-                    painter = painterResource(id = BuddyPreferences.getBodyDrawableResForBuddy(buddyName)),
-                    contentDescription = buddyName,
+                    painter = painterResource(id = drawableResFor(option)),
+                    contentDescription = option,
                     modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit,
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun EyesSelectionRow(
-    selectedEyes: String,
-    onEyesSelected: (String) -> Unit,
-) {
-    OptionRow(horizontalPadding = 12.dp) {
-        BuddyPreferences.EYE_OPTIONS.forEach { eyesStyle ->
-            SelectableOptionBox(
-                isSelected = selectedEyes == eyesStyle,
-                onClick = { onEyesSelected(eyesStyle) },
-                modifier = Modifier.size(52.dp),
-                shape = RoundedCornerShape(26.dp),
-            ) {
-                Image(
-                    painter = painterResource(id = BuddyPreferences.getEyesDrawableRes(eyesStyle)),
-                    contentDescription = eyesStyle,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit,
-                    colorFilter = createEyeMouthColorFilter(BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR),
+                    contentScale = contentScale,
+                    colorFilter = colorFilter,
                 )
             }
         }
@@ -612,31 +604,6 @@ private fun MouthSelectionRow(
                     contentScale = ContentScale.FillHeight,
                     alignment = Alignment.Center,
                     colorFilter = createEyeMouthColorFilter(BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR),
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun EnvironmentSelectionRow(
-    selectedEnv: String,
-    onEnvironmentSelected: (String) -> Unit,
-) {
-    OptionRow(verticalPadding = 12.dp) {
-        BuddyPreferences.ENVIRONMENT_OPTIONS.forEach { envName ->
-            SelectableOptionBox(
-                isSelected = selectedEnv == envName,
-                onClick = { onEnvironmentSelected(envName) },
-                modifier = Modifier.size(96.dp, 64.dp),
-                shape = RoundedCornerShape(24.dp),
-                contentPadding = PaddingValues(4.dp),
-            ) {
-                Image(
-                    painter = painterResource(id = BuddyPreferences.getDrawableResForEnvironment(envName)),
-                    contentDescription = envName,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop,
                 )
             }
         }

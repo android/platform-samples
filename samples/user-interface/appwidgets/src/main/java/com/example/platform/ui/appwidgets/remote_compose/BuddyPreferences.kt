@@ -20,6 +20,8 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.compose.runtime.saveable.Saver
+import androidx.compose.runtime.saveable.listSaver
 import androidx.core.content.edit
 import com.example.platform.ui.appwidgets.R
 
@@ -37,7 +39,40 @@ data class WidgetBuddyState(
     val buddyColor: Int = BuddyPreferences.DEFAULT_BUDDY_COLOR,
     val eyeMouthColor: Int = BuddyPreferences.resolveEyeMouthColor(buddyColor),
     val isGrownUp: Boolean = false,
-)
+) {
+    companion object {
+        val Saver: Saver<WidgetBuddyState, Any> = listSaver(
+            save = {
+                listOf(
+                    it.widgetId,
+                    it.coins,
+                    it.buddyName,
+                    it.nickname,
+                    it.eyes,
+                    it.mouth,
+                    it.environment,
+                    it.buddyColor,
+                    it.eyeMouthColor,
+                    it.isGrownUp,
+                )
+            },
+            restore = {
+                WidgetBuddyState(
+                    widgetId = it[0] as Int,
+                    coins = it[1] as Int,
+                    buddyName = it[2] as String,
+                    nickname = it[3] as String,
+                    eyes = it[4] as String,
+                    mouth = it[5] as String,
+                    environment = it[6] as String,
+                    buddyColor = it[7] as Int,
+                    eyeMouthColor = it[8] as Int,
+                    isGrownUp = it[9] as Boolean,
+                )
+            },
+        )
+    }
+}
 
 /**
  * Persists per-widget pet configuration and collected coins in [SharedPreferences].
