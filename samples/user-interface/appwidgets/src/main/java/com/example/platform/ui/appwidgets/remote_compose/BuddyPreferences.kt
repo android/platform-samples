@@ -125,6 +125,20 @@ object BuddyPreferences {
         }
     }
 
+    fun saveBuddyConfig(context: Context, state: WidgetBuddyState) {
+        saveBuddyConfig(
+            context = context,
+            widgetId = state.widgetId,
+            buddy = state.buddyName,
+            nickname = state.nickname,
+            environment = state.environment,
+            colorArgb = state.buddyColor,
+            eyes = state.eyes,
+            mouth = state.mouth,
+            eyeMouthColor = state.eyeMouthColor,
+        )
+    }
+
     fun saveBuddyConfig(
         context: Context,
         widgetId: Int,

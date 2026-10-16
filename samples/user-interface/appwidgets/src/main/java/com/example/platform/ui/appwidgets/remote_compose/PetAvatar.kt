@@ -45,44 +45,18 @@ fun PetAvatar(
     modifier: Modifier = Modifier,
     containerSize: Dp = 104.dp,
     characterSize: Dp = 88.dp,
-) {
-    PetAvatar(
-        buddyName = state.buddyName,
-        eyes = state.eyes,
-        mouth = state.mouth,
-        buddyColor = state.buddyColor,
-        eyeMouthColor = state.eyeMouthColor,
-        isGrownUp = state.isGrownUp,
-        contentDescription = state.nickname,
-        modifier = modifier,
-        containerSize = containerSize,
-        characterSize = characterSize,
-    )
-}
-
-@Composable
-fun PetAvatar(
-    buddyName: String,
-    eyes: String,
-    mouth: String = BuddyPreferences.DEFAULT_MOUTH,
-    buddyColor: Int = BuddyPreferences.DEFAULT_BUDDY_COLOR,
-    eyeMouthColor: Int = BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR,
-    isGrownUp: Boolean = false,
-    contentDescription: String? = null,
-    modifier: Modifier = Modifier,
-    containerSize: Dp = 104.dp,
-    characterSize: Dp = containerSize,
+    contentDescription: String? = state.nickname,
 ) {
     val bodyColorFilter = if (
-        buddyColor != 0 && buddyColor != BuddyPreferences.DEFAULT_BUDDY_COLOR
+        state.buddyColor != 0 && state.buddyColor != BuddyPreferences.DEFAULT_BUDDY_COLOR
     ) {
-        ColorFilter.tint(Color(buddyColor), BlendMode.SrcIn)
+        ColorFilter.tint(Color(state.buddyColor), BlendMode.SrcIn)
     } else {
         null
     }
-    val eyeMouthColorFilter = createEyeMouthColorFilter(eyeMouthColor)
+    val eyeMouthColorFilter = createEyeMouthColorFilter(state.eyeMouthColor)
     val bodyPainter = painterResource(
-        id = BuddyPreferences.getBodyDrawableResForBuddy(buddyName),
+        id = BuddyPreferences.getBodyDrawableResForBuddy(state.buddyName),
     )
 
     Box(
@@ -120,7 +94,7 @@ fun PetAvatar(
                 colorFilter = bodyColorFilter,
             )
             Image(
-                painter = painterResource(id = BuddyPreferences.getEyesDrawableRes(eyes)),
+                painter = painterResource(id = BuddyPreferences.getEyesDrawableRes(state.eyes)),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
@@ -129,8 +103,8 @@ fun PetAvatar(
                 colorFilter = eyeMouthColorFilter,
             )
             val mouthRes = BuddyPreferences.getMouthDrawableRes(
-                mouth,
-                isGrownUp = isGrownUp,
+                state.mouth,
+                isGrownUp = state.isGrownUp,
             )
             if (mouthRes != null) {
                 Image(
