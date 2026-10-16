@@ -67,8 +67,10 @@ object BuddyPreferences {
     const val MOUTH_OFFSET_Y_FRACTION = 0.08f
     const val MOUTH_CENTER_Y_FRACTION = EYES_CENTER_Y_FRACTION + MOUTH_OFFSET_Y_FRACTION
 
+    val BUDDY_OPTIONS: List<String> = listOf("guy_bunny", "guy_bun", "guy_wiggle")
     val EYE_OPTIONS: List<String> = listOf("eyes_1", "eyes_2", "eyes_4", "eyes_5")
     val MOUTH_OPTIONS: List<String> = listOf("mouth_1", "mouth_2")
+    val ENVIRONMENT_OPTIONS: List<String> = listOf("env_room", "env_meadow")
 
     fun prefs(context: Context): SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

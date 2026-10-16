@@ -18,9 +18,11 @@
     android:configure="com.example.platform.ui.appwidgets.remote_compose.BuddyConfigActivity"
     android:description="@string/android_pet_widget_description"
     android:initialLayout="@layout/android_pet_widget_fallback"
-    android:minWidth="180dp"
+    android:minWidth="110dp"
     android:minHeight="110dp"
     android:previewImage="@drawable/android_pet_widget_preview"
     android:resizeMode="horizontal|vertical"
+    android:targetCellWidth="2"
+    android:targetCellHeight="2"
     android:updatePeriodMillis="0"
     android:widgetCategory="home_screen" />

@@ -22,24 +22,23 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -58,15 +57,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorMatrix
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
@@ -77,10 +75,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import com.example.platform.ui.appwidgets.R
+
+enum class ConfigStep(
+    @DrawableRes val iconRes: Int,
+    @StringRes val labelRes: Int,
+) {
+    BUDDY(R.drawable.ic_nav_buddy, R.string.nav_buddy),
+    NAME(R.drawable.ic_nav_name, R.string.nav_name),
+    ENVIRONMENT(R.drawable.ic_nav_environment, R.string.nav_environment),
+    THEME(R.drawable.ic_nav_palette, R.string.nav_palette),
+}
 
 /**
  * Configuration activity for [AndroidPetWidget], allowing the user to customize the pet's
@@ -88,42 +97,7 @@ import com.example.platform.ui.appwidgets.R
  */
 class BuddyConfigActivity : ComponentActivity() {
 
-    var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
-        private set
-    var selectedBuddy by mutableStateOf(BuddyPreferences.DEFAULT_BUDDY)
-        internal set
-    var selectedEyes by mutableStateOf(BuddyPreferences.DEFAULT_EYES)
-        internal set
-    var selectedMouth by mutableStateOf(BuddyPreferences.DEFAULT_MOUTH)
-        internal set
-    var buddyNickname by mutableStateOf(BuddyPreferences.DEFAULT_BUDDY_NAME)
-        internal set
-    var selectedEnv by mutableStateOf(BuddyPreferences.DEFAULT_ENVIRONMENT)
-        internal set
-    var selectedThemeColor by mutableIntStateOf(BuddyPreferences.DEFAULT_BUDDY_COLOR)
-        internal set
-    var selectedEyeMouthColor by mutableIntStateOf(BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR)
-        internal set
-    var isGrownUp by mutableStateOf(false)
-        internal set
-    var currentStep by mutableIntStateOf(STEP_BUDDY)
-        internal set
-
-    companion object {
-        const val STEP_BUDDY = 1
-        const val STEP_NAME = 2
-        const val STEP_ENVIRONMENT = 3
-        const val STEP_THEME = 4
-
-        private const val KEY_SELECTED_BUDDY = "selected_buddy"
-        private const val KEY_SELECTED_EYES = "selected_eyes"
-        private const val KEY_SELECTED_MOUTH = "selected_mouth"
-        private const val KEY_BUDDY_NICKNAME = "buddy_nickname"
-        private const val KEY_SELECTED_ENV = "selected_env"
-        private const val KEY_SELECTED_THEME_COLOR = "selected_theme_color"
-        private const val KEY_SELECTED_EYE_MOUTH_COLOR = "selected_eye_mouth_color"
-        private const val KEY_CURRENT_STEP = "current_step"
-    }
+    private var appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,29 +116,21 @@ class BuddyConfigActivity : ComponentActivity() {
         enableEdgeToEdge()
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
 
-        val state = BuddyPreferences.getWidgetBuddyState(this, appWidgetId)
-        isGrownUp = state.isGrownUp
-        if (savedInstanceState != null) {
-            selectedBuddy = savedInstanceState.getString(KEY_SELECTED_BUDDY, state.buddyName)
-            selectedEyes = savedInstanceState.getString(KEY_SELECTED_EYES, state.eyes)
-            selectedMouth = savedInstanceState.getString(KEY_SELECTED_MOUTH, state.mouth)
-            buddyNickname = savedInstanceState.getString(KEY_BUDDY_NICKNAME, state.nickname)
-            selectedEnv = savedInstanceState.getString(KEY_SELECTED_ENV, state.environment)
-            selectedThemeColor = savedInstanceState.getInt(KEY_SELECTED_THEME_COLOR, state.buddyColor)
-            selectedEyeMouthColor = savedInstanceState.getInt(KEY_SELECTED_EYE_MOUTH_COLOR, state.eyeMouthColor)
-            currentStep = savedInstanceState.getInt(KEY_CURRENT_STEP, STEP_BUDDY)
-        } else {
-            selectedBuddy = state.buddyName
-            selectedEyes = state.eyes
-            selectedMouth = state.mouth
-            buddyNickname = state.nickname
-            selectedEnv = state.environment
-            selectedThemeColor = state.buddyColor
-            selectedEyeMouthColor = state.eyeMouthColor
-        }
+        val initialState = BuddyPreferences.getWidgetBuddyState(this, appWidgetId)
 
         setContent {
             StoreTheme(darkTheme = false) {
+                var currentStep by rememberSaveable { mutableStateOf(ConfigStep.BUDDY) }
+                var selectedBuddy by rememberSaveable { mutableStateOf(initialState.buddyName) }
+                var selectedEyes by rememberSaveable { mutableStateOf(initialState.eyes) }
+                var selectedMouth by rememberSaveable { mutableStateOf(initialState.mouth) }
+                var buddyNickname by rememberSaveable { mutableStateOf(initialState.nickname) }
+                var selectedEnv by rememberSaveable { mutableStateOf(initialState.environment) }
+                var selectedThemeColor by rememberSaveable { mutableIntStateOf(initialState.buddyColor) }
+                var selectedEyeMouthColor by rememberSaveable {
+                    mutableIntStateOf(initialState.eyeMouthColor)
+                }
+
                 val itemColors = NavigationSuiteDefaults.itemColors(
                     navigationBarItemColors = NavigationBarItemDefaults.colors(
                         selectedIconColor = Color.White,
@@ -184,81 +150,39 @@ class BuddyConfigActivity : ComponentActivity() {
 
                 NavigationSuiteScaffold(
                     navigationSuiteItems = {
-                        item(
-                            selected = currentStep == STEP_BUDDY,
-                            onClick = { showBuddySelection() },
-                            icon = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_nav_buddy),
-                                    contentDescription = stringResource(id = R.string.nav_buddy),
-                                    modifier = Modifier.size(32.dp),
-                                )
-                            },
-                            label = {
-                                Text(
-                                    text = stringResource(id = R.string.nav_buddy),
-                                    fontFamily = MadimiOneFontFamily,
-                                )
-                            },
-                            colors = itemColors,
-                        )
-                        item(
-                            selected = currentStep == STEP_NAME,
-                            onClick = { showNameBuddy() },
-                            icon = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_nav_name),
-                                    contentDescription = stringResource(id = R.string.nav_name),
-                                    modifier = Modifier.size(32.dp),
-                                )
-                            },
-                            label = {
-                                Text(
-                                    text = stringResource(id = R.string.nav_name),
-                                    fontFamily = MadimiOneFontFamily,
-                                )
-                            },
-                            colors = itemColors,
-                        )
-                        item(
-                            selected = currentStep == STEP_ENVIRONMENT,
-                            onClick = { showEnvironmentSelection() },
-                            icon = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_nav_environment),
-                                    contentDescription = stringResource(id = R.string.nav_environment),
-                                    modifier = Modifier.size(32.dp),
-                                )
-                            },
-                            label = {
-                                Text(
-                                    text = stringResource(id = R.string.nav_environment),
-                                    fontFamily = MadimiOneFontFamily,
-                                )
-                            },
-                            colors = itemColors,
-                        )
-                        item(
-                            selected = currentStep == STEP_THEME,
-                            onClick = { showThemeSelection() },
-                            icon = {
-                                Icon(
-                                    painter = painterResource(id = R.drawable.ic_nav_palette),
-                                    contentDescription = stringResource(id = R.string.nav_palette),
-                                    modifier = Modifier.size(32.dp),
-                                )
-                            },
-                            label = {
-                                Text(
-                                    text = stringResource(id = R.string.nav_palette),
-                                    fontFamily = MadimiOneFontFamily,
-                                )
-                            },
-                            colors = itemColors,
-                        )
+                        ConfigStep.entries.forEach { step ->
+                            item(
+                                selected = currentStep == step,
+                                onClick = { currentStep = step },
+                                icon = {
+                                    Icon(
+                                        painter = painterResource(id = step.iconRes),
+                                        contentDescription = stringResource(id = step.labelRes),
+                                        modifier = Modifier.size(32.dp),
+                                    )
+                                },
+                                label = {
+                                    Text(
+                                        text = stringResource(id = step.labelRes),
+                                        fontFamily = MadimiOneFontFamily,
+                                    )
+                                },
+                                colors = itemColors,
+                            )
+                        }
                         item(
                             selected = false,
-                            onClick = { commitSelection() },
+                            onClick = {
+                                commitSelection(
+                                    buddy = selectedBuddy,
+                                    nickname = buddyNickname,
+                                    environment = selectedEnv,
+                                    colorArgb = selectedThemeColor,
+                                    eyes = selectedEyes,
+                                    mouth = selectedMouth,
+                                    eyeMouthColor = selectedEyeMouthColor,
+                                )
+                            },
                             icon = {
                                 Icon(
                                     painter = painterResource(id = R.drawable.ic_arrow_forward),
@@ -290,15 +214,15 @@ class BuddyConfigActivity : ComponentActivity() {
                         selectedEnv = selectedEnv,
                         selectedThemeColor = selectedThemeColor,
                         selectedEyeMouthColor = selectedEyeMouthColor,
-                        isGrownUp = isGrownUp,
-                        onBuddySelected = { onBuddySelected(it) },
-                        onEyesSelected = { onEyesSelected(it) },
-                        onMouthSelected = { onMouthSelected(it) },
-                        onNicknameChanged = { onNicknameChanged(it) },
-                        onEnvironmentSelected = { onEnvironmentSelected(it) },
-                        onThemeSelected = { onThemeSelected(it) },
+                        isGrownUp = initialState.isGrownUp,
+                        onBuddySelected = { selectedBuddy = it },
+                        onEyesSelected = { selectedEyes = it },
+                        onMouthSelected = { selectedMouth = it },
+                        onNicknameChanged = { buddyNickname = it.take(20) },
+                        onEnvironmentSelected = { selectedEnv = it },
                         onThemeAndEyeColorSelected = { color, eyeColor ->
-                            onThemeSelected(color, eyeColor)
+                            selectedThemeColor = color
+                            selectedEyeMouthColor = eyeColor
                         },
                         modifier = Modifier.fillMaxSize(),
                     )
@@ -307,74 +231,26 @@ class BuddyConfigActivity : ComponentActivity() {
         }
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-        outState.putString(KEY_SELECTED_BUDDY, selectedBuddy)
-        outState.putString(KEY_SELECTED_EYES, selectedEyes)
-        outState.putString(KEY_SELECTED_MOUTH, selectedMouth)
-        outState.putString(KEY_BUDDY_NICKNAME, buddyNickname)
-        outState.putString(KEY_SELECTED_ENV, selectedEnv)
-        outState.putInt(KEY_SELECTED_THEME_COLOR, selectedThemeColor)
-        outState.putInt(KEY_SELECTED_EYE_MOUTH_COLOR, selectedEyeMouthColor)
-        outState.putInt(KEY_CURRENT_STEP, currentStep)
-    }
-
-    internal fun onBuddySelected(buddyName: String) {
-        selectedBuddy = buddyName
-    }
-
-    internal fun onEyesSelected(eyesStyle: String) {
-        selectedEyes = eyesStyle
-    }
-
-    internal fun onMouthSelected(mouthStyle: String) {
-        selectedMouth = mouthStyle
-    }
-
-    internal fun onNicknameChanged(name: String) {
-        buddyNickname = name.take(20)
-    }
-
-    internal fun onEnvironmentSelected(envName: String) {
-        selectedEnv = envName
-    }
-
-    internal fun onThemeSelected(
+    private fun commitSelection(
+        buddy: String,
+        nickname: String,
+        environment: String,
         colorArgb: Int,
-        eyeMouthColorArgb: Int = BuddyPreferences.resolveEyeMouthColor(colorArgb),
+        eyes: String,
+        mouth: String,
+        eyeMouthColor: Int,
     ) {
-        selectedThemeColor = colorArgb
-        selectedEyeMouthColor = eyeMouthColorArgb
-    }
-
-    internal fun showBuddySelection() {
-        currentStep = STEP_BUDDY
-    }
-
-    internal fun showNameBuddy() {
-        currentStep = STEP_NAME
-    }
-
-    internal fun showEnvironmentSelection() {
-        currentStep = STEP_ENVIRONMENT
-    }
-
-    internal fun showThemeSelection() {
-        currentStep = STEP_THEME
-    }
-
-    internal fun commitSelection() {
-        val finalNickname = buddyNickname.trim().ifEmpty { BuddyPreferences.DEFAULT_BUDDY_NAME }
+        val finalNickname = nickname.trim().ifEmpty { BuddyPreferences.DEFAULT_BUDDY_NAME }
         BuddyPreferences.saveBuddyConfig(
             context = this,
             widgetId = appWidgetId,
-            buddy = selectedBuddy,
+            buddy = buddy,
             nickname = finalNickname,
-            environment = selectedEnv,
-            colorArgb = selectedThemeColor,
-            eyes = selectedEyes,
-            mouth = selectedMouth,
-            eyeMouthColor = selectedEyeMouthColor,
+            environment = environment,
+            colorArgb = colorArgb,
+            eyes = eyes,
+            mouth = mouth,
+            eyeMouthColor = eyeMouthColor,
         )
 
         AndroidPetWidget().onUpdate(
@@ -393,7 +269,7 @@ class BuddyConfigActivity : ComponentActivity() {
 
 @Composable
 fun BuddyConfigScreenContent(
-    currentStep: Int,
+    currentStep: ConfigStep,
     selectedBuddy: String,
     selectedEnv: String,
     onBuddySelected: (String) -> Unit,
@@ -407,8 +283,7 @@ fun BuddyConfigScreenContent(
     onNicknameChanged: (String) -> Unit = {},
     selectedThemeColor: Int = BuddyPreferences.DEFAULT_BUDDY_COLOR,
     selectedEyeMouthColor: Int = BuddyPreferences.resolveEyeMouthColor(selectedThemeColor),
-    onThemeSelected: (Int) -> Unit = {},
-    onThemeAndEyeColorSelected: (Int, Int) -> Unit = { color, _ -> onThemeSelected(color) },
+    onThemeAndEyeColorSelected: (Int, Int) -> Unit = { _, _ -> },
     isGrownUp: Boolean = false,
 ) {
     Column(
@@ -433,157 +308,135 @@ fun BuddyConfigScreenContent(
                 .padding(bottom = 8.dp),
         )
 
-        if (currentStep == BuddyConfigActivity.STEP_BUDDY) {
-            Text(
-                text = stringResource(id = R.string.select_buddy_title),
-                style = TextStyle(
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = MadimiOneFontFamily,
-                    color = colorResource(id = R.color.title_text_color),
-                ),
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 4.dp),
-            )
+        when (currentStep) {
+            ConfigStep.BUDDY -> {
+                ConfigSectionCard(titleRes = R.string.select_buddy_title) {
+                    BuddySelectionRow(
+                        selectedBuddy = selectedBuddy,
+                        onBuddySelected = onBuddySelected,
+                    )
+                }
 
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                shape = RoundedCornerShape(48.dp),
-                color = colorResource(id = R.color.selection_card_bg),
-                shadowElevation = 4.dp,
-            ) {
-                BuddySelectionRow(
-                    selectedBuddy = selectedBuddy,
-                    onBuddySelected = onBuddySelected,
-                )
+                Spacer(modifier = Modifier.height(6.dp))
+
+                ConfigSectionCard(titleRes = R.string.choose_eyes_title) {
+                    EyesSelectionRow(
+                        selectedEyes = selectedEyes,
+                        onEyesSelected = onEyesSelected,
+                    )
+                }
+
+                Spacer(modifier = Modifier.height(6.dp))
+
+                ConfigSectionCard(
+                    titleRes = R.string.choose_mouth_title,
+                    subtitleRes = R.string.choose_mouth_subtitle,
+                    modifier = Modifier.padding(bottom = 2.dp),
+                ) {
+                    MouthSelectionRow(
+                        selectedMouth = selectedMouth,
+                        onMouthSelected = onMouthSelected,
+                    )
+                }
             }
 
-            Spacer(modifier = Modifier.height(6.dp))
-
-            Text(
-                text = stringResource(id = R.string.choose_eyes_title),
-                style = TextStyle(
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = MadimiOneFontFamily,
-                    color = colorResource(id = R.color.title_text_color),
-                ),
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 4.dp),
-            )
-
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp),
-                shape = RoundedCornerShape(48.dp),
-                color = colorResource(id = R.color.selection_card_bg),
-                shadowElevation = 4.dp,
-            ) {
-                EyesSelectionRow(
-                    selectedEyes = selectedEyes,
-                    onEyesSelected = onEyesSelected,
-                )
-            }
-
-            Spacer(modifier = Modifier.height(6.dp))
-
-            Text(
-                text = stringResource(id = R.string.choose_mouth_title),
-                style = TextStyle(
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = MadimiOneFontFamily,
-                    color = colorResource(id = R.color.title_text_color),
-                ),
-                textAlign = TextAlign.Center,
-                modifier = Modifier.fillMaxWidth(),
-            )
-
-            Text(
-                text = stringResource(id = R.string.choose_mouth_subtitle),
-                style = TextStyle(
-                    fontSize = 13.sp,
-                    fontWeight = FontWeight.Normal,
-                    fontFamily = MadimiOneFontFamily,
-                    color = colorResource(id = R.color.title_text_color).copy(alpha = 0.75f),
-                ),
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 4.dp),
-            )
-
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
-                    .padding(bottom = 2.dp),
-                shape = RoundedCornerShape(48.dp),
-                color = colorResource(id = R.color.selection_card_bg),
-                shadowElevation = 4.dp,
-            ) {
-                MouthSelectionRow(
-                    selectedMouth = selectedMouth,
-                    onMouthSelected = onMouthSelected,
-                )
-            }
-        } else {
-            Text(
-                text = stringResource(
-                    id = when (currentStep) {
-                        BuddyConfigActivity.STEP_NAME -> R.string.name_buddy_title
-                        BuddyConfigActivity.STEP_ENVIRONMENT -> R.string.select_environment_title
-                        else -> R.string.select_theme_title
-                    },
-                ),
-                style = TextStyle(
-                    fontSize = 34.sp,
-                    fontWeight = FontWeight.Bold,
-                    fontFamily = MadimiOneFontFamily,
-                    color = colorResource(id = R.color.title_text_color),
-                ),
-                textAlign = TextAlign.Center,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-            )
-
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 8.dp)
-                    .padding(bottom = 4.dp),
-                shape = RoundedCornerShape(
-                    if (currentStep == BuddyConfigActivity.STEP_NAME) 24.dp else 48.dp,
-                ),
-                color = colorResource(id = R.color.selection_card_bg),
-                shadowElevation = 4.dp,
-            ) {
-                when (currentStep) {
-                    BuddyConfigActivity.STEP_NAME -> NameBuddyStepContent(
+            ConfigStep.NAME -> {
+                ConfigSectionCard(
+                    titleRes = R.string.name_buddy_title,
+                    titleFontSize = 34.sp,
+                    titleBottomPadding = 12.dp,
+                    shape = RoundedCornerShape(24.dp),
+                    modifier = Modifier.padding(bottom = 4.dp),
+                ) {
+                    NameBuddyStepContent(
                         buddyNickname = buddyNickname,
                         onNicknameChanged = onNicknameChanged,
                     )
-                    BuddyConfigActivity.STEP_ENVIRONMENT -> EnvironmentSelectionRow(
+                }
+            }
+
+            ConfigStep.ENVIRONMENT -> {
+                ConfigSectionCard(
+                    titleRes = R.string.select_environment_title,
+                    titleFontSize = 34.sp,
+                    titleBottomPadding = 12.dp,
+                    modifier = Modifier.padding(bottom = 4.dp),
+                ) {
+                    EnvironmentSelectionRow(
                         selectedEnv = selectedEnv,
                         onEnvironmentSelected = onEnvironmentSelected,
                     )
-                    else -> ThemeSelectionRow(
+                }
+            }
+
+            ConfigStep.THEME -> {
+                ConfigSectionCard(
+                    titleRes = R.string.select_theme_title,
+                    titleFontSize = 34.sp,
+                    titleBottomPadding = 12.dp,
+                    modifier = Modifier.padding(bottom = 4.dp),
+                ) {
+                    ThemeSelectionRow(
                         selectedThemeColor = selectedThemeColor,
-                        onThemeSelected = onThemeSelected,
                         onThemeAndEyeColorSelected = onThemeAndEyeColorSelected,
                     )
                 }
             }
         }
     }
+}
+
+@Composable
+private fun ConfigSectionCard(
+    @StringRes titleRes: Int,
+    modifier: Modifier = Modifier,
+    @StringRes subtitleRes: Int? = null,
+    titleFontSize: TextUnit = 22.sp,
+    titleBottomPadding: androidx.compose.ui.unit.Dp = 4.dp,
+    shape: Shape = RoundedCornerShape(48.dp),
+    content: @Composable () -> Unit,
+) {
+    val titleColor = colorResource(id = R.color.title_text_color)
+
+    Text(
+        text = stringResource(id = titleRes),
+        style = TextStyle(
+            fontSize = titleFontSize,
+            fontWeight = FontWeight.Bold,
+            fontFamily = MadimiOneFontFamily,
+            color = titleColor,
+        ),
+        textAlign = TextAlign.Center,
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(bottom = if (subtitleRes == null) titleBottomPadding else 0.dp),
+    )
+
+    if (subtitleRes != null) {
+        Text(
+            text = stringResource(id = subtitleRes),
+            style = TextStyle(
+                fontSize = 13.sp,
+                fontWeight = FontWeight.Normal,
+                fontFamily = MadimiOneFontFamily,
+                color = titleColor.copy(alpha = 0.75f),
+            ),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(bottom = titleBottomPadding),
+        )
+    }
+
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        shape = shape,
+        color = colorResource(id = R.color.selection_card_bg),
+        shadowElevation = 4.dp,
+        content = content,
+    )
 }
 
 @Composable
@@ -646,7 +499,7 @@ fun NameBuddyStepContent(
 
 @Composable
 private fun BuddyConfigHeroPreviewCard(
-    currentStep: Int,
+    currentStep: ConfigStep,
     selectedBuddy: String,
     selectedEyes: String,
     selectedEnv: String,
@@ -668,7 +521,7 @@ private fun BuddyConfigHeroPreviewCard(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
-            if (currentStep == BuddyConfigActivity.STEP_BUDDY || currentStep == BuddyConfigActivity.STEP_NAME) {
+            if (currentStep == ConfigStep.BUDDY || currentStep == ConfigStep.NAME) {
                 Image(
                     painter = painterResource(id = R.drawable.expressive_shape_2),
                     contentDescription = "Shape Background",
@@ -686,70 +539,17 @@ private fun BuddyConfigHeroPreviewCard(
                 )
             }
 
-            val bodyColorFilter = if (
-                selectedThemeColor != 0 && selectedThemeColor != BuddyPreferences.DEFAULT_BUDDY_COLOR
-            ) {
-                ColorFilter.tint(Color(selectedThemeColor), BlendMode.SrcIn)
-            } else {
-                null
-            }
-            val eyeMouthColorFilter = createEyeMouthColorFilter(selectedEyeMouthColor)
-            val bodyPainter = painterResource(
-                id = BuddyPreferences.getBodyDrawableResForBuddy(selectedBuddy),
+            PetAvatar(
+                buddyName = selectedBuddy,
+                eyes = selectedEyes,
+                mouth = selectedMouth,
+                buddyColor = selectedThemeColor,
+                eyeMouthColor = selectedEyeMouthColor,
+                isGrownUp = isGrownUp,
+                contentDescription = stringResource(id = R.string.preview_buddy_image),
+                containerSize = 160.dp,
+                characterSize = 160.dp,
             )
-            BoxWithConstraints(
-                modifier = Modifier.size(160.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                val bodyIntrinsic = bodyPainter.intrinsicSize
-                val bodyAspect = if (bodyIntrinsic.width > 0f && bodyIntrinsic.height > 0f) {
-                    bodyIntrinsic.width / bodyIntrinsic.height
-                } else {
-                    1f
-                }
-                val boxWidth = maxWidth
-                val boxHeight = maxHeight
-                val boxAspect = if (boxHeight > 0.dp) boxWidth / boxHeight else 1f
-                val renderedBodyWidth = if (bodyAspect >= boxAspect) boxWidth else boxHeight * bodyAspect
-                val renderedBodyHeight = if (bodyAspect >= boxAspect) boxWidth / bodyAspect else boxHeight
-
-                val eyesWidth = renderedBodyWidth * 0.65f
-                val eyesOffsetY = renderedBodyHeight * (BuddyPreferences.EYES_CENTER_Y_FRACTION - 0.50f)
-                val mouthWidth = renderedBodyWidth * 1.0f
-                val mouthOffsetY = renderedBodyHeight * (BuddyPreferences.MOUTH_CENTER_Y_FRACTION - 0.50f)
-
-                Image(
-                    painter = bodyPainter,
-                    contentDescription = stringResource(id = R.string.preview_buddy_image),
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Fit,
-                    colorFilter = bodyColorFilter,
-                )
-                Image(
-                    painter = painterResource(id = BuddyPreferences.getEyesDrawableRes(selectedEyes)),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(eyesWidth)
-                        .offset(y = eyesOffsetY),
-                    contentScale = ContentScale.FillWidth,
-                    colorFilter = eyeMouthColorFilter,
-                )
-                val mouthRes = BuddyPreferences.getMouthDrawableRes(
-                    selectedMouth,
-                    isGrownUp = isGrownUp,
-                )
-                if (mouthRes != null) {
-                    Image(
-                        painter = painterResource(id = mouthRes),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .width(mouthWidth)
-                            .offset(y = mouthOffsetY),
-                        contentScale = ContentScale.FillWidth,
-                        colorFilter = eyeMouthColorFilter,
-                    )
-                }
-            }
         }
     }
 }
@@ -766,21 +566,13 @@ private fun BuddySelectionRow(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        BuddyOption(
-            buddyName = "guy_bunny",
-            isSelected = selectedBuddy == "guy_bunny",
-            onClick = { onBuddySelected("guy_bunny") },
-        )
-        BuddyOption(
-            buddyName = "guy_bun",
-            isSelected = selectedBuddy == "guy_bun",
-            onClick = { onBuddySelected("guy_bun") },
-        )
-        BuddyOption(
-            buddyName = "guy_wiggle",
-            isSelected = selectedBuddy == "guy_wiggle",
-            onClick = { onBuddySelected("guy_wiggle") },
-        )
+        BuddyPreferences.BUDDY_OPTIONS.forEach { buddyName ->
+            BuddyOption(
+                buddyName = buddyName,
+                isSelected = selectedBuddy == buddyName,
+                onClick = { onBuddySelected(buddyName) },
+            )
+        }
     }
 }
 
@@ -918,26 +710,21 @@ private fun EnvironmentSelectionRow(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        EnvOption(
-            envName = "env_room",
-            drawableRes = R.drawable.env_room,
-            isSelected = selectedEnv == "env_room",
-            onClick = { onEnvironmentSelected("env_room") },
-        )
-        EnvOption(
-            envName = "env_meadow",
-            drawableRes = R.drawable.env_meadow,
-            isSelected = selectedEnv == "env_meadow",
-            onClick = { onEnvironmentSelected("env_meadow") },
-        )
+        BuddyPreferences.ENVIRONMENT_OPTIONS.forEach { envName ->
+            EnvOption(
+                envName = envName,
+                drawableRes = BuddyPreferences.getDrawableResForEnvironment(envName),
+                isSelected = selectedEnv == envName,
+                onClick = { onEnvironmentSelected(envName) },
+            )
+        }
     }
 }
 
 @Composable
 private fun ThemeSelectionRow(
     selectedThemeColor: Int,
-    onThemeSelected: (Int) -> Unit,
-    onThemeAndEyeColorSelected: (Int, Int) -> Unit = { color, _ -> onThemeSelected(color) },
+    onThemeAndEyeColorSelected: (Int, Int) -> Unit,
 ) {
     val colorScheme = MaterialTheme.colorScheme
     val primaryColor = colorScheme.primary
@@ -998,33 +785,21 @@ private fun ThemeSelectionRow(
                 )
             },
         )
-        ThemeOption(
-            color = primaryColor,
-            isSelected = selectedThemeColor == primaryColor.toArgb(),
-            onClick = {
-                val bodyArgb = primaryColor.toArgb()
-                val eyeArgb = BuddyPreferences.resolveEyeMouthColor(bodyArgb, primaryEyeAccent.toArgb())
-                onThemeAndEyeColorSelected(bodyArgb, eyeArgb)
-            },
-        )
-        ThemeOption(
-            color = secondaryColor,
-            isSelected = selectedThemeColor == secondaryColor.toArgb(),
-            onClick = {
-                val bodyArgb = secondaryColor.toArgb()
-                val eyeArgb = BuddyPreferences.resolveEyeMouthColor(bodyArgb, secondaryEyeAccent.toArgb())
-                onThemeAndEyeColorSelected(bodyArgb, eyeArgb)
-            },
-        )
-        ThemeOption(
-            color = tertiaryColor,
-            isSelected = selectedThemeColor == tertiaryColor.toArgb(),
-            onClick = {
-                val bodyArgb = tertiaryColor.toArgb()
-                val eyeArgb = BuddyPreferences.resolveEyeMouthColor(bodyArgb, tertiaryEyeAccent.toArgb())
-                onThemeAndEyeColorSelected(bodyArgb, eyeArgb)
-            },
-        )
+        listOf(
+            primaryColor to primaryEyeAccent,
+            secondaryColor to secondaryEyeAccent,
+            tertiaryColor to tertiaryEyeAccent,
+        ).forEach { (themeColor, eyeAccent) ->
+            val bodyArgb = themeColor.toArgb()
+            ThemeOption(
+                color = themeColor,
+                isSelected = selectedThemeColor == bodyArgb,
+                onClick = {
+                    val eyeArgb = BuddyPreferences.resolveEyeMouthColor(bodyArgb, eyeAccent.toArgb())
+                    onThemeAndEyeColorSelected(bodyArgb, eyeArgb)
+                },
+            )
+        }
     }
 }
 
@@ -1120,32 +895,4 @@ private fun ThemeOption(
                 .then(bgModifier),
         )
     }
-}
-
-/**
- * Creates a white-preserving [ColorFilter] that tints black (`#000000`) pupils, outlines, and mouths
- * to [eyeMouthColorArgb] while preserving white (`#FFFFFF`) eye sclera areas as pure white.
- */
-internal fun createEyeMouthColorFilter(eyeMouthColorArgb: Int): ColorFilter {
-    val targetColor = if (eyeMouthColorArgb == 0) {
-        BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR
-    } else {
-        eyeMouthColorArgb
-    }
-    val r = ((targetColor ushr 16) and 0xFF).toFloat()
-    val g = ((targetColor ushr 8) and 0xFF).toFloat()
-    val b = (targetColor and 0xFF).toFloat()
-    val scaleR = 1f - (r / 255f)
-    val scaleG = 1f - (g / 255f)
-    val scaleB = 1f - (b / 255f)
-    return ColorFilter.colorMatrix(
-        ColorMatrix(
-            floatArrayOf(
-                scaleR, 0f, 0f, 0f, r,
-                0f, scaleG, 0f, 0f, g,
-                0f, 0f, scaleB, 0f, b,
-                0f, 0f, 0f, 1f, 0f,
-            ),
-        ),
-    )
 }

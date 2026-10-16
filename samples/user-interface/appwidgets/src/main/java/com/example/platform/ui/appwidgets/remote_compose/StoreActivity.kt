@@ -29,7 +29,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -39,12 +38,10 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -71,9 +68,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -81,7 +76,6 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.platform.ui.appwidgets.R
@@ -414,87 +408,6 @@ fun BuddyRoomPreview(
                 containerSize = 104.dp,
                 characterSize = 88.dp,
             )
-        }
-    }
-}
-
-@Composable
-fun PetAvatar(
-    state: WidgetBuddyState,
-    modifier: Modifier = Modifier,
-    containerSize: Dp = 104.dp,
-    characterSize: Dp = 88.dp,
-) {
-    val bodyColorFilter = if (
-        state.buddyColor != 0 && state.buddyColor != BuddyPreferences.DEFAULT_BUDDY_COLOR
-    ) {
-        ColorFilter.tint(Color(state.buddyColor), BlendMode.SrcIn)
-    } else {
-        null
-    }
-    val eyeMouthColorFilter = createEyeMouthColorFilter(state.eyeMouthColor)
-    val bodyPainter = painterResource(
-        id = BuddyPreferences.getBodyDrawableResForBuddy(state.buddyName),
-    )
-
-    Box(
-        modifier = modifier.size(containerSize),
-        contentAlignment = Alignment.Center,
-    ) {
-        BoxWithConstraints(
-            modifier = Modifier
-                .size(characterSize)
-                .align(Alignment.Center),
-            contentAlignment = Alignment.Center,
-        ) {
-            val bodyIntrinsic = bodyPainter.intrinsicSize
-            val bodyAspect = if (bodyIntrinsic.width > 0f && bodyIntrinsic.height > 0f) {
-                bodyIntrinsic.width / bodyIntrinsic.height
-            } else {
-                1f
-            }
-            val boxWidth = maxWidth
-            val boxHeight = maxHeight
-            val boxAspect = if (boxHeight > 0.dp) boxWidth / boxHeight else 1f
-            val renderedBodyWidth = if (bodyAspect >= boxAspect) boxWidth else boxHeight * bodyAspect
-            val renderedBodyHeight = if (bodyAspect >= boxAspect) boxWidth / bodyAspect else boxHeight
-
-            val eyesWidth = renderedBodyWidth * 0.65f
-            val eyesOffsetY = renderedBodyHeight * (BuddyPreferences.EYES_CENTER_Y_FRACTION - 0.50f)
-            val mouthWidth = renderedBodyWidth * 1.0f
-            val mouthOffsetY = renderedBodyHeight * (BuddyPreferences.MOUTH_CENTER_Y_FRACTION - 0.50f)
-
-            Image(
-                painter = bodyPainter,
-                contentDescription = state.nickname,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.fillMaxSize(),
-                colorFilter = bodyColorFilter,
-            )
-            Image(
-                painter = painterResource(id = BuddyPreferences.getEyesDrawableRes(state.eyes)),
-                contentDescription = null,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .width(eyesWidth)
-                    .offset(y = eyesOffsetY),
-                colorFilter = eyeMouthColorFilter,
-            )
-            val mouthRes = BuddyPreferences.getMouthDrawableRes(
-                state.mouth,
-                isGrownUp = state.isGrownUp,
-            )
-            if (mouthRes != null) {
-                Image(
-                    painter = painterResource(id = mouthRes),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .width(mouthWidth)
-                        .offset(y = mouthOffsetY),
-                    colorFilter = eyeMouthColorFilter,
-                )
-            }
         }
     }
 }
