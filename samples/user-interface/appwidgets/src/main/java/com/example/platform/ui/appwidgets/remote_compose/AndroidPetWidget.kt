@@ -62,6 +62,7 @@ class AndroidPetWidget : RemoteComposeWidget() {
             state.mouth,
             state.buddyColor,
             state.eyeMouthColor,
+            state.isGrownUp,
         ) {
             PetBitmapRenderer.renderPetBitmap(appContext, state).asImageBitmap()
         }

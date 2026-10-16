@@ -34,6 +34,7 @@
     <string name="select_buddy_title">Choose a body</string>
     <string name="choose_eyes_title">Choose eyes</string>
     <string name="choose_mouth_title">Choose a mouth</string>
+    <string name="choose_mouth_subtitle">Only appears on the evolved form</string>
     <string name="select_environment_title">Where do they live?</string>
     <string name="select_theme_title">What\'s their vibe?</string>
     <string name="name_buddy_title">Give \'em a name...</string>

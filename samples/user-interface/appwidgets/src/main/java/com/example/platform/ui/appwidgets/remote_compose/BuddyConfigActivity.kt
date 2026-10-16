@@ -32,7 +32,6 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,6 +39,7 @@ import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -48,13 +48,13 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationRail
-import androidx.compose.material3.NavigationRailItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -105,6 +105,8 @@ class BuddyConfigActivity : ComponentActivity() {
         internal set
     var selectedEyeMouthColor by mutableIntStateOf(BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR)
         internal set
+    var isGrownUp by mutableStateOf(false)
+        internal set
     var currentStep by mutableIntStateOf(STEP_BUDDY)
         internal set
 
@@ -142,6 +144,7 @@ class BuddyConfigActivity : ComponentActivity() {
         WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
 
         val state = BuddyPreferences.getWidgetBuddyState(this, appWidgetId)
+        isGrownUp = state.isGrownUp
         if (savedInstanceState != null) {
             selectedBuddy = savedInstanceState.getString(KEY_SELECTED_BUDDY, state.buddyName)
             selectedEyes = savedInstanceState.getString(KEY_SELECTED_EYES, state.eyes)
@@ -163,142 +166,146 @@ class BuddyConfigActivity : ComponentActivity() {
 
         setContent {
             StoreTheme(darkTheme = false) {
-                val railItemColors = NavigationRailItemDefaults.colors(
-                    selectedIconColor = Color.White,
-                    selectedTextColor = Color(0xFF1B1C17),
-                    indicatorColor = Color(0xFF50524A),
-                    unselectedIconColor = Color(0xFF49454F),
-                    unselectedTextColor = Color(0xFF49454F),
+                val itemColors = NavigationSuiteDefaults.itemColors(
+                    navigationBarItemColors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = Color.White,
+                        selectedTextColor = Color(0xFF1B1C17),
+                        indicatorColor = Color(0xFF50524A),
+                        unselectedIconColor = Color(0xFF49454F),
+                        unselectedTextColor = Color(0xFF49454F),
+                    ),
+                    navigationRailItemColors = NavigationRailItemDefaults.colors(
+                        selectedIconColor = Color.White,
+                        selectedTextColor = Color(0xFF1B1C17),
+                        indicatorColor = Color(0xFF50524A),
+                        unselectedIconColor = Color(0xFF49454F),
+                        unselectedTextColor = Color(0xFF49454F),
+                    ),
                 )
 
-                Scaffold(
+                NavigationSuiteScaffold(
+                    navigationSuiteItems = {
+                        item(
+                            selected = currentStep == STEP_BUDDY,
+                            onClick = { showBuddySelection() },
+                            icon = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_nav_buddy),
+                                    contentDescription = stringResource(id = R.string.nav_buddy),
+                                    modifier = Modifier.size(32.dp),
+                                )
+                            },
+                            label = {
+                                Text(
+                                    text = stringResource(id = R.string.nav_buddy),
+                                    fontFamily = MadimiOneFontFamily,
+                                )
+                            },
+                            colors = itemColors,
+                        )
+                        item(
+                            selected = currentStep == STEP_NAME,
+                            onClick = { showNameBuddy() },
+                            icon = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_nav_name),
+                                    contentDescription = stringResource(id = R.string.nav_name),
+                                    modifier = Modifier.size(32.dp),
+                                )
+                            },
+                            label = {
+                                Text(
+                                    text = stringResource(id = R.string.nav_name),
+                                    fontFamily = MadimiOneFontFamily,
+                                )
+                            },
+                            colors = itemColors,
+                        )
+                        item(
+                            selected = currentStep == STEP_ENVIRONMENT,
+                            onClick = { showEnvironmentSelection() },
+                            icon = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_nav_environment),
+                                    contentDescription = stringResource(id = R.string.nav_environment),
+                                    modifier = Modifier.size(32.dp),
+                                )
+                            },
+                            label = {
+                                Text(
+                                    text = stringResource(id = R.string.nav_environment),
+                                    fontFamily = MadimiOneFontFamily,
+                                )
+                            },
+                            colors = itemColors,
+                        )
+                        item(
+                            selected = currentStep == STEP_THEME,
+                            onClick = { showThemeSelection() },
+                            icon = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_nav_palette),
+                                    contentDescription = stringResource(id = R.string.nav_palette),
+                                    modifier = Modifier.size(32.dp),
+                                )
+                            },
+                            label = {
+                                Text(
+                                    text = stringResource(id = R.string.nav_palette),
+                                    fontFamily = MadimiOneFontFamily,
+                                )
+                            },
+                            colors = itemColors,
+                        )
+                        item(
+                            selected = false,
+                            onClick = { commitSelection() },
+                            icon = {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_arrow_forward),
+                                    contentDescription = stringResource(id = R.string.save_to_home_screen),
+                                    modifier = Modifier.size(32.dp),
+                                )
+                            },
+                            label = {
+                                Text(
+                                    text = stringResource(id = R.string.nav_place),
+                                    fontFamily = MadimiOneFontFamily,
+                                )
+                            },
+                            colors = itemColors,
+                        )
+                    },
                     containerColor = colorResource(id = R.color.config_bg),
-                ) { innerPadding ->
-                    Row(
+                    navigationSuiteColors = NavigationSuiteDefaults.colors(
+                        navigationBarContainerColor = Color(0xFFEEF3E7),
+                        navigationRailContainerColor = Color(0xFFEEF3E7),
+                    ),
+                ) {
+                    BuddyConfigScreenContent(
+                        currentStep = currentStep,
+                        selectedBuddy = selectedBuddy,
+                        selectedEyes = selectedEyes,
+                        selectedMouth = selectedMouth,
+                        buddyNickname = buddyNickname,
+                        selectedEnv = selectedEnv,
+                        selectedThemeColor = selectedThemeColor,
+                        selectedEyeMouthColor = selectedEyeMouthColor,
+                        isGrownUp = isGrownUp,
+                        onBuddySelected = { onBuddySelected(it) },
+                        onEyesSelected = { onEyesSelected(it) },
+                        onMouthSelected = { onMouthSelected(it) },
+                        onNicknameChanged = { onNicknameChanged(it) },
+                        onEnvironmentSelected = { onEnvironmentSelected(it) },
+                        onThemeSelected = { onThemeSelected(it) },
+                        onThemeAndEyeColorSelected = { color, eyeColor ->
+                            onThemeSelected(color, eyeColor)
+                        },
                         modifier = Modifier
                             .fillMaxSize()
-                            .padding(innerPadding)
-                            .consumeWindowInsets(innerPadding),
-                    ) {
-                        NavigationRail(
-                            containerColor = Color(0xFFEEF3E7),
-                        ) {
-                            NavigationRailItem(
-                                selected = currentStep == STEP_BUDDY,
-                                onClick = { showBuddySelection() },
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_nav_buddy),
-                                        contentDescription = stringResource(id = R.string.nav_buddy),
-                                        modifier = Modifier.size(32.dp),
-                                    )
-                                },
-                                label = {
-                                    Text(
-                                        text = stringResource(id = R.string.nav_buddy),
-                                        fontFamily = MadimiOneFontFamily,
-                                    )
-                                },
-                                colors = railItemColors,
-                            )
-                            NavigationRailItem(
-                                selected = currentStep == STEP_NAME,
-                                onClick = { showNameBuddy() },
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_nav_name),
-                                        contentDescription = stringResource(id = R.string.nav_name),
-                                        modifier = Modifier.size(32.dp),
-                                    )
-                                },
-                                label = {
-                                    Text(
-                                        text = stringResource(id = R.string.nav_name),
-                                        fontFamily = MadimiOneFontFamily,
-                                    )
-                                },
-                                colors = railItemColors,
-                            )
-                            NavigationRailItem(
-                                selected = currentStep == STEP_ENVIRONMENT,
-                                onClick = { showEnvironmentSelection() },
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_nav_environment),
-                                        contentDescription = stringResource(id = R.string.nav_environment),
-                                        modifier = Modifier.size(32.dp),
-                                    )
-                                },
-                                label = {
-                                    Text(
-                                        text = stringResource(id = R.string.nav_environment),
-                                        fontFamily = MadimiOneFontFamily,
-                                    )
-                                },
-                                colors = railItemColors,
-                            )
-                            NavigationRailItem(
-                                selected = currentStep == STEP_THEME,
-                                onClick = { showThemeSelection() },
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_nav_palette),
-                                        contentDescription = stringResource(id = R.string.nav_palette),
-                                        modifier = Modifier.size(32.dp),
-                                    )
-                                },
-                                label = {
-                                    Text(
-                                        text = stringResource(id = R.string.nav_palette),
-                                        fontFamily = MadimiOneFontFamily,
-                                    )
-                                },
-                                colors = railItemColors,
-                            )
-                            NavigationRailItem(
-                                selected = false,
-                                onClick = { commitSelection() },
-                                icon = {
-                                    Icon(
-                                        painter = painterResource(id = R.drawable.ic_arrow_forward),
-                                        contentDescription = stringResource(id = R.string.save_to_home_screen),
-                                        modifier = Modifier.size(32.dp),
-                                    )
-                                },
-                                label = {
-                                    Text(
-                                        text = stringResource(id = R.string.nav_place),
-                                        fontFamily = MadimiOneFontFamily,
-                                    )
-                                },
-                                colors = railItemColors,
-                            )
-                        }
-
-                        BuddyConfigScreenContent(
-                            currentStep = currentStep,
-                            selectedBuddy = selectedBuddy,
-                            selectedEyes = selectedEyes,
-                            selectedMouth = selectedMouth,
-                            buddyNickname = buddyNickname,
-                            selectedEnv = selectedEnv,
-                            selectedThemeColor = selectedThemeColor,
-                            selectedEyeMouthColor = selectedEyeMouthColor,
-                            onBuddySelected = { onBuddySelected(it) },
-                            onEyesSelected = { onEyesSelected(it) },
-                            onMouthSelected = { onMouthSelected(it) },
-                            onNicknameChanged = { onNicknameChanged(it) },
-                            onEnvironmentSelected = { onEnvironmentSelected(it) },
-                            onThemeSelected = { onThemeSelected(it) },
-                            onThemeAndEyeColorSelected = { color, eyeColor ->
-                                onThemeSelected(color, eyeColor)
-                            },
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxSize()
-                                .imePadding(),
-                        )
-                    }
+                            .statusBarsPadding()
+                            .imePadding(),
+                    )
                 }
             }
         }
@@ -406,6 +413,7 @@ fun BuddyConfigScreenContent(
     selectedEyeMouthColor: Int = BuddyPreferences.resolveEyeMouthColor(selectedThemeColor),
     onThemeSelected: (Int) -> Unit = {},
     onThemeAndEyeColorSelected: (Int, Int) -> Unit = { color, _ -> onThemeSelected(color) },
+    isGrownUp: Boolean = false,
 ) {
     Column(
         modifier = modifier
@@ -421,6 +429,7 @@ fun BuddyConfigScreenContent(
             selectedEnv = selectedEnv,
             selectedThemeColor = selectedThemeColor,
             selectedEyeMouthColor = selectedEyeMouthColor,
+            isGrownUp = isGrownUp,
             modifier = Modifier
                 .fillMaxWidth()
                 .weight(1f)
@@ -495,6 +504,18 @@ fun BuddyConfigScreenContent(
                     fontWeight = FontWeight.Bold,
                     fontFamily = MadimiOneFontFamily,
                     color = colorResource(id = R.color.title_text_color),
+                ),
+                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
+            )
+
+            Text(
+                text = stringResource(id = R.string.choose_mouth_subtitle),
+                style = TextStyle(
+                    fontSize = 13.sp,
+                    fontWeight = FontWeight.Normal,
+                    fontFamily = MadimiOneFontFamily,
+                    color = colorResource(id = R.color.title_text_color).copy(alpha = 0.75f),
                 ),
                 textAlign = TextAlign.Center,
                 modifier = Modifier
@@ -636,6 +657,7 @@ private fun BuddyConfigHeroPreviewCard(
     selectedEyeMouthColor: Int,
     modifier: Modifier = Modifier,
     selectedMouth: String = BuddyPreferences.DEFAULT_MOUTH,
+    isGrownUp: Boolean = false,
 ) {
     Card(
         modifier = modifier,
@@ -715,15 +737,21 @@ private fun BuddyConfigHeroPreviewCard(
                     contentScale = ContentScale.FillWidth,
                     colorFilter = eyeMouthColorFilter,
                 )
-                Image(
-                    painter = painterResource(id = BuddyPreferences.getMouthDrawableRes(selectedMouth)),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .width(mouthWidth)
-                        .offset(y = mouthOffsetY),
-                    contentScale = ContentScale.FillWidth,
-                    colorFilter = eyeMouthColorFilter,
+                val mouthRes = BuddyPreferences.getMouthDrawableRes(
+                    selectedMouth,
+                    isGrownUp = isGrownUp,
                 )
+                if (mouthRes != null) {
+                    Image(
+                        painter = painterResource(id = mouthRes),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .width(mouthWidth)
+                            .offset(y = mouthOffsetY),
+                        contentScale = ContentScale.FillWidth,
+                        colorFilter = eyeMouthColorFilter,
+                    )
+                }
             }
         }
     }
@@ -767,7 +795,7 @@ private fun EyesSelectionRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 6.dp, horizontal = 8.dp),
+            .padding(vertical = 6.dp, horizontal = 12.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -790,14 +818,14 @@ private fun EyesOption(
     onClick: () -> Unit,
 ) {
     val borderModifier = if (isSelected) {
-        Modifier.border(3.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(24.dp))
+        Modifier.border(3.dp, MaterialTheme.colorScheme.primary, RoundedCornerShape(26.dp))
     } else {
         Modifier
     }
     Box(
         modifier = Modifier
-            .size(48.dp)
-            .clip(RoundedCornerShape(24.dp))
+            .size(52.dp)
+            .clip(RoundedCornerShape(26.dp))
             .then(borderModifier)
             .clickable(onClick = onClick)
             .padding(6.dp),
@@ -826,7 +854,8 @@ private fun MouthSelectionRow(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         BuddyPreferences.MOUTH_OPTIONS.forEach { mouthStyle ->
-            val drawableRes = BuddyPreferences.getMouthDrawableRes(mouthStyle)
+            val drawableRes = BuddyPreferences.getMouthDrawableRes(mouthStyle, isGrownUp = true)
+                ?: R.drawable.mouth_1
             MouthOption(
                 mouthStyle = mouthStyle,
                 drawableRes = drawableRes,
@@ -948,7 +977,7 @@ private fun ThemeSelectionRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 12.dp, horizontal = 8.dp),
+            .padding(vertical = 12.dp, horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -1075,7 +1104,7 @@ private fun ThemeOption(
     }
     Box(
         modifier = Modifier
-            .size(40.dp)
+            .size(48.dp)
             .clip(CircleShape)
             .then(borderModifier)
             .clickable(onClick = onClick)

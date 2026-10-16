@@ -36,6 +36,7 @@ data class WidgetBuddyState(
     val environment: String = BuddyPreferences.DEFAULT_ENVIRONMENT,
     val buddyColor: Int = BuddyPreferences.DEFAULT_BUDDY_COLOR,
     val eyeMouthColor: Int = BuddyPreferences.resolveEyeMouthColor(buddyColor),
+    val isGrownUp: Boolean = false,
 )
 
 /**
@@ -225,11 +226,16 @@ object BuddyPreferences {
             else -> R.drawable.eyes_1
         }
 
-    fun getMouthDrawableRes(mouthStyle: String = DEFAULT_MOUTH): Int =
-        when (mouthStyle) {
+    fun getMouthDrawableRes(
+        mouthStyle: String = DEFAULT_MOUTH,
+        isGrownUp: Boolean = false,
+    ): Int? {
+        if (!isGrownUp) return null
+        return when (mouthStyle) {
             "mouth_2", "mouth2" -> R.drawable.mouth_2
             else -> R.drawable.mouth_1
         }
+    }
 
     fun getDrawableResForEnvironment(envName: String): Int =
         when (envName) {

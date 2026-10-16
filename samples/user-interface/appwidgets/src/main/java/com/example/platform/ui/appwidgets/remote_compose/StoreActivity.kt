@@ -23,15 +23,24 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -57,13 +66,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.platform.ui.appwidgets.R
@@ -82,10 +96,20 @@ internal val StoreTypography = Typography(
         fontSize = 21.sp,
         fontWeight = FontWeight.Bold,
     ),
+    bodyLarge = TextStyle(
+        fontFamily = MadimiOneFontFamily,
+        fontSize = 15.sp,
+        fontWeight = FontWeight.Normal,
+    ),
     bodyMedium = TextStyle(
         fontFamily = MadimiOneFontFamily,
         fontSize = 14.sp,
         fontWeight = FontWeight.Medium,
+    ),
+    bodySmall = TextStyle(
+        fontFamily = MadimiOneFontFamily,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Normal,
     ),
     labelLarge = TextStyle(
         fontFamily = MadimiOneFontFamily,
@@ -115,7 +139,7 @@ fun StoreTheme(
 
 /**
  * Companion Store activity for the Remote Compose [AndroidPetWidget].
- * Displays each active widget's ID and collected coin balance.
+ * Displays each active widget's configured buddy name, room preview, and collected coin balance.
  */
 class StoreActivity : ComponentActivity() {
 
@@ -174,21 +198,29 @@ fun StoreScreen(
     ) { innerPadding ->
         Column(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(innerPadding)
                 .padding(top = 8.dp, start = 16.dp, end = 16.dp),
         ) {
-            BuddySelectorBar(
-                buddies = activeStates,
-                selectedWidgetId = effectiveSelectedId,
-                onSelectBuddy = onSelectBuddy,
-            )
+            if (activeStates.size > 1) {
+                BuddySelectorBar(
+                    buddies = activeStates,
+                    selectedWidgetId = effectiveSelectedId,
+                    onSelectBuddy = onSelectBuddy,
+                )
+            }
 
-            LazyColumn(
-                contentPadding = PaddingValues(bottom = 16.dp),
-                verticalArrangement = Arrangement.spacedBy(20.dp),
-            ) {
-                items(displayedBuddies, key = { it.widgetId }) { state ->
-                    WidgetCoinCard(state = state)
+            if (activeStates.isEmpty()) {
+                StoreEmptyStateCard()
+            } else {
+                LazyColumn(
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = 16.dp),
+                    verticalArrangement = Arrangement.spacedBy(20.dp),
+                ) {
+                    items(displayedBuddies, key = { it.widgetId }) { state ->
+                        WidgetCoinCard(state = state)
+                    }
                 }
             }
         }
@@ -255,8 +287,44 @@ fun BuddySelectorBar(
             FilterChip(
                 selected = selectedWidgetId == buddy.widgetId,
                 onClick = { onSelectBuddy(buddy.widgetId) },
-                label = { Text("${buddy.nickname} #${buddy.widgetId}") },
+                label = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    ) {
+                        Text(text = buddy.nickname)
+                        Text(text = "#${buddy.widgetId}")
+                    }
+                },
                 shape = CircleShape,
+            )
+        }
+    }
+}
+
+@Composable
+fun StoreEmptyStateCard(
+    modifier: Modifier = Modifier,
+) {
+    ElevatedCard(
+        modifier = modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            Text(
+                text = "🐾",
+                style = MaterialTheme.typography.headlineMedium,
+                modifier = Modifier.padding(bottom = 8.dp),
+            )
+            Text(
+                text = "No active pet widgets found. Add a Pet Buddy widget to access the store!",
+                style = MaterialTheme.typography.bodyLarge,
             )
         }
     }
@@ -265,19 +333,160 @@ fun BuddySelectorBar(
 @Composable
 fun WidgetCoinCard(state: WidgetBuddyState) {
     ElevatedCard(
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(28.dp),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 6.dp),
     ) {
-        Row(
-            modifier = Modifier.padding(18.dp),
-            verticalAlignment = Alignment.CenterVertically,
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(18.dp),
         ) {
-            Text(
-                text = "${state.nickname}: #${state.widgetId}",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.weight(1f),
+            BuddyCardHeader(state = state)
+
+            Spacer(modifier = Modifier.height(14.dp))
+
+            BuddyRoomPreview(state = state)
+        }
+    }
+}
+
+@Composable
+fun BuddyCardHeader(
+    state: WidgetBuddyState,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Text(
+            text = "${state.nickname} (#${state.widgetId})",
+            style = MaterialTheme.typography.titleLarge,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.weight(1f),
+        )
+        CreditPill(text = "${state.coins} credits 🪙")
+    }
+}
+
+@Composable
+fun BuddyRoomPreview(
+    state: WidgetBuddyState,
+    modifier: Modifier = Modifier,
+) {
+    val isDark = isSystemInDarkTheme()
+    val roomFrameBorderColor = if (isDark) Color(0xFF263540) else Color(0xFF3B4D5B)
+
+    ElevatedCard(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(210.dp)
+            .border(2.dp, roomFrameBorderColor, RoundedCornerShape(22.dp))
+            .clip(RoundedCornerShape(22.dp)),
+        shape = RoundedCornerShape(22.dp),
+        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
+    ) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center,
+        ) {
+            Image(
+                painter = painterResource(
+                    id = BuddyPreferences.getDrawableResForEnvironment(state.environment),
+                ),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
             )
-            CreditPill(text = "${state.coins} credits 🪙")
+
+            PetAvatar(
+                state = state,
+                containerSize = 104.dp,
+                characterSize = 88.dp,
+            )
+        }
+    }
+}
+
+@Composable
+fun PetAvatar(
+    state: WidgetBuddyState,
+    modifier: Modifier = Modifier,
+    containerSize: Dp = 104.dp,
+    characterSize: Dp = 88.dp,
+) {
+    val bodyColorFilter = if (
+        state.buddyColor != 0 && state.buddyColor != BuddyPreferences.DEFAULT_BUDDY_COLOR
+    ) {
+        ColorFilter.tint(Color(state.buddyColor), BlendMode.SrcIn)
+    } else {
+        null
+    }
+    val eyeMouthColorFilter = createEyeMouthColorFilter(state.eyeMouthColor)
+    val bodyPainter = painterResource(
+        id = BuddyPreferences.getBodyDrawableResForBuddy(state.buddyName),
+    )
+
+    Box(
+        modifier = modifier.size(containerSize),
+        contentAlignment = Alignment.Center,
+    ) {
+        BoxWithConstraints(
+            modifier = Modifier
+                .size(characterSize)
+                .align(Alignment.Center),
+            contentAlignment = Alignment.Center,
+        ) {
+            val bodyIntrinsic = bodyPainter.intrinsicSize
+            val bodyAspect = if (bodyIntrinsic.width > 0f && bodyIntrinsic.height > 0f) {
+                bodyIntrinsic.width / bodyIntrinsic.height
+            } else {
+                1f
+            }
+            val boxWidth = maxWidth
+            val boxHeight = maxHeight
+            val boxAspect = if (boxHeight > 0.dp) boxWidth / boxHeight else 1f
+            val renderedBodyWidth = if (bodyAspect >= boxAspect) boxWidth else boxHeight * bodyAspect
+            val renderedBodyHeight = if (bodyAspect >= boxAspect) boxWidth / bodyAspect else boxHeight
+
+            val eyesWidth = renderedBodyWidth * 0.65f
+            val eyesOffsetY = renderedBodyHeight * (BuddyPreferences.EYES_CENTER_Y_FRACTION - 0.50f)
+            val mouthWidth = renderedBodyWidth * 1.0f
+            val mouthOffsetY = renderedBodyHeight * (BuddyPreferences.MOUTH_CENTER_Y_FRACTION - 0.50f)
+
+            Image(
+                painter = bodyPainter,
+                contentDescription = state.nickname,
+                contentScale = ContentScale.Fit,
+                modifier = Modifier.fillMaxSize(),
+                colorFilter = bodyColorFilter,
+            )
+            Image(
+                painter = painterResource(id = BuddyPreferences.getEyesDrawableRes(state.eyes)),
+                contentDescription = null,
+                contentScale = ContentScale.FillWidth,
+                modifier = Modifier
+                    .width(eyesWidth)
+                    .offset(y = eyesOffsetY),
+                colorFilter = eyeMouthColorFilter,
+            )
+            val mouthRes = BuddyPreferences.getMouthDrawableRes(
+                state.mouth,
+                isGrownUp = state.isGrownUp,
+            )
+            if (mouthRes != null) {
+                Image(
+                    painter = painterResource(id = mouthRes),
+                    contentDescription = null,
+                    contentScale = ContentScale.FillWidth,
+                    modifier = Modifier
+                        .width(mouthWidth)
+                        .offset(y = mouthOffsetY),
+                    colorFilter = eyeMouthColorFilter,
+                )
+            }
         }
     }
 }
