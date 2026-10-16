@@ -68,9 +68,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.platform.ui.appwidgets.R
 
-private val MadimiOneFontFamily = FontFamily(Font(R.font.madimi_one_regular))
+internal val MadimiOneFontFamily = FontFamily(Font(R.font.madimi_one_regular))
 
-private val StoreTypography = Typography(
+internal val StoreTypography = Typography(
     headlineMedium = TextStyle(
         fontFamily = MadimiOneFontFamily,
         fontSize = 26.sp,
@@ -255,7 +255,7 @@ fun BuddySelectorBar(
             FilterChip(
                 selected = selectedWidgetId == buddy.widgetId,
                 onClick = { onSelectBuddy(buddy.widgetId) },
-                label = { Text("Android Buddy #${buddy.widgetId}") },
+                label = { Text("${buddy.nickname} #${buddy.widgetId}") },
                 shape = CircleShape,
             )
         }
@@ -273,7 +273,7 @@ fun WidgetCoinCard(state: WidgetBuddyState) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "Android Buddy: #${state.widgetId}",
+                text = "${state.nickname}: #${state.widgetId}",
                 style = MaterialTheme.typography.titleLarge,
                 modifier = Modifier.weight(1f),
             )

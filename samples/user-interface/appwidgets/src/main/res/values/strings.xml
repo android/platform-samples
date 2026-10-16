@@ -31,6 +31,22 @@
     <string name="android_pet_widget_description">An animated interactive pet widget powered by Remote Compose.</string>
     <string name="android_pet_widget_fallback_message">Remote Compose widgets work on Android 17 and higher devices. Use an Android 17 device.</string>
     <string name="android_pet_store_title">Android Pet Store</string>
+    <string name="select_buddy_title">Choose a body</string>
+    <string name="choose_eyes_title">Choose eyes</string>
+    <string name="choose_mouth_title">Choose a mouth</string>
+    <string name="select_environment_title">Where do they live?</string>
+    <string name="select_theme_title">What\'s their vibe?</string>
+    <string name="name_buddy_title">Give \'em a name...</string>
+    <string name="name_buddy_label">Buddy Name</string>
+    <string name="name_buddy_placeholder">Android Buddy</string>
+    <string name="clear_name">Clear name</string>
+    <string name="preview_buddy_image">Preview Buddy Image</string>
+    <string name="nav_buddy">Buddy</string>
+    <string name="nav_name">Name</string>
+    <string name="nav_environment">Room</string>
+    <string name="nav_palette">Theme</string>
+    <string name="nav_place">Place</string>
+    <string name="save_to_home_screen">Save to Home Screen</string>
     <!-- Common texts-->
     <string name="sample_app_name">LayoutSamples</string>
     <string name="sample_action_list_settings_label">Settings</string>

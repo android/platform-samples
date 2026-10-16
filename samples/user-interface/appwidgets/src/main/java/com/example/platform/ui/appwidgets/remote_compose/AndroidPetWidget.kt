@@ -21,21 +21,21 @@ import android.content.Context
 import androidx.compose.remote.creation.compose.action.valueChange
 import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteBox
-import androidx.compose.remote.creation.compose.layout.RemoteColumn
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
-import androidx.compose.remote.creation.compose.layout.RemoteText
+import androidx.compose.remote.creation.compose.layout.RemoteImage
 import androidx.compose.remote.creation.compose.modifier.RemoteModifier
-import androidx.compose.remote.creation.compose.modifier.background
 import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.compose.modifier.onTouchDown
-import androidx.compose.remote.creation.compose.state.rc
+import androidx.compose.remote.creation.compose.state.rb
 import androidx.compose.remote.creation.compose.state.rememberMutableRemoteInt
 import androidx.compose.remote.creation.compose.state.ri
 import androidx.compose.remote.creation.compose.state.rs
 import androidx.compose.remote.creation.compose.state.selectIfGe
 import androidx.compose.remote.creation.compose.widgets.RemoteComposeWidget
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
 
 @SuppressLint("RestrictedApiAndroidX", "RestrictedApi")
 class AndroidPetWidget : RemoteComposeWidget() {
@@ -52,7 +52,19 @@ class AndroidPetWidget : RemoteComposeWidget() {
     @Composable
     override fun Content(context: Context, widgetId: Int) {
         val appContext = context.applicationContext ?: context
-        val coins = BuddyPreferences.getCoinsForWidget(appContext, widgetId)
+        val state = BuddyPreferences.getWidgetBuddyState(appContext, widgetId)
+        val envBitmap = remember(state.environment) {
+            PetBitmapRenderer.renderEnvironmentBitmap(appContext, state.environment).asImageBitmap()
+        }
+        val petBitmap = remember(
+            state.buddyName,
+            state.eyes,
+            state.mouth,
+            state.buddyColor,
+            state.eyeMouthColor,
+        ) {
+            PetBitmapRenderer.renderPetBitmap(appContext, state).asImageBitmap()
+        }
 
         val petTaps = rememberMutableRemoteInt(0)
         val nextPetTaps = petTaps + 1.ri
@@ -62,22 +74,24 @@ class AndroidPetWidget : RemoteComposeWidget() {
         val isClaimVisible = selectIfGe(petTaps, REQUIRED_TAPS_FOR_COIN.ri, 1.ri, 0.ri)
 
         RemoteBox(
-            modifier = RemoteModifier.fillMaxSize().background(Color.White.rc),
-            contentAlignment = RemoteAlignment.Center
+            modifier = RemoteModifier.fillMaxSize(),
+            contentAlignment = RemoteAlignment.Center,
         ) {
-            RemoteColumn(
-                modifier = RemoteModifier.onTouchDown(valueChange(petTaps, nextPetTaps)),
-                horizontalAlignment = RemoteAlignment.CenterHorizontally
-            ) {
-                RemoteText(
-                    text = "Android Pet".rs,
-                    color = Color.Black.rc
-                )
-                RemoteText(
-                    text = "Coins: $coins".rs,
-                    color = Color.DarkGray.rc
-                )
-            }
+            RemoteImage(
+                remoteBitmap = envBitmap.rb,
+                contentDescription = state.environment.rs,
+                contentScale = ContentScale.Crop,
+                modifier = RemoteModifier.fillMaxSize(),
+            )
+
+            RemoteImage(
+                remoteBitmap = petBitmap.rb,
+                contentDescription = state.nickname.rs,
+                contentScale = ContentScale.Fit,
+                modifier = RemoteModifier
+                    .fillMaxSize(0.5f)
+                    .onTouchDown(valueChange(petTaps, nextPetTaps)),
+            )
 
             WidgetActionBar(
                 context = appContext,
