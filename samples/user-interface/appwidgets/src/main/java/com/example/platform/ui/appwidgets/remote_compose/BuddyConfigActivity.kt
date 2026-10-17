@@ -24,6 +24,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -188,7 +189,7 @@ private fun BuddyConfigScreenContent(
     onStateChange: (WidgetBuddyState) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val defaultFeatureFilter = createEyeMouthColorFilter(BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR)
+    val featureFilter = createEyeMouthColorFilter(MaterialTheme.colorScheme.onSurface.toArgb())
 
     Column(
         modifier = modifier
@@ -229,7 +230,9 @@ private fun BuddyConfigScreenContent(
                     optionModifier = Modifier.size(52.dp),
                     shape = RoundedCornerShape(26.dp),
                     horizontalPadding = 12.dp,
-                    colorFilter = defaultFeatureFilter,
+                    colorFilterFor = { eyeStyle ->
+                        if (eyeStyle == "eyes_1" || eyeStyle == "eyes_5") featureFilter else null
+                    },
                 )
             }
 
@@ -253,7 +256,7 @@ private fun BuddyConfigScreenContent(
                     selectedBackgroundColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.10f),
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
                     contentScale = ContentScale.FillHeight,
-                    colorFilter = defaultFeatureFilter,
+                    colorFilterFor = { featureFilter },
                     imageModifierFor = { mouthStyle ->
                         val scale = if (mouthStyle == "mouth_1") 1.4f else 1.1f
                         Modifier.graphicsLayer { scaleX = scale; scaleY = scale }
@@ -335,7 +338,8 @@ private fun ConfigSectionCard(
             .fillMaxWidth()
             .padding(horizontal = 8.dp),
         shape = shape,
-        color = MaterialTheme.colorScheme.surfaceContainerLow,
+        color = MaterialTheme.colorScheme.surfaceContainerHigh,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         shadowElevation = 4.dp,
         content = content,
     )
@@ -460,7 +464,7 @@ private fun DrawableOptionRow(
     selectedBackgroundColor: Color = Color.Transparent,
     contentPadding: PaddingValues = PaddingValues(6.dp),
     contentScale: ContentScale = ContentScale.Fit,
-    colorFilter: ColorFilter? = null,
+    colorFilterFor: (String) -> ColorFilter? = { null },
     imageModifierFor: (String) -> Modifier = { Modifier },
 ) {
     Row(
@@ -484,7 +488,7 @@ private fun DrawableOptionRow(
                     contentDescription = option,
                     modifier = Modifier.fillMaxSize().then(imageModifierFor(option)),
                     contentScale = contentScale,
-                    colorFilter = colorFilter,
+                    colorFilter = colorFilterFor(option),
                 )
             }
         }
