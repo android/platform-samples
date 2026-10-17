@@ -48,13 +48,9 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.NavigationRailItemDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteItemColors
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScope
 import androidx.compose.runtime.Composable
@@ -73,17 +69,13 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.view.WindowCompat
 import com.example.platform.ui.appwidgets.R
 
 private const val MAX_NICKNAME_LENGTH = 20
@@ -98,11 +90,6 @@ private enum class ConfigStep(
     ENVIRONMENT(R.drawable.ic_nav_environment, R.string.nav_environment, R.string.select_environment_title),
     THEME(R.drawable.ic_nav_palette, R.string.nav_palette, R.string.select_theme_title),
 }
-
-private val NavSuiteContainerColor = Color(0xFFEEF3E7)
-private val NavSelectedTextColor = Color(0xFF1B1C17)
-private val NavIndicatorColor = Color(0xFF50524A)
-private val NavUnselectedColor = Color(0xFF49454F)
 
 /**
  * Configuration activity for [AndroidPetWidget], allowing the user to customize the pet's
@@ -126,16 +113,14 @@ class BuddyConfigActivity : ComponentActivity() {
         }
 
         enableEdgeToEdge()
-        WindowCompat.getInsetsController(window, window.decorView).isAppearanceLightStatusBars = true
         val initialState = BuddyPreferences.getWidgetBuddyState(this, appWidgetId)
 
         setContent {
-            StoreTheme(darkTheme = false) {
+            StoreTheme {
                 var currentStep by rememberSaveable { mutableStateOf(ConfigStep.BUDDY) }
                 var state by rememberSaveable(stateSaver = WidgetBuddyState.Saver) {
                     mutableStateOf(initialState)
                 }
-                val itemColors = configNavigationItemColors()
 
                 NavigationSuiteScaffold(
                     navigationSuiteItems = {
@@ -145,7 +130,6 @@ class BuddyConfigActivity : ComponentActivity() {
                                 onClick = { currentStep = step },
                                 iconRes = step.iconRes,
                                 labelRes = step.labelRes,
-                                colors = itemColors,
                             )
                         }
                         configNavItem(
@@ -154,14 +138,8 @@ class BuddyConfigActivity : ComponentActivity() {
                             iconRes = R.drawable.ic_arrow_forward,
                             labelRes = R.string.nav_place,
                             contentDescriptionRes = R.string.save_to_home_screen,
-                            colors = itemColors,
                         )
                     },
-                    containerColor = colorResource(id = R.color.config_bg),
-                    navigationSuiteColors = NavigationSuiteDefaults.colors(
-                        navigationBarContainerColor = NavSuiteContainerColor,
-                        navigationRailContainerColor = NavSuiteContainerColor,
-                    ),
                 ) {
                     BuddyConfigScreenContent(
                         currentStep = currentStep,
@@ -182,31 +160,11 @@ class BuddyConfigActivity : ComponentActivity() {
     }
 }
 
-@Composable
-private fun configNavigationItemColors(): NavigationSuiteItemColors =
-    NavigationSuiteDefaults.itemColors(
-        navigationBarItemColors = NavigationBarItemDefaults.colors(
-            selectedIconColor = Color.White,
-            selectedTextColor = NavSelectedTextColor,
-            indicatorColor = NavIndicatorColor,
-            unselectedIconColor = NavUnselectedColor,
-            unselectedTextColor = NavUnselectedColor,
-        ),
-        navigationRailItemColors = NavigationRailItemDefaults.colors(
-            selectedIconColor = Color.White,
-            selectedTextColor = NavSelectedTextColor,
-            indicatorColor = NavIndicatorColor,
-            unselectedIconColor = NavUnselectedColor,
-            unselectedTextColor = NavUnselectedColor,
-        ),
-    )
-
 private fun NavigationSuiteScope.configNavItem(
     selected: Boolean,
     onClick: () -> Unit,
     @DrawableRes iconRes: Int,
     @StringRes labelRes: Int,
-    colors: NavigationSuiteItemColors,
     @StringRes contentDescriptionRes: Int = labelRes,
 ) {
     item(
@@ -219,8 +177,7 @@ private fun NavigationSuiteScope.configNavItem(
                 modifier = Modifier.size(32.dp),
             )
         },
-        label = { Text(text = stringResource(id = labelRes), fontFamily = MadimiOneFontFamily) },
-        colors = colors,
+        label = { Text(text = stringResource(id = labelRes)) },
     )
 }
 
@@ -306,7 +263,7 @@ private fun BuddyConfigScreenContent(
         } else {
             ConfigSectionCard(
                 titleRes = currentStep.titleRes,
-                titleFontSize = 34.sp,
+                titleStyle = MaterialTheme.typography.headlineLarge,
                 titleBottomPadding = 12.dp,
                 shape = RoundedCornerShape(if (currentStep == ConfigStep.NAME) 24.dp else 48.dp),
                 modifier = Modifier.padding(bottom = 4.dp),
@@ -346,21 +303,15 @@ private fun ConfigSectionCard(
     @StringRes titleRes: Int,
     modifier: Modifier = Modifier,
     @StringRes subtitleRes: Int? = null,
-    titleFontSize: TextUnit = 22.sp,
+    titleStyle: TextStyle = MaterialTheme.typography.titleLarge,
     titleBottomPadding: Dp = 4.dp,
     shape: Shape = RoundedCornerShape(48.dp),
     content: @Composable () -> Unit,
 ) {
-    val titleColor = colorResource(id = R.color.title_text_color)
-
     Text(
         text = stringResource(id = titleRes),
-        style = TextStyle(
-            fontSize = titleFontSize,
-            fontWeight = FontWeight.Bold,
-            fontFamily = MadimiOneFontFamily,
-            color = titleColor,
-        ),
+        style = titleStyle,
+        color = MaterialTheme.colorScheme.onSurface,
         textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
@@ -370,11 +321,8 @@ private fun ConfigSectionCard(
     if (subtitleRes != null) {
         Text(
             text = stringResource(id = subtitleRes),
-            style = TextStyle(
-                fontSize = 13.sp,
-                fontFamily = MadimiOneFontFamily,
-                color = titleColor.copy(alpha = 0.75f),
-            ),
+            style = MaterialTheme.typography.labelLarge,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
@@ -387,7 +335,7 @@ private fun ConfigSectionCard(
             .fillMaxWidth()
             .padding(horizontal = 8.dp),
         shape = shape,
-        color = colorResource(id = R.color.selection_card_bg),
+        color = MaterialTheme.colorScheme.surfaceContainerLow,
         shadowElevation = 4.dp,
         content = content,
     )
@@ -404,9 +352,9 @@ private fun NameBuddyStepContent(
         modifier = Modifier
             .fillMaxWidth()
             .padding(20.dp),
-        textStyle = TextStyle(fontFamily = MadimiOneFontFamily, fontSize = 18.sp),
-        label = { Text(stringResource(R.string.name_buddy_label), fontFamily = MadimiOneFontFamily) },
-        placeholder = { Text(stringResource(R.string.name_buddy_placeholder), fontFamily = MadimiOneFontFamily) },
+        textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
+        label = { Text(stringResource(R.string.name_buddy_label)) },
+        placeholder = { Text(stringResource(R.string.name_buddy_placeholder)) },
         singleLine = true,
         trailingIcon = {
             if (buddyNickname.isNotEmpty()) {
@@ -423,8 +371,6 @@ private fun NameBuddyStepContent(
                 text = "${buddyNickname.length} / $MAX_NICKNAME_LENGTH",
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = TextAlign.End,
-                style = MaterialTheme.typography.bodySmall,
-                fontFamily = MadimiOneFontFamily,
             )
         },
         shape = RoundedCornerShape(16.dp),
@@ -456,6 +402,11 @@ private fun BuddyConfigHeroPreviewCard(
                 contentDescription = null,
                 modifier = if (isShapeBg) Modifier.size(260.dp) else Modifier.fillMaxSize(),
                 contentScale = if (isShapeBg) ContentScale.Fit else ContentScale.Crop,
+                colorFilter = if (isShapeBg) {
+                    ColorFilter.tint(MaterialTheme.colorScheme.secondaryContainer)
+                } else {
+                    null
+                },
             )
             PetAvatar(
                 state = state,

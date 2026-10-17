@@ -83,6 +83,11 @@ import com.example.platform.ui.appwidgets.R
 internal val MadimiOneFontFamily = FontFamily(Font(R.font.madimi_one_regular))
 
 internal val StoreTypography = Typography(
+    headlineLarge = TextStyle(
+        fontFamily = MadimiOneFontFamily,
+        fontSize = 34.sp,
+        fontWeight = FontWeight.Bold,
+    ),
     headlineMedium = TextStyle(
         fontFamily = MadimiOneFontFamily,
         fontSize = 26.sp,
@@ -113,6 +118,11 @@ internal val StoreTypography = Typography(
         fontFamily = MadimiOneFontFamily,
         fontSize = 13.sp,
         fontWeight = FontWeight.SemiBold,
+    ),
+    labelMedium = TextStyle(
+        fontFamily = MadimiOneFontFamily,
+        fontSize = 12.sp,
+        fontWeight = FontWeight.Medium,
     ),
 )
 
