@@ -215,7 +215,6 @@ private fun BuddyConfigScreenContent(
                     onOptionSelected = { onStateChange(state.copy(buddyName = it)) },
                     drawableResFor = BuddyPreferences::getBodyDrawableResForBuddy,
                     optionModifier = Modifier.size(56.dp),
-                    shape = RoundedCornerShape(28.dp),
                 )
             }
 
@@ -228,8 +227,6 @@ private fun BuddyConfigScreenContent(
                     onOptionSelected = { onStateChange(state.copy(eyes = it)) },
                     drawableResFor = BuddyPreferences::getEyesDrawableRes,
                     optionModifier = Modifier.size(52.dp),
-                    shape = RoundedCornerShape(26.dp),
-                    horizontalPadding = 12.dp,
                     colorFilterFor = { eyeStyle ->
                         if (eyeStyle == "eyes_1" || eyeStyle == "eyes_5") featureFilter else null
                     },
@@ -247,13 +244,8 @@ private fun BuddyConfigScreenContent(
                     options = BuddyPreferences.MOUTH_OPTIONS,
                     selectedOption = state.mouth,
                     onOptionSelected = { onStateChange(state.copy(mouth = it)) },
-                    drawableResFor = {
-                        BuddyPreferences.getMouthDrawableRes(it, isGrownUp = true)
-                            ?: R.drawable.mouth_1
-                    },
+                    drawableResFor = { if (it == "mouth_2") R.drawable.mouth_2 else R.drawable.mouth_1 },
                     optionModifier = Modifier.size(width = 72.dp, height = 52.dp),
-                    shape = RoundedCornerShape(26.dp),
-                    selectedBackgroundColor = MaterialTheme.colorScheme.primary.copy(alpha = 0.10f),
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
                     contentScale = ContentScale.FillHeight,
                     colorFilterFor = { featureFilter },
@@ -267,17 +259,43 @@ private fun BuddyConfigScreenContent(
             ConfigSectionCard(
                 titleRes = currentStep.titleRes,
                 titleStyle = MaterialTheme.typography.headlineLarge,
-                titleBottomPadding = 12.dp,
                 shape = RoundedCornerShape(if (currentStep == ConfigStep.NAME) 24.dp else 48.dp),
                 modifier = Modifier.padding(bottom = 4.dp),
             ) {
                 when (currentStep) {
-                    ConfigStep.NAME -> NameBuddyStepContent(
-                        buddyNickname = state.nickname,
-                        onNicknameChanged = {
+                    ConfigStep.NAME -> {
+                        val buddyNickname = state.nickname
+                        val onNicknameChanged: (String) -> Unit = {
                             onStateChange(state.copy(nickname = it.take(MAX_NICKNAME_LENGTH)))
-                        },
-                    )
+                        }
+                        OutlinedTextField(
+                            value = buddyNickname,
+                            onValueChange = onNicknameChanged,
+                            modifier = Modifier.fillMaxWidth().padding(20.dp),
+                            textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
+                            label = { Text(stringResource(R.string.name_buddy_label)) },
+                            placeholder = { Text(stringResource(R.string.name_buddy_placeholder)) },
+                            singleLine = true,
+                            trailingIcon = {
+                                if (buddyNickname.isNotEmpty()) {
+                                    IconButton(onClick = { onNicknameChanged("") }) {
+                                        Icon(
+                                            painter = painterResource(id = R.drawable.ic_clear),
+                                            contentDescription = stringResource(id = R.string.clear_name),
+                                        )
+                                    }
+                                }
+                            },
+                            supportingText = {
+                                Text(
+                                    text = "${buddyNickname.length} / $MAX_NICKNAME_LENGTH",
+                                    modifier = Modifier.fillMaxWidth(),
+                                    textAlign = TextAlign.End,
+                                )
+                            },
+                            shape = RoundedCornerShape(16.dp),
+                        )
+                    }
                     ConfigStep.ENVIRONMENT -> DrawableOptionRow(
                         options = BuddyPreferences.ENVIRONMENT_OPTIONS,
                         selectedOption = state.environment,
@@ -307,10 +325,10 @@ private fun ConfigSectionCard(
     modifier: Modifier = Modifier,
     @StringRes subtitleRes: Int? = null,
     titleStyle: TextStyle = MaterialTheme.typography.titleLarge,
-    titleBottomPadding: Dp = 4.dp,
     shape: Shape = RoundedCornerShape(48.dp),
     content: @Composable () -> Unit,
 ) {
+    val bottomPadding = if (titleStyle == MaterialTheme.typography.headlineLarge) 12.dp else 4.dp
     Text(
         text = stringResource(id = titleRes),
         style = titleStyle,
@@ -318,7 +336,7 @@ private fun ConfigSectionCard(
         textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(bottom = if (subtitleRes == null) titleBottomPadding else 0.dp),
+            .padding(bottom = if (subtitleRes == null) bottomPadding else 0.dp),
     )
 
     if (subtitleRes != null) {
@@ -329,7 +347,7 @@ private fun ConfigSectionCard(
             textAlign = TextAlign.Center,
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(bottom = titleBottomPadding),
+                .padding(bottom = bottomPadding),
         )
     }
 
@@ -342,42 +360,6 @@ private fun ConfigSectionCard(
         border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant),
         shadowElevation = 4.dp,
         content = content,
-    )
-}
-
-@Composable
-private fun NameBuddyStepContent(
-    buddyNickname: String,
-    onNicknameChanged: (String) -> Unit,
-) {
-    OutlinedTextField(
-        value = buddyNickname,
-        onValueChange = onNicknameChanged,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(20.dp),
-        textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
-        label = { Text(stringResource(R.string.name_buddy_label)) },
-        placeholder = { Text(stringResource(R.string.name_buddy_placeholder)) },
-        singleLine = true,
-        trailingIcon = {
-            if (buddyNickname.isNotEmpty()) {
-                IconButton(onClick = { onNicknameChanged("") }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_clear),
-                        contentDescription = stringResource(id = R.string.clear_name),
-                    )
-                }
-            }
-        },
-        supportingText = {
-            Text(
-                text = "${buddyNickname.length} / $MAX_NICKNAME_LENGTH",
-                modifier = Modifier.fillMaxWidth(),
-                textAlign = TextAlign.End,
-            )
-        },
-        shape = RoundedCornerShape(16.dp),
     )
 }
 
@@ -414,8 +396,7 @@ private fun BuddyConfigHeroPreviewCard(
             )
             PetAvatar(
                 state = state,
-                containerSize = 160.dp,
-                characterSize = 160.dp,
+                size = 160.dp,
                 contentDescription = stringResource(id = R.string.preview_buddy_image),
             )
         }
@@ -428,7 +409,6 @@ private fun SelectableOptionBox(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     shape: Shape = CircleShape,
-    selectedBackgroundColor: Color = Color.Transparent,
     contentPadding: PaddingValues = PaddingValues(6.dp),
     content: @Composable BoxScope.() -> Unit,
 ) {
@@ -438,7 +418,7 @@ private fun SelectableOptionBox(
             .then(
                 if (isSelected) {
                     Modifier
-                        .background(selectedBackgroundColor, shape)
+                        .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.10f), shape)
                         .border(3.dp, MaterialTheme.colorScheme.primary, shape)
                 } else {
                     Modifier
@@ -458,10 +438,8 @@ private fun DrawableOptionRow(
     onOptionSelected: (String) -> Unit,
     drawableResFor: (String) -> Int,
     optionModifier: Modifier,
-    shape: Shape,
+    shape: Shape = CircleShape,
     verticalPadding: Dp = 6.dp,
-    horizontalPadding: Dp = 16.dp,
-    selectedBackgroundColor: Color = Color.Transparent,
     contentPadding: PaddingValues = PaddingValues(6.dp),
     contentScale: ContentScale = ContentScale.Fit,
     colorFilterFor: (String) -> ColorFilter? = { null },
@@ -470,7 +448,7 @@ private fun DrawableOptionRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = verticalPadding, horizontal = horizontalPadding),
+            .padding(vertical = verticalPadding, horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -480,7 +458,6 @@ private fun DrawableOptionRow(
                 onClick = { onOptionSelected(option) },
                 modifier = optionModifier,
                 shape = shape,
-                selectedBackgroundColor = selectedBackgroundColor,
                 contentPadding = contentPadding,
             ) {
                 Image(
@@ -501,17 +478,17 @@ private fun ThemeSelectionRow(
     onThemeAndEyeColorSelected: (Int, Int) -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
-    fun darker(a: Color, b: Color): Color = if (a.luminance() <= b.luminance()) a else b
+    fun darker(a: Color, b: Color): Int = (if (a.luminance() <= b.luminance()) a else b).toArgb()
 
     val originalBrush = Brush.sweepGradient(
         listOf(Color(0xFFFFA3E5), Color(0xFF80D8FF), Color(0xFFFFD180), Color(0xFFFFA3E5)),
     )
     val swatches = listOf(
-        Triple(BuddyPreferences.DEFAULT_BUDDY_COLOR, BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR, Modifier.background(originalBrush)),
-        Triple(BuddyPreferences.COLOR_ANDROID_GREEN, BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR, Modifier.background(Color(BuddyPreferences.COLOR_ANDROID_GREEN))),
-        Triple(scheme.primary.toArgb(), darker(scheme.onPrimaryContainer, scheme.onPrimary).toArgb(), Modifier.background(scheme.primary)),
-        Triple(scheme.secondary.toArgb(), darker(scheme.onSecondaryContainer, scheme.onSecondary).toArgb(), Modifier.background(scheme.secondary)),
-        Triple(scheme.tertiary.toArgb(), darker(scheme.onTertiaryContainer, scheme.onTertiary).toArgb(), Modifier.background(scheme.tertiary)),
+        BuddyPreferences.DEFAULT_BUDDY_COLOR to BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR,
+        BuddyPreferences.COLOR_ANDROID_GREEN to BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR,
+        scheme.primary.toArgb() to darker(scheme.onPrimaryContainer, scheme.onPrimary),
+        scheme.secondary.toArgb() to darker(scheme.onSecondaryContainer, scheme.onSecondary),
+        scheme.tertiary.toArgb() to darker(scheme.onTertiaryContainer, scheme.onTertiary),
     )
 
     Row(
@@ -521,7 +498,12 @@ private fun ThemeSelectionRow(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        swatches.forEach { (bodyArgb, eyeAccentArgb, bgModifier) ->
+        swatches.forEach { (bodyArgb, eyeAccentArgb) ->
+            val bgModifier = if (bodyArgb == BuddyPreferences.DEFAULT_BUDDY_COLOR) {
+                Modifier.background(originalBrush, CircleShape)
+            } else {
+                Modifier.background(Color(bodyArgb), CircleShape)
+            }
             SelectableOptionBox(
                 isSelected = selectedThemeColor == bodyArgb,
                 onClick = {
@@ -531,7 +513,7 @@ private fun ThemeSelectionRow(
                 modifier = Modifier.size(48.dp),
                 contentPadding = PaddingValues(4.dp),
             ) {
-                Box(modifier = Modifier.fillMaxSize().clip(CircleShape).then(bgModifier))
+                Box(modifier = Modifier.fillMaxSize().then(bgModifier))
             }
         }
     }

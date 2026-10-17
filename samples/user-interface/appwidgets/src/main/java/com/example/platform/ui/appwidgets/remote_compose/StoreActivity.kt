@@ -388,14 +388,11 @@ fun BuddyRoomPreview(
     state: WidgetBuddyState,
     modifier: Modifier = Modifier,
 ) {
-    val isDark = isSystemInDarkTheme()
-    val roomFrameBorderColor = if (isDark) Color(0xFF263540) else Color(0xFF3B4D5B)
-
     ElevatedCard(
         modifier = modifier
             .fillMaxWidth()
             .height(210.dp)
-            .border(2.dp, roomFrameBorderColor, RoundedCornerShape(22.dp))
+            .border(2.dp, MaterialTheme.colorScheme.outlineVariant, RoundedCornerShape(22.dp))
             .clip(RoundedCornerShape(22.dp)),
         shape = RoundedCornerShape(22.dp),
         elevation = CardDefaults.elevatedCardElevation(defaultElevation = 4.dp),
@@ -413,20 +410,15 @@ fun BuddyRoomPreview(
                 modifier = Modifier.fillMaxSize(),
             )
 
-            PetAvatar(
-                state = state,
-                containerSize = 104.dp,
-                characterSize = 88.dp,
-            )
+            PetAvatar(state = state)
         }
     }
 }
 
 @Composable
 private fun CreditPill(text: String, modifier: Modifier = Modifier) {
-    val isDark = isSystemInDarkTheme()
-    val badgeBg = if (isDark) Color(0xFF3D3112) else Color(0xFFFFF3CD)
-    val badgeText = if (isDark) Color(0xFFFFD54F) else Color(0xFF7A5200)
+    val badgeBg = MaterialTheme.colorScheme.tertiaryContainer
+    val badgeText = MaterialTheme.colorScheme.onTertiaryContainer
 
     Text(
         text = text,

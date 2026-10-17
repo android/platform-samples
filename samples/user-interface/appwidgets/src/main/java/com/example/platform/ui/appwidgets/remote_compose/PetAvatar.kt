@@ -17,7 +17,6 @@
 package com.example.platform.ui.appwidgets.remote_compose
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
@@ -43,8 +42,7 @@ import androidx.compose.ui.unit.dp
 fun PetAvatar(
     state: WidgetBuddyState,
     modifier: Modifier = Modifier,
-    containerSize: Dp = 104.dp,
-    characterSize: Dp = 88.dp,
+    size: Dp = 88.dp,
     contentDescription: String? = state.nickname,
 ) {
     val bodyColorFilter = if (
@@ -59,73 +57,66 @@ fun PetAvatar(
         id = BuddyPreferences.getBodyDrawableResForBuddy(state.buddyName),
     )
 
-    Box(
-        modifier = modifier.size(containerSize),
+    BoxWithConstraints(
+        modifier = modifier.size(size),
         contentAlignment = Alignment.Center,
     ) {
-        BoxWithConstraints(
+        val bodyIntrinsic = bodyPainter.intrinsicSize
+        val bodyAspect = if (bodyIntrinsic.width > 0f && bodyIntrinsic.height > 0f) {
+            bodyIntrinsic.width / bodyIntrinsic.height
+        } else {
+            1f
+        }
+        val boxWidth = maxWidth
+        val boxHeight = maxHeight
+        val boxAspect = if (boxHeight > 0.dp) boxWidth / boxHeight else 1f
+        val renderedBodyWidth = if (bodyAspect >= boxAspect) boxWidth else boxHeight * bodyAspect
+        val renderedBodyHeight = if (bodyAspect >= boxAspect) boxWidth / bodyAspect else boxHeight
+
+        val eyesWidth = renderedBodyWidth * 0.65f
+        val eyesOffsetY = renderedBodyHeight * (BuddyPreferences.EYES_CENTER_Y_FRACTION - 0.50f)
+        val mouthWidth = renderedBodyWidth * 1.0f
+        val mouthOffsetY = renderedBodyHeight * (BuddyPreferences.MOUTH_CENTER_Y_FRACTION - 0.50f)
+
+        Image(
+            painter = bodyPainter,
+            contentDescription = contentDescription,
+            contentScale = ContentScale.Fit,
+            modifier = Modifier.fillMaxSize(),
+            colorFilter = bodyColorFilter,
+        )
+        Image(
+            painter = painterResource(id = BuddyPreferences.getEyesDrawableRes(state.eyes)),
+            contentDescription = null,
+            contentScale = ContentScale.FillWidth,
             modifier = Modifier
-                .size(characterSize)
-                .align(Alignment.Center),
-            contentAlignment = Alignment.Center,
-        ) {
-            val bodyIntrinsic = bodyPainter.intrinsicSize
-            val bodyAspect = if (bodyIntrinsic.width > 0f && bodyIntrinsic.height > 0f) {
-                bodyIntrinsic.width / bodyIntrinsic.height
-            } else {
-                1f
-            }
-            val boxWidth = maxWidth
-            val boxHeight = maxHeight
-            val boxAspect = if (boxHeight > 0.dp) boxWidth / boxHeight else 1f
-            val renderedBodyWidth = if (bodyAspect >= boxAspect) boxWidth else boxHeight * bodyAspect
-            val renderedBodyHeight = if (bodyAspect >= boxAspect) boxWidth / bodyAspect else boxHeight
-
-            val eyesWidth = renderedBodyWidth * 0.65f
-            val eyesOffsetY = renderedBodyHeight * (BuddyPreferences.EYES_CENTER_Y_FRACTION - 0.50f)
-            val mouthWidth = renderedBodyWidth * 1.0f
-            val mouthOffsetY = renderedBodyHeight * (BuddyPreferences.MOUTH_CENTER_Y_FRACTION - 0.50f)
-
+                .width(eyesWidth)
+                .offset(y = eyesOffsetY),
+            colorFilter = eyeMouthColorFilter,
+        )
+        val mouthRes = BuddyPreferences.getMouthDrawableRes(
+            state.mouth,
+            isGrownUp = state.isGrownUp,
+        )
+        if (mouthRes != null) {
             Image(
-                painter = bodyPainter,
-                contentDescription = contentDescription,
-                contentScale = ContentScale.Fit,
-                modifier = Modifier.fillMaxSize(),
-                colorFilter = bodyColorFilter,
-            )
-            Image(
-                painter = painterResource(id = BuddyPreferences.getEyesDrawableRes(state.eyes)),
+                painter = painterResource(id = mouthRes),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
-                    .width(eyesWidth)
-                    .offset(y = eyesOffsetY),
+                    .width(mouthWidth)
+                    .offset(y = mouthOffsetY),
                 colorFilter = eyeMouthColorFilter,
             )
-            val mouthRes = BuddyPreferences.getMouthDrawableRes(
-                state.mouth,
-                isGrownUp = state.isGrownUp,
-            )
-            if (mouthRes != null) {
-                Image(
-                    painter = painterResource(id = mouthRes),
-                    contentDescription = null,
-                    contentScale = ContentScale.FillWidth,
-                    modifier = Modifier
-                        .width(mouthWidth)
-                        .offset(y = mouthOffsetY),
-                    colorFilter = eyeMouthColorFilter,
-                )
-            }
         }
     }
 }
 
 /**
- * Creates a white-preserving [ColorFilter] that tints black (`#000000`) pupils, outlines, and mouths
- * to [eyeMouthColorArgb] while preserving white (`#FFFFFF`) eye sclera areas as pure white.
+ * Returns the 4x5 [FloatArray] color matrix that maps black (`#000000`) to [eyeMouthColorArgb]
+ * while keeping white (`#FFFFFF`) eye sclera areas as pure white.
  */
-internal fun createEyeMouthColorFilter(eyeMouthColorArgb: Int): ColorFilter {
+internal fun createEyeMouthMatrixValues(eyeMouthColorArgb: Int): FloatArray {
     val targetColor = if (eyeMouthColorArgb == 0) {
         BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR
     } else {
@@ -134,17 +125,17 @@ internal fun createEyeMouthColorFilter(eyeMouthColorArgb: Int): ColorFilter {
     val r = ((targetColor ushr 16) and 0xFF).toFloat()
     val g = ((targetColor ushr 8) and 0xFF).toFloat()
     val b = (targetColor and 0xFF).toFloat()
-    val scaleR = 1f - (r / 255f)
-    val scaleG = 1f - (g / 255f)
-    val scaleB = 1f - (b / 255f)
-    return ColorFilter.colorMatrix(
-        ColorMatrix(
-            floatArrayOf(
-                scaleR, 0f, 0f, 0f, r,
-                0f, scaleG, 0f, 0f, g,
-                0f, 0f, scaleB, 0f, b,
-                0f, 0f, 0f, 1f, 0f,
-            ),
-        ),
+    return floatArrayOf(
+        1f - (r / 255f), 0f, 0f, 0f, r,
+        0f, 1f - (g / 255f), 0f, 0f, g,
+        0f, 0f, 1f - (b / 255f), 0f, b,
+        0f, 0f, 0f, 1f, 0f,
     )
 }
+
+/**
+ * Creates a white-preserving [ColorFilter] that tints black (`#000000`) pupils, outlines, and mouths
+ * to [eyeMouthColorArgb] while preserving white (`#FFFFFF`) eye sclera areas as pure white.
+ */
+internal fun createEyeMouthColorFilter(eyeMouthColorArgb: Int): ColorFilter =
+    ColorFilter.colorMatrix(ColorMatrix(createEyeMouthMatrixValues(eyeMouthColorArgb)))

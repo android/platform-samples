@@ -20,6 +20,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -109,31 +110,11 @@ object PetBitmapRenderer {
         if (colorArgb == 0 || colorArgb == BuddyPreferences.DEFAULT_BUDDY_COLOR) {
             return source
         }
-        val width = source.width
-        val height = source.height
-        val output = createBitmap(width, height, source.config ?: Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(output)
-        val paint = Paint().apply {
+        val output = createBitmap(source.width, source.height, source.config ?: Bitmap.Config.ARGB_8888)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             colorFilter = PorterDuffColorFilter(colorArgb, PorterDuff.Mode.SRC_IN)
         }
-        canvas.drawBitmap(source, 0f, 0f, paint)
-
-        val pixels = IntArray(width * height)
-        source.getPixels(pixels, 0, width, 0, 0, width, height)
-        val targetR = (colorArgb ushr 16) and 0xFF
-        val targetG = (colorArgb ushr 8) and 0xFF
-        val targetB = colorArgb and 0xFF
-        var hasNonTransparent = false
-        for (i in pixels.indices) {
-            val a = (pixels[i] ushr 24) and 0xFF
-            if (a != 0) {
-                hasNonTransparent = true
-                pixels[i] = (a shl 24) or (targetR shl 16) or (targetG shl 8) or targetB
-            }
-        }
-        if (hasNonTransparent) {
-            output.setPixels(pixels, 0, width, 0, 0, width, height)
-        }
+        Canvas(output).drawBitmap(source, 0f, 0f, paint)
         return output
     }
 
@@ -142,35 +123,11 @@ object PetBitmapRenderer {
      * sclera/cutout pixels as pure white (`#FFFFFF`).
      */
     fun tintFeatureBitmap(source: Bitmap, colorArgb: Int): Bitmap {
-        val targetColor = if (colorArgb == 0) BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR else colorArgb
-        val width = source.width
-        val height = source.height
-        val output = createBitmap(width, height, Bitmap.Config.ARGB_8888)
-        val pixels = IntArray(width * height)
-        source.getPixels(pixels, 0, width, 0, 0, width, height)
-
-        val targetR = (targetColor ushr 16) and 0xFF
-        val targetG = (targetColor ushr 8) and 0xFF
-        val targetB = targetColor and 0xFF
-
-        for (i in pixels.indices) {
-            val pixel = pixels[i]
-            val a = (pixel ushr 24) and 0xFF
-            if (a == 0) continue
-
-            val r = (pixel ushr 16) and 0xFF
-            val g = (pixel ushr 8) and 0xFF
-            val b = pixel and 0xFF
-
-            val whiteness = minOf(r, g, b)
-            val outR = (targetR + (whiteness * (255 - targetR) + 127) / 255).coerceIn(0, 255)
-            val outG = (targetG + (whiteness * (255 - targetG) + 127) / 255).coerceIn(0, 255)
-            val outB = (targetB + (whiteness * (255 - targetB) + 127) / 255).coerceIn(0, 255)
-
-            pixels[i] = (a shl 24) or (outR shl 16) or (outG shl 8) or outB
+        val output = createBitmap(source.width, source.height, Bitmap.Config.ARGB_8888)
+        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            colorFilter = ColorMatrixColorFilter(createEyeMouthMatrixValues(colorArgb))
         }
-
-        output.setPixels(pixels, 0, width, 0, 0, width, height)
+        Canvas(output).drawBitmap(source, 0f, 0f, paint)
         return output
     }
 

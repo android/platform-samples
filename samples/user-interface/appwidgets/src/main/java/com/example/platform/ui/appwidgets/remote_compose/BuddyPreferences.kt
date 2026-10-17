@@ -121,94 +121,46 @@ object BuddyPreferences {
         return updated
     }
 
-    fun getBuddyForWidget(context: Context, widgetId: Int): String =
-        prefs(context).getString("$KEY_BUDDY_PREFIX$widgetId", DEFAULT_BUDDY) ?: DEFAULT_BUDDY
-
-    fun getBuddyNickname(context: Context, widgetId: Int): String {
-        val customName = prefs(context).getString("$KEY_NICKNAME_PREFIX$widgetId", null)?.trim()
-        return if (!customName.isNullOrEmpty()) customName else DEFAULT_BUDDY_NAME
-    }
-
-    fun getEyesForWidget(context: Context, widgetId: Int): String =
-        prefs(context).getString("$KEY_EYES_PREFIX$widgetId", DEFAULT_EYES) ?: DEFAULT_EYES
-
-    fun getMouthForWidget(context: Context, widgetId: Int): String =
-        prefs(context).getString("$KEY_MOUTH_PREFIX$widgetId", DEFAULT_MOUTH) ?: DEFAULT_MOUTH
-
-    fun getEnvironmentForWidget(context: Context, widgetId: Int): String =
-        prefs(context).getString("$KEY_ENVIRONMENT_PREFIX$widgetId", DEFAULT_ENVIRONMENT)
-            ?: DEFAULT_ENVIRONMENT
-
-    fun getBuddyColorForWidget(context: Context, widgetId: Int): Int =
-        prefs(context).getInt("$KEY_BUDDY_COLOR_PREFIX$widgetId", DEFAULT_BUDDY_COLOR)
-
-    fun getEyeMouthColorForWidget(context: Context, widgetId: Int): Int {
-        val sharedPrefs = prefs(context)
-        val key = "$KEY_EYE_MOUTH_COLOR_PREFIX$widgetId"
-        return if (sharedPrefs.contains(key)) {
-            val saved = sharedPrefs.getInt(key, DEFAULT_EYE_MOUTH_COLOR)
-            val er = (saved ushr 16) and 0xFF
-            val eg = (saved ushr 8) and 0xFF
-            val eb = saved and 0xFF
-            if (er >= 225 && eg >= 225 && eb >= 225) {
-                resolveEyeMouthColor(getBuddyColorForWidget(context, widgetId))
-            } else {
-                saved
-            }
-        } else {
-            resolveEyeMouthColor(getBuddyColorForWidget(context, widgetId))
-        }
-    }
-
     fun saveBuddyConfig(context: Context, state: WidgetBuddyState) {
-        saveBuddyConfig(
-            context = context,
-            widgetId = state.widgetId,
-            buddy = state.buddyName,
-            nickname = state.nickname,
-            environment = state.environment,
-            colorArgb = state.buddyColor,
-            eyes = state.eyes,
-            mouth = state.mouth,
-            eyeMouthColor = state.eyeMouthColor,
-        )
-    }
-
-    fun saveBuddyConfig(
-        context: Context,
-        widgetId: Int,
-        buddy: String,
-        nickname: String,
-        environment: String,
-        colorArgb: Int,
-        eyes: String = DEFAULT_EYES,
-        mouth: String = DEFAULT_MOUTH,
-        eyeMouthColor: Int = resolveEyeMouthColor(colorArgb),
-    ) {
-        val resolvedName = nickname.trim().ifEmpty { DEFAULT_BUDDY_NAME }
+        val widgetId = state.widgetId
+        val resolvedName = state.nickname.trim().ifEmpty { DEFAULT_BUDDY_NAME }
         prefs(context).edit {
-            putString("$KEY_BUDDY_PREFIX$widgetId", buddy)
+            putString("$KEY_BUDDY_PREFIX$widgetId", state.buddyName)
             putString("$KEY_NICKNAME_PREFIX$widgetId", resolvedName)
-            putString("$KEY_EYES_PREFIX$widgetId", eyes)
-            putString("$KEY_MOUTH_PREFIX$widgetId", mouth)
-            putString("$KEY_ENVIRONMENT_PREFIX$widgetId", environment)
-            putInt("$KEY_BUDDY_COLOR_PREFIX$widgetId", colorArgb)
-            putInt("$KEY_EYE_MOUTH_COLOR_PREFIX$widgetId", eyeMouthColor)
+            putString("$KEY_EYES_PREFIX$widgetId", state.eyes)
+            putString("$KEY_MOUTH_PREFIX$widgetId", state.mouth)
+            putString("$KEY_ENVIRONMENT_PREFIX$widgetId", state.environment)
+            putInt("$KEY_BUDDY_COLOR_PREFIX$widgetId", state.buddyColor)
+            putInt("$KEY_EYE_MOUTH_COLOR_PREFIX$widgetId", state.eyeMouthColor)
         }
     }
 
     fun getWidgetBuddyState(context: Context, widgetId: Int): WidgetBuddyState {
-        val buddyColor = getBuddyColorForWidget(context, widgetId)
+        val p = prefs(context)
+        val buddyColor = p.getInt("$KEY_BUDDY_COLOR_PREFIX$widgetId", DEFAULT_BUDDY_COLOR)
+        val eyeKey = "$KEY_EYE_MOUTH_COLOR_PREFIX$widgetId"
+        val eyeMouthColor = if (p.contains(eyeKey)) {
+            val saved = p.getInt(eyeKey, DEFAULT_EYE_MOUTH_COLOR)
+            val isNearWhite = ((saved ushr 16) and 0xFF) >= 225 &&
+                ((saved ushr 8) and 0xFF) >= 225 &&
+                (saved and 0xFF) >= 225
+            if (isNearWhite) resolveEyeMouthColor(buddyColor) else saved
+        } else {
+            resolveEyeMouthColor(buddyColor)
+        }
         return WidgetBuddyState(
             widgetId = widgetId,
-            coins = getCoinsForWidget(context, widgetId),
-            buddyName = getBuddyForWidget(context, widgetId),
-            nickname = getBuddyNickname(context, widgetId),
-            eyes = getEyesForWidget(context, widgetId),
-            mouth = getMouthForWidget(context, widgetId),
-            environment = getEnvironmentForWidget(context, widgetId),
+            coins = p.getInt("$KEY_COINS_PREFIX$widgetId", 0),
+            buddyName = p.getString("$KEY_BUDDY_PREFIX$widgetId", DEFAULT_BUDDY) ?: DEFAULT_BUDDY,
+            nickname = p.getString("$KEY_NICKNAME_PREFIX$widgetId", null)
+                ?.trim()
+                ?.ifEmpty { null } ?: DEFAULT_BUDDY_NAME,
+            eyes = p.getString("$KEY_EYES_PREFIX$widgetId", DEFAULT_EYES) ?: DEFAULT_EYES,
+            mouth = p.getString("$KEY_MOUTH_PREFIX$widgetId", DEFAULT_MOUTH) ?: DEFAULT_MOUTH,
+            environment = p.getString("$KEY_ENVIRONMENT_PREFIX$widgetId", DEFAULT_ENVIRONMENT)
+                ?: DEFAULT_ENVIRONMENT,
             buddyColor = buddyColor,
-            eyeMouthColor = getEyeMouthColorForWidget(context, widgetId),
+            eyeMouthColor = eyeMouthColor,
         )
     }
 
@@ -245,19 +197,17 @@ object BuddyPreferences {
             return DEFAULT_EYE_MOUTH_COLOR
         }
         if (explicitAccentColor != 0 && explicitAccentColor != DEFAULT_EYE_MOUTH_COLOR) {
-            val er = (explicitAccentColor ushr 16) and 0xFF
-            val eg = (explicitAccentColor ushr 8) and 0xFF
-            val eb = explicitAccentColor and 0xFF
-            val isNearWhite = er >= 225 && eg >= 225 && eb >= 225
+            val isNearWhite = ((explicitAccentColor ushr 16) and 0xFF) >= 225 &&
+                ((explicitAccentColor ushr 8) and 0xFF) >= 225 &&
+                (explicitAccentColor and 0xFF) >= 225
             if (!isNearWhite) {
                 return explicitAccentColor
             }
         }
-        val a = 0xFF
         val r = ((buddyColor shr 16) and 0xFF) * 35 / 100
         val g = ((buddyColor shr 8) and 0xFF) * 35 / 100
         val b = (buddyColor and 0xFF) * 35 / 100
-        val derived = (a shl 24) or (r shl 16) or (g shl 8) or b
+        val derived = (0xFF shl 24) or (r shl 16) or (g shl 8) or b
         return if (derived == DEFAULT_EYE_MOUTH_COLOR) 0xFF1B1B1F.toInt() else derived
     }
 
@@ -270,10 +220,9 @@ object BuddyPreferences {
 
     fun getEyesDrawableRes(eyesStyle: String = DEFAULT_EYES): Int =
         when (eyesStyle) {
-            "eyes_1", "eyes1" -> R.drawable.eyes_1
-            "eyes_2", "eyes2" -> R.drawable.eyes_2
-            "eyes_4", "eyes4" -> R.drawable.eyes_4
-            "eyes_5", "eyes5" -> R.drawable.eyes_5
+            "eyes_2" -> R.drawable.eyes_2
+            "eyes_4" -> R.drawable.eyes_4
+            "eyes_5" -> R.drawable.eyes_5
             else -> R.drawable.eyes_1
         }
 
@@ -282,10 +231,7 @@ object BuddyPreferences {
         isGrownUp: Boolean = false,
     ): Int? {
         if (!isGrownUp) return null
-        return when (mouthStyle) {
-            "mouth_2", "mouth2" -> R.drawable.mouth_2
-            else -> R.drawable.mouth_1
-        }
+        return if (mouthStyle == "mouth_2") R.drawable.mouth_2 else R.drawable.mouth_1
     }
 
     fun getDrawableResForEnvironment(envName: String): Int =
