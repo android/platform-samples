@@ -66,12 +66,8 @@ object PetBitmapRenderer {
             centerYFraction = BuddyPreferences.EYES_CENTER_Y_FRACTION,
         )
 
-        val mouthRes = BuddyPreferences.getMouthDrawableRes(
-            state.mouth,
-            isGrownUp = state.isGrownUp,
-        )
-        if (mouthRes != null) {
-            val rawMouth = decodeBitmap(context, mouthRes)
+        if (state.isGrownUp) {
+            val rawMouth = decodeBitmap(context, BuddyPreferences.getMouthDrawableRes(state.mouth))
             val tintedMouth = tintFeatureBitmap(rawMouth, state.eyeMouthColor)
             drawFeatureOnBodyCanvas(
                 canvas = canvas,

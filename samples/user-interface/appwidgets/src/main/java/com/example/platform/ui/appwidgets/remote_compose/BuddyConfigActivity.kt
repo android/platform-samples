@@ -67,7 +67,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
@@ -260,7 +259,7 @@ private fun BuddyConfigScreenContent(
                     options = BuddyPreferences.MOUTH_OPTIONS,
                     selectedOption = state.mouth,
                     onOptionSelected = { onStateChange(state.copy(mouth = it)) },
-                    drawableResFor = { if (it == "mouth_2") R.drawable.mouth_2 else R.drawable.mouth_1 },
+                    drawableResFor = BuddyPreferences::getMouthDrawableRes,
                     optionModifier = Modifier.size(width = 72.dp, height = 52.dp),
                     contentPadding = PaddingValues(horizontal = 12.dp, vertical = 8.dp),
                     contentScale = ContentScale.FillHeight,
@@ -326,9 +325,7 @@ private fun BuddyConfigScreenContent(
                     )
                     else -> ThemeSelectionRow(
                         selectedThemeColor = state.buddyColor,
-                        onThemeAndEyeColorSelected = { color, eyeColor ->
-                            onStateChange(state.copy(buddyColor = color, eyeMouthColor = eyeColor))
-                        },
+                        onThemeColorSelected = { onStateChange(state.copy(buddyColor = it)) },
                     )
                 }
             }
@@ -503,27 +500,23 @@ private fun DrawableOptionRow(
 }
 
 /**
- * Displays the color swatches for the pet body and calculates a contrasting color for the eyes and mouth.
+ * Displays the color swatches for the pet body.
  */
 @Composable
 private fun ThemeSelectionRow(
     selectedThemeColor: Int,
-    onThemeAndEyeColorSelected: (Int, Int) -> Unit,
+    onThemeColorSelected: (Int) -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
-    // Select the darker of two theme colors to keep high contrast on the pet body.
-    fun darker(a: Color, b: Color): Int = (if (a.luminance() <= b.luminance()) a else b).toArgb()
-
     val originalBrush = Brush.sweepGradient(
         listOf(Color(0xFFFFA3E5), Color(0xFF80D8FF), Color(0xFFFFD180), Color(0xFFFFA3E5)),
     )
-    // Each pair maps a body color to its eye and mouth accent color.
     val swatches = listOf(
-        BuddyPreferences.DEFAULT_BUDDY_COLOR to BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR,
-        BuddyPreferences.COLOR_ANDROID_GREEN to BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR,
-        scheme.primary.toArgb() to darker(scheme.onPrimaryContainer, scheme.onPrimary),
-        scheme.secondary.toArgb() to darker(scheme.onSecondaryContainer, scheme.onSecondary),
-        scheme.tertiary.toArgb() to darker(scheme.onTertiaryContainer, scheme.onTertiary),
+        BuddyPreferences.DEFAULT_BUDDY_COLOR,
+        BuddyPreferences.COLOR_ANDROID_GREEN,
+        scheme.primary.toArgb(),
+        scheme.secondary.toArgb(),
+        scheme.tertiary.toArgb(),
     )
 
     Row(
@@ -533,7 +526,7 @@ private fun ThemeSelectionRow(
         horizontalArrangement = Arrangement.SpaceEvenly,
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        swatches.forEach { (bodyArgb, eyeAccentArgb) ->
+        swatches.forEach { bodyArgb ->
             val bgModifier = if (bodyArgb == BuddyPreferences.DEFAULT_BUDDY_COLOR) {
                 Modifier.background(originalBrush, CircleShape)
             } else {
@@ -541,10 +534,7 @@ private fun ThemeSelectionRow(
             }
             SelectableOptionBox(
                 isSelected = selectedThemeColor == bodyArgb,
-                onClick = {
-                    val eyeArgb = BuddyPreferences.resolveEyeMouthColor(bodyArgb, eyeAccentArgb)
-                    onThemeAndEyeColorSelected(bodyArgb, eyeArgb)
-                },
+                onClick = { onThemeColorSelected(bodyArgb) },
                 modifier = Modifier.size(48.dp),
                 contentPadding = PaddingValues(4.dp),
             ) {

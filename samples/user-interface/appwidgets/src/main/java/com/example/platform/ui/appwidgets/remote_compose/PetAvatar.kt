@@ -94,13 +94,9 @@ fun PetAvatar(
                 .offset(y = eyesOffsetY),
             colorFilter = eyeMouthColorFilter,
         )
-        val mouthRes = BuddyPreferences.getMouthDrawableRes(
-            state.mouth,
-            isGrownUp = state.isGrownUp,
-        )
-        if (mouthRes != null) {
+        if (state.isGrownUp) {
             Image(
-                painter = painterResource(id = mouthRes),
+                painter = painterResource(id = BuddyPreferences.getMouthDrawableRes(state.mouth)),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
