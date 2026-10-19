@@ -125,9 +125,7 @@ class BuddyConfigActivity : ComponentActivity() {
         setContent {
             StoreTheme {
                 var currentStep by rememberSaveable { mutableStateOf(ConfigStep.BUDDY) }
-                var state by rememberSaveable(stateSaver = WidgetBuddyState.Saver) {
-                    mutableStateOf(initialState)
-                }
+                var state by rememberSaveable { mutableStateOf(initialState) }
 
                 // NavigationSuiteScaffold shows a bottom bar on compact screens and a side rail on expanded screens.
                 NavigationSuiteScaffold(

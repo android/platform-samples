@@ -20,13 +20,14 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.compose.runtime.saveable.Saver
-import androidx.compose.runtime.saveable.listSaver
+import android.graphics.Color
 import androidx.core.content.edit
+import androidx.core.graphics.ColorUtils
 import com.example.platform.ui.appwidgets.R
+import java.io.Serializable
 
 /**
- * Snapshot of an Android Pet widget instance's configuration and coin state.
+ * Holds the configuration and coin count for one [AndroidPetWidget] instance.
  */
 data class WidgetBuddyState(
     val widgetId: Int,
@@ -39,43 +40,10 @@ data class WidgetBuddyState(
     val buddyColor: Int = BuddyPreferences.DEFAULT_BUDDY_COLOR,
     val eyeMouthColor: Int = BuddyPreferences.resolveEyeMouthColor(buddyColor),
     val isGrownUp: Boolean = false,
-) {
-    companion object {
-        val Saver: Saver<WidgetBuddyState, Any> = listSaver(
-            save = {
-                listOf(
-                    it.widgetId,
-                    it.coins,
-                    it.buddyName,
-                    it.nickname,
-                    it.eyes,
-                    it.mouth,
-                    it.environment,
-                    it.buddyColor,
-                    it.eyeMouthColor,
-                    it.isGrownUp,
-                )
-            },
-            restore = {
-                WidgetBuddyState(
-                    widgetId = it[0] as Int,
-                    coins = it[1] as Int,
-                    buddyName = it[2] as String,
-                    nickname = it[3] as String,
-                    eyes = it[4] as String,
-                    mouth = it[5] as String,
-                    environment = it[6] as String,
-                    buddyColor = it[7] as Int,
-                    eyeMouthColor = it[8] as Int,
-                    isGrownUp = it[9] as Boolean,
-                )
-            },
-        )
-    }
-}
+) : Serializable
 
 /**
- * Persists per-widget pet configuration and collected coins in [SharedPreferences].
+ * Saves and loads per-widget pet configuration and coin counts in [SharedPreferences].
  */
 object BuddyPreferences {
     const val PREFS_NAME = "buddy_prefs"
@@ -93,14 +61,12 @@ object BuddyPreferences {
     const val DEFAULT_EYES = "eyes_1"
     const val DEFAULT_MOUTH = "mouth_1"
     const val DEFAULT_ENVIRONMENT = "env_room"
-    const val COLOR_ORIGINAL = 0
+    const val DEFAULT_BUDDY_COLOR = 0
     const val COLOR_ANDROID_GREEN = 0xFF34A853.toInt()
-    const val DEFAULT_BUDDY_COLOR = COLOR_ORIGINAL
-    const val DEFAULT_EYE_MOUTH_COLOR = 0xFF000000.toInt()
+    const val DEFAULT_EYE_MOUTH_COLOR = Color.BLACK
 
     const val EYES_CENTER_Y_FRACTION = 0.50f
-    const val MOUTH_OFFSET_Y_FRACTION = 0.08f
-    const val MOUTH_CENTER_Y_FRACTION = EYES_CENTER_Y_FRACTION + MOUTH_OFFSET_Y_FRACTION
+    const val MOUTH_CENTER_Y_FRACTION = 0.58f
 
     val BUDDY_OPTIONS: List<String> = listOf("guy_bunny", "guy_bun", "guy_wiggle")
     val EYE_OPTIONS: List<String> = listOf("eyes_1", "eyes_2", "eyes_4", "eyes_5")
@@ -110,17 +76,20 @@ object BuddyPreferences {
     fun prefs(context: Context): SharedPreferences =
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
 
-    fun getCoinsForWidget(context: Context, widgetId: Int): Int =
-        prefs(context).getInt("$KEY_COINS_PREFIX$widgetId", 0)
-
+    /**
+     * Adds [amount] coins to the balance for [widgetId] and returns the new total.
+     */
     fun addCoinsForWidget(context: Context, widgetId: Int, amount: Int = 1): Int {
-        val updated = (getCoinsForWidget(context, widgetId) + amount).coerceAtLeast(0)
-        prefs(context).edit {
-            putInt("$KEY_COINS_PREFIX$widgetId", updated)
-        }
+        val p = prefs(context)
+        val key = "$KEY_COINS_PREFIX$widgetId"
+        val updated = (p.getInt(key, 0) + amount).coerceAtLeast(0)
+        p.edit { putInt(key, updated) }
         return updated
     }
 
+    /**
+     * Saves the pet configuration from [state] for its widget ID.
+     */
     fun saveBuddyConfig(context: Context, state: WidgetBuddyState) {
         val widgetId = state.widgetId
         val resolvedName = state.nickname.trim().ifEmpty { DEFAULT_BUDDY_NAME }
@@ -135,19 +104,13 @@ object BuddyPreferences {
         }
     }
 
+    /**
+     * Loads the saved [WidgetBuddyState] for [widgetId], or returns default values if not set.
+     */
     fun getWidgetBuddyState(context: Context, widgetId: Int): WidgetBuddyState {
         val p = prefs(context)
         val buddyColor = p.getInt("$KEY_BUDDY_COLOR_PREFIX$widgetId", DEFAULT_BUDDY_COLOR)
-        val eyeKey = "$KEY_EYE_MOUTH_COLOR_PREFIX$widgetId"
-        val eyeMouthColor = if (p.contains(eyeKey)) {
-            val saved = p.getInt(eyeKey, DEFAULT_EYE_MOUTH_COLOR)
-            val isNearWhite = ((saved ushr 16) and 0xFF) >= 225 &&
-                ((saved ushr 8) and 0xFF) >= 225 &&
-                (saved and 0xFF) >= 225
-            if (isNearWhite) resolveEyeMouthColor(buddyColor) else saved
-        } else {
-            resolveEyeMouthColor(buddyColor)
-        }
+        val savedEyeColor = p.getInt("$KEY_EYE_MOUTH_COLOR_PREFIX$widgetId", 0)
         return WidgetBuddyState(
             widgetId = widgetId,
             coins = p.getInt("$KEY_COINS_PREFIX$widgetId", 0),
@@ -160,10 +123,13 @@ object BuddyPreferences {
             environment = p.getString("$KEY_ENVIRONMENT_PREFIX$widgetId", DEFAULT_ENVIRONMENT)
                 ?: DEFAULT_ENVIRONMENT,
             buddyColor = buddyColor,
-            eyeMouthColor = eyeMouthColor,
+            eyeMouthColor = resolveEyeMouthColor(buddyColor, savedEyeColor),
         )
     }
 
+    /**
+     * Deletes all saved preferences for [widgetId] when the user removes the widget.
+     */
     fun removeWidgetState(context: Context, widgetId: Int) {
         prefs(context).edit {
             remove("$KEY_COINS_PREFIX$widgetId")
@@ -177,6 +143,9 @@ object BuddyPreferences {
         }
     }
 
+    /**
+     * Returns the [WidgetBuddyState] list for all active [AndroidPetWidget] instances on the device.
+     */
     fun getActiveBuddyStates(context: Context): List<WidgetBuddyState> {
         val manager = AppWidgetManager.getInstance(context)
         val component = ComponentName(context, AndroidPetWidget::class.java)
@@ -187,28 +156,23 @@ object BuddyPreferences {
     }
 
     /**
-     * Resolves the tint color for eyes and mouth based on the selected buddy vibe color.
-     * - Original ([COLOR_ORIGINAL]) and Android Green ([COLOR_ANDROID_GREEN]) use pure black (`0xFF000000`).
-     * - System theme colors use [explicitAccentColor] if provided, non-black, and not near-white,
-     *   or a contrasting dark shade derived from [buddyColor].
+     * Selects a high-contrast color for the eyes and mouth based on [buddyColor].
+     * Uses pure black for the default and Android Green themes. For Material theme colors,
+     * uses [explicitAccentColor] if it is not near-white, or blends [buddyColor] with black.
      */
     fun resolveEyeMouthColor(buddyColor: Int, explicitAccentColor: Int = 0): Int {
-        if (buddyColor == COLOR_ORIGINAL || buddyColor == COLOR_ANDROID_GREEN) {
+        if (buddyColor == DEFAULT_BUDDY_COLOR || buddyColor == COLOR_ANDROID_GREEN) {
             return DEFAULT_EYE_MOUTH_COLOR
         }
-        if (explicitAccentColor != 0 && explicitAccentColor != DEFAULT_EYE_MOUTH_COLOR) {
-            val isNearWhite = ((explicitAccentColor ushr 16) and 0xFF) >= 225 &&
-                ((explicitAccentColor ushr 8) and 0xFF) >= 225 &&
-                (explicitAccentColor and 0xFF) >= 225
-            if (!isNearWhite) {
-                return explicitAccentColor
-            }
+        if (
+            explicitAccentColor != 0 &&
+            explicitAccentColor != DEFAULT_EYE_MOUTH_COLOR &&
+            ColorUtils.calculateLuminance(explicitAccentColor) < 0.75
+        ) {
+            return explicitAccentColor
         }
-        val r = ((buddyColor shr 16) and 0xFF) * 35 / 100
-        val g = ((buddyColor shr 8) and 0xFF) * 35 / 100
-        val b = (buddyColor and 0xFF) * 35 / 100
-        val derived = (0xFF shl 24) or (r shl 16) or (g shl 8) or b
-        return if (derived == DEFAULT_EYE_MOUTH_COLOR) 0xFF1B1B1F.toInt() else derived
+        val darkened = ColorUtils.blendARGB(buddyColor, Color.BLACK, 0.65f)
+        return if (darkened == DEFAULT_EYE_MOUTH_COLOR) 0xFF1B1B1F.toInt() else darkened
     }
 
     fun getBodyDrawableResForBuddy(buddyName: String): Int =
