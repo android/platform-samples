@@ -20,7 +20,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
-import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -61,12 +60,11 @@ object PetBitmapRenderer {
 
         canvas.drawBitmap(texturedBody, 0f, 0f, paint)
 
-        val rawEyes = decodeBitmap(context, BuddyPreferences.getEyesDrawableRes(state.eyes))
-        val tintedEyes = tintFeatureBitmap(rawEyes, state.eyeMouthColor)
+        val eyesBitmap = decodeBitmap(context, BuddyPreferences.getEyesDrawableRes(state.eyes))
         drawFeatureOnBodyCanvas(
             canvas = canvas,
             paint = paint,
-            feature = tintedEyes,
+            feature = eyesBitmap,
             bodyWidth = bodyWidth,
             bodyHeight = bodyHeight,
             widthFraction = 0.65f,
@@ -74,12 +72,11 @@ object PetBitmapRenderer {
         )
 
         if (state.isGrownUp) {
-            val rawMouth = decodeBitmap(context, BuddyPreferences.getMouthDrawableRes(state.mouth))
-            val tintedMouth = tintFeatureBitmap(rawMouth, state.eyeMouthColor)
+            val mouthBitmap = decodeBitmap(context, BuddyPreferences.getMouthDrawableRes(state.mouth))
             drawFeatureOnBodyCanvas(
                 canvas = canvas,
                 paint = paint,
-                feature = tintedMouth,
+                feature = mouthBitmap,
                 bodyWidth = bodyWidth,
                 bodyHeight = bodyHeight,
                 widthFraction = 1.0f,
@@ -106,18 +103,6 @@ object PetBitmapRenderer {
         val output = createBitmap(source.width, source.height, source.config ?: Bitmap.Config.ARGB_8888)
         val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             colorFilter = PorterDuffColorFilter(colorArgb, PorterDuff.Mode.SRC_IN)
-        }
-        Canvas(output).drawBitmap(source, 0f, 0f, paint)
-        return output
-    }
-
-    /**
-     * Tints black pixels of an eye or mouth bitmap to [colorArgb] and keeps white pixels white.
-     */
-    fun tintFeatureBitmap(source: Bitmap, colorArgb: Int): Bitmap {
-        val output = createBitmap(source.width, source.height, Bitmap.Config.ARGB_8888)
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            colorFilter = ColorMatrixColorFilter(createEyeMouthMatrixValues(colorArgb))
         }
         Canvas(output).drawBitmap(source, 0f, 0f, paint)
         return output

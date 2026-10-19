@@ -203,7 +203,7 @@ private fun BuddyConfigScreenContent(
     modifier: Modifier = Modifier,
 ) {
     // Tint black-only eye and mouth options with onSurface so they are visible in light and dark themes.
-    val featureFilter = createEyeMouthColorFilter(MaterialTheme.colorScheme.onSurface.toArgb())
+    val featureFilter = ColorFilter.tint(MaterialTheme.colorScheme.onSurface)
 
     Column(
         modifier = modifier

@@ -27,7 +27,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.graphics.ColorMatrix
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
@@ -50,7 +49,6 @@ fun PetAvatar(
     } else {
         null
     }
-    val eyeMouthColorFilter = createEyeMouthColorFilter(state.eyeMouthColor)
 
     Box(
         modifier = modifier.size(size),
@@ -70,7 +68,6 @@ fun PetAvatar(
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
             modifier = Modifier.fillMaxWidth(0.65f),
-            colorFilter = eyeMouthColorFilter,
         )
         // Draw the mouth below the eyes only when the pet is in its evolved form.
         if (state.isGrownUp) {
@@ -81,29 +78,7 @@ fun PetAvatar(
                 modifier = Modifier
                     .fillMaxWidth()
                     .offset(y = size * 0.045f),
-                colorFilter = eyeMouthColorFilter,
             )
         }
     }
 }
-
-/**
- * Builds a 4x5 color matrix that changes black (`#000000`) to [eyeMouthColorArgb]
- * and keeps white (`#FFFFFF`) eye areas pure white.
- */
-internal fun createEyeMouthMatrixValues(eyeMouthColorArgb: Int): FloatArray {
-    val c = Color(eyeMouthColorArgb)
-    return floatArrayOf(
-        1f - c.red, 0f, 0f, 0f, c.red * 255f,
-        0f, 1f - c.green, 0f, 0f, c.green * 255f,
-        0f, 0f, 1f - c.blue, 0f, c.blue * 255f,
-        0f, 0f, 0f, 1f, 0f,
-    )
-}
-
-/**
- * Returns a [ColorFilter] that tints black eye and mouth strokes to [eyeMouthColorArgb]
- * while keeping white eye sclera areas white.
- */
-internal fun createEyeMouthColorFilter(eyeMouthColorArgb: Int): ColorFilter =
-    ColorFilter.colorMatrix(ColorMatrix(createEyeMouthMatrixValues(eyeMouthColorArgb)))

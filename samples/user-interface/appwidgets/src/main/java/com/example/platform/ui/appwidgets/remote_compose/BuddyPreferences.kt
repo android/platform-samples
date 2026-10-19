@@ -20,9 +20,7 @@ import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Color
 import androidx.core.content.edit
-import androidx.core.graphics.ColorUtils
 import com.example.platform.ui.appwidgets.R
 import java.io.Serializable
 
@@ -39,10 +37,7 @@ data class WidgetBuddyState(
     val environment: String = BuddyPreferences.DEFAULT_ENVIRONMENT,
     val buddyColor: Int = BuddyPreferences.DEFAULT_BUDDY_COLOR,
     val isGrownUp: Boolean = false,
-) : Serializable {
-    val eyeMouthColor: Int
-        get() = BuddyPreferences.resolveEyeMouthColor(buddyColor)
-}
+) : Serializable
 
 /**
  * Saves and loads per-widget pet configuration and coin counts in [SharedPreferences].
@@ -58,7 +53,6 @@ object BuddyPreferences {
     const val DEFAULT_ENVIRONMENT = "env_room"
     const val DEFAULT_BUDDY_COLOR = 0
     const val COLOR_ANDROID_GREEN = 0xFF34A853.toInt()
-    const val DEFAULT_EYE_MOUTH_COLOR = Color.BLACK
 
     const val EYES_CENTER_Y_FRACTION = 0.50f
     const val MOUTH_CENTER_Y_FRACTION = 0.58f
@@ -135,18 +129,6 @@ object BuddyPreferences {
             .sorted()
             .map { id -> getWidgetBuddyState(context, id) }
     }
-
-    /**
-     * Selects a high-contrast color for the eyes and mouth based on [buddyColor].
-     * Uses pure black for the default and Android Green themes, and blends [buddyColor]
-     * with black for Material theme colors.
-     */
-    fun resolveEyeMouthColor(buddyColor: Int): Int =
-        if (buddyColor == DEFAULT_BUDDY_COLOR || buddyColor == COLOR_ANDROID_GREEN) {
-            DEFAULT_EYE_MOUTH_COLOR
-        } else {
-            ColorUtils.blendARGB(buddyColor, Color.BLACK, 0.65f)
-        }
 
     fun getBodyDrawableResForBuddy(buddyName: String): Int =
         when (buddyName) {
