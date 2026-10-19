@@ -81,6 +81,9 @@ import com.example.platform.ui.appwidgets.R
 
 private const val MAX_NICKNAME_LENGTH = 20
 
+/**
+ * Defines the four configuration steps in the navigation bar or rail.
+ */
 private enum class ConfigStep(
     @DrawableRes val iconRes: Int,
     @StringRes val labelRes: Int,
@@ -93,8 +96,8 @@ private enum class ConfigStep(
 }
 
 /**
- * Configuration activity for [AndroidPetWidget], allowing the user to customize the pet's
- * body, eyes, mouth, nickname, room environment, and theme colors before placing the widget.
+ * Configures an [AndroidPetWidget] instance before the system places it on the home screen.
+ * The user selects the pet body, eyes, mouth, name, room background, and theme colors.
  */
 class BuddyConfigActivity : ComponentActivity() {
 
@@ -102,8 +105,11 @@ class BuddyConfigActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // Set the default result to RESULT_CANCELED. If the user exits before tapping Place,
+        // the host cancels the widget placement.
         setResult(RESULT_CANCELED)
 
+        // Read the target widget ID from the intent. Close the activity if the ID is not valid.
         appWidgetId = intent?.getIntExtra(
             AppWidgetManager.EXTRA_APPWIDGET_ID,
             AppWidgetManager.INVALID_APPWIDGET_ID,
@@ -123,6 +129,7 @@ class BuddyConfigActivity : ComponentActivity() {
                     mutableStateOf(initialState)
                 }
 
+                // NavigationSuiteScaffold shows a bottom bar on compact screens and a side rail on expanded screens.
                 NavigationSuiteScaffold(
                     navigationSuiteItems = {
                         ConfigStep.entries.forEach { step ->
@@ -153,6 +160,9 @@ class BuddyConfigActivity : ComponentActivity() {
         }
     }
 
+    /**
+     * Saves the configuration, updates the widget on the home screen, and closes the activity.
+     */
     private fun commitSelection(state: WidgetBuddyState) {
         BuddyPreferences.saveBuddyConfig(this, state)
         AndroidPetWidget().onUpdate(this, AppWidgetManager.getInstance(this), intArrayOf(appWidgetId))
@@ -161,6 +171,9 @@ class BuddyConfigActivity : ComponentActivity() {
     }
 }
 
+/**
+ * Adds one navigation item to the [NavigationSuiteScope].
+ */
 private fun NavigationSuiteScope.configNavItem(
     selected: Boolean,
     onClick: () -> Unit,
@@ -182,6 +195,9 @@ private fun NavigationSuiteScope.configNavItem(
     )
 }
 
+/**
+ * Shows the live pet preview card at the top and the controls for [currentStep] at the bottom.
+ */
 @Composable
 private fun BuddyConfigScreenContent(
     currentStep: ConfigStep,
@@ -189,6 +205,7 @@ private fun BuddyConfigScreenContent(
     onStateChange: (WidgetBuddyState) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    // Tint black-only eye and mouth options with onSurface so they are visible in light and dark themes.
     val featureFilter = createEyeMouthColorFilter(MaterialTheme.colorScheme.onSurface.toArgb())
 
     Column(
@@ -208,6 +225,7 @@ private fun BuddyConfigScreenContent(
         )
 
         if (currentStep == ConfigStep.BUDDY) {
+            // The Buddy step shows three cards: body, eyes, and mouth.
             ConfigSectionCard(titleRes = R.string.select_buddy_title) {
                 DrawableOptionRow(
                     options = BuddyPreferences.BUDDY_OPTIONS,
@@ -256,6 +274,7 @@ private fun BuddyConfigScreenContent(
                 )
             }
         } else {
+            // The Name, Room, and Theme steps each show one card.
             ConfigSectionCard(
                 titleRes = currentStep.titleRes,
                 titleStyle = MaterialTheme.typography.headlineLarge,
@@ -319,6 +338,9 @@ private fun BuddyConfigScreenContent(
     }
 }
 
+/**
+ * Displays a section title, an optional subtitle, and a rounded card for the section controls.
+ */
 @Composable
 private fun ConfigSectionCard(
     @StringRes titleRes: Int,
@@ -363,6 +385,10 @@ private fun ConfigSectionCard(
     )
 }
 
+/**
+ * Displays the live preview of the pet. Shows a decorative shape on the Buddy and Name steps,
+ * and shows the selected room background on the Room and Theme steps.
+ */
 @Composable
 private fun BuddyConfigHeroPreviewCard(
     currentStep: ConfigStep,
@@ -403,6 +429,9 @@ private fun BuddyConfigHeroPreviewCard(
     }
 }
 
+/**
+ * Wraps one selectable option and draws a primary border and tint when [isSelected] is true.
+ */
 @Composable
 private fun SelectableOptionBox(
     isSelected: Boolean,
@@ -431,6 +460,9 @@ private fun SelectableOptionBox(
     )
 }
 
+/**
+ * Displays a horizontal row of drawable options (body, eyes, mouth, or room background).
+ */
 @Composable
 private fun DrawableOptionRow(
     options: List<String>,
@@ -472,17 +504,22 @@ private fun DrawableOptionRow(
     }
 }
 
+/**
+ * Displays the color swatches for the pet body and calculates a contrasting color for the eyes and mouth.
+ */
 @Composable
 private fun ThemeSelectionRow(
     selectedThemeColor: Int,
     onThemeAndEyeColorSelected: (Int, Int) -> Unit,
 ) {
     val scheme = MaterialTheme.colorScheme
+    // Select the darker of two theme colors to keep high contrast on the pet body.
     fun darker(a: Color, b: Color): Int = (if (a.luminance() <= b.luminance()) a else b).toArgb()
 
     val originalBrush = Brush.sweepGradient(
         listOf(Color(0xFFFFA3E5), Color(0xFF80D8FF), Color(0xFFFFD180), Color(0xFFFFA3E5)),
     )
+    // Each pair maps a body color to its eye and mouth accent color.
     val swatches = listOf(
         BuddyPreferences.DEFAULT_BUDDY_COLOR to BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR,
         BuddyPreferences.COLOR_ANDROID_GREEN to BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR,
