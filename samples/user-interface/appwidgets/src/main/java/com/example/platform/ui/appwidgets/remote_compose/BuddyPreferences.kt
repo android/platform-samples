@@ -64,7 +64,7 @@ object BuddyPreferences {
     const val MOUTH_CENTER_Y_FRACTION = 0.58f
 
     val BUDDY_OPTIONS: List<String> = listOf("guy_bunny", "guy_bun", "guy_wiggle")
-    val EYE_OPTIONS: List<String> = listOf("eyes_1", "eyes_2", "eyes_4", "eyes_5")
+    val EYE_OPTIONS: List<String> = listOf("eyes_1", "eyes_2", "eyes_3", "eyes_4")
     val MOUTH_OPTIONS: List<String> = listOf("mouth_1", "mouth_2")
     val ENVIRONMENT_OPTIONS: List<String> = listOf("env_room", "env_meadow")
 
@@ -158,8 +158,8 @@ object BuddyPreferences {
     fun getEyesDrawableRes(eyesStyle: String = DEFAULT_EYES): Int =
         when (eyesStyle) {
             "eyes_2" -> R.drawable.eyes_2
+            "eyes_3" -> R.drawable.eyes_3
             "eyes_4" -> R.drawable.eyes_4
-            "eyes_5" -> R.drawable.eyes_5
             else -> R.drawable.eyes_1
         }
 

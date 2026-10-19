@@ -17,15 +17,14 @@
 package com.example.platform.ui.appwidgets.remote_compose
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.ColorMatrix
@@ -35,8 +34,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
 /**
- * Renders the layered Pet Buddy character (tinted body, eyes, and optional evolved mouth)
- * shared across [StoreActivity] and [BuddyConfigActivity].
+ * Draws the layered Pet Buddy character (body, eyes, and optional evolved mouth)
+ * in [StoreActivity] and [BuddyConfigActivity].
  */
 @Composable
 fun PetAvatar(
@@ -45,41 +44,22 @@ fun PetAvatar(
     size: Dp = 88.dp,
     contentDescription: String? = state.nickname,
 ) {
-    val bodyColorFilter = if (
-        state.buddyColor != 0 && state.buddyColor != BuddyPreferences.DEFAULT_BUDDY_COLOR
-    ) {
-        ColorFilter.tint(Color(state.buddyColor), BlendMode.SrcIn)
+    // Tint the pet body only when the user selects a custom theme color.
+    val bodyColorFilter = if (state.buddyColor != BuddyPreferences.DEFAULT_BUDDY_COLOR) {
+        ColorFilter.tint(Color(state.buddyColor))
     } else {
         null
     }
     val eyeMouthColorFilter = createEyeMouthColorFilter(state.eyeMouthColor)
-    val bodyPainter = painterResource(
-        id = BuddyPreferences.getBodyDrawableResForBuddy(state.buddyName),
-    )
 
-    BoxWithConstraints(
+    Box(
         modifier = modifier.size(size),
         contentAlignment = Alignment.Center,
     ) {
-        val bodyIntrinsic = bodyPainter.intrinsicSize
-        val bodyAspect = if (bodyIntrinsic.width > 0f && bodyIntrinsic.height > 0f) {
-            bodyIntrinsic.width / bodyIntrinsic.height
-        } else {
-            1f
-        }
-        val boxWidth = maxWidth
-        val boxHeight = maxHeight
-        val boxAspect = if (boxHeight > 0.dp) boxWidth / boxHeight else 1f
-        val renderedBodyWidth = if (bodyAspect >= boxAspect) boxWidth else boxHeight * bodyAspect
-        val renderedBodyHeight = if (bodyAspect >= boxAspect) boxWidth / bodyAspect else boxHeight
-
-        val eyesWidth = renderedBodyWidth * 0.65f
-        val eyesOffsetY = renderedBodyHeight * (BuddyPreferences.EYES_CENTER_Y_FRACTION - 0.50f)
-        val mouthWidth = renderedBodyWidth * 1.0f
-        val mouthOffsetY = renderedBodyHeight * (BuddyPreferences.MOUTH_CENTER_Y_FRACTION - 0.50f)
-
         Image(
-            painter = bodyPainter,
+            painter = painterResource(
+                id = BuddyPreferences.getBodyDrawableResForBuddy(state.buddyName),
+            ),
             contentDescription = contentDescription,
             contentScale = ContentScale.Fit,
             modifier = Modifier.fillMaxSize(),
@@ -89,19 +69,18 @@ fun PetAvatar(
             painter = painterResource(id = BuddyPreferences.getEyesDrawableRes(state.eyes)),
             contentDescription = null,
             contentScale = ContentScale.FillWidth,
-            modifier = Modifier
-                .width(eyesWidth)
-                .offset(y = eyesOffsetY),
+            modifier = Modifier.fillMaxWidth(0.65f),
             colorFilter = eyeMouthColorFilter,
         )
+        // Draw the mouth below the eyes only when the pet is in its evolved form.
         if (state.isGrownUp) {
             Image(
                 painter = painterResource(id = BuddyPreferences.getMouthDrawableRes(state.mouth)),
                 contentDescription = null,
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
-                    .width(mouthWidth)
-                    .offset(y = mouthOffsetY),
+                    .fillMaxWidth()
+                    .offset(y = size * 0.045f),
                 colorFilter = eyeMouthColorFilter,
             )
         }
@@ -109,29 +88,22 @@ fun PetAvatar(
 }
 
 /**
- * Returns the 4x5 [FloatArray] color matrix that maps black (`#000000`) to [eyeMouthColorArgb]
- * while keeping white (`#FFFFFF`) eye sclera areas as pure white.
+ * Builds a 4x5 color matrix that changes black (`#000000`) to [eyeMouthColorArgb]
+ * and keeps white (`#FFFFFF`) eye areas pure white.
  */
 internal fun createEyeMouthMatrixValues(eyeMouthColorArgb: Int): FloatArray {
-    val targetColor = if (eyeMouthColorArgb == 0) {
-        BuddyPreferences.DEFAULT_EYE_MOUTH_COLOR
-    } else {
-        eyeMouthColorArgb
-    }
-    val r = ((targetColor ushr 16) and 0xFF).toFloat()
-    val g = ((targetColor ushr 8) and 0xFF).toFloat()
-    val b = (targetColor and 0xFF).toFloat()
+    val c = Color(eyeMouthColorArgb)
     return floatArrayOf(
-        1f - (r / 255f), 0f, 0f, 0f, r,
-        0f, 1f - (g / 255f), 0f, 0f, g,
-        0f, 0f, 1f - (b / 255f), 0f, b,
+        1f - c.red, 0f, 0f, 0f, c.red * 255f,
+        0f, 1f - c.green, 0f, 0f, c.green * 255f,
+        0f, 0f, 1f - c.blue, 0f, c.blue * 255f,
         0f, 0f, 0f, 1f, 0f,
     )
 }
 
 /**
- * Creates a white-preserving [ColorFilter] that tints black (`#000000`) pupils, outlines, and mouths
- * to [eyeMouthColorArgb] while preserving white (`#FFFFFF`) eye sclera areas as pure white.
+ * Returns a [ColorFilter] that tints black eye and mouth strokes to [eyeMouthColorArgb]
+ * while keeping white eye sclera areas white.
  */
 internal fun createEyeMouthColorFilter(eyeMouthColorArgb: Int): ColorFilter =
     ColorFilter.colorMatrix(ColorMatrix(createEyeMouthMatrixValues(eyeMouthColorArgb)))

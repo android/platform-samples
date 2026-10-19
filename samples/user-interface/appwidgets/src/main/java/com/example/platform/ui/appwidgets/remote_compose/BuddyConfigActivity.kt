@@ -243,7 +243,7 @@ private fun BuddyConfigScreenContent(
                     drawableResFor = BuddyPreferences::getEyesDrawableRes,
                     optionModifier = Modifier.size(52.dp),
                     colorFilterFor = { eyeStyle ->
-                        if (eyeStyle == "eyes_1" || eyeStyle == "eyes_5") featureFilter else null
+                        if (eyeStyle == "eyes_1" || eyeStyle == "eyes_3") featureFilter else null
                     },
                 )
             }

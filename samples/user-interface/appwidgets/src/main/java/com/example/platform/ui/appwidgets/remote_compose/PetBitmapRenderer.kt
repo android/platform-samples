@@ -18,28 +18,35 @@ package com.example.platform.ui.appwidgets.remote_compose
 
 import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.Canvas
+import android.graphics.Color
 import android.graphics.ColorMatrixColorFilter
 import android.graphics.Paint
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.RectF
-import android.graphics.drawable.BitmapDrawable
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.createBitmap
+import androidx.core.graphics.drawable.toBitmap
 
 /**
- * Decodes and composites the configured environment and pet bitmaps (tinted body with mesh noise
- * texture, tinted eyes, and tinted mouth) for [AndroidPetWidget].
+ * Decodes and composites the room background and pet bitmaps (body with mesh noise
+ * texture, eyes, and evolved mouth) for [AndroidPetWidget].
  */
 object PetBitmapRenderer {
 
+    /**
+     * Decodes the room background bitmap for [environment].
+     */
     fun renderEnvironmentBitmap(context: Context, environment: String): Bitmap {
         val envRes = BuddyPreferences.getDrawableResForEnvironment(environment)
         return decodeBitmap(context, envRes)
     }
 
+    /**
+     * Composites the pet body, eyes, and optional evolved mouth into one bitmap.
+     */
     fun renderPetBitmap(context: Context, state: WidgetBuddyState): Bitmap {
         val bodyRes = BuddyPreferences.getBodyDrawableResForBuddy(state.buddyName)
         val rawBody = decodeBitmap(context, bodyRes)
@@ -83,27 +90,17 @@ object PetBitmapRenderer {
         return composite
     }
 
-    fun decodeBitmap(context: Context, resId: Int): Bitmap {
-        val bitmap = BitmapFactory.decodeResource(context.resources, resId)
-        if (bitmap != null) {
-            return bitmap
-        }
-        val drawable = ContextCompat.getDrawable(context, resId)
-            ?: throw IllegalArgumentException("Resource not found: $resId")
-        if (drawable is BitmapDrawable && drawable.bitmap != null) {
-            return drawable.bitmap
-        }
-        val width = if (drawable.intrinsicWidth > 0) drawable.intrinsicWidth else 96
-        val height = if (drawable.intrinsicHeight > 0) drawable.intrinsicHeight else 96
-        val vectorBitmap = createBitmap(width, height)
-        val canvas = Canvas(vectorBitmap)
-        drawable.setBounds(0, 0, canvas.width, canvas.height)
-        drawable.draw(canvas)
-        return vectorBitmap
-    }
+    /**
+     * Decodes a vector or raster drawable resource into a [Bitmap].
+     */
+    fun decodeBitmap(context: Context, resId: Int): Bitmap =
+        requireNotNull(ContextCompat.getDrawable(context, resId)).toBitmap()
 
+    /**
+     * Tints all non-transparent pixels of [source] to [colorArgb].
+     */
     fun tintBitmap(source: Bitmap, colorArgb: Int): Bitmap {
-        if (colorArgb == 0 || colorArgb == BuddyPreferences.DEFAULT_BUDDY_COLOR) {
+        if (colorArgb == BuddyPreferences.DEFAULT_BUDDY_COLOR) {
             return source
         }
         val output = createBitmap(source.width, source.height, source.config ?: Bitmap.Config.ARGB_8888)
@@ -115,8 +112,7 @@ object PetBitmapRenderer {
     }
 
     /**
-     * Tints dark/black pixels of an eye or mouth bitmap to [colorArgb] while preserving white
-     * sclera/cutout pixels as pure white (`#FFFFFF`).
+     * Tints black pixels of an eye or mouth bitmap to [colorArgb] and keeps white pixels white.
      */
     fun tintFeatureBitmap(source: Bitmap, colorArgb: Int): Bitmap {
         val output = createBitmap(source.width, source.height, Bitmap.Config.ARGB_8888)
@@ -127,6 +123,9 @@ object PetBitmapRenderer {
         return output
     }
 
+    /**
+     * Draws [feature] horizontally centered on [canvas] at [centerYFraction] of [bodyHeight].
+     */
     private fun drawFeatureOnBodyCanvas(
         canvas: Canvas,
         paint: Paint,
@@ -145,6 +144,9 @@ object PetBitmapRenderer {
         canvas.drawBitmap(feature, null, dstRect, paint)
     }
 
+    /**
+     * Applies a deterministic stipple grain texture over the pet body bitmap.
+     */
     fun applyMeshNoiseTexture(
         source: Bitmap,
         buddyName: String = BuddyPreferences.DEFAULT_BUDDY,
@@ -156,49 +158,32 @@ object PetBitmapRenderer {
         val pixels = IntArray(width * height)
         output.getPixels(pixels, 0, width, 0, 0, width, height)
 
-        val (stippleR, stippleG, stippleB) = when {
-            buddyColor != 0 && buddyColor != BuddyPreferences.DEFAULT_BUDDY_COLOR -> {
-                val r = ((buddyColor ushr 16) and 0xFF) * 0.6f
-                val g = ((buddyColor ushr 8) and 0xFF) * 0.6f
-                val b = (buddyColor and 0xFF) * 0.6f
-                Triple(r.toInt(), g.toInt(), b.toInt())
-            }
-            buddyName == "guy_bun" -> Triple(0x1F, 0x78, 0x88)
-            buddyName == "guy_wiggle" -> Triple(0x5A, 0x82, 0x14)
-            else -> Triple(146, 92, 183)
+        val stippleColor = when {
+            buddyColor != BuddyPreferences.DEFAULT_BUDDY_COLOR ->
+                ColorUtils.blendARGB(buddyColor, Color.BLACK, 0.4f)
+            buddyName == "guy_bun" -> 0xFF1F7888.toInt()
+            buddyName == "guy_wiggle" -> 0xFF5A8214.toInt()
+            else -> 0xFF925CB7.toInt()
         }
 
-        val seed = 4194
+        fun hashNoise(x: Int, y: Int, offset: Int = 0): Float {
+            var h = 4194 + x * 374761393 + y * 668265263 + offset
+            h = (h xor (h ushr 13)) * 1274126177
+            return ((h xor (h ushr 16)) and 0x7FFFFFFF) / 2147483647f
+        }
+
         for (y in 0 until height) {
             val rowOffset = y * width
             for (x in 0 until width) {
                 val pixel = pixels[rowOffset + x]
-                val srcA = (pixel ushr 24) and 0xFF
+                val srcA = pixel ushr 24
                 if (srcA < 10) continue
 
-                var h0 = seed + x * 374761393 + y * 668265263
-                h0 = (h0 xor (h0 ushr 13)) * 1274126177
-                val n0 = ((h0 xor (h0 ushr 16)) and 0x7FFFFFFF) / 2147483647f
-
-                var h1 = seed + (x shr 1) * 374761393 + (y shr 1) * 668265263 + 101
-                h1 = (h1 xor (h1 ushr 13)) * 1274126177
-                val n1 = ((h1 xor (h1 ushr 16)) and 0x7FFFFFFF) / 2147483647f
-
-                val noiseVal = n0 * 0.7f + n1 * 0.3f
-
+                val noiseVal = hashNoise(x, y) * 0.7f + hashNoise(x shr 1, y shr 1, 101) * 0.3f
                 if (noiseVal in 0.12f..0.42f) {
                     val grainAlpha = (0.28f + (noiseVal - 0.12f) * 0.35f) * (srcA / 255f)
-                    val invAlpha = 1f - grainAlpha
-
-                    val srcR = (pixel ushr 16) and 0xFF
-                    val srcG = (pixel ushr 8) and 0xFF
-                    val srcB = pixel and 0xFF
-
-                    val outR = (srcR * invAlpha + stippleR * grainAlpha).toInt().coerceIn(0, 255)
-                    val outG = (srcG * invAlpha + stippleG * grainAlpha).toInt().coerceIn(0, 255)
-                    val outB = (srcB * invAlpha + stippleB * grainAlpha).toInt().coerceIn(0, 255)
-
-                    pixels[rowOffset + x] = (srcA shl 24) or (outR shl 16) or (outG shl 8) or outB
+                    val blended = ColorUtils.blendARGB(pixel, stippleColor, grainAlpha)
+                    pixels[rowOffset + x] = (srcA shl 24) or (blended and 0x00FFFFFF)
                 }
             }
         }
