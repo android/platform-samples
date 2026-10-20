@@ -14,9 +14,10 @@ import kotlin.math.sqrt
 
 object ImageUtils {
 
-  // Conservative 15 MiB ceiling so bitmaps decoded while a foldable is unfolded (26.81 MB cap)
-  // still fit within the cover screen's ~15.71 MB cap when the device is folded closed.
-  private const val CONSERVATIVE_MAX_BYTES = 15_728_640
+  // Conservative 15 MB ceiling below the cover-screen cap of common foldables (e.g. 15.71 MB
+  // on 1080x2424). The system latches the real cap at boot, so a device booted folded keeps
+  // the smaller cap after unfolding.
+  private const val CONSERVATIVE_MAX_BYTES = 15_000_000
 
   /**
    * Loads the image resource as bitmap by scaling for the requested size and enforcing
@@ -96,9 +97,9 @@ object ImageUtils {
   }
 
   /**
-   * Returns maximum bytes allowed per the appwidget limits for bitmaps in the remote views.
-   * Uses [WindowManager.getCurrentWindowMetrics] on API 30+ (matching AppWidgetServiceImpl)
-   * and caps at [CONSERVATIVE_MAX_BYTES] (15 MiB) for foldable cover-screen safety.
+   * Estimates the maximum bytes allowed per the appwidget limits for bitmaps in the remote views.
+   * The system computes 6x the default display's real size once at boot and does not expose it
+   * via a public API (b/327416107), so this clamps to [CONSERVATIVE_MAX_BYTES].
    */
   fun Context.getMaxWidgetMemoryAllowedSizeInBytes(): Int {
     val windowManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -112,9 +113,8 @@ object ImageUtils {
     } else {
       resources.displayMetrics.run { Size(widthPixels, heightPixels) }
     }
-    // Cap memory usage at 1.5 times the size of the display
-    // 1.5 * 4 bytes/pixel * w * h ==> 6 * w * h
-    // See https://cs.android.com/android/platform/superproject/+/master:frameworks/base/services/appwidget/java/com/android/server/appwidget/AppWidgetServiceImpl.java;l=274-281;drc=389cb6f54a5a5bb8dea540f57a3a8ac3c3c1c758
+    // System cap is 1.5 times the size of the display at 4 bytes/pixel (6 * width * height),
+    // clamped here to CONSERVATIVE_MAX_BYTES for foldable cover-screen safety.
     return min(CONSERVATIVE_MAX_BYTES, 6 * size.width * size.height)
   }
 

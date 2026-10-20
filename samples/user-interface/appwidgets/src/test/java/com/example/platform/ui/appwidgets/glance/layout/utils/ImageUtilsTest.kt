@@ -44,10 +44,10 @@ class ImageUtilsTest {
 
     assertTrue("Memory cap must be positive", reportedCap > 0)
     assertTrue(
-      "Memory cap ($reportedCap B) must never exceed 15 MiB (15,728,640 B) for foldable cover-screen safety",
-      reportedCap <= 15_728_640,
+      "Memory cap ($reportedCap B) must never exceed 15 MB (15,000,000 B) for foldable cover-screen safety",
+      reportedCap <= 15_000_000,
     )
-    assertEquals(min(15_728_640, expectedRawBytes), reportedCap)
+    assertEquals(min(15_000_000, expectedRawBytes), reportedCap)
   }
 
   @Test
