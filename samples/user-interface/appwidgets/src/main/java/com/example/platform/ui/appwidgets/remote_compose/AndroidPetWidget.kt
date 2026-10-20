@@ -23,17 +23,24 @@ import androidx.compose.remote.creation.compose.layout.RemoteAlignment
 import androidx.compose.remote.creation.compose.layout.RemoteBox
 import androidx.compose.remote.creation.compose.layout.RemoteComposable
 import androidx.compose.remote.creation.compose.layout.RemoteImage
+import androidx.compose.remote.creation.compose.layout.RemoteText
 import androidx.compose.remote.creation.compose.modifier.RemoteModifier
+import androidx.compose.remote.creation.compose.modifier.background
 import androidx.compose.remote.creation.compose.modifier.fillMaxSize
 import androidx.compose.remote.creation.compose.modifier.onTouchDown
+import androidx.compose.remote.creation.compose.modifier.padding
 import androidx.compose.remote.creation.compose.state.rb
+import androidx.compose.remote.creation.compose.state.rc
+import androidx.compose.remote.creation.compose.state.rdp
 import androidx.compose.remote.creation.compose.state.rememberMutableRemoteInt
 import androidx.compose.remote.creation.compose.state.ri
 import androidx.compose.remote.creation.compose.state.rs
+import androidx.compose.remote.creation.compose.state.rsp
 import androidx.compose.remote.creation.compose.state.selectIfGe
 import androidx.compose.remote.creation.compose.widgets.RemoteComposeWidget
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
 
@@ -98,6 +105,20 @@ class AndroidPetWidget : RemoteComposeWidget() {
                 widgetId = widgetId,
                 isClaimVisible = isClaimVisible,
             )
+
+            RemoteBox(
+                contentAlignment = RemoteAlignment.BottomStart,
+                modifier = RemoteModifier.fillMaxSize().padding(12.rdp),
+            ) {
+                RemoteText(
+                    text = "Work In Progress".rs,
+                    color = Color.Black.rc,
+                    fontSize = 11.rsp,
+                    modifier = RemoteModifier
+                        .background(Color.White.rc)
+                        .padding(horizontal = 8.rdp, vertical = 4.rdp),
+                )
+            }
         }
     }
 
