@@ -31,12 +31,7 @@ object ImageUtils {
     preferredConfig: Bitmap.Config = Bitmap.Config.RGB_565,
     maxBytesPerImage: Int = DEFAULT_MAX_BYTES_PER_IMAGE,
   ): Bitmap {
-    val bytesPerPixel = when (preferredConfig) {
-      Bitmap.Config.ALPHA_8 -> 1
-      Bitmap.Config.RGB_565 -> 2
-      Bitmap.Config.RGBA_F16 -> 8
-      else -> 4
-    }
+    val bytesPerPixel = bytesPerPixel(preferredConfig)
 
     fun calculateInSampleSize(
       originalSize: Size,
@@ -79,12 +74,10 @@ object ImageUtils {
       val originalHeight: Int = outHeight
       // If the resource has an alpha channel (e.g. non-opaque PNG/WebP), Android's built-in
       // BitmapFactory ignores inPreferredConfig = RGB_565 and sets outConfig = ARGB_8888 (4 B/px).
-      val effectiveBytesPerPixel = when (outConfig ?: preferredConfig) {
-        Bitmap.Config.ALPHA_8 -> 1
-        Bitmap.Config.RGB_565 -> 2
-        Bitmap.Config.RGBA_F16 -> 8
-        else -> 4
-      }
+      val decodedConfig =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) outConfig ?: preferredConfig
+        else preferredConfig
+      val effectiveBytesPerPixel = bytesPerPixel(decodedConfig)
 
       inSampleSize =
         calculateInSampleSize(
@@ -136,6 +129,14 @@ object ImageUtils {
     val height = if (aspectRatio > 1) max(1, (side / aspectRatio).roundToInt()) else side
     return Size(width, height)
   }
+
+  private fun bytesPerPixel(config: Bitmap.Config?): Int =
+    when {
+      config == Bitmap.Config.ALPHA_8 -> 1
+      config == Bitmap.Config.RGB_565 -> 2
+      Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && config == Bitmap.Config.RGBA_F16 -> 8
+      else -> 4
+    }
 
   private const val BYTES_PER_PIXEL = 4
 }
