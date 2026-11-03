@@ -24,8 +24,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.platform.graphics.ultrahdr.databinding.CompressUltrahdrBinding
 import java.io.ByteArrayOutputStream
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 
 @RequiresApi(34)
@@ -78,11 +82,10 @@ class CompressingUltraHDRImages : Fragment() {
     /**
      * Updated the currently displayed UltraHDR ORIGINAL image.
      */
-    private fun displayOriginalUltraHDRImage() {
+    private fun displayOriginalUltraHDRImage() = lifecycleScope.launch(Dispatchers.IO) {
 
         val stream = context?.assets?.open(ULTRA_HDR_IMAGE)
         val bitmap = BitmapFactory.decodeStream(stream)
-        binding.imageContainer.setImageBitmap(bitmap)
 
         // display original size of image
         val outputStream = ByteArrayOutputStream()
@@ -92,15 +95,19 @@ class CompressingUltraHDRImages : Fragment() {
         // convert from bytes to MB for displaying text
         orignalImageSize = (outputStreamSize / (1024 * 1024))
 
-        " Displayed Original Image size :  $orignalImageSize  MB".also {
-            binding.ultrahdrImageSizeText.text = it
+        withContext(Dispatchers.Main) {
+            binding.imageContainer.setImageBitmap(bitmap)
+
+            " Displayed Original Image size :  $orignalImageSize  MB".also {
+                binding.ultrahdrImageSizeText.text = it
+            }
         }
     }
 
     /**
      * Updated the currently displayed UltraHDR ORIGINAL image.
      */
-    private fun compressAndDisplayUltraHDRImage() {
+    private fun compressAndDisplayUltraHDRImage() = lifecycleScope.launch(Dispatchers.IO) {
 
         //open original image
         val stream = context?.assets?.open(ULTRA_HDR_IMAGE)
@@ -127,12 +134,14 @@ class CompressingUltraHDRImages : Fragment() {
                 .decodeByteArray(compressedByteArray, 0, compressedByteArray.size)
 
 
-        //Load the compressed bitmap
-        binding.imageContainer.setImageBitmap(compressedBitmap)
+        withContext(Dispatchers.Main) {
+            //Load the compressed bitmap
+            binding.imageContainer.setImageBitmap(compressedBitmap)
 
-        //Set compressed image details as text for informational purposes
-        ("Compressed Image Quality : ${ULTRA_HDR_IMAGE_COMPRESSION_QUALITY}% \n Displayed Compressed Image Size : ${compressedImageSizeInMegabytes}  MB ").also {
-            binding.ultrahdrImageSizeText.text = it
+            //Set compressed image details as text for informational purposes
+            ("Compressed Image Quality : ${ULTRA_HDR_IMAGE_COMPRESSION_QUALITY}% \n Displayed Compressed Image Size : ${compressedImageSizeInMegabytes}  MB ").also {
+                binding.ultrahdrImageSizeText.text = it
+            }
         }
     }
 
