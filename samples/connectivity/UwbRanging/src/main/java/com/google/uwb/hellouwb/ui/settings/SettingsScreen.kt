@@ -18,6 +18,11 @@
 
 package com.google.uwb.hellouwb.ui.settings
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,6 +31,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -155,12 +161,37 @@ fun SettingsScreen(
 
         Row(verticalAlignment = Alignment.CenterVertically) {
             Text("Sensor Fusion", Modifier.padding(end = 12.dp))
+            val context = LocalContext.current
             var sensorFusionEnabled by remember { mutableStateOf(uiState.sensorFusionEnabled) }
+            // Sensor fusion uses ARCore, which needs the camera. Only ask for the camera permission
+            // when the user opts in, so the baseline UWB ranging flow never prompts for it.
+            val cameraPermissionLauncher = rememberLauncherForActivityResult(
+                ActivityResultContracts.RequestPermission()
+            ) { granted ->
+                if (granted) {
+                    updateSensorFusionEnabled(true)
+                    sensorFusionEnabled = true
+                } else {
+                    Toast.makeText(
+                        context,
+                        "Camera permission is required for sensor fusion",
+                        Toast.LENGTH_LONG,
+                    ).show()
+                }
+            }
             Switch(
                 checked = sensorFusionEnabled,
-                onCheckedChange = {
-                    updateSensorFusionEnabled(it)
-                    sensorFusionEnabled = it
+                onCheckedChange = { enabled ->
+                    if (
+                        enabled &&
+                        context.checkSelfPermission(Manifest.permission.CAMERA) !=
+                        PackageManager.PERMISSION_GRANTED
+                    ) {
+                        cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                    } else {
+                        updateSensorFusionEnabled(enabled)
+                        sensorFusionEnabled = enabled
+                    }
                 },
             )
         }

@@ -26,9 +26,15 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import com.google.uwb.hellouwb.HelloUwbApplication
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import com.google.ar.core.ArCoreApk
 import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException
+import com.google.uwb.hellouwb.HelloUwbApplication
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 
 private const val PERMISSION_REQUEST_CODE = 1234
@@ -43,6 +49,7 @@ class UwbRangingActivity : ComponentActivity() {
     (application as HelloUwbApplication).initContainer {
       runOnUiThread { setContent { HelloUwbApp((application as HelloUwbApplication).container) } }
     }
+    observeSensorFusionSetting()
 
     /**
      * Check if device supports Ultra-wideband
@@ -61,26 +68,45 @@ class UwbRangingActivity : ComponentActivity() {
     }
   }
 
-  override fun onResume() {
-    super.onResume()
-    if (
-      checkCallingOrSelfPermission(Manifest.permission.CAMERA) ==
-        PackageManager.PERMISSION_GRANTED
-    ) {
-      ArCoreApk.getInstance().checkAvailabilityAsync(this) { availability ->
-        if (availability.isSupported) {
-          try {
-            when (ArCoreApk.getInstance().requestInstall(this, userRequestedInstall)) {
-              ArCoreApk.InstallStatus.INSTALLED -> {}
-              ArCoreApk.InstallStatus.INSTALL_REQUESTED -> {
-                userRequestedInstall = false
-              }
+  /**
+   * ARCore is only needed for the optional sensor fusion feature, so only check for (and offer to
+   * install) ARCore while sensor fusion is enabled and the camera permission has been granted. The
+   * camera permission itself is requested from the settings screen when sensor fusion is turned on.
+   */
+  private fun observeSensorFusionSetting() {
+    val settingsStore = (application as HelloUwbApplication).container.settingsStore
+    lifecycleScope.launch {
+      repeatOnLifecycle(Lifecycle.State.RESUMED) {
+        settingsStore.appSettings
+          .map { it.sensorFusionEnabled }
+          .distinctUntilChanged()
+          .collect { sensorFusionEnabled ->
+            if (
+              sensorFusionEnabled &&
+                checkSelfPermission(Manifest.permission.CAMERA) ==
+                  PackageManager.PERMISSION_GRANTED
+            ) {
+              requestArCoreInstallIfNeeded()
             }
-          } catch (e: UnavailableUserDeclinedInstallationException) {
-            Log.e("UWB Sample", "User declined ARCore installation", e)
-          } catch (e: Exception) {
-            Log.e("UWB Sample", "ARCore installation check failed", e)
           }
+      }
+    }
+  }
+
+  private fun requestArCoreInstallIfNeeded() {
+    ArCoreApk.getInstance().checkAvailabilityAsync(this) { availability ->
+      if (availability.isSupported) {
+        try {
+          when (ArCoreApk.getInstance().requestInstall(this, userRequestedInstall)) {
+            ArCoreApk.InstallStatus.INSTALLED -> {}
+            ArCoreApk.InstallStatus.INSTALL_REQUESTED -> {
+              userRequestedInstall = false
+            }
+          }
+        } catch (e: UnavailableUserDeclinedInstallationException) {
+          Log.e("UWB Sample", "User declined ARCore installation", e)
+        } catch (e: Exception) {
+          Log.e("UWB Sample", "ARCore installation check failed", e)
         }
       }
     }
@@ -135,9 +161,6 @@ class UwbRangingActivity : ComponentActivity() {
 
         // permission required by UWB API
         Manifest.permission.UWB_RANGING,
-
-        // permission required by ARCore for UWB sensor fusion
-        Manifest.permission.CAMERA,
       )
 
     private val PERMISSIONS_REQUIRED_T =
