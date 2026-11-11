@@ -19,6 +19,7 @@
 package com.google.uwb.uwbranging
 
 import androidx.core.uwb.RangingPosition
+import androidx.core.uwb.SensorFusionResult
 
 /** A data class for ranging result update. */
 abstract class EndpointEvents internal constructor() {
@@ -32,6 +33,26 @@ abstract class EndpointEvents internal constructor() {
    */
   data class PositionUpdated(override val endpoint: UwbEndpoint, val position: RangingPosition) :
     EndpointEvents()
+
+  /**
+   * Sensor fusion estimate update.
+   *
+   * @property estimate Sensor fusion estimate of the UWB device during Ranging
+   */
+  data class SensorFusionEstimateUpdated(
+    override val endpoint: UwbEndpoint,
+    val estimate: SensorFusionResult.Estimate,
+  ) : EndpointEvents()
+
+  /**
+   * Sensor fusion fallback update.
+   *
+   * @property fallback Sensor fusion fallback result when falling back to standard ranging
+   */
+  data class SensorFusionFallback(
+    override val endpoint: UwbEndpoint,
+    val fallback: SensorFusionResult.SensorFusionFallback,
+  ) : EndpointEvents()
 
   /** A ranging result with peer disconnected status update. */
   data class UwbDisconnected(override val endpoint: UwbEndpoint) : EndpointEvents()

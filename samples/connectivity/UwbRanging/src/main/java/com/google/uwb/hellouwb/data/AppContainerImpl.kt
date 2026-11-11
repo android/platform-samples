@@ -54,6 +54,7 @@ internal class AppContainerImpl(
                     afterLoading()
                 } else {
                     rangingResultSource.deviceType = it.deviceType
+                    rangingResultSource.sensorFusionEnabled = it.sensorFusionEnabled
           rangingResultSource.updateEndpointId(endpointId)
         }
       }

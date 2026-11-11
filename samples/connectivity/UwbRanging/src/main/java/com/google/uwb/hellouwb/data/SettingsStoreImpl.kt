@@ -73,6 +73,14 @@ internal class SettingsStoreImpl(
     }
   }
 
+  override fun updateSensorFusionEnabled(enabled: Boolean) {
+    coroutineScope.launch {
+      context.settingsDataStore.updateData { settings ->
+        settings.toBuilder().setSensorFusionEnabled(enabled).build()
+      }
+    }
+  }
+
   companion object {
     private const val STORE_FILE_NAME = "app_settings.pb"
 

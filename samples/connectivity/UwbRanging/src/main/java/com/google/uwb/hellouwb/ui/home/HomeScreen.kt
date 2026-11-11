@@ -64,13 +64,45 @@ fun HomeScreen(uiState: HomeUiState, modifier: Modifier = Modifier) {
     modifier = modifier
   ) { innerPadding ->
     Column(modifier = Modifier.padding(innerPadding)) {
-      Row(modifier = Modifier.padding(innerPadding)) {
+      Row {
         ConnectStatusBar(
           uiState.connectedEndpoints.map { it.endpoint },
           uiState.disconnectedEndpoints
         )
       }
+      SensorFusionStatusSection(uiState)
       Row { RangingPlot(uiState.connectedEndpoints) }
+    }
+  }
+}
+
+@Composable
+fun SensorFusionStatusSection(uiState: HomeUiState) {
+  Column(modifier = Modifier.padding(horizontal = 16.dp)) {
+    if (uiState.isSensorFusionFallback) {
+      val reasonSuffix = uiState.fallbackReason?.let { " ($it)" } ?: ""
+      Text(
+        text = "Fell back to standard ranging$reasonSuffix",
+        color = Color.Red,
+      )
+    }
+    uiState.connectedEndpoints.forEach { connectedEndpoint ->
+      val endpointName = connectedEndpoint.endpoint.id.split("|")[0]
+      when (val estimateState = connectedEndpoint.estimateState) {
+        is EstimateState.Drifting -> {
+          Text(
+            text = "$endpointName: DRIFTING",
+            color = Color.Red,
+          )
+        }
+        is EstimateState.Imprecise -> {
+          Text(
+            text = "$endpointName: IMPRECISE: (${estimateState.reason})",
+            color = Color.Red,
+          )
+        }
+        is EstimateState.Precise -> {}
+      }
     }
   }
 }
@@ -108,10 +140,15 @@ fun RangingPlot(connectedEndpoints: List<ConnectedEndpoint>) {
     val scale = drawPolar(center)
     connectedEndpoints.forEachIndexed { index, endpoint ->
       endpoint.position.distance?.let { distance ->
-        endpoint.position.azimuth?.let { azimuth ->
+        val azimuth =
+          when (endpoint.estimateState) {
+            is EstimateState.Imprecise -> 0.0f
+            else -> endpoint.position.azimuth?.value
+          }
+        azimuth?.let {
           drawPosition(
             distance.value,
-            azimuth.value,
+            it,
             scale = scale,
             centerOffset = center,
             color = ENDPOINT_COLORS[index % ENDPOINT_COLORS.size]

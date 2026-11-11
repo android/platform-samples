@@ -55,6 +55,14 @@ class SettingsViewModel(
     settingsStore.updateConfigType(configType)
   }
 
+  fun updateSensorFusionEnabled(enabled: Boolean) {
+    if (enabled == uiState.value.sensorFusionEnabled) {
+      return
+    }
+    uwbRangingControlSource.sensorFusionEnabled = enabled
+    settingsStore.updateSensorFusionEnabled(enabled)
+  }
+
   companion object {
     fun provideFactory(
       uwbRangingControlSource: UwbRangingControlSource,

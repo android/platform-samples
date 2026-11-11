@@ -26,12 +26,22 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
+import com.google.ar.core.ArCoreApk
+import com.google.ar.core.exceptions.UnavailableUserDeclinedInstallationException
 import com.google.uwb.hellouwb.HelloUwbApplication
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.launch
 
 
 private const val PERMISSION_REQUEST_CODE = 1234
 
 class UwbRangingActivity : ComponentActivity() {
+
+  private var userRequestedInstall = true
 
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
@@ -39,6 +49,7 @@ class UwbRangingActivity : ComponentActivity() {
     (application as HelloUwbApplication).initContainer {
       runOnUiThread { setContent { HelloUwbApp((application as HelloUwbApplication).container) } }
     }
+    observeSensorFusionSetting()
 
     /**
      * Check if device supports Ultra-wideband
@@ -57,20 +68,61 @@ class UwbRangingActivity : ComponentActivity() {
     }
   }
 
-  private fun requestPermissions() {
-    if (!arePermissionsGranted()) {
-      requestPermissions(PERMISSIONS_REQUIRED, PERMISSION_REQUEST_CODE)
+  /**
+   * ARCore is only needed for the optional sensor fusion feature, so only check for (and offer to
+   * install) ARCore while sensor fusion is enabled and the camera permission has been granted. The
+   * camera permission itself is requested from the settings screen when sensor fusion is turned on.
+   */
+  private fun observeSensorFusionSetting() {
+    val settingsStore = (application as HelloUwbApplication).container.settingsStore
+    lifecycleScope.launch {
+      repeatOnLifecycle(Lifecycle.State.RESUMED) {
+        settingsStore.appSettings
+          .map { it.sensorFusionEnabled }
+          .distinctUntilChanged()
+          .collect { sensorFusionEnabled ->
+            if (
+              sensorFusionEnabled &&
+                checkSelfPermission(Manifest.permission.CAMERA) ==
+                  PackageManager.PERMISSION_GRANTED
+            ) {
+              requestArCoreInstallIfNeeded()
+            }
+          }
+      }
     }
   }
 
-  private fun arePermissionsGranted(): Boolean {
-    for (permission in PERMISSIONS_REQUIRED) {
-      if (checkCallingOrSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-        return false
+  private fun requestArCoreInstallIfNeeded() {
+    ArCoreApk.getInstance().checkAvailabilityAsync(this) { availability ->
+      if (availability.isSupported) {
+        try {
+          when (ArCoreApk.getInstance().requestInstall(this, userRequestedInstall)) {
+            ArCoreApk.InstallStatus.INSTALLED -> {}
+            ArCoreApk.InstallStatus.INSTALL_REQUESTED -> {
+              userRequestedInstall = false
+            }
+          }
+        } catch (e: UnavailableUserDeclinedInstallationException) {
+          Log.e("UWB Sample", "User declined ARCore installation", e)
+        } catch (e: Exception) {
+          Log.e("UWB Sample", "ARCore installation check failed", e)
+        }
       }
     }
-    return true
   }
+
+  private fun requestPermissions() {
+    val missingPermissions = getMissingPermissions()
+    if (missingPermissions.isNotEmpty()) {
+      requestPermissions(missingPermissions, PERMISSION_REQUEST_CODE)
+    }
+  }
+
+  private fun getMissingPermissions(): Array<String> =
+    PERMISSIONS_REQUIRED.filter {
+      checkCallingOrSelfPermission(it) != PackageManager.PERMISSION_GRANTED
+    }.toTypedArray()
 
   override fun onRequestPermissionsResult(
     requestCode: Int,
@@ -78,10 +130,20 @@ class UwbRangingActivity : ComponentActivity() {
     grantResults: IntArray,
   ) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-    for (result in grantResults) {
-      if (result != PackageManager.PERMISSION_GRANTED) {
-        requestPermissions()
+    if (requestCode != PERMISSION_REQUEST_CODE) return
+    // Don't re-request here: denied (or non-requestable) permissions are returned immediately,
+    // which would cause an endless request loop.
+    val deniedPermissions =
+      permissions.filterIndexed { index, _ ->
+        grantResults.getOrNull(index) != PackageManager.PERMISSION_GRANTED
       }
+    if (deniedPermissions.isNotEmpty()) {
+      Log.w("UWB Sample", "Permissions denied: $deniedPermissions")
+      Toast.makeText(
+        applicationContext,
+        "UWB ranging requires all requested permissions",
+        Toast.LENGTH_LONG,
+      ).show()
     }
   }
 
@@ -90,8 +152,6 @@ class UwbRangingActivity : ComponentActivity() {
     private val PERMISSIONS_REQUIRED_BEFORE_T =
       listOf(
         // Permissions needed by Nearby Connection
-        Manifest.permission.BLUETOOTH,
-        Manifest.permission.BLUETOOTH_ADMIN,
         Manifest.permission.BLUETOOTH_SCAN,
         Manifest.permission.BLUETOOTH_ADVERTISE,
         Manifest.permission.BLUETOOTH_CONNECT,
@@ -100,7 +160,7 @@ class UwbRangingActivity : ComponentActivity() {
         Manifest.permission.CHANGE_WIFI_STATE,
 
         // permission required by UWB API
-        Manifest.permission.UWB_RANGING
+        Manifest.permission.UWB_RANGING,
       )
 
     private val PERMISSIONS_REQUIRED_T =
@@ -108,11 +168,20 @@ class UwbRangingActivity : ComponentActivity() {
         Manifest.permission.NEARBY_WIFI_DEVICES,
       )
 
+    // Runtime permission required by Nearby Connections starting in Android 17
+    private val PERMISSIONS_REQUIRED_CINNAMON_BUN =
+      arrayOf(
+        Manifest.permission.ACCESS_LOCAL_NETWORK,
+      )
+
     private val PERMISSIONS_REQUIRED =
       PERMISSIONS_REQUIRED_BEFORE_T.toMutableList()
         .apply {
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             addAll(PERMISSIONS_REQUIRED_T)
+          }
+          if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.CINNAMON_BUN) {
+            addAll(PERMISSIONS_REQUIRED_CINNAMON_BUN)
           }
         }
         .toTypedArray()
