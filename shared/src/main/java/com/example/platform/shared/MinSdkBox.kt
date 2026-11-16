@@ -55,3 +55,35 @@ fun MinSdkBox(modifier: Modifier = Modifier, minSdk: Int, content: @Composable (
         content()
     }
 }
+
+@Composable
+fun MinSdkFullBox(
+    modifier: Modifier = Modifier,
+    minSdkFull: Int,
+    content: @Composable () -> Unit,
+) {
+    val isSupported = Build.VERSION.SDK_INT >= Build.VERSION_CODES.BAKLAVA &&
+        Build.VERSION.SDK_INT_FULL >= minSdkFull
+    if (!isSupported) {
+        val major = minSdkFull / 100_000
+        val minor = minSdkFull % 100_000
+        Column(
+            modifier = modifier.fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center,
+        ) {
+            Icon(
+                painter = painterResource(R.drawable.round_warning_24),
+                contentDescription = null,
+                modifier = Modifier.size(64.dp),
+            )
+            Spacer(Modifier.height(18.dp))
+            Text(
+                text = "Your device's Android Version is lower than the required SDK version for this sample: $major.$minor",
+                textAlign = TextAlign.Center,
+            )
+        }
+    } else {
+        content()
+    }
+}

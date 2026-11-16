@@ -56,6 +56,7 @@ import com.example.platform.location.useractivityrecog.UserActivityRecognitionSc
 import com.example.platform.media.ultrahdr.video.UltraHDRToHDRVideo
 import com.example.platform.media.video.TransformerTFLite
 import com.example.platform.media.video.TransformerVideoComposition
+import com.example.platform.performance.memory.MemoryBudgetSample
 import com.example.platform.privacy.data.PackageVisibility
 import com.example.platform.privacy.permissions.ComposePermissions
 import com.example.platform.privacy.permissions.MultiplePermissions
@@ -538,6 +539,15 @@ val SAMPLE_DEMOS by lazy {
             apiSurface = MediaVideoApiSurface,
             tags = listOf("Transformer"),
             content = { AndroidFragment<TransformerVideoComposition>() },
+        ),
+        ComposableSampleDemo(
+            id = "memory-budget",
+            name = "Memory Budget Manager",
+            description = "Demonstrates declaring app memory budgets and managing dynamic budgets and over-budget callbacks with MemoryBudgetManager.",
+            documentation = "https://developer.android.com/topic/performance/memory/app-memory-budgets",
+            apiSurface = PerformanceMemoryApiSurface,
+            tags = listOf("Performance", "Memory"),
+            content = { MemoryBudgetSample() },
         ),
         ComposableSampleDemo(
             id = "package-visibility",
