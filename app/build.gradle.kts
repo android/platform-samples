@@ -23,7 +23,11 @@ plugins {
 
 android {
     namespace = "com.example.platform"
-    compileSdk = 37
+    compileSdk {
+        version = release(37) {
+            minorApiLevel = 2
+        }
+    }
 
     defaultConfig {
         applicationId = "com.example.platform"
@@ -83,6 +87,7 @@ dependencies {
     implementation(project(":samples:location"))
     implementation(project(":samples:media:ultrahdr"))
     implementation(project(":samples:media:video"))
+    implementation(project(":samples:performance:memory"))
     implementation(project(":samples:privacy:data"))
     implementation(project(":samples:privacy:permissions"))
     implementation(project(":samples:privacy:transparency"))

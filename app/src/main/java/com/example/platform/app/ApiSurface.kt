@@ -99,6 +99,12 @@ val MediaVideoApiSurface = ApiSurface(
     null,
 )
 
+val PerformanceMemoryApiSurface = ApiSurface(
+    "performance-memory",
+    "Performance - Memory",
+    null,
+)
+
 val PrivacyDataApiSurface = ApiSurface(
     "privacy-data",
     "Privacy Data",
@@ -219,6 +225,7 @@ val API_SURFACES = listOf(
     LocationApiSurface,
     MediaUltraHdrApiSurface,
     MediaVideoApiSurface,
+    PerformanceMemoryApiSurface,
     PrivacyDataApiSurface,
     PrivacyPermissionsApiSurface,
     PrivacyTransparencyApiSurface,
