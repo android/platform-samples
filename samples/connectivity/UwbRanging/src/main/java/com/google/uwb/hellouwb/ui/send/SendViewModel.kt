@@ -21,9 +21,11 @@ package com.google.uwb.hellouwb.ui.send
 import android.content.ContentResolver
 import android.net.Uri
 import androidx.core.net.toUri
+import androidx.core.uwb.SensorFusionResult
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.uwb.hellouwb.data.UwbRangingControlSource
+import com.google.uwb.hellouwb.ui.home.HomeViewModel
 import com.google.uwb.uwbranging.EndpointEvents
 import com.google.uwb.uwbranging.UwbEndpoint
 import kotlinx.coroutines.CoroutineScope
@@ -102,10 +104,20 @@ class SendViewModel(
         uwbRangingControlSource
           .observeRangingResults()
           .filterNot { it.endpoint in endpointsSent }
-          .filterIsInstance<EndpointEvents.PositionUpdated>()
           .collect { event ->
-            event.position.azimuth?.let { azimuth ->
-              if (azimuth.value > -5.0f && azimuth.value < 5.0f) {
+            val azimuth =
+              when (event) {
+                is EndpointEvents.PositionUpdated -> event.position.azimuth
+                is EndpointEvents.SensorFusionEstimateUpdated ->
+                  if (event.estimate is SensorFusionResult.ImpreciseEstimate) {
+                    null
+                  } else {
+                    HomeViewModel.estimateToBoresightPosition(event.estimate).azimuth
+                  }
+                else -> null
+              }
+            azimuth?.let {
+              if (it.value > -5.0f && it.value < 5.0f) {
                 endpointsSent.add(event.endpoint)
                 uwbRangingControlSource.sendOobMessage(event.endpoint, bytesToSend)
                 val endpointDisplayName = event.endpoint.id.split("|")[0]

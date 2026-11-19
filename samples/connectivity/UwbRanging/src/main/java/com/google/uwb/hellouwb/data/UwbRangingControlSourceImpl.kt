@@ -43,7 +43,11 @@ internal class UwbRangingControlSourceImpl(
   private var uwbEndpoint = UwbEndpoint(endpointId, SecureRandom.getSeed(8))
 
   private var uwbSessionScope: UwbSessionScope =
-    getSessionScope(DeviceType.CONTROLLER, ConfigType.CONFIG_UNICAST_DS_TWR)
+    getSessionScope(
+      DeviceType.CONTROLLER,
+      ConfigType.CONFIG_UNICAST_DS_TWR,
+      sensorFusionEnabled = false,
+    )
 
   private var rangingJob: Job? = null
 
@@ -57,16 +61,21 @@ internal class UwbRangingControlSourceImpl(
 
   override val isRunning = runningStateFlow.asStateFlow()
 
-  private fun getSessionScope(deviceType: DeviceType, configType: ConfigType): UwbSessionScope {
+  private fun getSessionScope(
+    deviceType: DeviceType,
+    configType: ConfigType,
+    sensorFusionEnabled: Boolean,
+  ): UwbSessionScope {
     return when (deviceType) {
-      DeviceType.CONTROLEE -> uwbConnectionManager.controleeUwbScope(uwbEndpoint)
+      DeviceType.CONTROLEE ->
+        uwbConnectionManager.controleeUwbScope(uwbEndpoint, sensorFusionEnabled)
       DeviceType.CONTROLLER ->
         uwbConnectionManager.controllerUwbScope(uwbEndpoint, when (configType) {
           ConfigType.CONFIG_UNICAST_DS_TWR -> RangingParameters.CONFIG_UNICAST_DS_TWR
           ConfigType.CONFIG_MULTICAST_DS_TWR -> RangingParameters.CONFIG_MULTICAST_DS_TWR
           ConfigType.CONFIG_PROVISIONED_UNICAST -> RangingParameters.CONFIG_PROVISIONED_UNICAST_DS_TWR
           else -> throw java.lang.IllegalStateException()
-        })
+        }, sensorFusionEnabled)
       else -> throw IllegalStateException()
     }
   }
@@ -79,7 +88,7 @@ internal class UwbRangingControlSourceImpl(
   Delegates.observable(DeviceType.CONTROLLER) { _, oldValue, newValue ->
     if (oldValue != newValue) {
       stop()
-      uwbSessionScope = getSessionScope(newValue, configType)
+      uwbSessionScope = getSessionScope(newValue, configType, sensorFusionEnabled)
     }
   }
 
@@ -87,7 +96,15 @@ internal class UwbRangingControlSourceImpl(
   Delegates.observable(ConfigType.CONFIG_UNICAST_DS_TWR) { _, oldValue, newValue ->
     if (oldValue != newValue) {
       stop()
-      uwbSessionScope = getSessionScope(deviceType, newValue)
+      uwbSessionScope = getSessionScope(deviceType, newValue, sensorFusionEnabled)
+    }
+  }
+
+  override var sensorFusionEnabled: Boolean by
+  Delegates.observable(false) { _, oldValue, newValue ->
+    if (oldValue != newValue) {
+      stop()
+      uwbSessionScope = getSessionScope(deviceType, configType, newValue)
     }
   }
 
@@ -95,7 +112,7 @@ internal class UwbRangingControlSourceImpl(
     if (id != uwbEndpoint.id) {
       stop()
       uwbEndpoint = UwbEndpoint(id, SecureRandom.getSeed(8))
-      uwbSessionScope = getSessionScope(deviceType, configType)
+      uwbSessionScope = getSessionScope(deviceType, configType, sensorFusionEnabled)
     }
   }
 

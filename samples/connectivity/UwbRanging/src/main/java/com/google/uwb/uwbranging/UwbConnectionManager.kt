@@ -26,9 +26,16 @@ import com.google.uwb.uwbranging.impl.UwbConnectionManagerImpl
  * starts the UWB ranging.
  */
 interface UwbConnectionManager {
-  fun controllerUwbScope(endpoint: UwbEndpoint, configId: Int): UwbSessionScope
+  fun controllerUwbScope(
+    endpoint: UwbEndpoint,
+    configId: Int,
+    sensorFusionEnabled: Boolean = false,
+  ): UwbSessionScope
 
-  fun controleeUwbScope(endpoint: UwbEndpoint): UwbSessionScope
+  fun controleeUwbScope(
+    endpoint: UwbEndpoint,
+    sensorFusionEnabled: Boolean = false,
+  ): UwbSessionScope
 
   companion object {
     fun getInstance(context: Context): UwbConnectionManager {

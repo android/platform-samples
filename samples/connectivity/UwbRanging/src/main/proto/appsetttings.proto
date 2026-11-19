@@ -36,4 +36,5 @@ message AppSettings {
   string device_display_name = 2;
   string device_uuid = 3;
   ConfigType config_type = 4;
+  bool sensor_fusion_enabled = 5;
 }

@@ -30,4 +30,6 @@ interface SettingsStore {
   fun updateConfigType(configType: ConfigType)
 
   fun updateDeviceDisplayName(displayName: String)
+
+  fun updateSensorFusionEnabled(enabled: Boolean)
 }

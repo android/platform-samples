@@ -51,16 +51,20 @@ class ControlViewModel(
             launch {
                 uwbRangingControlSource
                     .observeRangingResults()
-                    .filterIsInstance<EndpointEvents.PositionUpdated>()
+                    .mapNotNull {
+                        when (it) {
+                            is EndpointEvents.PositionUpdated -> it.position.distance
+                            is EndpointEvents.SensorFusionEstimateUpdated -> it.estimate.distance
+                            else -> null
+                        }
+                    }
                     .collect {
-                        it.position.distance?.let {
-                            val state = _uiState.value as ControlUiState.LockState
-                            if (!state.isLocked && it.value > LOCK_DISTANCE) {
-                                _uiState.update { ControlUiState.LockState(isLocked = true) }
-                            }
-                            if (state.isLocked && it.value < UNLOCK_DISTANCE) {
-                                _uiState.update { ControlUiState.LockState(isLocked = false) }
-                            }
+                        val state = _uiState.value as ControlUiState.LockState
+                        if (!state.isLocked && it.value > LOCK_DISTANCE) {
+                            _uiState.update { ControlUiState.LockState(isLocked = true) }
+                        }
+                        if (state.isLocked && it.value < UNLOCK_DISTANCE) {
+                            _uiState.update { ControlUiState.LockState(isLocked = false) }
                         }
                     }
             }
